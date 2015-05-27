@@ -1,6 +1,6 @@
-var app = angular.module('categoriesModule', ['categoriesService', 'ui.bootstrap', 'ui.grid', 'ui.grid.pagination']);
+var app = angular.module('categoriesModule', ['categoriesService', 'ui.bootstrap', 'ui.grid', 'ui.grid.pagination', 'ngDialog']);
 
-app.controller('categoriesController', function($scope, $http, $modal, Categories) {
+app.controller('categoriesController', function($scope, $http, $modal, Categories, ngDialog) {
 	$scope.loading = true;
 	$scope.errorMessage = '';
 
@@ -9,10 +9,10 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         paginationPageSizes: [10, 20],
         paginationPageSize: 10,
         columnDefs: [		
-          	{ name: 'Nome', field: 'name', width:'61%' },
-          	{ name: 'Tipo', field: 'type', width:'30%' },
-          	{ name: 'Ações', enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="" href="#" ng-click="grid.appScope.deleteCategory(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
+          	{ name: 'Nome', field: 'name', type: 'string', width:'61%' },
+          	{ name: 'Tipo', field: 'type', type: 'string', width:'30%' },
+          	{ name: 'Ações', type: 'string', enableSorting: false, enableColumnMenu: false, cellTemplate:
+          		'<a class="" href="#" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
           		'<a class="" href="#" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>',
           		 width: '9%' }
         ]
@@ -53,6 +53,23 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	    	}
 		});
     };
+
+	// DELETE CONFIRMATION =====================================================
+    $scope.deleteConfirmation = function (id) {
+        $scope.message = 'Confirma a exclusão da categoria?';
+        ngDialog.open({
+        	template: 'html/confirmDialogModal.html',
+        	className: 'ngdialog-theme-default',
+        	scope: $scope
+         });
+//         	function(value) {
+//         		$scope.deleteCategory(id);
+//         	},
+         	//function(value) {
+//
+//         	}
+//         );
+    };  
 
 	// GET =====================================================================
 	$scope.getCategories = function() {
