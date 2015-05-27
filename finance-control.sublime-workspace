@@ -1,0 +1,338 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fo",
+				"formData"
+			],
+			[
+				"gr",
+				"gridOptions"
+			],
+			[
+				"mongo",
+				"mongoose"
+			],
+			[
+				"i",
+				"insertDocuments"
+			],
+			[
+				"find",
+				"findDocuments"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "static/index.html",
+			"settings":
+			{
+				"buffer_size": 2466,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/js/controllers/categoriesController.js",
+			"settings":
+			{
+				"buffer_size": 2543,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "static/js/services/categoriesService.js",
+			"settings":
+			{
+				"buffer_size": 473,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/diogo/finance-control",
+		"/home/diogo/finance-control/api",
+		"/home/diogo/finance-control/static",
+		"/home/diogo/finance-control/static/js/controllers",
+		"/home/diogo/finance-control/static/js/services"
+	],
+	"file_history":
+	[
+		"/home/diogo/finance-control/static/js/financeControl.js",
+		"/home/diogo/finance-control/static/css/app.css",
+		"/home/diogo/finance-control/api/categoriesApi.js",
+		"/home/diogo/finance-control/static/js/services/categoriesService.js",
+		"/home/diogo/finance-control/static/js/services/categories.js",
+		"/home/diogo/finance-control/static/bower_components/angular/angular.js",
+		"/home/diogo/finance-control/index.js",
+		"/home/diogo/finance-control/static/bower_components/ui-grid.info/.bower.json",
+		"/home/diogo/finance-control/setup-env.txt",
+		"/home/diogo/finance-control/static/bower.json",
+		"/home/diogo/finance-control/static/bower_components/ui-grid.info/release/ui-grid-unstable.js",
+		"/home/diogo/finance-control/package.json",
+		"/home/diogo/finance-control/bower_components/angular/angular.js",
+		"/home/diogo/finance-control/bower_components/ng-grid/ng-grid-2.0.14.min.js",
+		"/home/diogo/finance-control/static/js/core.js",
+		"/home/diogo/finance-control/api/models/category.js",
+		"/home/diogo/finance-control/api/services/categoriesService.js",
+		"/home/diogo/finance-control/config/database.js",
+		"/home/diogo/finance-control/heroku-commands.txt",
+		"/home/diogo/finance-control/static/js/controllers/main.js",
+		"/home/diogo/finance-control/static/index.html",
+		"/home/diogo/finance-control/services/categoriesService.js",
+		"/home/diogo/finance-control/Procfile",
+		"/home/diogo/finance-control/app.json",
+		"/home/diogo/finance-control/Services/categoriesService.js"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/home/diogo/finance-control/static",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"categoriesCtrl",
+			"mainController",
+			"categoriesController",
+			"ui-g",
+			"MainCtrl",
+			"FinanceCon",
+			"Finace"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "static/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2466,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								964,
+								964
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 546.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "static/js/controllers/categoriesController.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2543,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								523,
+								523
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "static/js/services/categoriesService.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 473,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								124,
+								124
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 21.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "finance-control.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 241.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

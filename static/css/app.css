@@ -1,0 +1,23 @@
+html { overflow-y:scroll; }
+body { padding-top:25px; }
+#category-form { margin-bottom:50px; }
+
+.dataGrid {
+    width: 600px;
+    height: 400px;
+
+}
+
+input.ng-invalid {
+  border: 1px solid red;
+}
+input.ng-valid {
+  border: 1px solid green;
+}
+
+select.ng-invalid {
+  border: 1px solid red;
+}
+select.ng-valid {
+  border: 1px solid green;
+}

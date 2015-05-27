@@ -1,0 +1,50 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="categoriesModule">
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Finance Control</title>
+
+	<!-- EXTERNAL DEPENDECIES -->
+	<link rel="styleSheet" href="css/app.css"/>
+ 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
+	<script src="bower_components/angular-ui-grid/ui-grid.js"></script>	
+
+	<!-- INTERNAL DEPENDENCIES -->
+	<script src="js/controllers/categoriesModalController.js"></script> 	
+	<script src="js/controllers/categoriesController.js"></script> 
+	<script src="js/services/categoriesService.js"></script> 
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="categoriesController">
+	<div class="container">
+		<p class="bg-danger" ng-show="errorMessage != null">
+			<span>{{errorMessage}}</span>
+		</p>
+		<div class="text-center">
+			<h2>Cadastro de categorias</h2>
+		</div>	
+
+		<!-- CATEGORY GRID -->
+		<div id="category-grid" class="row">
+ 			<div class="col-md-8 col-md-offset-2">
+				<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar categoria</button>	 			
+				<h3>Categorias cadastradas:</h3>
+  				<div ui-grid="gridOptions" ui-grid-pagination ></div>	
+				<p class="text-center" ng-show="loading">
+					<span class="fa fa-spinner fa-spin fa-3x"></span>
+				</p>
+			</div> 
+		</div>
+	</div>
+</body>
+</html>
