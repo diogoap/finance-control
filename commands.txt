@@ -5,6 +5,12 @@ foreman start
 OR
 nodemon file.js
 
+# Heroku - Github - Pushing changes #
+git add -A
+git commit -m "Message"
+git push origin master
+heroku open
+
 # Heroku - Pushing changes #
 git add -A
 git commit -m "Message"

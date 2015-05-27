@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
 // configuration ===============================================================
-mongoose.connect(databaseurl);
+mongoose.connect(databaseUrl);
 app.use(express.static(__dirname + '/static'))
 app.use(morgan('dev'));
 
