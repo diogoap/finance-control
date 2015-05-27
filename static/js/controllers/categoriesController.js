@@ -49,7 +49,7 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	    	if (category._action == 'new') {
 	    		$scope.createCategory(category);
 	    	} else if (category._action == 'edit') {
-	    		$scope.editCategory(category);        		
+	    		$scope.editCategory(category);
 	    	}
 		});
     };
@@ -57,18 +57,13 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (id) {
         $scope.message = 'Confirma a exclusão da categoria?';
-        ngDialog.open({
+        ngDialog.openConfirm({
         	template: 'html/confirmDialogModal.html',
         	className: 'ngdialog-theme-default',
         	scope: $scope
+         }).then(function(value) {
+                $scope.deleteCategory(id);          		
          });
-//         	function(value) {
-//         		$scope.deleteCategory(id);
-//         	},
-         	//function(value) {
-//
-//         	}
-//         );
     };  
 
 	// GET =====================================================================
