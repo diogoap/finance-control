@@ -1,5 +1,6 @@
 function categoriesModalController($scope, Categories, categoryId, action) {
-	$scope.loading = true;	
+	$scope.loading = true;
+	$scope.errorMessage = '';
 	$scope.action = action;
  	$scope.categoryTypes = ['Despesa', 'Receita'];
  	$scope.submitted = false;
@@ -15,8 +16,13 @@ function categoriesModalController($scope, Categories, categoryId, action) {
 		Categories.getById(categoryId)
 			.success(function(data) {
 				$scope.category = data;
+				$scope.errorMessage = null;
 				$scope.loading = false;
-			});		
+			})
+			.error(function(data, status, headers, config) {
+				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				$scope.loading = false;
+			});
 	};
 
 	$scope.submit = function () {
