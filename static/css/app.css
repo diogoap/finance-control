@@ -2,22 +2,16 @@ html { overflow-y:scroll; }
 body { padding-top:25px; }
 #category-form { margin-bottom:50px; }
 
-.dataGrid {
-    width: 600px;
-    height: 400px;
-
-}
-
-input.ng-invalid {
+input.form-control.ng-invalid {
   border: 1px solid red;
 }
-input.ng-valid {
+input.form-control.ng-valid {
   border: 1px solid green;
 }
 
-select.ng-invalid {
+select.form-control.ng-invalid {
   border: 1px solid red;
 }
-select.ng-valid {
+select.form-control.ng-valid {
   border: 1px solid green;
 }
