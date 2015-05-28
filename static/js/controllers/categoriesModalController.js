@@ -1,9 +1,9 @@
-function categoriesModalController($scope, $modalInstance, Categories, categoryId, action) {
+function categoriesModalController($scope, Categories, categoryId, action) {
 	$scope.loading = true;	
 	$scope.action = action;
  	$scope.categoryTypes = ['Despesa', 'Receita'];
  	$scope.submitted = false;
-	
+
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar categoria';
 		$scope.loading = false;
@@ -22,13 +22,9 @@ function categoriesModalController($scope, $modalInstance, Categories, categoryI
 	$scope.submit = function () {
     	if ($scope.categoryForm.$valid) {
 			$scope.category._action = $scope.action;
-			$modalInstance.close($scope.category);
+			$scope.closeThisDialog($scope.category);
     	} else {
       		$scope.submitted = true;
     	}
-	};
-
-	$scope.cancel = function () {
-		$modalInstance.dismiss('cancel');
 	};
 };

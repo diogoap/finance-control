@@ -30,11 +30,11 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 		});
 
 	// OPEN MODAL ==============================================================
-  	$scope.open = function (categoryId, action) {
-    	var modalInstance = $modal.open({
-      		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/categoriesModal.html',
-      		controller: categoriesModalController,
+    $scope.open = function (categoryId, action) {
+        var dialog = ngDialog.open({
+        	template: 'html/categoriesModal.html',
+        	controller: categoriesModalController,
+        	scope: $scope,
       		resolve: {
 		        categoryId: function () {
 					return categoryId; 
@@ -42,21 +42,21 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         		action: function () {
         			return action;
         		}
-      		}
-    	});
+      		}        	
+         });
 
-		modalInstance.result.then(function (category) {
-	    	if (category._action == 'new') {
-	    		$scope.createCategory(category);
-	    	} else if (category._action == 'edit') {
-	    		$scope.editCategory(category);
-	    	}
-		});
-    };
+		dialog.closePromise.then(function (data) {
+	    	if (data.value._action == 'new') {
+		    	$scope.createCategory(data.value);
+	    	} else if (data.value._action == 'edit') {
+		    	$scope.editCategory(data.value);
+	    	}  
+        });			
+    };   	 
 
 	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (id) {
-        $scope.message = 'Confirma a exclusão da categoria?';
+        $scope.modalConfirmMessage = 'Confirma a exclusão da categoria?';
         ngDialog.openConfirm({
         	template: 'html/confirmDialogModal.html',
         	className: 'ngdialog-theme-default',
@@ -84,7 +84,6 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	$scope.createCategory = function(category) {
 		$scope.loading = true;
 
-		// call the create function from our service (returns a promise object)
 		Categories.create(category)
 			.success(function(data) {
 				$scope.getCategories();					
