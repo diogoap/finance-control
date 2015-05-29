@@ -1,3 +1,5 @@
+'use strict';
+
 var categoriesService = require('./services/categoriesService');
 
 function getCategories(res) {

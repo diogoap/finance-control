@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('categoriesService', [])
 
 	.factory('Categories', ['$http',function($http) {

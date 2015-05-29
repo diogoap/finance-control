@@ -1,3 +1,5 @@
+'use strict';
+
 var Categories = require('../models/categoriesModel');
 var Validator = require('jsonschema').Validator;
 

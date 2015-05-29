@@ -1,6 +1,9 @@
-var app = angular.module('categoriesModule', ['categoriesService', 'ui.bootstrap', 'ui.grid', 'ui.grid.pagination', 'ngDialog']);
+'use strict';
 
-app.controller('categoriesController', function($scope, $http, $modal, Categories, ngDialog) {
+var app = angular.module('financeControl');
+
+app.controller('categoriesController', function($scope, $http, $modal, Categories) {
+
 	$scope.loading = true;
 	$scope.errorMessage = '';
 
@@ -12,8 +15,8 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
           	{ name: 'Nome', field: 'name', type: 'string', width:'61%' },
           	{ name: 'Tipo', field: 'type', type: 'string', width:'30%' },
           	{ name: 'Ações', type: 'string', enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="" href="#" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
-          		'<a class="" href="#" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>',
+          		'<a class="" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
+          		'<a class="" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>',
           		 width: '9%' }
         ]
     }; 
@@ -30,11 +33,11 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 		});
 
 	// OPEN MODAL ==============================================================
-    $scope.open = function (categoryId, action) {
-        var dialog = ngDialog.open({
-        	template: 'html/categoriesModal.html',
-        	controller: categoriesModalController,
-        	scope: $scope,
+  	$scope.open = function (categoryId, action) {
+    	var modalInstance = $modal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/categoriesModal.html',
+      		controller: categoriesModalController,
       		resolve: {
 		        categoryId: function () {
 					return categoryId; 
@@ -42,28 +45,39 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         		action: function () {
         			return action;
         		}
-      		}        	
-         });
+      		}
+    	});
 
-		dialog.closePromise.then(function (data) {
-	    	if (data.value._action == 'new') {
-		    	$scope.createCategory(data.value);
-	    	} else if (data.value._action == 'edit') {
-		    	$scope.editCategory(data.value);
-	    	}  
-        });			
-    };   	 
+		modalInstance.result.then(function (category) {
+	    	if (category._action == 'new') {
+	    		$scope.createCategory(category);
+	    	} else if (category._action == 'edit') {
+	    		$scope.editCategory(category);
+	    	}
+		});
+    };  
 
 	// DELETE CONFIRMATION =====================================================
-    $scope.deleteConfirmation = function (id) {
-        $scope.modalConfirmMessage = 'Confirma a exclusão da categoria?';
-        ngDialog.openConfirm({
-        	template: 'html/confirmDialogModal.html',
-        	className: 'ngdialog-theme-default',
-        	scope: $scope
-         }).then(function(value) {
-                $scope.deleteCategory(id);          		
-         });
+    $scope.deleteConfirmation = function (categoryId) {
+    	
+    	var modalInstance = $modal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/confirmDialogModal.html',
+      		controller: confirmDialogController,
+      		size: 'sm',
+      		resolve: {
+		        categoryId: function () {
+					return categoryId; 
+        		},      			
+		        message: function () {
+					return 'Confirma a exclusão da categoria?'; 
+        		}
+      		}
+    	});
+
+		modalInstance.result.then(function (id) {
+	    	$scope.deleteCategory(id);
+		}); 
     };  
 
 	// GET =====================================================================
@@ -121,4 +135,5 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 				$scope.loading = false;
 			});
 	};
+
 });

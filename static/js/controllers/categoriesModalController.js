@@ -1,4 +1,6 @@
-function categoriesModalController($scope, Categories, categoryId, action) {
+'use strict';
+
+function categoriesModalController($scope, $modalInstance, Categories, categoryId, action) {
 	$scope.loading = true;
 	$scope.errorMessage = '';
 	$scope.action = action;
@@ -28,9 +30,13 @@ function categoriesModalController($scope, Categories, categoryId, action) {
 	$scope.submit = function () {
     	if ($scope.categoryForm.$valid) {
 			$scope.category._action = $scope.action;
-			$scope.closeThisDialog($scope.category);
+			$modalInstance.close($scope.category);
     	} else {
       		$scope.submitted = true;
     	}
 	};
+
+	$scope.cancel = function() {
+		$modalInstance.dismiss('cancel');
+	}
 };

@@ -1,0 +1,20 @@
+<div class="container" ng-controller="categoriesController">
+	<p class="bg-danger" ng-show="errorMessage != null">
+		<span>{{errorMessage}}</span>
+	</p>
+	<div class="text-center">
+		<h2>Cadastro de categorias</h2>
+	</div>	
+
+	<!-- CATEGORY GRID -->
+	<div id="category-grid" class="row">
+			<div class="col-md-8 col-md-offset-2">
+			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar categoria</button> 	
+			<h3>Categorias cadastradas:</h3>
+				<div ui-grid="gridOptions" ui-grid-pagination ></div>	
+			<p class="text-center" ng-show="loading">
+				<span class="fa fa-spinner fa-spin fa-3x"></span>
+			</p>
+		</div> 
+	</div>
+</div>
