@@ -62,8 +62,8 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
     	
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/confirmDialogModal.html',
-      		controller: confirmDialogController,
+      		templateUrl: 'html/confirmModal.html',
+      		controller: confirmModalController,
       		size: 'sm',
       		resolve: {
 		        categoryId: function () {

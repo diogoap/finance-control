@@ -1,6 +1,6 @@
 'use strict';
 
-function confirmDialogController($modalInstance, $scope, categoryId, message) {
+function confirmModalController($modalInstance, $scope, categoryId, message) {
 
 	$scope.message = message;
 
