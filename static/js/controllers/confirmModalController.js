@@ -1,11 +1,11 @@
 'use strict';
 
-function confirmModalController($modalInstance, $scope, categoryId, message) {
+function confirmModalController($modalInstance, $scope, data, message) {
 
 	$scope.message = message;
 
 	$scope.yes = function () {
-		$modalInstance.close(categoryId);
+		$modalInstance.close(data);
 	};
 
 	$scope.no = function() {

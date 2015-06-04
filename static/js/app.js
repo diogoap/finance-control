@@ -1,6 +1,14 @@
 'use strict';
 
-var app = angular.module('financeControl', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.pagination', 'categoriesService']);
+var app = angular.module('financeControl', [
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.grid',
+    'ui.grid.pagination',
+    'purplefox.numeric',
+    'categoriesService',
+    'accountsService'
+]);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -12,9 +20,9 @@ app.config(function($routeProvider) {
             templateUrl: 'html/categories.html',
             controller: 'categoriesController'
         })
-        .when('/account', {
+        .when('/accounts', {
             templateUrl: 'html/accounts.html',
-            controller: 'accountController'
+            controller: 'accountsController'
         })
         .otherwise({
         	redirecTo: '/'

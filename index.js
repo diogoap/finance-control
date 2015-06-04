@@ -20,6 +20,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 // routes ======================================================================
 require('./api/categoriesApi.js')(app);
+require('./api/accountsApi.js')(app);
 
 // listen (start app with node server.js) ======================================
 app.listen(port);

@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('categoriesController', function($scope, $http, $modal, Categories) {
+app.controller('accountsController', function($scope, $http, $modal, Accounts) {
 
 	$scope.loading = true;
 	$scope.errorMessage = '';
@@ -13,7 +13,7 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         paginationPageSize: 10,
         columnDefs: [		
           	{ name: 'Nome', field: 'name', type: 'string', width:'61%' },
-          	{ name: 'Tipo', field: 'type', type: 'string', width:'30%' },
+          	{ name: 'Saldo inicial', field: 'initialBalance', type: 'number', width:'30%' },
           	{ name: 'Ações', type: 'string', enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
           		'<a class="" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>',
@@ -21,7 +21,7 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         ]
     }; 
 
-	Categories.get()
+	Accounts.get()
 		.success(function(data) {
 			$scope.gridOptions.data = data;
 			$scope.errorMessage = null;
@@ -33,14 +33,14 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 		});
 
 	// OPEN MODAL ==============================================================
-  	$scope.open = function (categoryId, action) {
+  	$scope.open = function (accountId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/categoriesModal.html',
-      		controller: categoriesModalController,
+      		templateUrl: 'html/accountsModal.html',
+      		controller: accountsModalController,
       		resolve: {
-		        categoryId: function () {
-					return categoryId; 
+		        accountId: function () {
+					return accountId; 
         		},
         		action: function () {
         			return action;
@@ -48,17 +48,17 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
       		}
     	});
 
-		modalInstance.result.then(function (category) {
-	    	if (category._action == 'new') {
-	    		$scope.createCategory(category);
-	    	} else if (category._action == 'edit') {
-	    		$scope.editCategory(category);
+		modalInstance.result.then(function (account) {
+	    	if (account._action == 'new') {
+	    		$scope.createAccount(account);
+	    	} else if (account._action == 'edit') {
+	    		$scope.editAccount(account);
 	    	}
 		});
     };  
 
 	// DELETE CONFIRMATION =====================================================
-    $scope.deleteConfirmation = function (categoryId) {
+    $scope.deleteConfirmation = function (accountId) {
     	
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
@@ -67,22 +67,22 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return categoryId; 
+					return accountId; 
         		},      			
 		        message: function () {
-					return 'Confirma a exclusão da categoria?'; 
+					return 'Confirma a exclusão da conta?'; 
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
-	    	$scope.deleteCategory(id);
+	    	$scope.deleteAccount(id);
 		}); 
     };  
 
 	// GET =====================================================================
-	$scope.getCategories = function() {
-		Categories.get()
+	$scope.getAccounts = function() {
+		Accounts.get()
 			.success(function(data) {
 				$scope.gridOptions.data = data;			
 				$scope.errorMessage = null;
@@ -95,12 +95,12 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	};
 
 	// CREATE ==================================================================
-	$scope.createCategory = function(category) {
+	$scope.createAccount = function(account) {
 		$scope.loading = true;
 
-		Categories.create(category)
+		Accounts.create(account)
 			.success(function(data) {
-				$scope.getCategories();					
+				$scope.getAccounts();					
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -109,12 +109,12 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	};
 
 	// EDIT ====================================================================
-	$scope.editCategory = function(category) {
+	$scope.editAccount = function(account) {
 		$scope.loading = true;
 
-		Categories.patch(category._id, category)
+		Accounts.patch(account._id, account)
 			.success(function(data) {
-				$scope.getCategories();					
+				$scope.getAccounts();					
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -123,12 +123,12 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
 	};	
 
 	// DELETE ==================================================================
-	$scope.deleteCategory = function(id) {
+	$scope.deleteAccount = function(id) {
 		$scope.loading = true;
 
-		Categories.delete(id)
+		Accounts.delete(id)
 			.success(function(data) {			
-				$scope.getCategories();
+				$scope.getAccounts();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
