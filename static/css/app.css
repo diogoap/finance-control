@@ -15,3 +15,11 @@ select.form-control.ng-invalid {
 select.form-control.ng-valid {
   border: 1px solid green;
 }
+
+.ui-grid-cell-right-align {
+    text-align: right;
+}
+
+.ui-grid-cell-center-align {
+    text-align: center;
+}

@@ -12,12 +12,13 @@ app.controller('categoriesController', function($scope, $http, $modal, Categorie
         paginationPageSizes: [10, 20],
         paginationPageSize: 10,
         columnDefs: [		
-          	{ name: 'Nome', field: 'name', type: 'string', width:'61%' },
-          	{ name: 'Tipo', field: 'type', type: 'string', width:'30%' },
-          	{ name: 'Ações', type: 'string', enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg"></i></a> ' + 
-          		'<a class="" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>',
-          		 width: '9%' }
+          	{ name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false },
+          	{ name: 'Tipo', field: 'type', type: 'string', width:'30%', enableColumnMenu: false },
+          	{ name: 'Ações', type: 'string',  width: '10%', enableSorting: false, enableColumnMenu: false, cellTemplate:
+          		'<a class="" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil-square-o fa-lg"></i></a>' +
+          		'<a class="" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)">&#32;<i class="fa fa-trash-o fa-lg"></i></a> ',
+          		headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+          	}
         ]
     }; 
 
