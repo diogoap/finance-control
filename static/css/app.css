@@ -1,6 +1,5 @@
 html { overflow-y:scroll; }
-body { padding-top:25px; }
-#category-form { margin-bottom:50px; }
+body { padding-top:10px; }
 
 input.form-control.ng-invalid {
   border: 1px solid red;
@@ -22,4 +21,8 @@ select.form-control.ng-valid {
 
 .ui-grid-cell-center-align {
     text-align: center;
+}
+
+.ui-grid {
+	margin-top: 10px;
 }

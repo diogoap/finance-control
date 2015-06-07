@@ -1,8 +1,11 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Category', {
-	name: {type: String, default: ''},
-	type: {type: String, default: ''}
+var categorySchema = new Schema({
+ 	name: String,
+	type: String
 });
+
+module.exports = mongoose.model('Category', categorySchema);

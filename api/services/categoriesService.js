@@ -21,7 +21,7 @@ var categorySchema = {
                 "Despesa"
             ]
         }
-    }
+    }  
 };
 
 module.exports = {

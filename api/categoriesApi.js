@@ -37,7 +37,7 @@ module.exports = function(app) {
     })
 
     app.post('/api/categories', function(req, res) {
-        categoriesService.create( { name : req.body.name, type : req.body.type }, function(error, category, status) {
+        categoriesService.create(req.body, function(error, category, status) {
             if (error) {        
                 sendError(res, error, status);
             } else {         
@@ -57,7 +57,7 @@ module.exports = function(app) {
     })
 
     app.patch('/api/categories/:id', function(req, res) {
-        categoriesService.edit( req.params.id, { name : req.body.name, type : req.body.type }, function(error, category, status) {
+        categoriesService.edit(req.params.id, req.body, function(error, category, status) {
             if (error) {
                 sendError(res, error, status);
             } else {

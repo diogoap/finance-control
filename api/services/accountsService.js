@@ -16,9 +16,9 @@ var accountSchema = {
         "initialBalance": {
             "type": "double"
         },
-         "actualBalance": {
+        "actualBalance": {
             "type": "double"
-        }       
+        }
     }
 };
 

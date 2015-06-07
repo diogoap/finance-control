@@ -37,9 +37,7 @@ module.exports = function(app) {
     })
 
     app.post('/api/accounts', function(req, res) {
-        accountsService.create( {
-            name: req.body.name,
-            initialBalance: req.body.initialBalance },
+        accountsService.create(req.body,
             function(error, account, status) {
                 if (error) {        
                     sendError(res, error, status);
@@ -60,9 +58,7 @@ module.exports = function(app) {
     })
 
     app.patch('/api/accounts/:id', function(req, res) {
-        accountsService.edit( req.params.id, {
-            name: req.body.name,
-            initialBalance: req.body.initialBalance },
+        accountsService.edit(req.params.id, req.body,
             function(error, account, status) {
                 if (error) {        
                     sendError(res, error, status);
