@@ -7,7 +7,8 @@ var app = angular.module('financeControl', [
     'ui.grid.pagination',
     'purplefox.numeric',
     'categoriesService',
-    'accountsService'
+    'accountsService',
+    'expensesService'
 ]);
 
 app.config(function($routeProvider) {
@@ -24,6 +25,10 @@ app.config(function($routeProvider) {
             templateUrl: 'html/accounts.html',
             controller: 'accountsController'
         })
+        .when('/expenses', {
+            templateUrl: 'html/expenses.html',
+            controller: 'expensesController'
+        })        
         .otherwise({
         	redirecTo: '/'
         });

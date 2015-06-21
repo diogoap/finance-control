@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{screenTitle}}</h3>
+</div>
+<form name="expenseForm" class="form-horizontal" novalidate ng-submit="submit()">
+	<div class="modal-body">
+		<p class="bg-danger" ng-show="errorMessage != null">
+			<span>{{errorMessage}}</span>
+		</p>
+		<div class="form-group">
+			<label for="expenseDescription" class="col-md-3 control-label">Descrição</label>
+			<div class="col-md-9">
+				<input type="text" name="expenseDescription" ng-model="expense.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
+					<div class="error" ng-show="(expenseForm.expenseDescription.$dirty && expenseForm.expenseDescription.$invalid) || (submitted && expenseForm.expenseDescription.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.required">
+    					O campo Descrição é obrigatório.
+					</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.minlength">
+        				O campo Descrição deve possuir no mínimo 3 caracteres.
+					</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.maxlength">
+        				O campo Descrição deve possuir no máximo 100 caracteres.
+					</small>
+					</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="expenseAmount" class="col-md-3 control-label">Valor</label>
+			<div class="col-md-9">
+				<input numeric decimals="2" name="expenseAmount" ng-model="expense.amount" required class="form-control"></select>
+					<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseAmount.$error.required">
+    					O campo Valor é obrigatório.
+					</small>
+					</div>
+			</div>	
+		</div>
+		<p class="text-center" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-lg"></span>
+		</p>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">Confirmar</button>
+	    <button class="btn btn-default" ng-click="cancel()">Cancelar</button>
+	</div>
+</form>

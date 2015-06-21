@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('accountsController', function($scope, $http, $modal, $locale, Accounts) {
+app.controller('expensesController', function($scope, $http, $modal, $locale, Expenses) {
 
 	$scope.loading = true;
 	$scope.errorMessage = '';
@@ -11,20 +11,35 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
         enableSorting: true,
         paginationPageSizes: [10, 20],
         paginationPageSize: 10,
-        columnDefs: [		
+        columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
-          	{ name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false },
-          	{ name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '30%', enableColumnMenu: false,
+        	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'9%', enableColumnMenu: false,
+          		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+          	},        	
+          	{ name: 'Descrição', field: 'description', type: 'string', width:'30%', enableColumnMenu: false },
+          	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
-          	}
+          	},
+        	{ name: 'Categoria', field: 'category', type: 'string', width:'18%', enableColumnMenu: false },
+        	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
+        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        	},
+        	{ name: 'Valor pago', field: 'amountPaid', type: 'number', width:'9%', enableColumnMenu: false,
+				cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+        	},
+        	{ name: 'Ag.', field: 'scheduledPayment', type: 'string', width:'4%', enableColumnMenu: false,
+        		cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
+        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        	}
         ]
     }; 
 
-	Accounts.get()
+	Expenses.get()
 		.success(function(data) {
 			$scope.gridOptions.data = data;
 			$scope.errorMessage = null;
@@ -36,14 +51,14 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 		});
 
 	// OPEN MODAL ==============================================================
-  	$scope.open = function (accountId, action) {
+  	$scope.open = function (expenseId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/accountsModal.html',
-      		controller: accountsModalController,
+      		templateUrl: 'html/expensesModal.html',
+      		controller: expensesModalController,
       		resolve: {
-		        accountId: function () {
-					return accountId; 
+		        expenseId: function () {
+					return expenseId; 
         		},
         		action: function () {
         			return action;
@@ -51,17 +66,17 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
       		}
     	});
 
-		modalInstance.result.then(function (account) {
-	    	if (account._action == 'new') {
-	    		$scope.createAccount(account);
-	    	} else if (account._action == 'edit') {
-	    		$scope.editAccount(account);
+		modalInstance.result.then(function (expense) {
+	    	if (expense._action == 'new') {
+	    		$scope.createExpense(expense);
+	    	} else if (expense._action == 'edit') {
+	    		$scope.editExpense(expense);
 	    	}
 		});
     };  
 
 	// DELETE CONFIRMATION =====================================================
-    $scope.deleteConfirmation = function (accountId) {
+    $scope.deleteConfirmation = function (ExpenseId) {
     	
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
@@ -70,22 +85,22 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return accountId; 
+					return ExpenseId; 
         		},      			
 		        message: function () {
-					return 'Confirma a exclusão da conta?'; 
+					return 'Confirma a exclusão da despesa?'; 
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
-	    	$scope.deleteAccount(id);
+	    	$scope.deleteExpense(id);
 		}); 
     };  
 
 	// GET =====================================================================
-	$scope.getAccounts = function() {
-		Accounts.get()
+	$scope.getExpenses = function() {
+		Expenses.get()
 			.success(function(data) {
 				$scope.gridOptions.data = data;			
 				$scope.errorMessage = null;
@@ -98,12 +113,12 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 	};
 
 	// CREATE ==================================================================
-	$scope.createAccount = function(account) {
+	$scope.createExpense = function(expense) {
 		$scope.loading = true;
 
-		Accounts.create(account)
+		Expenses.create(expense)
 			.success(function(data) {
-				$scope.getAccounts();					
+				$scope.getExpenses();					
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -112,12 +127,12 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 	};
 
 	// EDIT ====================================================================
-	$scope.editAccount = function(account) {
+	$scope.editExpense = function(expense) {
 		$scope.loading = true;
 
-		Accounts.patch(account._id, account)
+		Expenses.patch(expense._id, expense)
 			.success(function(data) {
-				$scope.getAccounts();					
+				$scope.getExpenses();					
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -126,12 +141,12 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 	};	
 
 	// DELETE ==================================================================
-	$scope.deleteAccount = function(id) {
+	$scope.deleteExpense = function(id) {
 		$scope.loading = true;
 
-		Accounts.delete(id)
+		Expenses.delete(id)
 			.success(function(data) {			
-				$scope.getAccounts();
+				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;

@@ -1,4 +1,4 @@
-<div class="container" ng-controller="accountsController">
+<div class="container" ng-controller="expensesController">
 	<div class="row">
 		<div class="col-lg-12">
 			<p class="bg-danger" ng-show="errorMessage != null">
@@ -6,10 +6,10 @@
 			</p>
 
 			<div class="text-center">
-				<h3>Cadastro de contas</h3>
-			</div>	
+				<h3>Cadastro de despesas</h3>
+			</div>
 
-			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar conta</button>
+			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar despesa</button>
 
 			<div ui-grid="gridOptions" ui-grid-pagination></div>
 

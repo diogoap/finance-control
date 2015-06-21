@@ -95,6 +95,11 @@ module.exports = {
     get: function(callback) {
         return Expenses.find(function(error, expense) {
             callback(error, expense);
+        })
+        .populate('_category', 'name')
+        .exec(function (error, expense) {
+            if (error) return callback(error, expense);
+            console.log('The creator is %s', expense._category);
         });
     },    
 
