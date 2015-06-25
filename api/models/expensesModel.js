@@ -11,7 +11,6 @@ var expenseSchema = new Schema({
 	amount: { type: Number, default: 0 },
 	category_id: ObjectId,
 	_category: { type: Number, ref: 'Category' },
-	_category_name: String,
 	amountPaid: { type: Number, default: 0 },
 	status: { type: String, default: '' },
 	notes: String,

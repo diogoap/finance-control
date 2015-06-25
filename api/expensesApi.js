@@ -3,13 +3,14 @@
 var expensesService = require('./services/expensesService');
 
 function getExpenses(res) {
-    expensesService.get(function(error, expenses, status) {
-        if (error) {
+    expensesService.get(
+        function(expenses) {      
+            res.json(expenses);    
+        },
+        function(error, status) {
             sendError(res, error, status);
-        } else {          
-            res.json(expenses);
-        };
-    });
+        }
+    );
 };
 
 function sendError(res, error, status) {
@@ -23,13 +24,14 @@ function sendError(res, error, status) {
 module.exports = function(app) {
 
     app.get('/api/expenses/:id', function(req, res) {
-        var expense = expensesService.getById(req.params.id, function(error, expense, status) {
-            if (error){
-                sendError(res, error, status);
-            } else {
+        var expense = expensesService.getById(req.params.id,
+            function(expense) {
                 res.json(expense);
-            };
-        });
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.get('/api/expenses', function(req, res) {
@@ -38,34 +40,35 @@ module.exports = function(app) {
 
     app.post('/api/expenses', function(req, res) {
         expensesService.create(req.body,
-            function(error, expense, status) {
-                if (error) {        
-                    sendError(res, error, status);
-                } else {         
-                    getExpenses(res);
-                };
-        });
+            function(expenses) {
+                getExpenses(res);
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.delete('/api/expenses/:id', function(req, res) {
-        expensesService.delete( { _id : req.params.id }, function(error, expense, status) {
-            if (error) {
-                sendError(res, error, status);
-            } else {
+        expensesService.delete( { _id : req.params.id }, 
+            function() {
                 getExpenses(res);
-            };
-        });  
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );  
     })
 
     app.patch('/api/expenses/:id', function(req, res) {
         expensesService.edit(req.params.id, req.body,
-            function(error, expense, status) {
-                if (error) {        
-                    sendError(res, error, status);
-                } else {         
-                    getExpenses(res);
-                };
-        });        
+            function(expenses) {
+                getExpenses(res);
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );        
     })  
 
 }

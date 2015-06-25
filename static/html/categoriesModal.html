@@ -10,28 +10,20 @@
 			<label for="categoryName" class="col-md-2 control-label">Nome</label>
 			<div class="col-md-10">
 				<input type="text" name="categoryName" ng-model="category.name" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
-					<div class="error" ng-show="(categoryForm.categoryName.$dirty && categoryForm.categoryName.$invalid) || (submitted && categoryForm.categoryName.$invalid)">
-					<small class="error" ng-show="categoryForm.categoryName.$error.required">
-    					O campo Nome é obrigatório.
-					</small>
-					<small class="error" ng-show="categoryForm.categoryName.$error.minlength">
-        				O campo Nome deve possuir no mínimo 3 caracteres.
-					</small>
-					<small class="error" ng-show="categoryForm.categoryName.$error.maxlength">
-        				O campo Nome deve possuir no máximo 100 caracteres.
-					</small>
-					</div>
+				<div class="error" ng-show="(categoryForm.categoryName.$dirty && categoryForm.categoryName.$invalid) || (submitted && categoryForm.categoryName.$invalid)">
+					<small class="error" ng-show="categoryForm.categoryName.$error.required">O campo Nome é obrigatório.</small>
+					<small class="error" ng-show="categoryForm.categoryName.$error.minlength">O campo Nome deve possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="categoryForm.categoryName.$error.maxlength">O campo Nome deve possuir no máximo 100 caracteres.</small>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="categoryType" class="col-md-2 control-label">Tipo</label>
 			<div class="col-md-10">
 				<select name="categoryType" required ng-model="category.type" ng-options="type for type in categoryTypes" class="form-control"></select>
-					<div class="error" ng-show="(categoryForm.categoryType.$dirty && categoryForm.categoryType.$invalid) || (submitted && categoryForm.categoryType.$invalid)">
-					<small class="error" ng-show="categoryForm.categoryType.$error.required">
-    					O campo Tipo é obrigatório.
-					</small>
-					</div>
+				<div class="error" ng-show="(categoryForm.categoryType.$dirty && categoryForm.categoryType.$invalid) || (submitted && categoryForm.categoryType.$invalid)">
+					<small class="error" ng-show="categoryForm.categoryType.$error.required">O campo Tipo é obrigatório.</small>
+				</div>
 			</div>
 		</div>
 		<p class="text-center" ng-show="loading">

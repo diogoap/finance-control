@@ -1,6 +1,7 @@
 'use strict';
 
 var Expenses = require('../models/expensesModel');
+var Categories = require('../models/categoriesModel');
 var Validator = require('jsonschema').Validator;
 
 var expenseSchema = {
@@ -18,8 +19,7 @@ var expenseSchema = {
             "required": true            
         },
         "scheduledPayment": {
-            "type": "boolean",
-            "required": true            
+            "type": "boolean"         
         },       
         "amount": {
             "type": "number",
@@ -86,50 +86,85 @@ var expenseSchema = {
 
 module.exports = {
 
-    getById: function(id, callback) {
-        return Expenses.findById(id, function(error, expense) {
-            callback(error, expense);
-        });
+    getById: function(id, callbackSuccess, callbackError) {
+        var expensesPromisse = Expenses.findById(id);
+
+        expensesPromisse.then(function (expense) {
+            callbackSuccess(expense);              
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
+        });        
     },
 
-    get: function(callback) {
-        return Expenses.find(function(error, expense) {
-            callback(error, expense);
+    get: function(callbackSuccess, callbackError) {
+        var expensesPromisse = Expenses.find().exec();
+
+        expensesPromisse.then(function (expenses) {
+            var categoriesPromisse = Categories.find().exec();
+
+            categoriesPromisse.then(function (categories) {
+                for (var i in expenses) {
+                    for (var j in categories)
+                    {
+                        if (expenses[i].category_id == categories[j].id)
+                        {
+                            expenses[i]._category = categories[j];
+                            break;
+                        }
+                    }
+                };
+
+                callbackSuccess(expenses);
+            });               
         })
-        .populate('_category', 'name')
-        .exec(function (error, expense) {
-            if (error) return callback(error, expense);
-            console.log('The creator is %s', expense._category);
+        .then(null, function(error) {
+            callbackError(error);
         });
     },    
 
-    create: function(expense, callback) {
+    create: function(expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
 
         if (val.errors.length == 0) {
-            return Expenses.create(expense, function(error, expense) {
-                callback(error, expense);
+            var expensesPromisse = Expenses.create(expense);
+
+            expensesPromisse.then(function () {
+                callbackSuccess();              
+            })
+            .then(null, function(error) {
+                callbackError(error, 400);
             });
         } else {
-            callback(val.errors, expense, 400)
+            callbackError(val.errors, 400)
         }
     },
 
-    delete: function(id, callback) {
-        return Expenses.remove(id, function(error, expense) {
-            callback(error, expense);
+    delete: function(id, callbackSuccess, callbackError) {
+        var expensesPromisse = Expenses.remove(id);
+
+        expensesPromisse.then(function () {
+            callbackSuccess();              
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
         });
     },
 
-    edit: function(id, expense, callback) {
+    edit: function(id, expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
 
-        if (val.errors.length == 0) {        
-            return Expenses.findByIdAndUpdate(id, expense, function(error, expense) {
-                callback(error, expense);
-        });
+        if (val.errors.length == 0) { 
+            var expensesPromisse = Expenses.findByIdAndUpdate(id, expense);
+
+            expensesPromisse.then(function () {
+                callbackSuccess();              
+            })
+            .then(null, function(error) {
+                callbackError(error, 400);
+            });
         } else {
-            callback(val.errors, expense, 400)
+            callbackError(val.errors, 400)
         }            
     }
 

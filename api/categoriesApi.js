@@ -3,33 +3,35 @@
 var categoriesService = require('./services/categoriesService');
 
 function getCategories(res) {
-    categoriesService.get(function(error, categories, status) {
-        if (error) {
+    categoriesService.get(
+        function(categories) {
+            res.json(categories);    
+        },
+        function(error, status) {
             sendError(res, error, status);
-        } else {          
-            res.json(categories);
-        };
-    });
+        }
+    );
 };
 
 function sendError(res, error, status) {
     if (status) {
-        res.status(status).send(error);    
+        res.status(status).send(error);
     } else {
-        res.status(500).send(error);   
+        res.status(500).send(error);
     };
 }
 
 module.exports = function(app) {
 
     app.get('/api/categories/:id', function(req, res) {
-        var category = categoriesService.getById(req.params.id, function(error, category, status) {
-            if (error){
-                sendError(res, error, status);
-            } else {
+        var category = categoriesService.getById(req.params.id,
+            function(category) {
                 res.json(category);
-            };
-        });
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.get('/api/categories', function(req, res) {
@@ -37,33 +39,36 @@ module.exports = function(app) {
     })
 
     app.post('/api/categories', function(req, res) {
-        categoriesService.create(req.body, function(error, category, status) {
-            if (error) {        
-                sendError(res, error, status);
-            } else {         
+        categoriesService.create(req.body,
+            function(categories) {
                 getCategories(res);
-            };
-        });
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.delete('/api/categories/:id', function(req, res) {
-        categoriesService.delete( { _id : req.params.id }, function(error, category, status) {
-            if (error) {
-                sendError(res, error, status);
-            } else {
+        categoriesService.delete( { _id : req.params.id }, 
+            function() {
                 getCategories(res);
-            };
-        });  
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );  
     })
 
     app.patch('/api/categories/:id', function(req, res) {
-        categoriesService.edit(req.params.id, req.body, function(error, category, status) {
-            if (error) {
-                sendError(res, error, status);
-            } else {
+        categoriesService.edit(req.params.id, req.body,
+            function(categories) {
                 getCategories(res);
-            };
-        });  
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );        
     })  
 
 }

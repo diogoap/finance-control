@@ -24,45 +24,70 @@ var accountSchema = {
 
 module.exports = {
 
-    getById: function(id, callback) {
-        return Accounts.findById(id, function(error, account) {
-            callback(error, account);
-        });
+    getById: function(id, callbackSuccess, callbackError) {
+        var accountsPromisse = Accounts.findById(id);
+
+        accountsPromisse.then(function (account) {
+            callbackSuccess(account);              
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
+        });        
     },
 
-    get: function(callback) {
-        return Accounts.find(function(error, account) {
-            callback(error, account);
+    get: function(callbackSuccess, callbackError) {
+        var accountsPromisse = Accounts.find().exec();
+
+        accountsPromisse.then(function (accounts) {
+            callbackSuccess(accounts);              
+        })
+        .then(null, function(error) {
+            callbackError(error);
         });
     },    
 
-    create: function(account, callback) {
+    create: function(account, callbackSuccess, callbackError) {
         var val = new Validator().validate(account, accountSchema);
 
         if (val.errors.length == 0) {
-            return Accounts.create(account, function(error, account) {
-                callback(error, account);
+            var accountsPromisse = Accounts.create(account);
+
+            accountsPromisse.then(function () {
+                callbackSuccess();              
+            })
+            .then(null, function(error) {
+                callbackError(error, 400);
             });
         } else {
-            callback(val.errors, account, 400)
+            callbackError(val.errors, 400)
         }
     },
 
-    delete: function(id, callback) {
-        return Accounts.remove(id, function(error, account) {
-            callback(error, account);
+    delete: function(id, callbackSuccess, callbackError) {
+        var accountsPromisse = Accounts.remove(id);
+
+        accountsPromisse.then(function () {
+            callbackSuccess();              
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
         });
     },
 
-    edit: function(id, account, callback) {
+    edit: function(id, account, callbackSuccess, callbackError) {
         var val = new Validator().validate(account, accountSchema);
 
-        if (val.errors.length == 0) {        
-            return Accounts.findByIdAndUpdate(id, account, function(error, account) {
-                callback(error, account);
-        });
+        if (val.errors.length == 0) { 
+            var accountsPromisse = Accounts.findByIdAndUpdate(id, account);
+
+            accountsPromisse.then(function () {
+                callbackSuccess();              
+            })
+            .then(null, function(error) {
+                callbackError(error, 400);
+            });
         } else {
-            callback(val.errors, account, 400)
+            callbackError(val.errors, 400)
         }            
     }
 

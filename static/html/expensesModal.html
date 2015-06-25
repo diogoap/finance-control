@@ -10,30 +10,74 @@
 			<label for="expenseDescription" class="col-md-3 control-label">Descrição</label>
 			<div class="col-md-9">
 				<input type="text" name="expenseDescription" ng-model="expense.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
-					<div class="error" ng-show="(expenseForm.expenseDescription.$dirty && expenseForm.expenseDescription.$invalid) || (submitted && expenseForm.expenseDescription.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseDescription.$error.required">
-    					O campo Descrição é obrigatório.
-					</small>
-					<small class="error" ng-show="expenseForm.expenseDescription.$error.minlength">
-        				O campo Descrição deve possuir no mínimo 3 caracteres.
-					</small>
-					<small class="error" ng-show="expenseForm.expenseDescription.$error.maxlength">
-        				O campo Descrição deve possuir no máximo 100 caracteres.
-					</small>
-					</div>
+				<div class="error" ng-show="(expenseForm.expenseDescription.$dirty && expenseForm.expenseDescription.$invalid) || (submitted && expenseForm.expenseDescription.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.required">O campo Descrição é obrigatório.</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.minlength">O campo Descrição deve possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.maxlength">O campo Descrição deve possuir no máximo 100 caracteres.</small>
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="expenseAmount" class="col-md-3 control-label">Valor</label>
-			<div class="col-md-9">
-				<input numeric decimals="2" name="expenseAmount" ng-model="expense.amount" required class="form-control"></select>
-					<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseAmount.$error.required">
-    					O campo Valor é obrigatório.
-					</small>
+			<label for="expenseDueDate" class="col-md-3 control-label">Vencimento</label>
+			<div class="col-md-4">			
+				<div class="input-group">
+					<input datepicker-popup="shortDate" name="expenseDueDate" ng-model="expense.dueDate" required class="form-control" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+	              	<span class="input-group-btn">
+	                	<button type="button" class="btn btn-default" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+	              	</span>
+					<div class="error" ng-show="(expenseForm.expenseDueDate.$dirty && expenseForm.expenseDueDate.$invalid) || (submitted && expenseForm.expenseDueDate.$invalid)">
+						<small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é obrigatório.</small>
 					</div>
+				</div>
+			</div>
+			<label for="expenseAmount" class="col-md-2 control-label">Valor</label>
+			<div class="col-md-3">
+				<input numeric decimals="2" min="0.01" name="expenseAmount" ng-model="expense.amount" required class="form-control"/>
+				<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseAmount.$error.required">O campo Valor é obrigatório.</small>
+				</div>
 			</div>	
 		</div>
+		<div class="form-group">
+			<label for="expenseCategory" class="col-md-3 control-label">Categoria</label>
+			<div class="col-md-9">
+				<select name="expenseCategory" required ng-model="expense.category_id" ng-options="c._id as c.name for c in categories" class="form-control"></select>
+				<div class="error" ng-show="(expenseForm.expenseCategory.$dirty && expenseForm.expenseCategory.$invalid) || (submitted && expenseForm.expenseCategory.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseCategory.$error.required">O campo Categoria é obrigatório.</small>
+				</div>
+			</div>
+		</div>		
+		<div class="form-group">
+			<label for="expenseStatus" class="col-md-3 control-label">Situação</label>
+			<div class="col-md-3">
+				<select name="expenseStatus" required ng-model="expense.status" ng-options="type for type in expenseStatus" class="form-control"></select>
+				<div class="error" ng-show="(expenseForm.expenseStatus.$dirty && expenseForm.expenseStatus.$invalid) || (submitted && expenseForm.expenseStatus.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseStatus.$error.required">O campo Situação é obrigatório.</small>
+				</div>
+			</div>
+			<label for="expenseAmountPaid" class="col-md-3 control-label">Valor pago</label>
+			<div class="col-md-3">
+				<input numeric decimals="2" name="expenseAmountPaid" ng-model="expense.amountPaid" required class="form-control"/>
+				<div class="error" ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseAmountPaid.$error.required">O campo Valor pago é obrigatório.</small>
+				</div>
+			</div>	
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-3 col-md-9">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="expenseScheduledPayment" ng-model="expense.scheduledPayment"/>Pagamento agendado
+					</label>
+				</div>	
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="expenseNotes" class="col-md-3 control-label">Observações</label>
+			<div class="col-md-9">
+				<textarea name="expenseNotes" ng-model="expense.notes" rows="3" class="form-control"></textarea>
+			</div>
+		</div>		
 		<p class="text-center" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-lg"></span>
 		</p>

@@ -25,7 +25,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	},
-        	{ name: 'Categoria', field: 'category', type: 'string', width:'18%', enableColumnMenu: false },
+        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'18%', enableColumnMenu: false },
         	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
