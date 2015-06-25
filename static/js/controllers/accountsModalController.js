@@ -8,6 +8,7 @@ function accountsModalController($scope, $modalInstance, Accounts, accountId, ac
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar conta';
+		$scope.account = { initialBalance: 0 };		
 		$scope.loading = false;
 	}
 	else

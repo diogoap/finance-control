@@ -8,7 +8,8 @@ function expensesModalController($scope, $modalInstance, Expenses, Categories, e
  	$scope.submitted = false;
 
 	if (action == 'new') {
-		$scope.screenTitle = 'Adicionar despesa';
+		$scope.screenTitle = 'Adicionar despesa';		
+		$scope.expense = { dueDate: new Date(), status: 'Em aberto', amountPaid: 0 };
 		$scope.loading = false;
 	}
 	else
