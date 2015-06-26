@@ -21,11 +21,12 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
           		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},        	
-          	{ name: 'Descrição', field: 'description', type: 'string', width:'30%', enableColumnMenu: false },
+          	{ name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false },
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	},
-        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'18%', enableColumnMenu: false },
+          	{ name: 'Conta', field: '_account.name', type: 'string', width:'15%', enableColumnMenu: false },
+        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'15%', enableColumnMenu: false },
         	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
@@ -56,6 +57,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/expensesModal.html',
       		controller: expensesModalController,
+      		size: 'lg',
       		resolve: {
 		        expenseId: function () {
 					return expenseId; 

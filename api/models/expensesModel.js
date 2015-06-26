@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var Categories = require('../models/categoriesModel');
 var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;;
 
 var expenseSchema = new Schema({
@@ -10,7 +9,9 @@ var expenseSchema = new Schema({
 	scheduledPayment: { type: Boolean, default: false },
 	amount: { type: Number, default: 0 },
 	category_id: ObjectId,
-	_category: { type: Number, ref: 'Category' },
+	_category: Object,
+	account_id: ObjectId,
+	_account: Object,
 	amountPaid: { type: Number, default: 0 },
 	status: { type: String, default: '' },
 	notes: String,
@@ -18,6 +19,9 @@ var expenseSchema = new Schema({
 	 	description: String,
 		amount: { type: Number, default: 0 },
 		category_id: ObjectId,
+		_category: Object,
+		account_id: ObjectId,
+		_account: Object,
 		status: String
 	} ]
 });

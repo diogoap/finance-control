@@ -2,6 +2,7 @@
 
 var Expenses = require('../models/expensesModel');
 var Categories = require('../models/categoriesModel');
+var Accounts = require('../models/accountsModel');
 var Validator = require('jsonschema').Validator;
 
 var expenseSchema = {
@@ -20,7 +21,7 @@ var expenseSchema = {
         },
         "scheduledPayment": {
             "type": "boolean"         
-        },       
+        },
         "amount": {
             "type": "number",
             "minimum": 0.01,
@@ -29,7 +30,11 @@ var expenseSchema = {
         "category_id": {
             "type": "string",
             "required": true             
-        },       
+        },
+        "account_id": {
+            "type": "string",
+            "required": true             
+        },
         "amountPaid": {
             "type": "number",
             "minimum": 0,
@@ -68,7 +73,11 @@ var expenseSchema = {
                     "category_id": {
                         "type": "string",
                         "required": true             
-                    },       
+                    },
+                    "account_id": {
+                        "type": "string",
+                        "required": true
+                    },
                     "status": {
                         "type": "string",
                         "required": true,
@@ -84,13 +93,47 @@ var expenseSchema = {
     }
 };
 
+function setCategory(categoryList, obj) {
+    for (var j in categoryList) {
+        if (obj.category_id == categoryList[j].id) {
+            obj._category = categoryList[j];
+            break;
+        }
+    }
+}
+
+function setAccount(accountList, obj) {
+    for (var j in accountList) {
+        if (obj.account_id == accountList[j].id) {
+            obj._account = accountList[j];
+            break;
+        }
+    }
+}
+
 module.exports = {
 
     getById: function(id, callbackSuccess, callbackError) {
-        var expensesPromisse = Expenses.findById(id);
+        var expensePromisse = Expenses.findById(id);
+        expensePromisse.then(function (expense) {
 
-        expensesPromisse.then(function (expense) {
-            callbackSuccess(expense);              
+            var categoriesPromisse = Categories.find().exec();
+            categoriesPromisse.then(function (categories) {
+
+                var accountsPromisse = Accounts.find().exec();
+                accountsPromisse.then(function (accounts) {
+
+                    setCategory(categories, expense);
+                    setAccount(accounts, expense);
+
+                    expense.detail.forEach(function (det) {
+                        setCategory(categories, det);
+                        setAccount(accounts, det);
+                    });
+
+                    callbackSuccess(expense);
+                });
+            }); 
         })
         .then(null, function(error) {
             callbackError(error, 400);
@@ -99,23 +142,26 @@ module.exports = {
 
     get: function(callbackSuccess, callbackError) {
         var expensesPromisse = Expenses.find().exec();
-
-        expensesPromisse.then(function (expenses) {
+        expensesPromisse.then(function (expenses) {      
+            
             var categoriesPromisse = Categories.find().exec();
-
             categoriesPromisse.then(function (categories) {
-                for (var i in expenses) {
-                    for (var j in categories)
-                    {
-                        if (expenses[i].category_id == categories[j].id)
-                        {
-                            expenses[i]._category = categories[j];
-                            break;
-                        }
-                    }
-                };
 
-                callbackSuccess(expenses);
+                var accountsPromisse = Accounts.find().exec();
+                accountsPromisse.then(function (accounts) {
+
+                    expenses.forEach(function (exp) {
+                        setCategory(categories, exp);
+                        setAccount(accounts, exp);
+
+                        exp.detail.forEach(function (det) {
+                            setCategory(categories, det);
+                            setAccount(accounts, det);
+                        });
+                    });
+
+                    callbackSuccess(expenses);
+                });
             });               
         })
         .then(null, function(error) {
