@@ -183,6 +183,7 @@ module.exports = {
                         setAccount(accounts, exp);
 
                         exp.detail.forEach(function (det) {
+                            //exp._categoryName = exp._categoryName + ' - ' 
                             setCategory(categories, det);
                             setAccount(accounts, det);
                         });

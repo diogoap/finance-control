@@ -104,10 +104,11 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 
 		if ($scope.expense.detail.length > 0) {
 			$scope._hasDetail = true;
-			$scope.expense.account_id = null;
+
+			$scope.expense.account_id = '';
 			$scope.expense._account = null;
 
-			$scope.expense.category_id = null;
+			$scope.expense.category_id = '';
 			$scope.expense._category = null;
 
 			$scope.expense.amount = 0;
