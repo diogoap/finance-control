@@ -19,7 +19,7 @@
 		</div>
 		<div class="form-group">
 			<label for="expenseDueDate" class="col-md-3 control-label">Vencimento</label>
-			<div class="col-md-4">			
+			<div class="col-md-4">
 				<div class="input-group">
 					<input datepicker-popup="shortDate" name="expenseDueDate" ng-model="expense.dueDate" required class="form-control" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 	              	<span class="input-group-btn">
@@ -32,30 +32,30 @@
 			</div>
 			<label for="expenseAmount" class="col-md-2 control-label">Valor</label>
 			<div class="col-md-3">
-				<input numeric decimals="2" min="0.01" name="expenseAmount" ng-model="expense.amount" required class="form-control"/>
+				<input numeric decimals="2" min="0.01" name="expenseAmount" ng-model="expense.amount" required ng-readonly="_hasDetail" class="form-control"/>
 				<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmount.$error.required">O campo Valor é obrigatório.</small>
 				</div>
-			</div>	
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="expenseAccount" class="col-md-3 control-label">Conta</label>
 			<div class="col-md-9">
-				<select name="expenseAccount" required ng-model="expense.account_id" ng-options="c._id as c.name for c in accounts" class="form-control"></select>
+				<select name="expenseAccount" ng-model="expense.account_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.name for c in accounts" class="form-control"></select>
 				<div class="error" ng-show="(expenseForm.expenseAccount.$dirty && expenseForm.expenseAccount.$invalid) || (submitted && expenseForm.expenseAccount.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAccount.$error.required">O campo Conta é obrigatório.</small>
 				</div>
 			</div>
-		</div>		
+		</div>
 		<div class="form-group">
 			<label for="expenseCategory" class="col-md-3 control-label">Categoria</label>
 			<div class="col-md-9">
-				<select name="expenseCategory" required ng-model="expense.category_id" ng-options="c._id as c.name for c in categories" class="form-control"></select>
+				<select name="expenseCategory" ng-model="expense.category_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.name for c in categories" class="form-control"></select>
 				<div class="error" ng-show="(expenseForm.expenseCategory.$dirty && expenseForm.expenseCategory.$invalid) || (submitted && expenseForm.expenseCategory.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseCategory.$error.required">O campo Categoria é obrigatório.</small>
 				</div>
 			</div>
-		</div>		
+		</div>
 		<div class="form-group">
 			<label for="expenseStatus" class="col-md-3 control-label">Situação</label>
 			<div class="col-md-4">
@@ -66,11 +66,11 @@
 			</div>
 			<label for="expenseAmountPaid" class="col-md-2 control-label">Valor pago</label>
 			<div class="col-md-3">
-				<input numeric decimals="2" name="expenseAmountPaid" ng-model="expense.amountPaid" required class="form-control"/>
+				<input numeric decimals="2" name="expenseAmountPaid" ng-model="expense.amountPaid" required ng-readonly="_hasDetail" class="form-control"/>
 				<div class="error" ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmountPaid.$error.required">O campo Valor pago é obrigatório.</small>
 				</div>
-			</div>	
+			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-offset-3 col-md-9">
@@ -78,7 +78,7 @@
 					<label>
 						<input type="checkbox" name="expenseScheduledPayment" ng-model="expense.scheduledPayment"/>Pagamento agendado
 					</label>
-				</div>	
+				</div>
 			</div>
 		</div>
 		<div class="form-group">
@@ -86,15 +86,17 @@
 			<div class="col-md-9">
 				<textarea name="expenseNotes" ng-model="expense.notes" rows="3" class="form-control"></textarea>
 			</div>
-		</div>		
-		<p class="text-center" ng-show="loading">
-			<span class="fa fa-spinner fa-spin fa-lg"></span>
-		</p>
+		</div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="openDetail(null, 'new')">Adicionar detalhe</button>
+            <div ui-grid="gridOptions" ui-grid-pagination></div>
+        </div>
+
+        <p class="text-center" ng-show="loading">
+            <span class="fa fa-spinner fa-spin fa-lg"></span>
+        </p>
 	</div>
-
-	<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar detalhe</button>
-
-	<div ui-grid="gridOptions" ui-grid-pagination></div>
 
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary">Confirmar</button>

@@ -11,38 +11,33 @@ var expenseSchema = {
     "properties": {
         "description": {
             "type": "string",
-            "required": true,
             "minLength": 3,
             "maxLength": 100
         },
         "dueDate": {
-            "type": "datetime",
-            "required": true            
+            "type": "datetime"
         },
         "scheduledPayment": {
-            "type": "boolean"         
+            "type": "boolean"
         },
         "amount": {
             "type": "number",
             "minimum": 0.01,
-            "exclusiveMinimum": false             
+            "exclusiveMinimum": false
         },
         "category_id": {
-            "type": "string",
-            "required": true             
+            "type": "string"
         },
         "account_id": {
-            "type": "string",
-            "required": true             
+            "type": "string"
         },
         "amountPaid": {
             "type": "number",
             "minimum": 0,
-            "exclusiveMinimum": false            
+            "exclusiveMinimum": false
         },
         "status": {
             "type": "string",
-            "required": true,
             "enum": [
                 "Em aberto",
                 "Pago",
@@ -61,36 +56,34 @@ var expenseSchema = {
                 "properties": {
                     "description": {
                         "type": "string",
-                        "required": true,
-                        "minLength": 3,
+                        "minLength": 1,
                         "maxLength": 100
-                    },      
+                    },
                     "amount": {
                         "type": "number",
                         "minimum": 0.01,
-                        "exclusiveMinimum": false             
+                        "exclusiveMinimum": false
                     },
                     "category_id": {
-                        "type": "string",
-                        "required": true             
+                        "type": "string"
                     },
                     "account_id": {
-                        "type": "string",
-                        "required": true
+                        "type": "string"
                     },
                     "status": {
                         "type": "string",
-                        "required": true,
                         "enum": [
                             "Em aberto",
                             "Pago",
                             "Cancelado"
                         ]
-                    },
-                }
+                    }
+                },
+                "required": [ "description", "category_id", "account_id", "status", "amount" ]
             }
         }
-    }
+    },
+    "required": [ "description", "dueDate", "status", "amount" ],
 };
 
 function setCategory(categoryList, obj) {
@@ -107,6 +100,41 @@ function setAccount(accountList, obj) {
         if (obj.account_id == accountList[j].id) {
             obj._account = accountList[j];
             break;
+        }
+    }
+}
+
+function validateExpense(expense, errors) {
+    if ((expense.detail == undefined || expense.detail.length == 0) && (expense.account_id == null)) {
+        errors.push('account_id is required when there is no detail');
+    }
+
+    if ((expense.detail == undefined || expense.detail.length == 0) && (expense.category_id == null)) {
+        errors.push('category_id is required when there is no detail');
+    }
+}
+
+function updateExpenseTotal(expense) {
+    if (expense.detail != undefined) {
+        expense.account_id = null;
+        expense._account = null;
+
+        expense.category_id = null;
+        expense._category = null;
+
+        expense.amount = 0;
+        expense.amountPaid = 0;
+
+        expense.detail.forEach(function (det) {
+            expense.amount += det.amount;
+
+            if (det.status == 'Pago') {
+                expense.amountPaid += det.amount;
+            }
+        });
+
+        if (expense.amount == expense.amountPaid) {
+            expense.status = 'Pago';
         }
     }
 }
@@ -133,17 +161,17 @@ module.exports = {
 
                     callbackSuccess(expense);
                 });
-            }); 
+            });
         })
         .then(null, function(error) {
             callbackError(error, 400);
-        });        
+        });
     },
 
     get: function(callbackSuccess, callbackError) {
         var expensesPromisse = Expenses.find().exec();
-        expensesPromisse.then(function (expenses) {      
-            
+        expensesPromisse.then(function (expenses) {
+
             var categoriesPromisse = Categories.find().exec();
             categoriesPromisse.then(function (categories) {
 
@@ -162,21 +190,23 @@ module.exports = {
 
                     callbackSuccess(expenses);
                 });
-            });               
+            });
         })
         .then(null, function(error) {
             callbackError(error);
         });
-    },    
+    },
 
     create: function(expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
+        validateExpense(expense, val.errors);
 
         if (val.errors.length == 0) {
+            updateExpenseTotal(expense);
             var expensesPromisse = Expenses.create(expense);
 
             expensesPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
@@ -190,7 +220,7 @@ module.exports = {
         var expensesPromisse = Expenses.remove(id);
 
         expensesPromisse.then(function () {
-            callbackSuccess();              
+            callbackSuccess();
         })
         .then(null, function(error) {
             callbackError(error, 400);
@@ -199,19 +229,21 @@ module.exports = {
 
     edit: function(id, expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
+        validateExpense(expense, val.errors);
 
-        if (val.errors.length == 0) { 
+        if (val.errors.length == 0) {
+            updateExpenseTotal(expense);
             var expensesPromisse = Expenses.findByIdAndUpdate(id, expense);
 
             expensesPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
             });
         } else {
             callbackError(val.errors, 400)
-        }            
+        }
     }
 
 }

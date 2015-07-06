@@ -9,7 +9,6 @@ var accountSchema = {
     "properties": {
         "name": {
             "type": "string",
-            "required": true,
             "minLength": 3,
             "maxLength": 100
         },
@@ -19,7 +18,8 @@ var accountSchema = {
         "actualBalance": {
             "type": "double"
         }
-    }
+    },
+    "required": [ "name" ]
 };
 
 module.exports = {
@@ -28,23 +28,23 @@ module.exports = {
         var accountsPromisse = Accounts.findById(id);
 
         accountsPromisse.then(function (account) {
-            callbackSuccess(account);              
+            callbackSuccess(account);
         })
         .then(null, function(error) {
             callbackError(error, 400);
-        });        
+        });
     },
 
     get: function(callbackSuccess, callbackError) {
         var accountsPromisse = Accounts.find().exec();
 
         accountsPromisse.then(function (accounts) {
-            callbackSuccess(accounts);              
+            callbackSuccess(accounts);
         })
         .then(null, function(error) {
             callbackError(error);
         });
-    },    
+    },
 
     create: function(account, callbackSuccess, callbackError) {
         var val = new Validator().validate(account, accountSchema);
@@ -53,7 +53,7 @@ module.exports = {
             var accountsPromisse = Accounts.create(account);
 
             accountsPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
@@ -67,7 +67,7 @@ module.exports = {
         var accountsPromisse = Accounts.remove(id);
 
         accountsPromisse.then(function () {
-            callbackSuccess();              
+            callbackSuccess();
         })
         .then(null, function(error) {
             callbackError(error, 400);
@@ -77,18 +77,18 @@ module.exports = {
     edit: function(id, account, callbackSuccess, callbackError) {
         var val = new Validator().validate(account, accountSchema);
 
-        if (val.errors.length == 0) { 
+        if (val.errors.length == 0) {
             var accountsPromisse = Accounts.findByIdAndUpdate(id, account);
 
             accountsPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
             });
         } else {
             callbackError(val.errors, 400)
-        }            
+        }
     }
 
 }

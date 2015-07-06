@@ -9,19 +9,19 @@ var categorySchema = {
     "properties": {
         "name": {
             "type": "string",
-            "required": true,
             "minLength": 3,
             "maxLength": 100
         },
         "type": {
             "type": "string",
-            "required": true,
             "enum": [
                 "Receita",
                 "Despesa"
             ]
         }
-    }  
+    },
+    "required": [ "name", "type" ]
+
 };
 
 module.exports = {
@@ -30,23 +30,23 @@ module.exports = {
         var categoriesPromisse = Categories.findById(id);
 
         categoriesPromisse.then(function (category) {
-            callbackSuccess(category);              
+            callbackSuccess(category);
         })
         .then(null, function(error) {
             callbackError(error, 400);
-        });        
+        });
     },
 
     get: function(callbackSuccess, callbackError) {
         var categoriesPromisse = Categories.find().exec();
 
         categoriesPromisse.then(function (categories) {
-            callbackSuccess(categories);              
+            callbackSuccess(categories);
         })
         .then(null, function(error) {
             callbackError(error);
         });
-    },    
+    },
 
     create: function(category, callbackSuccess, callbackError) {
         var val = new Validator().validate(category, categorySchema);
@@ -55,7 +55,7 @@ module.exports = {
             var categoriesPromisse = Categories.create(category);
 
             categoriesPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
@@ -69,7 +69,7 @@ module.exports = {
         var categoriesPromisse = Categories.remove(id);
 
         categoriesPromisse.then(function () {
-            callbackSuccess();              
+            callbackSuccess();
         })
         .then(null, function(error) {
             callbackError(error, 400);
@@ -79,18 +79,18 @@ module.exports = {
     edit: function(id, category, callbackSuccess, callbackError) {
         var val = new Validator().validate(category, categorySchema);
 
-        if (val.errors.length == 0) { 
+        if (val.errors.length == 0) {
             var categoriesPromisse = Categories.findByIdAndUpdate(id, category);
 
             categoriesPromisse.then(function () {
-                callbackSuccess();              
+                callbackSuccess();
             })
             .then(null, function(error) {
                 callbackError(error, 400);
             });
         } else {
             callbackError(val.errors, 400)
-        }            
+        }
     }
 
 }
