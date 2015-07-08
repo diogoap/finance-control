@@ -84,6 +84,15 @@ var expenseSchema = {
         }
     },
     "required": [ "description", "dueDate", "status", "amount" ],
+    "anyOf": [
+      { "required": [ "accountd_id", "category_id" ] },
+      {
+        "properties": {
+          "detail": { "minItems": 1 }
+        },
+        "required": ["detail"]
+      }
+    ]
 };
 
 function setCategory(categoryList, obj) {
@@ -101,16 +110,6 @@ function setAccount(accountList, obj) {
             obj._account = accountList[j];
             break;
         }
-    }
-}
-
-function validateExpense(expense, errors) {
-    if ((expense.detail == undefined || expense.detail.length == 0) && (expense.account_id == null)) {
-        errors.push('account_id is required when there is no detail');
-    }
-
-    if ((expense.detail == undefined || expense.detail.length == 0) && (expense.category_id == null)) {
-        errors.push('category_id is required when there is no detail');
     }
 }
 
@@ -183,7 +182,7 @@ module.exports = {
                         setAccount(accounts, exp);
 
                         exp.detail.forEach(function (det) {
-                            //exp._categoryName = exp._categoryName + ' - ' 
+                            //exp._categoryName = exp._categoryName + ' - '
                             setCategory(categories, det);
                             setAccount(accounts, det);
                         });
@@ -200,7 +199,6 @@ module.exports = {
 
     create: function(expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
-        validateExpense(expense, val.errors);
 
         if (val.errors.length == 0) {
             updateExpenseTotal(expense);
@@ -230,7 +228,6 @@ module.exports = {
 
     edit: function(id, expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
-        validateExpense(expense, val.errors);
 
         if (val.errors.length == 0) {
             updateExpenseTotal(expense);

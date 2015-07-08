@@ -86,6 +86,7 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 	// MODAL SUBMIT ===============================================================
 	$scope.submit = function () {
     	if ($scope.expenseForm.$valid) {
+			$scope.updateExpenseTotal();
 			$scope.expense._action = $scope.action;
 			$modalInstance.close($scope.expense);
     	} else {
