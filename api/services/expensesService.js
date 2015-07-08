@@ -9,44 +9,16 @@ var expenseSchema = {
     "description": "Expense model validation.",
     "type": "object",
     "properties": {
-        "description": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100
+        "description": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "dueDate": { "type": "datetime" },
+        "scheduledPayment": { "type": "boolean" },
+        "amount": { "type": "number", "minimum": 0.01, "exclusiveMinimum": false },
+        "category_id": { "type": "string" },
+        "account_id": { "type": "string" },
+        "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
+        "status": { "type": "string", "enum": [ "Em aberto", "Pago", "Cancelado" ]
         },
-        "dueDate": {
-            "type": "datetime"
-        },
-        "scheduledPayment": {
-            "type": "boolean"
-        },
-        "amount": {
-            "type": "number",
-            "minimum": 0.01,
-            "exclusiveMinimum": false
-        },
-        "category_id": {
-            "type": "string"
-        },
-        "account_id": {
-            "type": "string"
-        },
-        "amountPaid": {
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": false
-        },
-        "status": {
-            "type": "string",
-            "enum": [
-                "Em aberto",
-                "Pago",
-                "Cancelado"
-            ]
-        },
-        "notes": {
-            "type": "string"
-        },
+        "notes": { "type": "string" },
         "detail": {
             "description": "Expenses detail list",
             "type": "array",
@@ -54,29 +26,11 @@ var expenseSchema = {
                 "description": "Expense detail",
                 "type": "object",
                 "properties": {
-                    "description": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 100
-                    },
-                    "amount": {
-                        "type": "number",
-                        "minimum": 0.01,
-                        "exclusiveMinimum": false
-                    },
-                    "category_id": {
-                        "type": "string"
-                    },
-                    "account_id": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "string",
-                        "enum": [
-                            "Em aberto",
-                            "Pago",
-                            "Cancelado"
-                        ]
+                    "description": { "type": "string", "minLength": 1, "maxLength": 100 },
+                    "amount": { "type": "number", "minimum": 0.01, "exclusiveMinimum": false },
+                    "category_id": { "type": "string" },
+                    "account_id": { "type": "string" },
+                    "status": { "type": "string", "enum": [ "Em aberto", "Pago", "Cancelado" ]
                     }
                 },
                 "required": [ "description", "category_id", "account_id", "status", "amount" ]
@@ -84,8 +38,8 @@ var expenseSchema = {
         }
     },
     "required": [ "description", "dueDate", "status", "amount" ],
-    "anyOf": [
-      { "required": [ "accountd_id", "category_id" ] },
+    "oneOf": [
+      { "required": [ "account_id", "category_id" ] },
       {
         "properties": {
           "detail": { "minItems": 1 }

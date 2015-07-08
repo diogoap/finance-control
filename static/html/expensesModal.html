@@ -66,7 +66,7 @@
 			</div>
 			<label for="expenseAmountPaid" class="col-md-2 control-label">Valor pago</label>
 			<div class="col-md-3">
-				<input numeric decimals="2" name="expenseAmountPaid" ng-model="expense.amountPaid" required ng-readonly="_hasDetail" class="form-control"/>
+				<input numeric decimals="2" min="0" name="expenseAmountPaid" ng-model="expense.amountPaid" required ng-readonly="_hasDetail" class="form-control"/>
 				<div class="error" ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmountPaid.$error.required">O campo Valor pago é obrigatório.</small>
 				</div>
