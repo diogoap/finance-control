@@ -4,24 +4,13 @@ var Categories = require('../models/categoriesModel');
 var Validator = require('jsonschema').Validator;
 
 var categorySchema = {
-    "description": "Category model validation.",
+    "description": "Category model validation",
     "type": "object",
     "properties": {
-        "name": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100
-        },
-        "type": {
-            "type": "string",
-            "enum": [
-                "Receita",
-                "Despesa"
-            ]
-        }
+        "name": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "type": { "type": "string", "enum": [ "Receita", "Despesa" ] }
     },
     "required": [ "name", "type" ]
-
 };
 
 module.exports = {

@@ -99,11 +99,20 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 		$modalInstance.dismiss('cancel');
 	}
 
+	// VALIDATE EXPENSE AMOUNT PAID ===============================================
+	$scope.validExpenseAmountPaid = function(value) {
+	  	if (($scope.expense != undefined) && ($scope.expense.status == 'Pago') && (value <= 0)) {
+	  		return false;
+	  	}
+
+		return true;
+	}
+
 	// TOTAL CALCULATION ==========================================================
 	$scope.updateExpenseTotal = function() {
 		$scope._hasDetail = false;
 
-		if ($scope.expense.detail.length > 0) {
+		if (($scope.expense.detail != undefined) && ($scope.expense.detail.length > 0)) {
 			$scope._hasDetail = true;
 
 			$scope.expense.account_id = '';

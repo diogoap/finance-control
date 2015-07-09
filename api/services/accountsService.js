@@ -4,20 +4,12 @@ var Accounts = require('../models/accountsModel');
 var Validator = require('jsonschema').Validator;
 
 var accountSchema = {
-    "description": "Account model validation.",
+    "description": "Account model validation",
     "type": "object",
     "properties": {
-        "name": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100
-        },
-        "initialBalance": {
-            "type": "double"
-        },
-        "actualBalance": {
-            "type": "double"
-        }
+        "name": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "initialBalance": { "type": "double" },
+        "actualBalance": { "type": "double" }
     },
     "required": [ "name" ]
 };

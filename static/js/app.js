@@ -5,6 +5,7 @@ var app = angular.module('financeControl', [
     'ui.bootstrap',
     'ui.grid',
     'ui.grid.pagination',
+    'ui.validate',
     'purplefox.numeric',
     'categoriesService',
     'accountsService',
@@ -28,7 +29,7 @@ app.config(function($routeProvider) {
         .when('/expenses', {
             templateUrl: 'html/expenses.html',
             controller: 'expensesController'
-        })        
+        })
         .otherwise({
         	redirecTo: '/'
         });
