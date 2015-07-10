@@ -20,9 +20,9 @@
 		<div class="form-group">
 			<label for="expenseAmount" class="col-md-3 control-label">Valor</label>
 			<div class="col-md-9">
-				<input numeric decimals="2" min="0.01" name="expenseAmount" ng-model="expenseDetail.amount" required class="form-control"/>
+				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control"/>
 				<div class="error" ng-show="(expenseDetailForm.expenseAmount.$dirty && expenseDetailForm.expenseAmount.$invalid) || (submitted && expenseDetailForm.expenseAmount.$invalid)">
-					<small class="error" ng-show="expenseDetailForm.expenseAmount.$error.required">O campo Valor é obrigatório.</small>
+					<small class="error" ng-show="expenseDetailForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>
 			</div>
 		</div>

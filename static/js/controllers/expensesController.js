@@ -20,7 +20,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
         	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'9%', enableColumnMenu: false,
           		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
-          	},        	
+          	},
           	{ name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false },
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
@@ -38,7 +38,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	}
         ]
-    }; 
+    };
 
 	Expenses.get()
 		.success(function(data) {
@@ -60,7 +60,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
       		size: 'lg',
       		resolve: {
 		        expenseId: function () {
-					return expenseId; 
+					return expenseId;
         		},
         		action: function () {
         			return action;
@@ -75,11 +75,11 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 	    		$scope.editExpense(expense);
 	    	}
 		});
-    };  
+    };
 
 	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (ExpenseId) {
-    	
+
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -87,31 +87,31 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return ExpenseId; 
-        		},      			
+					return ExpenseId;
+        		},
 		        message: function () {
-					return 'Confirma a exclusão da despesa?'; 
+					return 'Confirma a exclusão da despesa?';
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
 	    	$scope.deleteExpense(id);
-		}); 
-    };  
+		});
+    };
 
 	// GET =====================================================================
 	$scope.getExpenses = function() {
 		Expenses.get()
 			.success(function(data) {
-				$scope.gridOptions.data = data;			
+				$scope.gridOptions.data = data;
 				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
 				$scope.loading = false;
-			}); 		
+			});
 	};
 
 	// CREATE ==================================================================
@@ -120,7 +120,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 
 		Expenses.create(expense)
 			.success(function(data) {
-				$scope.getExpenses();					
+				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -134,20 +134,20 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 
 		Expenses.patch(expense._id, expense)
 			.success(function(data) {
-				$scope.getExpenses();					
+				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
 				$scope.loading = false;
 			});
-	};	
+	};
 
 	// DELETE ==================================================================
 	$scope.deleteExpense = function(id) {
 		$scope.loading = true;
 
 		Expenses.delete(id)
-			.success(function(data) {			
+			.success(function(data) {
 				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
