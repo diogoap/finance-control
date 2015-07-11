@@ -9,13 +9,51 @@
 				<h3>Cadastro de despesas</h3>
 			</div>
 
-			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar despesa</button>
+			<div class="row">
+				<div class="form-group">
+					<label for="expenseDueDateBegin" class="col-md-1 control-label">Período</label>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input datepicker-popup="shortDate" name="expenseDueDateBegin" ng-model="expenseDueDateBegin" required class="form-control" is-open="beginOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+							<div class="error" ng-show="(expenseForm.expenseDueDateBegin.$dirty && expenseForm.expenseDueDateBegin.$invalid) || (submitted && expenseForm.expenseDueDateBegin.$invalid)">
+								<small class="error" ng-show="expenseForm.expenseDueDateBegin.$error.required">O campo Período inicial é obrigatório.</small>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input datepicker-popup="shortDate" name="expenseDueDateEnd" ng-model="expenseDueDateEnd" required class="form-control" is-open="endOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+							<div class="error" ng-show="(expenseForm.expenseDueDateEnd.$dirty && expenseForm.expenseDueDateEnd.$invalid) || (submitted && expenseForm.expenseDueDateEnd.$invalid)">
+								<small class="error" ng-show="expenseForm.expenseDueDateEnd.$error.required">O campo Período final é obrigatório.</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-			<div ui-grid="gridOptions" ui-grid-pagination></div>
+			<div class="row">
+				<div class="form-group">
+					<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar despesa</button>
+				</div>
+			</div>
 
-			<p class="text-center" ng-show="loading">
-				<span class="fa fa-spinner fa-spin fa-lg"></span>
-			</p>
+			<div class="row">
+				<div class="form-group">
+					<div ui-grid="gridOptions" ui-grid-pagination></div>
+				</div>
+			</div>
+
+			<div class="row">
+				<p class="text-center" ng-show="loading">
+					<span class="fa fa-spinner fa-spin fa-lg"></span>
+				</p>
+			</div>
 		</div>
 	</div>
 </div>

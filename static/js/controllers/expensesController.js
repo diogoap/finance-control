@@ -25,8 +25,8 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	},
-          	{ name: 'Conta', field: '_account.name', type: 'string', width:'15%', enableColumnMenu: false },
-        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'15%', enableColumnMenu: false },
+          	{ name: 'Conta', field: '_accountNames', type: 'string', width:'15%', enableColumnMenu: false },
+        	{ name: 'Categoria', field: '_categoryNames', type: 'string', width:'15%', enableColumnMenu: false },
         	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
@@ -51,7 +51,21 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			$scope.loading = false;
 		});
 
-	// OPEN MODAL ==============================================================
+	// OPEN CALANDAR BEGIN ========================================================
+  	$scope.openCalendarDialogBegin = function($event) {
+    	$event.preventDefault();
+    	$event.stopPropagation();
+    	$scope.beginOpened = true;
+  	};
+
+	// OPEN CALANDAR END ==========================================================
+  	$scope.openCalendarDialogEnd = function($event) {
+    	$event.preventDefault();
+    	$event.stopPropagation();
+    	$scope.endOpened = true;
+  	};
+
+	// OPEN MODAL =================================================================
   	$scope.open = function (expenseId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,

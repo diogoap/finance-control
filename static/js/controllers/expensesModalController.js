@@ -4,7 +4,7 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 	$scope.loading = true;
 	$scope.errorMessage = '';
 	$scope.action = action;
- 	$scope.expenseStatus = ['Em aberto', 'Pago', 'Cancelado'];
+ 	$scope.expenseStatus = ['Em aberto', 'Pago'];
  	$scope.submitted = false;
 
 	$scope.gridOptions = {
@@ -134,6 +134,8 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 
 			if ($scope.expense.amount == $scope.expense.amountPaid) {
 				$scope.expense.status = 'Pago';
+			} else {
+				$scope.expense.status = 'Em aberto';
 			}
 		}
 	}

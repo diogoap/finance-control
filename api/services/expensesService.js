@@ -16,7 +16,7 @@ var expenseSchema = {
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
-        "status": { "type": "string", "enum": [ "Em aberto", "Pago", "Cancelado" ] },
+        "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
         "notes": { "type": "string" },
         "detail": {
             "description": "Expenses detail list",
@@ -29,7 +29,7 @@ var expenseSchema = {
                     "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
                     "category_id": { "type": "string" },
                     "account_id": { "type": "string" },
-                    "status": { "type": "string", "enum": [ "Em aberto", "Pago", "Cancelado" ] }
+                    "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] }
                 },
                 "required": [ "description", "category_id", "account_id", "status", "amount" ]
             }
@@ -44,7 +44,7 @@ var expenseSchema = {
         }
     ],
     "oneOf": [
-        { "properties": { "status": { "enum": [ "Em aberto", "Cancelado" ] } } },
+        { "properties": { "status": { "enum": [ "Em aberto" ] } } },
         {
             "properties": {
                 "amountPaid": { "minimum": 0, "exclusiveMinimum": true },
@@ -73,6 +73,33 @@ function setAccount(accountList, obj) {
     }
 }
 
+function fillDetailAccountsAndCategories(expense) {
+    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
+        expense._accountNames = '';
+        expense._categoryNames = '';
+
+        expense.detail.forEach(function (det) {
+
+            if (expense._accountNames.indexOf(det._account.name) == -1) {
+                if (expense._accountNames.length > 0) {
+                    expense._accountNames += ' - ';
+                }
+                expense._accountNames += det._account.name;
+            }
+
+            if (expense._categoryNames.indexOf(det._category.name) == -1) {
+                if (expense._categoryNames.length > 0) {
+                    expense._categoryNames += ' - ';
+                }
+                expense._categoryNames += det._category.name;
+            }
+        });
+    } else {
+        expense._accountNames = expense._account.name;
+        expense._categoryNames = expense._category.name;
+    }
+}
+
 function updateExpenseTotal(expense) {
     if ((expense.detail != undefined) && (expense.detail.lenght > 0)) {
         expense.account_id = null;
@@ -94,6 +121,8 @@ function updateExpenseTotal(expense) {
 
         if (expense.amount == expense.amountPaid) {
             expense.status = 'Pago';
+        } else {
+            expense.status = 'Em aberto';
         }
     }
 }
@@ -118,6 +147,8 @@ module.exports = {
                         setAccount(accounts, det);
                     });
 
+                    fillDetailAccountsAndCategories(expense);
+
                     callbackSuccess(expense);
                 });
             });
@@ -141,11 +172,13 @@ module.exports = {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
 
+
                         exp.detail.forEach(function (det) {
-                            //exp._categoryName = exp._categoryName + ' - '
                             setCategory(categories, det);
                             setAccount(accounts, det);
                         });
+
+                        fillDetailAccountsAndCategories(exp);
                     });
 
                     callbackSuccess(expenses);

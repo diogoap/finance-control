@@ -4,7 +4,7 @@ function expensesDetailModalController($scope, $modalInstance, Categories, Accou
 	$scope.loading = true;
 	$scope.errorMessage = '';
 	$scope.action = action;
- 	$scope.expenseStatus = ['Em aberto', 'Pago', 'Cancelado'];
+ 	$scope.expenseStatus = ['Em aberto', 'Pago'];
  	$scope.submitted = false;
 
 	if (action == 'new') {
