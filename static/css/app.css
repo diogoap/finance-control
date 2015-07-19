@@ -26,3 +26,7 @@ select.form-control.ng-valid {
 .ui-grid {
 	margin-top: 10px;
 }
+
+label {
+    margin-top: 5px;
+}

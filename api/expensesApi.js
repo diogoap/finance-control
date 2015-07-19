@@ -2,10 +2,11 @@
 
 var expensesService = require('./services/expensesService');
 
-function getExpenses(res) {
+function getExpenses(res, filter) {
     expensesService.get(
-        function(expenses) {      
-            res.json(expenses);    
+        filter,
+        function(expenses) {
+            res.json(expenses);
         },
         function(error, status) {
             sendError(res, error, status);
@@ -21,7 +22,7 @@ function sendError(res, error, status) {
     };
 }
 
-module.exports = function(app) {
+module.exports = function(app, url) {
 
     app.get('/api/expenses/:id', function(req, res) {
         var expense = expensesService.getById(req.params.id,
@@ -35,7 +36,10 @@ module.exports = function(app) {
     })
 
     app.get('/api/expenses', function(req, res) {
-        getExpenses(res);
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        getExpenses(res, query);
     })
 
     app.post('/api/expenses', function(req, res) {
@@ -50,14 +54,14 @@ module.exports = function(app) {
     })
 
     app.delete('/api/expenses/:id', function(req, res) {
-        expensesService.delete( { _id : req.params.id }, 
+        expensesService.delete( { _id : req.params.id },
             function() {
                 getExpenses(res);
             },
             function(error, status) {
                 sendError(res, error, status);
             }
-        );  
+        );
     })
 
     app.patch('/api/expenses/:id', function(req, res) {
@@ -68,7 +72,7 @@ module.exports = function(app) {
             function(error, status) {
                 sendError(res, error, status);
             }
-        );        
-    })  
+        );
+    })
 
 }

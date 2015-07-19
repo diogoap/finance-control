@@ -11,6 +11,15 @@
 
 			<div class="row">
 				<div class="form-group">
+					<div class="col-md-1">
+						<button class="btn btn-primary" ng-click="navigatePreviousMonth()">-1 Mês</button>
+					</div>
+					<div class="col-md-1">
+						<button class="btn btn-primary" ng-click="navigateActualMonth()">Atual</button>
+					</div>
+					<div class="col-md-1">
+						<button class="btn btn-primary" ng-click="navigateNextMonth()">+1 Mês</button>
+					</div>
 					<label for="expenseDueDateBegin" class="col-md-1 control-label">Período</label>
 					<div class="col-md-2">
 						<div class="input-group">
@@ -34,12 +43,12 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="form-group">
-					<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar despesa</button>
+					<div class="col-md-2">
+						<button class="btn btn-primary" ng-click="getExpenses()">Filtrar</button>
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar despesa</button>
+					</div>
 				</div>
 			</div>
 

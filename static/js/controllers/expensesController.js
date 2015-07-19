@@ -7,10 +7,14 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 	$scope.loading = true;
 	$scope.errorMessage = '';
 
+	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+	$scope.expenseDueDateBegin = new Date(y, m, 1);
+	$scope.expenseDueDateEnd = new Date(y, m + 1, 0);
+
  	$scope.gridOptions = {
         enableSorting: true,
-        paginationPageSizes: [10, 20],
-        paginationPageSize: 10,
+        paginationPageSizes: [15, 25],
+        paginationPageSize: 15,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
@@ -65,6 +69,51 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
     	$scope.endOpened = true;
   	};
 
+	// NAVIGATE TO PREVIOUS MONTH =================================================
+  	$scope.navigatePreviousMonth = function($event) {
+		var date;
+
+		if (isNaN(Date.parse($scope.expenseDueDateBegin))) {
+			date = new Date();
+		}
+		else {
+			date = $scope.expenseDueDateBegin;
+		}
+
+		y = date.getFullYear(), m = date.getMonth();
+		$scope.expenseDueDateBegin = new Date(y, m - 1, 1);
+		$scope.expenseDueDateEnd = new Date(y, m, 0);
+
+		$scope.getExpenses();
+  	};
+
+	// NAVIGATE TO ACUTAL MONTH ===================================================
+  	$scope.navigateActualMonth = function($event) {
+		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+		$scope.expenseDueDateBegin = new Date(y, m, 1);
+		$scope.expenseDueDateEnd = new Date(y, m + 1, 0);
+
+		$scope.getExpenses();
+  	};
+
+	// NAVIGATE TO NEXT MONTH =====================================================
+  	$scope.navigateNextMonth = function($event) {
+		var date;
+
+		if (isNaN(Date.parse($scope.expenseDueDateBegin))) {
+			date = new Date();
+		}
+		else {
+			date = $scope.expenseDueDateBegin;
+		}
+
+		y = date.getFullYear(), m = date.getMonth();
+		$scope.expenseDueDateBegin = new Date(y, m + 1, 1);
+		$scope.expenseDueDateEnd = new Date(y, m + 2, 0);
+
+		$scope.getExpenses();
+  	};
+
 	// OPEN MODAL =================================================================
   	$scope.open = function (expenseId, action) {
     	var modalInstance = $modal.open({
@@ -116,7 +165,9 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 
 	// GET =====================================================================
 	$scope.getExpenses = function() {
-		Expenses.get()
+		var filter = 'dueDateBegin=' + $scope.expenseDueDateBegin + '&dueDateEnd=' + $scope.expenseDueDateEnd;
+
+		Expenses.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
 				$scope.errorMessage = null;

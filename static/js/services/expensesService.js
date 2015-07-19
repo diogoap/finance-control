@@ -6,9 +6,9 @@ angular.module('expensesService', [])
 		return {
 			getById : function(id) {
 				return $http.get('/api/expenses/' + id);
-			},			
-			get : function() {
-				return $http.get('/api/expenses');
+			},
+			get : function(filter) {
+				return $http.get('/api/expenses?' + filter);
 			},
 			create : function(expenseData) {
 				return $http.post('/api/expenses', expenseData);

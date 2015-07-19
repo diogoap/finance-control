@@ -158,8 +158,17 @@ module.exports = {
         });
     },
 
-    get: function(callbackSuccess, callbackError) {
-        var expensesPromisse = Expenses.find().exec();
+    get: function(filter, callbackSuccess, callbackError) {
+        console.log(filter.dueDateBegin);
+        console.log(filter.dueDateEnd);
+
+        var queryFilter;
+
+        if (filter.dueDateBegin != undefined && filter.dueDateEnd != undefined) {
+            queryFilter = { dueDate: { $gt: filter.dueDateBegin, $lt: filter.dueDateEnd } };
+        }
+
+        var expensesPromisse = Expenses.find(queryFilter).exec();
         expensesPromisse.then(function (expenses) {
 
             var categoriesPromisse = Categories.find().exec();
@@ -171,7 +180,6 @@ module.exports = {
                     expenses.forEach(function (exp) {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
-
 
                         exp.detail.forEach(function (det) {
                             setCategory(categories, det);
