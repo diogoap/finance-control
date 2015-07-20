@@ -9,9 +9,8 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 
  	$scope.gridOptions = {
         enableSorting: true,
-        paginationPageSizes: [10, 20],
-        paginationPageSize: 10,
-        columnDefs: [		
+		enablePaginationControls: false,
+        columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
@@ -22,7 +21,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	}
         ]
-    }; 
+    };
 
 	Accounts.get()
 		.success(function(data) {
@@ -43,7 +42,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
       		controller: accountsModalController,
       		resolve: {
 		        accountId: function () {
-					return accountId; 
+					return accountId;
         		},
         		action: function () {
         			return action;
@@ -58,11 +57,11 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 	    		$scope.editAccount(account);
 	    	}
 		});
-    };  
+    };
 
 	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (accountId) {
-    	
+
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -70,31 +69,31 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return accountId; 
-        		},      			
+					return accountId;
+        		},
 		        message: function () {
-					return 'Confirma a exclusão da conta?'; 
+					return 'Confirma a exclusão da conta?';
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
 	    	$scope.deleteAccount(id);
-		}); 
-    };  
+		});
+    };
 
 	// GET =====================================================================
 	$scope.getAccounts = function() {
 		Accounts.get()
 			.success(function(data) {
-				$scope.gridOptions.data = data;			
+				$scope.gridOptions.data = data;
 				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
 				$scope.loading = false;
-			}); 		
+			});
 	};
 
 	// CREATE ==================================================================
@@ -103,7 +102,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 
 		Accounts.create(account)
 			.success(function(data) {
-				$scope.getAccounts();					
+				$scope.getAccounts();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -117,20 +116,20 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 
 		Accounts.patch(account._id, account)
 			.success(function(data) {
-				$scope.getAccounts();					
+				$scope.getAccounts();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
 				$scope.loading = false;
 			});
-	};	
+	};
 
 	// DELETE ==================================================================
 	$scope.deleteAccount = function(id) {
 		$scope.loading = true;
 
 		Accounts.delete(id)
-			.success(function(data) {			
+			.success(function(data) {
 				$scope.getAccounts();
 			})
 			.error(function(data, status, headers, config) {

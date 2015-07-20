@@ -159,16 +159,13 @@ module.exports = {
     },
 
     get: function(filter, callbackSuccess, callbackError) {
-        console.log(filter.dueDateBegin);
-        console.log(filter.dueDateEnd);
-
         var queryFilter;
 
-        if (filter.dueDateBegin != undefined && filter.dueDateEnd != undefined) {
+        if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
             queryFilter = { dueDate: { $gt: filter.dueDateBegin, $lt: filter.dueDateEnd } };
         }
 
-        var expensesPromisse = Expenses.find(queryFilter).exec();
+        var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();
         expensesPromisse.then(function (expenses) {
 
             var categoriesPromisse = Categories.find().exec();

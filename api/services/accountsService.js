@@ -28,7 +28,7 @@ module.exports = {
     },
 
     get: function(callbackSuccess, callbackError) {
-        var accountsPromisse = Accounts.find().exec();
+        var accountsPromisse = Accounts.find().sort('name').exec();
 
         accountsPromisse.then(function (accounts) {
             callbackSuccess(accounts);

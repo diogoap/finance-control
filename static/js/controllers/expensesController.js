@@ -2,22 +2,15 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, Expenses) {
+app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Expenses) {
 
-	$scope.loading = true;
-	$scope.errorMessage = '';
-
-	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-	$scope.expenseDueDateBegin = new Date(y, m, 1);
-	$scope.expenseDueDateEnd = new Date(y, m + 1, 0);
-
+	// Grid initialization ========================================================
  	$scope.gridOptions = {
         enableSorting: true,
-        paginationPageSizes: [15, 25],
-        paginationPageSize: 15,
+		showColumnFooter: true,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
@@ -25,9 +18,15 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
           		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
-          	{ name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false },
+          	{
+				name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false,
+				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+			},
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
-          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
           	},
           	{ name: 'Conta', field: '_accountNames', type: 'string', width:'15%', enableColumnMenu: false },
         	{ name: 'Categoria', field: '_categoryNames', type: 'string', width:'15%', enableColumnMenu: false },
@@ -35,7 +34,9 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
         	{ name: 'Valor pago', field: 'amountPaid', type: 'number', width:'9%', enableColumnMenu: false,
-				cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+				cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         	},
         	{ name: 'Ag.', field: 'scheduledPayment', type: 'string', width:'4%', enableColumnMenu: false,
         		cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
@@ -44,32 +45,18 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
         ]
     };
 
-	Expenses.get()
-		.success(function(data) {
-			$scope.gridOptions.data = data;
-			$scope.errorMessage = null;
-			$scope.loading = false;
-		})
-		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
-			$scope.loading = false;
-		});
-
-	// OPEN CALANDAR BEGIN ========================================================
   	$scope.openCalendarDialogBegin = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();
     	$scope.beginOpened = true;
   	};
 
-	// OPEN CALANDAR END ==========================================================
   	$scope.openCalendarDialogEnd = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();
     	$scope.endOpened = true;
   	};
 
-	// NAVIGATE TO PREVIOUS MONTH =================================================
   	$scope.navigatePreviousMonth = function($event) {
 		var date;
 
@@ -80,14 +67,13 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			date = $scope.expenseDueDateBegin;
 		}
 
-		y = date.getFullYear(), m = date.getMonth();
+		var y = date.getFullYear(), m = date.getMonth();
 		$scope.expenseDueDateBegin = new Date(y, m - 1, 1);
 		$scope.expenseDueDateEnd = new Date(y, m, 0);
 
 		$scope.getExpenses();
   	};
 
-	// NAVIGATE TO ACUTAL MONTH ===================================================
   	$scope.navigateActualMonth = function($event) {
 		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 		$scope.expenseDueDateBegin = new Date(y, m, 1);
@@ -96,7 +82,6 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 		$scope.getExpenses();
   	};
 
-	// NAVIGATE TO NEXT MONTH =====================================================
   	$scope.navigateNextMonth = function($event) {
 		var date;
 
@@ -107,15 +92,20 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			date = $scope.expenseDueDateBegin;
 		}
 
-		y = date.getFullYear(), m = date.getMonth();
+		var y = date.getFullYear(), m = date.getMonth();
 		$scope.expenseDueDateBegin = new Date(y, m + 1, 1);
 		$scope.expenseDueDateEnd = new Date(y, m + 2, 0);
 
 		$scope.getExpenses();
   	};
 
-	// OPEN MODAL =================================================================
-  	$scope.open = function (expenseId, action) {
+	$scope.filter = function($event) {
+		if ((isNaN(Date.parse($scope.expenseDueDateBegin)) == false) && (isNaN(Date.parse($scope.expenseDueDateEnd))) == false) {
+			$scope.getExpenses();
+		}
+  	};
+
+  	$scope.openModal = function (expenseId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/expensesModal.html',
@@ -140,9 +130,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 		});
     };
 
-	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (ExpenseId) {
-
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -163,9 +151,24 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 		});
     };
 
-	// GET =====================================================================
+	$scope.getDueDateFilter = function() {
+		var dateBegin, dateEnd, y, m, d;
+
+		dateBegin = $scope.expenseDueDateBegin;
+		y = dateBegin.getFullYear(), m = dateBegin.getMonth(), d = dateBegin.getDate();
+		dateBegin = new Date(y, m, d);
+
+		dateEnd = $scope.expenseDueDateEnd;
+		y = dateEnd.getFullYear(), m = dateEnd.getMonth(), d = dateEnd.getDate();
+		dateEnd = new Date(y, m, d, 23, 59, 59, 999);
+
+		return 'dueDateBegin=' + dateBegin + '&dueDateEnd=' + dateEnd;
+	}
+
 	$scope.getExpenses = function() {
-		var filter = 'dueDateBegin=' + $scope.expenseDueDateBegin + '&dueDateEnd=' + $scope.expenseDueDateEnd;
+		$scope.loading = true;
+
+		var filter = $scope.getDueDateFilter();
 
 		Expenses.get(filter)
 			.success(function(data) {
@@ -179,7 +182,6 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			});
 	};
 
-	// CREATE ==================================================================
 	$scope.createExpense = function(expense) {
 		$scope.loading = true;
 
@@ -193,7 +195,6 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			});
 	};
 
-	// EDIT ====================================================================
 	$scope.editExpense = function(expense) {
 		$scope.loading = true;
 
@@ -207,7 +208,6 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			});
 	};
 
-	// DELETE ==================================================================
 	$scope.deleteExpense = function(id) {
 		$scope.loading = true;
 
@@ -221,4 +221,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, Ex
 			});
 	};
 
+	// initialization
+	$scope.errorMessage = '';
+	$scope.navigateActualMonth();
 });

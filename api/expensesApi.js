@@ -2,18 +2,6 @@
 
 var expensesService = require('./services/expensesService');
 
-function getExpenses(res, filter) {
-    expensesService.get(
-        filter,
-        function(expenses) {
-            res.json(expenses);
-        },
-        function(error, status) {
-            sendError(res, error, status);
-        }
-    );
-};
-
 function sendError(res, error, status) {
     if (status) {
         res.status(status).send(error);
@@ -39,13 +27,21 @@ module.exports = function(app, url) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        getExpenses(res, query);
+        expensesService.get(
+            query,
+            function(expenses) {
+                res.json(expenses);
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.post('/api/expenses', function(req, res) {
         expensesService.create(req.body,
             function(expenses) {
-                getExpenses(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);
@@ -56,7 +52,7 @@ module.exports = function(app, url) {
     app.delete('/api/expenses/:id', function(req, res) {
         expensesService.delete( { _id : req.params.id },
             function() {
-                getExpenses(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);
@@ -67,7 +63,7 @@ module.exports = function(app, url) {
     app.patch('/api/expenses/:id', function(req, res) {
         expensesService.edit(req.params.id, req.body,
             function(expenses) {
-                getExpenses(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);

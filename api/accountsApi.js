@@ -2,17 +2,6 @@
 
 var accountsService = require('./services/accountsService');
 
-function getAccounts(res) {
-    accountsService.get(
-        function(accounts) {      
-            res.json(accounts);    
-        },
-        function(error, status) {
-            sendError(res, error, status);
-        }
-    );
-};
-
 function sendError(res, error, status) {
     if (status) {
         res.status(status).send(error);
@@ -35,13 +24,20 @@ module.exports = function(app) {
     })
 
     app.get('/api/accounts', function(req, res) {
-        getAccounts(res);
+        accountsService.get(
+            function(accounts) {
+                res.json(accounts);
+            },
+            function(error, status) {
+                sendError(res, error, status);
+            }
+        );
     })
 
     app.post('/api/accounts', function(req, res) {
         accountsService.create(req.body,
             function(accounts) {
-                getAccounts(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);
@@ -50,25 +46,25 @@ module.exports = function(app) {
     })
 
     app.delete('/api/accounts/:id', function(req, res) {
-        accountsService.delete( { _id : req.params.id }, 
+        accountsService.delete( { _id : req.params.id },
             function() {
-                getAccounts(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);
             }
-        );  
+        );
     })
 
     app.patch('/api/accounts/:id', function(req, res) {
         accountsService.edit(req.params.id, req.body,
             function(accounts) {
-                getAccounts(res);
+                res.json('OK');
             },
             function(error, status) {
                 sendError(res, error, status);
             }
-        );        
-    })  
+        );
+    })
 
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-function expensesModalController($scope, $modal, $modalInstance, Expenses, Categories, Accounts, expenseId, action) {
+function expensesModalController($scope, $modal, $modalInstance, uiGridConstants, Expenses, Categories, Accounts, expenseId, action) {
 	$scope.loading = true;
 	$scope.errorMessage = '';
 	$scope.action = action;
@@ -9,17 +9,22 @@ function expensesModalController($scope, $modal, $modalInstance, Expenses, Categ
 
 	$scope.gridOptions = {
         enableSorting: true,
-        paginationPageSizes: [10, 20],
-        paginationPageSize: 10,
+		showColumnFooter: true,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
-          	{ name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false },
+          	{
+				name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false,
+				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+			},
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
-          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
           	},
           	{ name: 'Conta', field: '_account.name', type: 'string', width:'15%', enableColumnMenu: false },
         	{ name: 'Categoria', field: '_category.name', type: 'string', width:'15%', enableColumnMenu: false },

@@ -27,7 +27,7 @@ module.exports = {
     },
 
     get: function(callbackSuccess, callbackError) {
-        var categoriesPromisse = Categories.find().exec();
+        var categoriesPromisse = Categories.find().sort('name').exec();
 
         categoriesPromisse.then(function (categories) {
             callbackSuccess(categories);
