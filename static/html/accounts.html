@@ -7,11 +7,11 @@
 
 			<div class="text-center">
 				<h3>Cadastro de contas</h3>
-			</div>	
+			</div>
 
-			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar conta</button>
+			<button class="btn btn-primary" ng-click="openModal(null, 'new')">Adicionar conta</button>
 
-			<div ui-grid="gridOptions" ui-grid-pagination></div>
+			<div ui-grid="gridOptions"></div>
 
 			<p class="text-center" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-lg"></span>

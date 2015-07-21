@@ -4,7 +4,6 @@ var app = angular.module('financeControl');
 
 app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Expenses) {
 
-	// Grid initialization ========================================================
  	$scope.gridOptions = {
         enableSorting: true,
 		showColumnFooter: true,

@@ -2,40 +2,29 @@
 
 var app = angular.module('financeControl');
 
-app.controller('accountsController', function($scope, $http, $modal, $locale, Accounts) {
-
-	$scope.loading = true;
-	$scope.errorMessage = '';
+app.controller('accountsController', function($scope, $http, $modal, $locale, uiGridConstants, Accounts) {
 
  	$scope.gridOptions = {
         enableSorting: true,
-		enablePaginationControls: false,
+		showColumnFooter: true,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.open(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
-          	{ name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false },
+          	{
+				name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false,
+				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+			},
           	{ name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '30%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	}
         ]
     };
 
-	Accounts.get()
-		.success(function(data) {
-			$scope.gridOptions.data = data;
-			$scope.errorMessage = null;
-			$scope.loading = false;
-		})
-		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
-			$scope.loading = false;
-		});
-
-	// OPEN MODAL ==============================================================
-  	$scope.open = function (accountId, action) {
+  	$scope.openModal = function (accountId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/accountsModal.html',
@@ -59,7 +48,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 		});
     };
 
-	// DELETE CONFIRMATION =====================================================
     $scope.deleteConfirmation = function (accountId) {
 
     	var modalInstance = $modal.open({
@@ -82,7 +70,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 		});
     };
 
-	// GET =====================================================================
 	$scope.getAccounts = function() {
 		Accounts.get()
 			.success(function(data) {
@@ -96,7 +83,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 			});
 	};
 
-	// CREATE ==================================================================
 	$scope.createAccount = function(account) {
 		$scope.loading = true;
 
@@ -110,7 +96,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 			});
 	};
 
-	// EDIT ====================================================================
 	$scope.editAccount = function(account) {
 		$scope.loading = true;
 
@@ -124,7 +109,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 			});
 	};
 
-	// DELETE ==================================================================
 	$scope.deleteAccount = function(id) {
 		$scope.loading = true;
 
@@ -138,4 +122,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, Ac
 			});
 	};
 
+	// initialization
+	$scope.errorMessage = '';
+	$scope.getAccounts();
 });

@@ -9,9 +9,9 @@
 				<h3>Cadastro de categorias</h3>
 			</div>
 
-			<button class="btn btn-primary" ng-click="open(null, 'new')">Adicionar categoria</button>
+			<button class="btn btn-primary" ng-click="openModal(null, 'new')">Adicionar categoria</button>
 
-			<div ui-grid="gridOptions" ui-grid-pagination></div>
+			<div ui-grid="gridOptions"></div>
 
 			<p class="text-center" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-lg"></span>
