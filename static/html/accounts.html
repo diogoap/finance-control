@@ -1,4 +1,4 @@
-<div class="container" ng-controller="accountsController">
+<div class="container-fluid fill" ng-controller="accountsController">
 	<div class="row">
 		<div class="col-lg-12">
 			<p class="bg-danger" ng-show="errorMessage != null">
@@ -10,8 +10,12 @@
 			</div>
 
 			<button class="btn btn-primary" ng-click="openModal(null, 'new')">Adicionar conta</button>
-
-			<div ui-grid="gridOptions"></div>
+			<button type="button" class="btn btn-success" ng-click="resizeGrid()">Change to Random Size</button>
+		</div>
+	</div>
+	<div class="row columns">
+		<div class="col-lg-12 fill">
+			<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-auto-resize></div>
 
 			<p class="text-center" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-lg"></span>
