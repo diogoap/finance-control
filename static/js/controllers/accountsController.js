@@ -86,7 +86,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 	$scope.createAccount = function(account) {
 		$scope.loading = true;
 
-		Accounts.create(account)
+		Accounts.create()
 			.success(function(data) {
 				$scope.getAccounts();
 			})
@@ -132,6 +132,13 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
       angular.element(document.getElementsByClassName('grid')[0]).css('height', newHeight - (rect.top + 25) + 'px');
       angular.element(document.getElementsByClassName('grid')[0]).css('width', newWidth - (rect.left + 15) + 'px');
     };
+
+    angular.element(document).ready(function () {
+        //$scope.resizeGrid();
+    });
+
+
+
 
 	// initialization
 	$scope.errorMessage = '';
