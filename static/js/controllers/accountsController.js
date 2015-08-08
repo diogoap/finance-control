@@ -49,7 +49,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
     };
 
     $scope.deleteConfirmation = function (accountId) {
-
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -121,24 +120,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 				$scope.loading = false;
 			});
 	};
-
-    $scope.resizeGrid = function () {
-      var newHeight = $(window).height();
-      var newWidth = $(window).width();
-
-      var obj = document.getElementById('grid');
-      var rect = obj.getBoundingClientRect();
-
-      angular.element(document.getElementsByClassName('grid')[0]).css('height', newHeight - (rect.top + 25) + 'px');
-      angular.element(document.getElementsByClassName('grid')[0]).css('width', newWidth - (rect.left + 15) + 'px');
-    };
-
-    angular.element(document).ready(function () {
-        //$scope.resizeGrid();
-    });
-
-
-
 
 	// initialization
 	$scope.errorMessage = '';

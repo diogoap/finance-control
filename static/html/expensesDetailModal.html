@@ -3,9 +3,6 @@
 </div>
 <form name="expenseDetailForm" class="form-horizontal" novalidate ng-submit="submitDetail()">
 	<div class="modal-body">
-		<p class="bg-danger" ng-show="errorMessage != null">
-			<span>{{errorMessage}}</span>
-		</p>
 		<div class="form-group">
 			<label for="expenseDescription" class="col-md-3 control-label">Descrição</label>
 			<div class="col-md-9">
@@ -54,9 +51,12 @@
 			</div>
 		</div>
 
-        <p class="text-center" ng-show="loading">
-            <span class="fa fa-spinner fa-spin fa-lg"></span>
-        </p>
+        <p class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</p>
+        <div class="bg-danger error-box" ng-show="errorMessage.length > 0">
+            <span>{{errorMessage}}</span>
+        </div>
 	</div>
 
 	<div class="modal-footer">

@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('categoriesController', function($scope, $http, $modal, uiGridConstants, Categories) {
+app.controller('categoriesController', function($scope, $http, $modal, $locale, uiGridConstants, Categories) {
 
  	$scope.gridOptions = {
         enableSorting: true,

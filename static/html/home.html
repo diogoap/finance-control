@@ -1,17 +1,16 @@
 <div class="container" ng-controller="indexController">
 	<div class="row">
 		<div class="col-lg-12">
-			<p class="bg-danger" ng-show="errorMessage != null">
-				<span>{{errorMessage}}</span>
-			</p>
-
 			<div class="text-center">
 				<h2>{{ message }}</h2>
-			</div>			
-			
-			<p class="text-center" ng-show="loading">
-				<span class="fa fa-spinner fa-spin fa-lg"></span>
-			</p>				
+			</div>
+
+			<p class="loading-box" ng-show="loading">
+				<span class="fa fa-spinner fa-spin fa-5x"></span>
+			</p>
+	        <div class="bg-danger error-box" ng-show="errorMessage.length > 0">
+	            <span>{{errorMessage}}</span>
+	        </div>
 		</div>
 	</div>
 </div>
