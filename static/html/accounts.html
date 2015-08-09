@@ -1,11 +1,11 @@
 <div class="container-fluid" ng-controller="accountsController">
 	<div class="row">
-		<div class="col-lg-12">
-			<div class="text-center">
+		<div class="col-sm-12">
+			<div class="text-center screen-title">
 				<h3>Cadastro de contas</h3>
 			</div>
 
-			<button class="btn btn-primary" ng-click="openModal(null, 'new')">Adicionar conta</button>
+			<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar conta</button>
 
 			<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-auto-resize resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
 

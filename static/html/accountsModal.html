@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{screenTitle}}</h3>
+    <h4 class="modal-title">{{screenTitle}}</h4>
 </div>
 <form name="accountForm" class="form-horizontal" novalidate ng-submit="submit()">
 	<div class="modal-body">
-		<div class="form-group">
-			<label for="accountName" class="col-md-3 control-label">Nome</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="accountName" class="col-sm-3 control-label">Nome</label>
+			<div class="col-sm-9">
 				<input type="text" name="accountName" ng-model="account.name" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
 				<div class="error" ng-show="(accountForm.accountName.$dirty && accountForm.accountName.$invalid) || (submitted && accountForm.accountName.$invalid)">
 					<small class="error" ng-show="accountForm.accountName.$error.required">O campo Nome é obrigatório.</small>
@@ -14,9 +14,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="accountInitialBalance" class="col-md-3 control-label">Saldo inicial</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="accountInitialBalance" class="col-sm-3 control-label">Saldo inicial</label>
+			<div class="col-sm-9">
 				<input numeric decimals="2" name="accountInitialBalance" ng-model="account.initialBalance" required class="form-control"/>
 				<div class="error" ng-show="(accountForm.accountInitialBalance.$dirty && accountForm.accountInitialBalance.$invalid) || (submitted && accountForm.accountInitialBalance.$invalid)">
 					<small class="error" ng-show="accountForm.accountInitialBalance.$error.required">O campo Saldo inicial é obrigatório.</small>
@@ -31,7 +31,7 @@
         </div>
 	</div>
 	<div class="modal-footer">
-		<button type="submit" class="btn btn-primary">Confirmar</button>
-	    <button class="btn btn-default" ng-click="cancel()">Cancelar</button>
+		<button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
+	    <button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
 	</div>
 </form>

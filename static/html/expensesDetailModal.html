@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{screenTitle}}</h3>
+    <h4 class="modal-title">{{screenTitle}}</h4>
 </div>
 <form name="expenseDetailForm" class="form-horizontal" novalidate ng-submit="submitDetail()">
 	<div class="modal-body">
-		<div class="form-group">
-			<label for="expenseDescription" class="col-md-3 control-label">Descrição</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="expenseDescription" class="col-sm-3 control-label">Descrição</label>
+			<div class="col-sm-9">
 				<input type="text" name="expenseDescription" ng-model="expenseDetail.description" required ng-maxlength=100 ng-minLength=1 class="form-control"/>
 				<div class="error" ng-show="(expenseDetailForm.expenseDescription.$dirty && expenseDetailForm.expenseDescription.$invalid) || (submitted && expenseDetailForm.expenseDescription.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseDescription.$error.required">O campo Descrição é obrigatório.</small>
@@ -14,36 +14,36 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="expenseAmount" class="col-md-3 control-label">Valor</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="expenseAmount" class="col-sm-3 control-label">Valor</label>
+			<div class="col-sm-9">
 				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control"/>
 				<div class="error" ng-show="(expenseDetailForm.expenseAmount.$dirty && expenseDetailForm.expenseAmount.$invalid) || (submitted && expenseDetailForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="expenseAccount" class="col-md-3 control-label">Conta</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="expenseAccount" class="col-sm-3 control-label">Conta</label>
+			<div class="col-sm-9">
 				<select name="expenseAccount" required ng-model="expenseDetail.account_id" ng-options="c._id as c.name for c in accounts" class="form-control"></select>
 				<div class="error" ng-show="(expenseDetailForm.expenseAccount.$dirty && expenseDetailForm.expenseAccount.$invalid) || (submitted && expenseDetailForm.expenseAccount.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseAccount.$error.required">O campo Conta é obrigatório.</small>
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="expenseCategory" class="col-md-3 control-label">Categoria</label>
-			<div class="col-md-9">
+		<div class="form-group form-group-sm">
+			<label for="expenseCategory" class="col-sm-3 control-label">Categoria</label>
+			<div class="col-sm-9">
 				<select name="expenseCategory" required ng-model="expenseDetail.category_id" ng-options="c._id as c.name for c in categories" class="form-control"></select>
 				<div class="error" ng-show="(expenseDetailForm.expenseCategory.$dirty && expenseDetailForm.expenseCategory.$invalid) || (submitted && expenseDetailForm.expenseCategory.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseCategory.$error.required">O campo Categoria é obrigatório.</small>
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="expenseStatus" class="col-md-3 control-label">Situação</label>
-			<div class="col-md-4">
+		<div class="form-group form-group-sm">
+			<label for="expenseStatus" class="col-sm-3 control-label">Situação</label>
+			<div class="col-sm-4">
 				<select name="expenseStatus" required ng-model="expenseDetail.status" ng-options="type for type in expenseStatus" class="form-control"></select>
 				<div class="error" ng-show="(expenseDetailForm.expenseStatus.$dirty && expenseDetailForm.expenseStatus.$invalid) || (submitted && expenseDetailForm.expenseStatus.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseStatus.$error.required">O campo Situação é obrigatório.</small>
@@ -60,7 +60,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<button type="submit" class="btn btn-primary">Confirmar</button>
-	    <button class="btn btn-default" ng-click="cancelDetail()">Cancelar</button>
+		<button type="submit" class="btn btn-primary btn-sn">Confirmar</button>
+	    <button class="btn btn-default btn-sm" ng-click="cancelDetail()">Cancelar</button>
 	</div>
 </form>

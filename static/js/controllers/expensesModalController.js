@@ -10,6 +10,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	$scope.gridOptions = {
         enableSorting: true,
 		showColumnFooter: true,
+		rowHeight: 23,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
@@ -17,18 +18,18 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
           	{
-				name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false,
+				name: 'Descrição', field: 'description', type: 'string', width:'25%', enableColumnMenu: false,
 				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 			},
-          	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
+          	{ name: 'Valor', field: 'amount', type: 'number',  width: '10%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
           	},
-          	{ name: 'Conta', field: '_account.name', type: 'string', width:'15%', enableColumnMenu: false },
-        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'15%', enableColumnMenu: false },
-        	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
+          	{ name: 'Conta', field: '_account.name', type: 'string', width:'16%', enableColumnMenu: false },
+        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'16%', enableColumnMenu: false },
+        	{ name: 'Situação', field: 'status', type: 'string', width:'10%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	}
         ]

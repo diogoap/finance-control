@@ -1,29 +1,29 @@
 <div class="container-fluid" ng-controller="expensesController">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-sm-12">
 
-			<div class="text-center">
+			<div class="text-center screen-title">
 				<h3>Cadastro de despesas</h3>
 			</div>
 
 			<div class="row">
-				<div class="form-group">
-					<div class="col-md-2">
-						<button class="btn btn-primary" ng-click="openModal(null, 'new')">Adicionar despesa</button>
+				<div class="form-group form-group-sm">
+					<div class="col-sm-2">
+						<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar despesa</button>
 					</div>
-					<div class="col-md-3">
-						<div class="btn-group">
+					<div class="col-sm-3">
+						<div class="btn-group btn-group-sm">
 							<button class="btn btn-success" ng-click="navigatePreviousMonth()">-1 Mês</button>
 							<button class="btn btn-success" ng-click="navigateActualMonth()">Atual</button>
 							<button class="btn btn-success" ng-click="navigateNextMonth()">+1 Mês</button>
 						</div>
 					</div>
-					<label for="expenseDueDateBegin" class="col-md-1 control-label">Período</label>
-					<div class="col-md-4">
-						<div class="input-group">
+					<label for="expenseDueDateBegin" class="col-sm-1 control-label">Período</label>
+					<div class="col-sm-4">
+						<div class="input-group input-group-sm">
 							<input datepicker-popup="shortDate" name="expenseDueDateBegin" ng-model="expenseDueDateBegin" required class="form-control" is-open="beginOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 							</span>
 							<div class="error" ng-show="(expenseForm.expenseDueDateBegin.$dirty && expenseForm.expenseDueDateBegin.$invalid) || (submitted && expenseForm.expenseDueDateBegin.$invalid)">
 								<small class="error" ng-show="expenseForm.expenseDueDateBegin.$error.required">O campo Período inicial é obrigatório.</small>
@@ -31,21 +31,21 @@
 
 							<input datepicker-popup="shortDate" name="expenseDueDateEnd" ng-model="expenseDueDateEnd" required class="form-control" is-open="endOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 							</span>
 							<div class="error" ng-show="(expenseForm.expenseDueDateEnd.$dirty && expenseForm.expenseDueDateEnd.$invalid) || (submitted && expenseForm.expenseDueDateEnd.$invalid)">
 								<small class="error" ng-show="expenseForm.expenseDueDateEnd.$error.required">O campo Período final é obrigatório.</small>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-2">
-						<button class="btn btn-primary" ng-click="filter()">Filtrar</button>
+					<div class="col-sm-2">
+						<button class="btn btn-primary btn-sm" ng-click="filter()">Filtrar</button>
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="form-group">
+				<div class="form-group form-group-sm">
 					<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-auto-resize resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
 				</div>
 			</div>
