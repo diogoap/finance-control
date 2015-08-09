@@ -9,12 +9,13 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 		showColumnFooter: true,
         rowHeight: 23,
         columnDefs: [
-          	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+          	{ name: 'Ações', type: 'string', width:'115', minWidth:'115', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" title="Pagar" href="" ng-click="grid.appScope.payExpense(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
-        	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'9%', enableColumnMenu: false,
+        	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
           		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
@@ -23,7 +24,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 			},
-          	{ name: 'Valor', field: 'amount', type: 'number',  width: '9%', enableColumnMenu: false,
+          	{ name: 'Valor', field: 'amount', type: 'number',  width: '8%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
@@ -33,7 +34,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
         	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
-        	{ name: 'Valor pago', field: 'amountPaid', type: 'number', width:'9%', enableColumnMenu: false,
+        	{ name: 'Valor pago', field: 'amountPaid', type: 'number', width:'8%', enableColumnMenu: false,
 				cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
@@ -148,6 +149,27 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 
 		modalInstance.result.then(function (id) {
 	    	$scope.deleteExpense(id);
+		});
+    };
+
+    $scope.payExpense = function (ExpenseId) {
+    	var modalInstance = $modal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/confirmModal.html',
+      		controller: confirmModalController,
+      		size: 'sm',
+      		resolve: {
+		        data: function () {
+					return ExpenseId;
+        		},
+		        message: function () {
+					return 'Confirma o pagamento da despesa?';
+        		}
+      		}
+    	});
+
+		modalInstance.result.then(function (id) {
+	    	//$scope.deleteExpense(id);
 		});
     };
 
