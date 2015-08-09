@@ -11,6 +11,7 @@ app.directive('resizableGrid', function($window) {
 			var rect = obj.getBoundingClientRect();
 			$scope.windowHeight = $window.innerHeight - (rect.top + 20) + 'px';
 			$scope.windowWidth = $window.innerWidth - (rect.left + 30) + 'px';
+
 		};
 
 		angular.element($window).bind('resize', function() {
@@ -19,6 +20,16 @@ app.directive('resizableGrid', function($window) {
 		});
 
 		angular.element(document).ready(function () {
+			$scope.initializeWindowSize();
+			$scope.$apply();
+		});
+
+		angular.element($window).bind('_page_ready', function() {
+			$scope.initializeWindowSize();
+			$scope.$apply();
+		});
+
+		$('#navbar').on('hidden.bs.collapse', function () {
 			$scope.initializeWindowSize();
 			$scope.$apply();
 		});

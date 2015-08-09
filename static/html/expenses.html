@@ -19,7 +19,7 @@
 						</div>
 					</div>
 					<label for="expenseDueDateBegin" class="col-sm-1 control-label">Período</label>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<div class="input-group input-group-sm">
 							<input datepicker-popup="shortDate" name="expenseDueDateBegin" ng-model="expenseDueDateBegin" required class="form-control" is-open="beginOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 							<span class="input-group-btn">
@@ -32,14 +32,12 @@
 							<input datepicker-popup="shortDate" name="expenseDueDateEnd" ng-model="expenseDueDateEnd" required class="form-control" is-open="endOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+								<button class="btn btn-default btn-sm" ng-click="filter()">Filtrar</button>
 							</span>
 							<div class="error" ng-show="(expenseForm.expenseDueDateEnd.$dirty && expenseForm.expenseDueDateEnd.$invalid) || (submitted && expenseForm.expenseDueDateEnd.$invalid)">
 								<small class="error" ng-show="expenseForm.expenseDueDateEnd.$error.required">O campo Período final é obrigatório.</small>
 							</div>
 						</div>
-					</div>
-					<div class="col-sm-2">
-						<button class="btn btn-primary btn-sm" ng-click="filter()">Filtrar</button>
 					</div>
 				</div>
 			</div>

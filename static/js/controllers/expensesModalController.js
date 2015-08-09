@@ -10,7 +10,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	$scope.gridOptions = {
         enableSorting: true,
 		showColumnFooter: true,
-		rowHeight: 23,
+		rowHeight: 24,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
