@@ -25,6 +25,7 @@ select.form-control.ng-valid {
 
 .ui-grid {
 	margin-top: 10px;
+    font-size: 13px;
 }
 
 .no-padding-bottom {
@@ -39,32 +40,6 @@ label {
     margin-top: 3px;
     text-align: right;
 }
-
-
-/*  CUSTOM CSS STARTS HERE */
-.grid2 .ui-grid-cell-contents {
-  padding: 1px 1px;
-}
-
-.grid2 .ui-grid-render-container-body .ui-grid-header-cell,
-.grid2 .ui-grid-render-container-left .ui-grid-header-cell,
-.grid2 .ui-grid-row,
-.grid2 .ui-grid-cell,
-.grid2 .ui-grid-cell .ui-grid-vertical-bar {
-
-  font-size: 12px;
-  line-height: 20px;
-}
-.grid2 .ui-grid-render-container-body .ui-grid-header-cell,
-.grid2 .ui-grid-render-container-left .ui-grid-header-cell,
-.grid2 .ui-grid-header-cell {
-  height: 55px !important;
-}
-.grid2 .ui-grid-filter-container {
-  padding: 1px 3px;
-}
-
-
 
 .loading-box {
     position: absolute;
