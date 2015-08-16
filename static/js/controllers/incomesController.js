@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, $route, uiGridConstants, Expenses) {
+app.controller('incomesController', function($scope, $http, $modal, $locale, $route, uiGridConstants, Incomes) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
@@ -15,7 +15,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
           	{ name: 'Ações', type: 'string', width:'107', minWidth:'107', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="Pagar" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
+          		'<a class="btn btn-primary btn-xs" title="Receber" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.receiveIncomeConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
           	},
         	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
@@ -26,7 +26,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
 				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 			},
-          	{ name: 'Valor', field: 'amount', type: 'number',  width: '8%', enableColumnMenu: false,
+          	{ name: 'Valor', field: 'amount', type: 'number',  width: '10%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
@@ -36,14 +36,10 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
         	{ name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	},
-        	{ name: 'Valor pago', field: 'amountPaid', type: 'number', width:'8%', enableColumnMenu: false,
+        	{ name: 'Valor receb.', field: 'amountReceived', type: 'number', width:'10%', enableColumnMenu: false,
 				cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
-        	},
-        	{ name: 'Ag.', field: 'scheduledPayment', type: 'string', width:'4%', enableColumnMenu: false,
-        		cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         	}
         ]
     };
@@ -67,60 +63,60 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
   	$scope.navigatePreviousMonth = function($event) {
 		var date;
 
-		if (isNaN(Date.parse($scope.expenseDueDateBegin))) {
+		if (isNaN(Date.parse($scope.incomeDueDateBegin))) {
 			date = new Date();
 		}
 		else {
-			date = $scope.expenseDueDateBegin;
+			date = $scope.incomeDueDateBegin;
 		}
 
 		var y = date.getFullYear(), m = date.getMonth();
-		$scope.expenseDueDateBegin = new Date(y, m - 1, 1);
-		$scope.expenseDueDateEnd = new Date(y, m, 0);
+		$scope.incomeDueDateBegin = new Date(y, m - 1, 1);
+		$scope.incomeDueDateEnd = new Date(y, m, 0);
 
-		$scope.getExpenses();
+		$scope.getIncomes();
   	};
 
   	$scope.navigateActualMonth = function($event) {
 		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-		$scope.expenseDueDateBegin = new Date(y, m, 1);
-		$scope.expenseDueDateEnd = new Date(y, m + 1, 0);
+		$scope.incomeDueDateBegin = new Date(y, m, 1);
+		$scope.incomeDueDateEnd = new Date(y, m + 1, 0);
 
-		$scope.getExpenses();
+		$scope.getIncomes();
   	};
 
   	$scope.navigateNextMonth = function($event) {
 		var date;
 
-		if (isNaN(Date.parse($scope.expenseDueDateBegin))) {
+		if (isNaN(Date.parse($scope.incomeDueDateBegin))) {
 			date = new Date();
 		}
 		else {
-			date = $scope.expenseDueDateBegin;
+			date = $scope.incomeDueDateBegin;
 		}
 
 		var y = date.getFullYear(), m = date.getMonth();
-		$scope.expenseDueDateBegin = new Date(y, m + 1, 1);
-		$scope.expenseDueDateEnd = new Date(y, m + 2, 0);
+		$scope.incomeDueDateBegin = new Date(y, m + 1, 1);
+		$scope.incomeDueDateEnd = new Date(y, m + 2, 0);
 
-		$scope.getExpenses();
+		$scope.getIncomes();
   	};
 
 	$scope.filter = function($event) {
-		if ((isNaN(Date.parse($scope.expenseDueDateBegin)) == false) && (isNaN(Date.parse($scope.expenseDueDateEnd))) == false) {
-			$scope.getExpenses();
+		if ((isNaN(Date.parse($scope.incomeDueDateBegin)) == false) && (isNaN(Date.parse($scope.incomeDueDateEnd))) == false) {
+			$scope.getIncomes();
 		}
   	};
 
-  	$scope.openModal = function (expenseId, action) {
+  	$scope.openModal = function (incomeId, action) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/expensesModal.html',
-      		controller: expensesModalController,
+      		templateUrl: 'html/incomesModal.html',
+      		controller: incomesModalController,
       		size: 'lg',
       		resolve: {
-		        expenseId: function () {
-					return expenseId;
+		        incomeId: function () {
+					return incomeId;
         		},
         		action: function () {
         			return action;
@@ -128,16 +124,16 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
       		}
     	});
 
-		modalInstance.result.then(function (expense) {
-	    	if (expense._action == 'new') {
-	    		$scope.createExpense(expense);
-	    	} else if (expense._action == 'edit') {
-	    		$scope.editExpense(expense);
+		modalInstance.result.then(function (income) {
+	    	if (income._action == 'new') {
+	    		$scope.createIncome(income);
+	    	} else if (income._action == 'edit') {
+	    		$scope.editIncome(income);
 	    	}
 		});
     };
 
-    $scope.deleteConfirmation = function (ExpenseId) {
+    $scope.deleteConfirmation = function (IncomeId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -145,20 +141,20 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return ExpenseId;
+					return IncomeId;
         		},
 		        message: function () {
-					return 'Confirma a exclusão da despesa?';
+					return 'Confirma a exclusão da receita?';
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
-	    	$scope.deleteExpense(id);
+	    	$scope.deleteIncome(id);
 		});
     };
 
-    $scope.payExpenseConfirmation = function (ExpenseId) {
+    $scope.receiveIncomeConfirmation = function (IncomeId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -166,39 +162,39 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return ExpenseId;
+					return IncomeId;
         		},
 		        message: function () {
-					return 'Confirma o pagamento da despesa?';
+					return 'Confirma o recebimento da receita?';
         		}
       		}
     	});
 
 		modalInstance.result.then(function (id) {
-	    	$scope.payExpense(id);
+	    	$scope.receiveIncome(id);
 		});
     };
 
 	$scope.getDueDateFilter = function() {
 		var dateBegin, dateEnd, y, m, d;
 
-		dateBegin = $scope.expenseDueDateBegin;
+		dateBegin = $scope.incomeDueDateBegin;
 		y = dateBegin.getFullYear(), m = dateBegin.getMonth(), d = dateBegin.getDate();
 		dateBegin = new Date(y, m, d);
 
-		dateEnd = $scope.expenseDueDateEnd;
+		dateEnd = $scope.incomeDueDateEnd;
 		y = dateEnd.getFullYear(), m = dateEnd.getMonth(), d = dateEnd.getDate();
 		dateEnd = new Date(y, m, d, 23, 59, 59, 999);
 
 		return 'dueDateBegin=' + dateBegin + '&dueDateEnd=' + dateEnd;
 	}
 
-	$scope.getExpenses = function() {
+	$scope.getIncomes = function() {
 		$scope.loading = true;
 
 		var filter = $scope.getDueDateFilter();
 
-		Expenses.get(filter)
+		Incomes.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
 				$scope.errorMessage = null;
@@ -210,12 +206,12 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
 			});
 	};
 
-	$scope.createExpense = function(expense) {
+	$scope.createIncome = function(income) {
 		$scope.loading = true;
 
-		Expenses.create(expense)
+		Incomes.create(income)
 			.success(function(data) {
-				$scope.getExpenses();
+				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -223,12 +219,12 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
 			});
 	};
 
-	$scope.editExpense = function(expense) {
+	$scope.editIncome = function(income) {
 		$scope.loading = true;
 
-		Expenses.patch(expense._id, expense)
+		Incomes.patch(income._id, income)
 			.success(function(data) {
-				$scope.getExpenses();
+				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -236,12 +232,12 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
 			});
 	};
 
-	$scope.deleteExpense = function(id) {
+	$scope.deleteIncome = function(id) {
 		$scope.loading = true;
 
-		Expenses.delete(id)
+		Incomes.delete(id)
 			.success(function(data) {
-				$scope.getExpenses();
+				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
@@ -249,12 +245,12 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
 			});
 	};
 
-	$scope.payExpense = function(id) {
+	$scope.receiveIncome = function(id) {
         $scope.loading = true;
 
-		Expenses.pay(id)
+		Incomes.receive(id)
 			.success(function(data) {
-                $scope.getExpenses();
+                $scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;

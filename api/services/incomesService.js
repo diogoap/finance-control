@@ -15,7 +15,7 @@ var incomeSchema = {
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "amountReceived": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
-        "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
+        "status": { "type": "string", "enum": [ "Em aberto", "Recebido" ] },
         "notes": { "type": "string" },
         "isLatePayment": { "type": "boolean" },
         "detail": {
@@ -48,7 +48,7 @@ var incomeSchema = {
         {
             "properties": {
                 "amountReceived": { "minimum": 0, "exclusiveMinimum": true },
-                "status": { "enum": [ "Pago" ] }
+                "status": { "enum": [ "Recebido" ] }
             },
             "required": [ "amountReceived" ]
         }
@@ -139,7 +139,7 @@ function receiveIncome(income) {
 
     if ((income.detail != undefined) && (income.detail.length > 0)) {
         income.detail.forEach(function(det) {
-            det.status = 'Pago';
+            det.status = 'Recebido';
         })
     }
 }

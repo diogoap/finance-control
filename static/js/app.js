@@ -9,7 +9,8 @@ var app = angular.module('financeControl', [
     'purplefox.numeric',
     'categoriesService',
     'accountsService',
-    'expensesService'
+    'expensesService',
+    'incomesService'
 ]);
 
 app.config(function($routeProvider) {
@@ -29,6 +30,10 @@ app.config(function($routeProvider) {
         .when('/expenses', {
             templateUrl: 'html/expenses.html',
             controller: 'expensesController'
+        })
+        .when('/incomes', {
+            templateUrl: 'html/incomes.html',
+            controller: 'incomesController'
         })
         .otherwise({
         	redirecTo: '/'

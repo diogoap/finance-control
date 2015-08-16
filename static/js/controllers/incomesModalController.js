@@ -1,10 +1,10 @@
 'use strict';
 
-function expensesModalController($scope, $modal, $modalInstance, uiGridConstants, Expenses, Categories, Accounts, expenseId, action) {
+function incomesModalController($scope, $modal, $modalInstance, uiGridConstants, Incomes, Categories, Accounts, incomeId, action) {
 	$scope.loading = true;
 	$scope.errorMessage = '';
 	$scope.action = action;
- 	$scope.expenseStatus = ['Em aberto', 'Pago'];
+ 	$scope.incomeStatus = ['Em aberto', 'Recebido'];
  	$scope.submitted = false;
 
 	$scope.gridOptions = {
@@ -36,23 +36,23 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
     };
 
 	if (action == 'new') {
-		$scope.screenTitle = 'Adicionar despesa';
-		$scope.expense = { dueDate: new Date(), status: 'Em aberto', amountPaid: 0, detail: new Array() };
-		$scope.gridOptions.data = $scope.expense.detail;
+		$scope.screenTitle = 'Adicionar receita';
+		$scope.income = { dueDate: new Date(), status: 'Em aberto', amountReceived: 0, detail: new Array() };
+		$scope.gridOptions.data = $scope.income.detail;
 		$scope._hasDetail = false;
 		$scope.loading = false;
 	}
 	else
 	{
-		$scope.screenTitle = 'Editar despesa';
+		$scope.screenTitle = 'Editar receita';
 
-		Expenses.getById(expenseId)
+		Incomes.getById(incomeId)
 			.success(function(data) {
-				$scope.expense = data;
+				$scope.income = data;
 
 				//Need to generate a new to date in order to make date picker work
-				$scope.expense.dueDate = new Date($scope.expense.dueDate);
-				$scope._hasDetail = $scope.expense.detail.length > 0;
+				$scope.income.dueDate = new Date($scope.income.dueDate);
+				$scope._hasDetail = $scope.income.detail.length > 0;
 				$scope.gridOptions.data = data.detail;
 				$scope.errorMessage = null;
 				$scope.loading = false;
@@ -92,10 +92,10 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
   	};
 
 	$scope.submit = function () {
-    	if ($scope.expenseForm.$valid) {
-			$scope.updateExpenseTotal();
-			$scope.expense._action = $scope.action;
-			$modalInstance.close($scope.expense);
+    	if ($scope.incomeForm.$valid) {
+			$scope.updateIncomeTotal();
+			$scope.income._action = $scope.action;
+			$modalInstance.close($scope.income);
     	} else {
       		$scope.submitted = true;
     	}
@@ -105,54 +105,54 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 		$modalInstance.dismiss('cancel');
 	}
 
-	$scope.validExpenseAmountPaid = function(value) {
-	  	if (($scope.expense != undefined) && ($scope.expense.status == 'Pago') && (value <= 0)) {
+	$scope.validIncomeAmountReceived = function(value) {
+	  	if (($scope.income != undefined) && ($scope.income.status == 'Recebido') && (value <= 0)) {
 	  		return false;
 	  	}
 
 		return true;
 	}
 
-	$scope.updateExpenseTotal = function() {
+	$scope.updateIncomeTotal = function() {
 		$scope._hasDetail = false;
 
-		if (($scope.expense.detail != undefined) && ($scope.expense.detail.length > 0)) {
+		if (($scope.income.detail != undefined) && ($scope.income.detail.length > 0)) {
 			$scope._hasDetail = true;
 
-			$scope.expense.account_id = '';
-			$scope.expense._account = null;
+			$scope.income.account_id = '';
+			$scope.income._account = null;
 
-			$scope.expense.category_id = '';
-			$scope.expense._category = null;
+			$scope.income.category_id = '';
+			$scope.income._category = null;
 
-			$scope.expense.amount = 0;
-			$scope.expense.amountPaid = 0;
+			$scope.income.amount = 0;
+			$scope.income.amountReceived = 0;
 
-			$scope.expense.detail.forEach(function (det) {
-				$scope.expense.amount += det.amount;
+			$scope.income.detail.forEach(function (det) {
+				$scope.income.amount += det.amount;
 
-				if (det.status == 'Pago') {
-					$scope.expense.amountPaid += det.amount;
+				if (det.status == 'Recebido') {
+					$scope.income.amountReceived += det.amount;
 				}
 			});
 
-			if ($scope.expense.amount == $scope.expense.amountPaid) {
-				$scope.expense.status = 'Pago';
+			if ($scope.income.amount == $scope.income.amountReceived) {
+				$scope.income.status = 'Recebido';
 			} else {
-				$scope.expense.status = 'Em aberto';
+				$scope.income.status = 'Em aberto';
 			}
 		}
 	}
 
-  	$scope.openDetail = function (expenseDetailId, action) {
+  	$scope.openDetail = function (incomeDetailId, action) {
 		var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/expensesDetailModal.html',
-      		controller: expensesDetailModalController,
+      		templateUrl: 'html/incomesDetailModal.html',
+      		controller: incomesDetailModalController,
       		resolve: {
-		        expenseDetail: function () {
+		        incomeDetail: function () {
 					// Get object for selected detail
-					var selDetail = $.grep($scope.expense.detail, function(e){ return e._id == expenseDetailId });
+					var selDetail = $.grep($scope.income.detail, function(e){ return e._id == incomeDetailId });
 					return selDetail[0];
         		},
         		action: function () {
@@ -161,24 +161,24 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
       		}
     	});
 
-		modalInstance.result.then(function (expenseDetail) {
-	    	if (expenseDetail._action == 'new') {
-	    		$scope.expense.detail.push(expenseDetail);
-	    	} else if (expenseDetail._action == 'edit') {
+		modalInstance.result.then(function (incomeDetail) {
+	    	if (incomeDetail._action == 'new') {
+	    		$scope.income.detail.push(incomeDetail);
+	    	} else if (incomeDetail._action == 'edit') {
 				// Replace exising detail object with the new one
-				for (var i in $scope.expense.detail) {
-			        if ($scope.expense.detail[i]._id == expenseDetail._id) {
-			            $scope.expense.detail[i] = expenseDetail;
+				for (var i in $scope.income.detail) {
+			        if ($scope.income.detail[i]._id == incomeDetail._id) {
+			            $scope.income.detail[i] = incomeDetail;
 			            break;
 			        }
 			    }
 	    	}
 
-			$scope.updateExpenseTotal();
+			$scope.updateIncomeTotal();
 		});
     };
 
-    $scope.deleteDetailConfirmation = function (expenseDetailId) {
+    $scope.deleteDetailConfirmation = function (incomeDetailId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -186,7 +186,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 			size: 'sm',
       		resolve: {
 		        data: function () {
-					return expenseDetailId;
+					return incomeDetailId;
         		},
 		        message: function () {
 					return 'Confirma a exclusão do detalhe?';
@@ -196,14 +196,14 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 		modalInstance.result.then(function (id) {
 			// Replace exising detail object with the new one
-			for (var i in $scope.expense.detail) {
-				if ($scope.expense.detail[i]._id == id) {
-					$scope.expense.detail.splice(i, 1);
+			for (var i in $scope.income.detail) {
+				if ($scope.income.detail[i]._id == id) {
+					$scope.income.detail.splice(i, 1);
 					break;
 				}
 			}
 
-			$scope.updateExpenseTotal();
+			$scope.updateIncomeTotal();
 		});
     };
 

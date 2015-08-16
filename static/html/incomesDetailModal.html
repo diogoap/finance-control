@@ -1,0 +1,66 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{screenTitle}}</h4>
+</div>
+<form name="incomeDetailForm" class="form-horizontal" novalidate ng-submit="submitDetail()">
+	<div class="modal-body">
+		<div class="form-group form-group-sm">
+			<label for="incomeDescription" class="col-sm-3 control-label">Descrição</label>
+			<div class="col-sm-9">
+				<input type="text" name="incomeDescription" ng-model="incomeDetail.description" required ng-maxlength=100 ng-minLength=1 class="form-control"/>
+				<div class="error" ng-show="(incomeDetailForm.incomeDescription.$dirty && incomeDetailForm.incomeDescription.$invalid) || (submitted && incomeDetailForm.incomeDescription.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeDescription.$error.required">O campo Descrição é obrigatório.</small>
+					<small class="error" ng-show="incomeDetailForm.incomeDescription.$error.minlength">O campo Descrição deve possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="incomeDetailForm.incomeDescription.$error.maxlength">O campo Descrição deve possuir no máximo 100 caracteres.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="incomeAmount" class="col-sm-3 control-label">Valor</label>
+			<div class="col-sm-9">
+				<input numeric decimals="2" gt-than="0" name="incomeAmount" ng-model="incomeDetail.amount" class="form-control"/>
+				<div class="error" ng-show="(incomeDetailForm.incomeAmount.$dirty && incomeDetailForm.incomeAmount.$invalid) || (submitted && incomeDetailForm.incomeAmount.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeAmount.$error.gtThan">O campo Valor é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="incomeAccount" class="col-sm-3 control-label">Conta</label>
+			<div class="col-sm-9">
+				<select name="incomeAccount" required ng-model="incomeDetail.account_id" ng-options="c._id as c.name for c in accounts" class="form-control"></select>
+				<div class="error" ng-show="(incomeDetailForm.incomeAccount.$dirty && incomeDetailForm.incomeAccount.$invalid) || (submitted && incomeDetailForm.incomeAccount.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeAccount.$error.required">O campo Conta é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="incomeCategory" class="col-sm-3 control-label">Categoria</label>
+			<div class="col-sm-9">
+				<select name="incomeCategory" required ng-model="incomeDetail.category_id" ng-options="c._id as c.name for c in categories" class="form-control"></select>
+				<div class="error" ng-show="(incomeDetailForm.incomeCategory.$dirty && incomeDetailForm.incomeCategory.$invalid) || (submitted && incomeDetailForm.incomeCategory.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeCategory.$error.required">O campo Categoria é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="incomeStatus" class="col-sm-3 control-label">Situação</label>
+			<div class="col-sm-4">
+				<select name="incomeStatus" required ng-model="incomeDetail.status" ng-options="type for type in incomeStatus" class="form-control"></select>
+				<div class="error" ng-show="(incomeDetailForm.incomeStatus.$dirty && incomeDetailForm.incomeStatus.$invalid) || (submitted && incomeDetailForm.incomeStatus.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeStatus.$error.required">O campo Situação é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+
+        <p class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</p>
+        <div class="bg-danger error-box" ng-show="errorMessage.length > 0">
+            <span>{{errorMessage}}</span>
+        </div>
+	</div>
+
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary btn-sn">Confirmar</button>
+	    <button class="btn btn-default btn-sm" ng-click="cancelDetail()">Cancelar</button>
+	</div>
+</form>
