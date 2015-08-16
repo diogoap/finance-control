@@ -1,36 +1,35 @@
 'use strict';
 
-var Expenses = require('../models/expensesModel');
+var Incomes = require('../models/incomesModel');
 var Categories = require('../models/categoriesModel');
 var Accounts = require('../models/accountsModel');
 var Validator = require('jsonschema').Validator;
 
-var expenseSchema = {
-    "description": "Expense model validation.",
+var incomeSchema = {
+    "description": "Income model validation.",
     "type": "object",
     "properties": {
         "description": { "type": "string", "minLength": 3, "maxLength": 100 },
         "dueDate": { "type": "datetime" },
-        "scheduledPayment": { "type": "boolean" },
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
-        "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
+        "amountReceived": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
         "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
         "notes": { "type": "string" },
         "isLatePayment": { "type": "boolean" },
         "detail": {
-            "description": "Expenses detail list",
+            "description": "Incomes detail list",
             "type": "array",
             "items": {
-                "description": "Expense detail",
+                "description": "Income detail",
                 "type": "object",
                 "properties": {
                     "description": { "type": "string", "minLength": 1, "maxLength": 100 },
                     "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
                     "category_id": { "type": "string" },
                     "account_id": { "type": "string" },
-                    "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] }
+                    "status": { "type": "string", "enum": [ "Em aberto", "Recebido" ] }
                 },
                 "required": [ "description", "category_id", "account_id", "status", "amount" ]
             }
@@ -48,10 +47,10 @@ var expenseSchema = {
         { "properties": { "status": { "enum": [ "Em aberto" ] } } },
         {
             "properties": {
-                "amountPaid": { "minimum": 0, "exclusiveMinimum": true },
+                "amountReceived": { "minimum": 0, "exclusiveMinimum": true },
                 "status": { "enum": [ "Pago" ] }
             },
-            "required": [ "amountPaid" ]
+            "required": [ "amountReceived" ]
         }
     ]
 };
@@ -80,66 +79,66 @@ function setAccount(accountList, obj) {
     }
 }
 
-function fillDetailAccountsAndCategories(expense) {
-    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
-        expense._accountNames = '';
-        expense._categoryNames = '';
+function fillDetailAccountsAndCategories(income) {
+    if ((income.detail != undefined) && (income.detail.length > 0)) {
+        income._accountNames = '';
+        income._categoryNames = '';
 
-        expense.detail.forEach(function (det) {
+        income.detail.forEach(function (det) {
 
-            if (expense._accountNames.indexOf(det._account.name) == -1) {
-                if (expense._accountNames.length > 0) {
-                    expense._accountNames += ' - ';
+            if (income._accountNames.indexOf(det._account.name) == -1) {
+                if (income._accountNames.length > 0) {
+                    income._accountNames += ' - ';
                 }
-                expense._accountNames += det._account.name;
+                income._accountNames += det._account.name;
             }
 
-            if (expense._categoryNames.indexOf(det._category.name) == -1) {
-                if (expense._categoryNames.length > 0) {
-                    expense._categoryNames += ' - ';
+            if (income._categoryNames.indexOf(det._category.name) == -1) {
+                if (income._categoryNames.length > 0) {
+                    income._categoryNames += ' - ';
                 }
-                expense._categoryNames += det._category.name;
+                income._categoryNames += det._category.name;
             }
         });
     } else {
-        expense._accountNames = expense._account.name;
-        expense._categoryNames = expense._category.name;
+        income._accountNames = income._account.name;
+        income._categoryNames = income._category.name;
     }
 }
 
-function updateExpenseTotal(expense) {
-    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
-        expense.account_id = null;
-        expense._account = null;
+function updateIncomeTotal(income) {
+    if ((income.detail != undefined) && (income.detail.length > 0)) {
+        income.account_id = null;
+        income._account = null;
 
-        expense.category_id = null;
-        expense._category = null;
+        income.category_id = null;
+        income._category = null;
 
-        expense.amount = 0;
-        expense.amountPaid = 0;
+        income.amount = 0;
+        income.amountReceived = 0;
 
-        expense.detail.forEach(function (det) {
-            expense.amount += det.amount;
+        income.detail.forEach(function (det) {
+            income.amount += det.amount;
 
-            if (det.status == 'Pago') {
-                expense.amountPaid += det.amount;
+            if (det.status == 'Recebido') {
+                income.amountReceived += det.amount;
             }
         });
 
-        if (expense.amount == expense.amountPaid) {
-            expense.status = 'Pago';
+        if (income.amount == income.amountReceived) {
+            income.status = 'Recebido';
         } else {
-            expense.status = 'Em aberto';
+            income.status = 'Em aberto';
         }
     }
 }
 
-function payExpense(expense) {
-    expense.status = 'Pago';
-    expense.amountPaid = expense.amount;
+function receiveIncome(income) {
+    income.status = 'Recebido';
+    income.amountReceived = income.amount;
 
-    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
-        expense.detail.forEach(function(det) {
+    if ((income.detail != undefined) && (income.detail.length > 0)) {
+        income.detail.forEach(function(det) {
             det.status = 'Pago';
         })
     }
@@ -148,30 +147,30 @@ function payExpense(expense) {
 module.exports = {
 
     getById: function(id, callbackSuccess, callbackError) {
-        var expensePromisse = Expenses.findById(id);
-        expensePromisse.then(function(expense) {
-            if (expense == undefined) {
+        var incomePromisse = Incomes.findById(id);
+        incomePromisse.then(function(income) {
+            if (income == undefined) {
                 callbackError(404);
             }
-            
+
             var categoriesPromisse = Categories.find().exec();
             categoriesPromisse.then(function (categories) {
 
                 var accountsPromisse = Accounts.find().exec();
                 accountsPromisse.then(function (accounts) {
 
-                    setCategory(categories, expense);
-                    setAccount(accounts, expense);
-                    fillProperties(expense);
+                    setCategory(categories, income);
+                    setAccount(accounts, income);
+                    fillProperties(income);
 
-                    expense.detail.forEach(function (det) {
+                    income.detail.forEach(function (det) {
                         setCategory(categories, det);
                         setAccount(accounts, det);
                     });
 
-                    fillDetailAccountsAndCategories(expense);
+                    fillDetailAccountsAndCategories(income);
 
-                    callbackSuccess(expense);
+                    callbackSuccess(income);
                 });
             });
         })
@@ -187,8 +186,8 @@ module.exports = {
             queryFilter = { dueDate: { $gt: filter.dueDateBegin, $lt: filter.dueDateEnd } };
         }
 
-        var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();
-        expensesPromisse.then(function (expenses) {
+        var incomesPromisse = Incomes.find(queryFilter).sort('dueDate').exec();
+        incomesPromisse.then(function (incomes) {
 
             var categoriesPromisse = Categories.find().exec();
             categoriesPromisse.then(function (categories) {
@@ -196,7 +195,7 @@ module.exports = {
                 var accountsPromisse = Accounts.find().exec();
                 accountsPromisse.then(function (accounts) {
 
-                    expenses.forEach(function (exp) {
+                    incomes.forEach(function (exp) {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
                         fillProperties(exp);
@@ -209,7 +208,7 @@ module.exports = {
                         fillDetailAccountsAndCategories(exp);
                     });
 
-                    callbackSuccess(expenses);
+                    callbackSuccess(incomes);
                 });
             });
         })
@@ -218,14 +217,14 @@ module.exports = {
         });
     },
 
-    create: function(expense, callbackSuccess, callbackError) {
-        var val = new Validator().validate(expense, expenseSchema);
+    create: function(income, callbackSuccess, callbackError) {
+        var val = new Validator().validate(income, incomeSchema);
 
         if (val.errors.length == 0) {
-            updateExpenseTotal(expense);
-            var expensesPromisse = Expenses.create(expense);
+            updateIncomeTotal(income);
+            var incomesPromisse = Incomes.create(income);
 
-            expensesPromisse.then(function () {
+            incomesPromisse.then(function () {
                 callbackSuccess();
             })
             .then(null, function(error) {
@@ -237,9 +236,9 @@ module.exports = {
     },
 
     delete: function(id, callbackSuccess, callbackError) {
-        var expensesPromisse = Expenses.remove(id);
+        var incomesPromisse = Incomes.remove(id);
 
-        expensesPromisse.then(function () {
+        incomesPromisse.then(function () {
             callbackSuccess();
         })
         .then(null, function(error) {
@@ -247,14 +246,14 @@ module.exports = {
         });
     },
 
-    edit: function(id, expense, callbackSuccess, callbackError) {
-        var val = new Validator().validate(expense, expenseSchema);
+    edit: function(id, income, callbackSuccess, callbackError) {
+        var val = new Validator().validate(income, incomeSchema);
 
         if (val.errors.length == 0) {
-            updateExpenseTotal(expense);
-            var expensesPromisse = Expenses.findByIdAndUpdate(id, expense);
+            updateIncomeTotal(income);
+            var incomesPromisse = Incomes.findByIdAndUpdate(id, income);
 
-            expensesPromisse.then(function() {
+            incomesPromisse.then(function() {
                 callbackSuccess();
             })
             .then(null, function(error) {
@@ -265,13 +264,13 @@ module.exports = {
         }
     },
 
-    pay: function(id, callbackSuccess, callbackError) {
-        var expenseFindPromisse = Expenses.findById(id);
-        expenseFindPromisse.then(function (expense) {
-            if (expense != undefined) {
-                payExpense(expense);
+    receive: function(id, callbackSuccess, callbackError) {
+        var incomeFindPromisse = Incomes.findById(id);
+        incomeFindPromisse.then(function (income) {
+            if (income != undefined) {
+                receiveIncome(income);
 
-                expense.save(function(error, raw) {
+                income.save(function(error, raw) {
                      if (error) {
                          callbackError(error, 400)
                      };

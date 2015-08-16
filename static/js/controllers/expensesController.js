@@ -15,7 +15,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, $r
           	{ name: 'Ações', type: 'string', width:'115', minWidth:'115', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="{{row.entity.status}}" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
+          		'<a class="btn btn-primary btn-xs" title="Pagar" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
           	},
         	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,

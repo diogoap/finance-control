@@ -23,6 +23,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 require('./api/categoriesApi.js')(app);
 require('./api/accountsApi.js')(app);
 require('./api/expensesApi.js')(app, url);
+require('./api/incomesApi.js')(app, url);
 
 // listen (start app with node server.js) ======================================
 app.listen(port);
