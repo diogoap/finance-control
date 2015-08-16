@@ -20,8 +20,8 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // routes ======================================================================
-require('./api/categoriesApi.js')(app);
-require('./api/accountsApi.js')(app);
+require('./api/categoriesApi.js')(app, url);
+require('./api/accountsApi.js')(app, url);
 require('./api/expensesApi.js')(app, url);
 require('./api/incomesApi.js')(app, url);
 

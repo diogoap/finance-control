@@ -26,8 +26,14 @@ module.exports = {
         });
     },
 
-    get: function(callbackSuccess, callbackError) {
-        var categoriesPromisse = Categories.find().sort('name').exec();
+    get: function(filter, callbackSuccess, callbackError) {
+        var queryFilter;
+
+        if ((filter != undefined) && (filter.type != undefined)) {
+            queryFilter = { type: filter.type };
+        }
+
+        var categoriesPromisse = Categories.find(queryFilter).sort('name').exec();
 
         categoriesPromisse.then(function (categories) {
             callbackSuccess(categories);

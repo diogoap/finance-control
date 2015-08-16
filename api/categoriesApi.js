@@ -10,7 +10,7 @@ function sendError(res, error, status) {
     };
 }
 
-module.exports = function(app) {
+module.exports = function(app, url) {
 
     app.get('/api/categories/:id', function(req, res) {
         var category = categoriesService.getById(req.params.id,
@@ -24,7 +24,11 @@ module.exports = function(app) {
     })
 
     app.get('/api/categories', function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
         categoriesService.get(
+            query,
             function(categories) {
                 res.json(categories);
             },

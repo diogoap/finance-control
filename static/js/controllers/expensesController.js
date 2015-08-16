@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, $route, uiGridConstants, Expenses) {
+app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Expenses) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 

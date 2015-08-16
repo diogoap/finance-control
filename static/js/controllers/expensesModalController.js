@@ -63,7 +63,8 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 			});
 	};
 
-	Categories.get()
+	var filter = 'type=Despesa';
+	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
 			$scope.errorMessage = null;

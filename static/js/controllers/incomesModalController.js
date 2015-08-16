@@ -63,7 +63,8 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 			});
 	};
 
-	Categories.get()
+	var filter = 'type=Receita';
+	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
 			$scope.errorMessage = null;

@@ -10,7 +10,7 @@ function sendError(res, error, status) {
     };
 }
 
-module.exports = function(app) {
+module.exports = function(app, url) {
 
     app.get('/api/accounts/:id', function(req, res) {
         var account = accountsService.getById(req.params.id,

@@ -6,9 +6,9 @@ angular.module('categoriesService', [])
 		return {
 			getById : function(id) {
 				return $http.get('/api/categories/' + id);
-			},			
-			get : function() {
-				return $http.get('/api/categories');
+			},
+			get : function(filter) {
+				return $http.get('/api/categories?' + filter);
 			},
 			create : function(categoryData) {
 				return $http.post('/api/categories', categoryData);

@@ -27,7 +27,8 @@ function expensesDetailModalController($scope, $modalInstance, Categories, Accou
 		$scope.loading = false;
 	};
 
-	Categories.get()
+	var filter = 'type=Despesa';
+	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
 			$scope.errorMessage = null;

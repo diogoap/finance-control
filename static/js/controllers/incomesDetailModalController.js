@@ -27,7 +27,8 @@ function incomesDetailModalController($scope, $modalInstance, Categories, Accoun
 		$scope.loading = false;
 	};
 
-	Categories.get()
+	var filter = 'type=Receita';
+	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
 			$scope.errorMessage = null;
