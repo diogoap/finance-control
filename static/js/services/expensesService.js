@@ -16,8 +16,11 @@ angular.module('expensesService', [])
 			delete : function(id) {
 				return $http.delete('/api/expenses/' + id);
 			},
-			patch : function(_id, expenseData) {
-				return $http.patch('/api/expenses/' + _id, expenseData);
+			patch : function(id, expenseData) {
+				return $http.patch('/api/expenses/' + id, expenseData);
+			},
+			pay : function(id) {
+				return $http.patch('/api/expenses/' + id + '?pay=true');
 			}
 		}
 	}]);

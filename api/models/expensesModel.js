@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;;
+var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
 
 var expenseSchema = new Schema({
 	description: String,
@@ -17,6 +17,7 @@ var expenseSchema = new Schema({
 	amountPaid: { type: Number, default: 0 },
 	status: { type: String, default: '' },
 	notes: String,
+	isLatePayment: { type: Boolean, default: false },
 	detail: [ {
 	 	description: String,
 		amount: { type: Number, default: 0 },

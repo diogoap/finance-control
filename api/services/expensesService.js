@@ -11,13 +11,14 @@ var expenseSchema = {
     "properties": {
         "description": { "type": "string", "minLength": 3, "maxLength": 100 },
         "dueDate": { "type": "datetime" },
-        "scheduledPayment": { "type": "boolean" },
+        "scheduledPayment": { "type": "" },
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
         "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
         "notes": { "type": "string" },
+        "isLatePayment": { "type": "boolean" },
         "detail": {
             "description": "Expenses detail list",
             "type": "array",
@@ -54,6 +55,12 @@ var expenseSchema = {
         }
     ]
 };
+
+function fillProperties(obj) {
+    var today = new Date(), y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+    today = new Date(y, m, d, 0, 0, 0, 0);
+    obj.isLatePayment = (obj.status == 'Em aberto' && obj.dueDate < today);
+}
 
 function setCategory(categoryList, obj) {
     for (var j in categoryList) {
@@ -101,7 +108,7 @@ function fillDetailAccountsAndCategories(expense) {
 }
 
 function updateExpenseTotal(expense) {
-    if ((expense.detail != undefined) && (expense.detail.lenght > 0)) {
+    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
         expense.account_id = null;
         expense._account = null;
 
@@ -127,6 +134,17 @@ function updateExpenseTotal(expense) {
     }
 }
 
+function payExpense(expense) {
+    expense.status = 'Pago';
+    expense.amountPaid = expense.amount;
+
+    if ((expense.detail != undefined) && (expense.detail.length > 0)) {
+        expense.detail.forEach(function(det) {
+            det.status = 'Pago';
+        })
+    }
+}
+
 module.exports = {
 
     getById: function(id, callbackSuccess, callbackError) {
@@ -141,6 +159,7 @@ module.exports = {
 
                     setCategory(categories, expense);
                     setAccount(accounts, expense);
+                    fillProperties(expense);
 
                     expense.detail.forEach(function (det) {
                         setCategory(categories, det);
@@ -177,6 +196,7 @@ module.exports = {
                     expenses.forEach(function (exp) {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
+                        fillProperties(exp);
 
                         exp.detail.forEach(function (det) {
                             setCategory(categories, det);
@@ -231,7 +251,7 @@ module.exports = {
             updateExpenseTotal(expense);
             var expensesPromisse = Expenses.findByIdAndUpdate(id, expense);
 
-            expensesPromisse.then(function () {
+            expensesPromisse.then(function() {
                 callbackSuccess();
             })
             .then(null, function(error) {
@@ -240,6 +260,28 @@ module.exports = {
         } else {
             callbackError(val.errors, 400)
         }
+    },
+
+    pay: function(id, callbackSuccess, callbackError) {
+        var expenseFindPromisse = Expenses.findById(id);
+        expenseFindPromisse.then(function (expense) {
+            if (expense != undefined) {
+                payExpense(expense);
+
+                expense.save(function(error, raw) {
+                     if (error) {
+                         callbackError(error, 400)
+                     };
+
+                     callbackSuccess();
+                });
+            } else {
+                callbackError(404);
+            };
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
+        });
     }
 
 }

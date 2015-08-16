@@ -4,7 +4,7 @@ var categoriesService = require('./services/categoriesService');
 
 function sendError(res, error, status) {
     if (status) {
-        res.status(status).send(error);
+        res.status(status).send('Error: ' + error);
     } else {
         res.status(500).send(error);
     };

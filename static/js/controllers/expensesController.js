@@ -2,22 +2,24 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Expenses) {
+app.controller('expensesController', function($scope, $http, $modal, $locale, $route, uiGridConstants, Expenses) {
+
+    var rowTemplate='<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
  	$scope.gridOptions = {
         enableSorting: true,
 		showColumnFooter: true,
         rowHeight: 23,
+        rowTemplate:rowTemplate,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'115', minWidth:'115', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="Pagar" href="" ng-click="grid.appScope.payExpense(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+          		'<a class="btn btn-primary btn-xs" title="{{row.entity.status}}" ng-show="{{row.entity.status == \'Em aberto\'}}" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
+        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
           	},
         	{ name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
-          		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+          		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
           	{
 				name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false,
@@ -45,6 +47,10 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
         	}
         ]
     };
+
+    $scope.gridOptions.onRegisterApi = function (gridApi) {
+         $scope.gridApi = gridApi;
+    }
 
   	$scope.openCalendarDialogBegin = function($event) {
     	$event.preventDefault();
@@ -152,7 +158,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 		});
     };
 
-    $scope.payExpense = function (ExpenseId) {
+    $scope.payExpenseConfirmation = function (ExpenseId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -169,7 +175,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
     	});
 
 		modalInstance.result.then(function (id) {
-	    	//$scope.deleteExpense(id);
+	    	$scope.payExpense(id);
 		});
     };
 
@@ -236,6 +242,26 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 		Expenses.delete(id)
 			.success(function(data) {
 				$scope.getExpenses();
+			})
+			.error(function(data, status, headers, config) {
+				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				$scope.loading = false;
+			});
+	};
+
+	$scope.payExpense = function(id) {
+        $scope.loading = true;
+
+		Expenses.pay(id)
+			.success(function(data) {
+				$route.reload();
+                //$scope.getExpenses();
+                //setTimeout(function() {
+                //    $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                //    $scope.gridApi.core.refresh();
+                //    $scope.getExpenses();
+                //    alert('feito');
+                //}, 5000);
 			})
 			.error(function(data, status, headers, config) {
 				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;

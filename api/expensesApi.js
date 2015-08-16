@@ -4,7 +4,7 @@ var expensesService = require('./services/expensesService');
 
 function sendError(res, error, status) {
     if (status) {
-        res.status(status).send(error);
+        res.status(status).send('Error: ' + error);
     } else {
         res.status(500).send(error);
     };
@@ -61,14 +61,28 @@ module.exports = function(app, url) {
     })
 
     app.patch('/api/expenses/:id', function(req, res) {
-        expensesService.edit(req.params.id, req.body,
-            function(expenses) {
-                res.json('OK');
-            },
-            function(error, status) {
-                sendError(res, error, status);
-            }
-        );
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        if (query.pay == 'true') {
+            expensesService.pay(req.params.id,
+                function() {
+                    res.json('OK');
+                },
+                function(error, status) {
+                    sendError(res, error, status);
+                }
+            );
+        } else {
+            expensesService.edit(req.params.id, req.body,
+                function() {
+                    res.json('OK');
+                },
+                function(error, status) {
+                    sendError(res, error, status);
+                }
+            );
+        }
     })
 
 }

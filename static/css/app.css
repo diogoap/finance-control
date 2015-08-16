@@ -36,6 +36,10 @@ select.form-control.ng-valid {
     margin-bottom: 0px;
 }
 
+.red-font-color {
+  color: red;
+}
+
 label {
     margin-top: 3px;
     text-align: right;

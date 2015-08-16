@@ -49,6 +49,9 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 		Expenses.getById(expenseId)
 			.success(function(data) {
 				$scope.expense = data;
+
+				//Need to generate a new to date in order to make date picker work
+				$scope.expense.dueDate = new Date($scope.expense.dueDate);
 				$scope._hasDetail = $scope.expense.detail.length > 0;
 				$scope.gridOptions.data = data.detail;
 				$scope.errorMessage = null;
@@ -84,7 +87,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 	// OPEN CALANDAR ==============================================================
   	$scope.openCalendarDialog = function($event) {
-    	$event.preventDefault();
+		$event.preventDefault();
     	$event.stopPropagation();
     	$scope.opened = true;
   	};
@@ -148,7 +151,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 	// OPEN ITEM MODAL ============================================================
   	$scope.openDetail = function (expenseDetailId, action) {
-    	var modalInstance = $modal.open({
+		var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/expensesDetailModal.html',
       		controller: expensesDetailModalController,
@@ -183,7 +186,6 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 	// DELETE CONFIRMATION ========================================================
     $scope.deleteDetailConfirmation = function (expenseDetailId) {
-
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
