@@ -11,7 +11,7 @@ var expenseSchema = {
     "properties": {
         "description": { "type": "string", "minLength": 3, "maxLength": 100 },
         "dueDate": { "type": "datetime" },
-        "scheduledPayment": { "type": "" },
+        "scheduledPayment": { "type": "boolean" },
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
