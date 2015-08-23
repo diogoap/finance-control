@@ -13,9 +13,7 @@
 				<span class="fa fa-spinner fa-spin fa-5x"></span>
 			</div>
 
-			<div class="bg-danger error-box" ng-show="errorMessage.length > 0">
-				<span>{{errorMessage}}</span>
-			</div>
+			<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
 		</div>
 	</div>
 </div>

@@ -91,9 +91,8 @@
         <p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
-        <div class="bg-danger error-box" ng-show="errorMessage.length > 0">
-            <span>{{errorMessage}}</span>
-        </div>
+        
+		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
 	</div>
 
 	<div class="modal-footer">

@@ -1,8 +1,9 @@
 'use strict';
 
-function categoriesModalController($scope, $modalInstance, Categories, categoryId, action) {
+function categoriesModalController($scope, $modalInstance, Utils, Categories, categoryId, action) {
 	$scope.loading = true;
-	$scope.errorMessage = '';
+	$scope.Utils = Utils;
+	$scope.alerts = [];
 	$scope.action = action;
  	$scope.categoryTypes = ['Despesa', 'Receita'];
  	$scope.submitted = false;
@@ -17,12 +18,11 @@ function categoriesModalController($scope, $modalInstance, Categories, categoryI
 
 		Categories.getById(categoryId)
 			.success(function(data) {
-				$scope.category = data;
-				$scope.errorMessage = null;
+				$scope.category = data;;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};

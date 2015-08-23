@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('categoriesController', function($scope, $http, $modal, $locale, uiGridConstants, Categories) {
+app.controller('categoriesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Categories) {
 
  	$scope.gridOptions = {
         enableSorting: true,
@@ -10,8 +10,8 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
         rowHeight: 23,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
           	},
           	{
@@ -72,11 +72,10 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 		Categories.get()
 			.success(function(data) {
 				$scope.gridOptions.data = data;
-				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -86,10 +85,11 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 
 		Categories.create(category)
 			.success(function(data) {
+			    Utils.addSucess($scope, 'Categoria adicionada com sucesso!');
 				$scope.getCategories();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -99,10 +99,11 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 
 		Categories.patch(category._id, category)
 			.success(function(data) {
+			    Utils.addSucess($scope, 'Categoria editada com sucesso!');
 				$scope.getCategories();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -112,15 +113,17 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 
 		Categories.delete(id)
 			.success(function(data) {
+			    Utils.addSucess($scope, 'Categoria excluída com sucesso!');
 				$scope.getCategories();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
 
 	// initialization
-	$scope.errorMessage = '';
+    $scope.Utils = Utils;
+    $scope.alerts = [];
 	$scope.getCategories();
 });

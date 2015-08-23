@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('incomesController', function($scope, $http, $modal, $locale, uiGridConstants, Incomes) {
+app.controller('incomesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Incomes) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
@@ -133,6 +133,25 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 		});
     };
 
+    $scope.openGeneratorModal = function () {
+    	var modalInstance = $modal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/generatorModal.html',
+      		controller: generatorModalController,
+      		size: 'lg',
+      		resolve: {
+		        type: function () {
+					return 'Receita';
+        		}
+      		}
+    	});
+
+        modalInstance.result.then(function (id) {
+			Utils.addSucess($scope, 'Receita(s) gerada(s) com sucesso!');
+        	$scope.getIncomes();
+        });
+    };
+
     $scope.deleteConfirmation = function (IncomeId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
@@ -197,11 +216,10 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 		Incomes.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
-				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -211,10 +229,11 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 
 		Incomes.create(income)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Receita adicionada com sucesso!');
 				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -224,10 +243,11 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 
 		Incomes.patch(income._id, income)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Receita editada com sucesso!');
 				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -237,10 +257,11 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 
 		Incomes.delete(id)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Receita excluída com sucesso!');
 				$scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -250,15 +271,17 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
 
 		Incomes.receive(id)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Receita recebida com sucesso!');
                 $scope.getIncomes();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
 
 	// initialization
-	$scope.errorMessage = '';
+    $scope.Utils = Utils;
+    $scope.alerts = [];
 	$scope.navigateActualMonth();
 });

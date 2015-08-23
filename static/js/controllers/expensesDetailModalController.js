@@ -1,8 +1,9 @@
 'use strict';
 
-function expensesDetailModalController($scope, $modalInstance, Categories, Accounts, expenseDetail, action) {
+function expensesDetailModalController($scope, $modalInstance, Utils, Categories, Accounts, expenseDetail, action) {
 	$scope.loading = true;
-	$scope.errorMessage = '';
+	$scope.Utils = Utils;
+	$scope.alerts = [];
 	$scope.action = action;
  	$scope.expenseStatus = ['Em aberto', 'Pago'];
  	$scope.submitted = false;
@@ -31,22 +32,20 @@ function expensesDetailModalController($scope, $modalInstance, Categories, Accou
 	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
-			$scope.errorMessage = null;
 			$scope.loading = false;
 		})
 		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
 	Accounts.get()
 		.success(function(data) {
 			$scope.accounts = data;
-			$scope.errorMessage = null;
 			$scope.loading = false;
 		})
 		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 

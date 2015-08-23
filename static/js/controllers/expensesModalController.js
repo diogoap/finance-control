@@ -1,8 +1,9 @@
 'use strict';
 
-function expensesModalController($scope, $modal, $modalInstance, uiGridConstants, Expenses, Categories, Accounts, expenseId, action) {
+function expensesModalController($scope, $modal, $modalInstance, uiGridConstants, Utils, Expenses, Categories, Accounts, expenseId, action) {
 	$scope.loading = true;
-	$scope.errorMessage = '';
+	$scope.Utils = Utils;
+	$scope.alerts = [];
 	$scope.action = action;
  	$scope.expenseStatus = ['Em aberto', 'Pago'];
  	$scope.submitted = false;
@@ -13,8 +14,8 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 		rowHeight: 23,
         columnDefs: [
           	{ name: 'Ações', type: 'string', width:'71', minWidth:'71', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
           	},
           	{
@@ -54,11 +55,10 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 				$scope.expense.dueDate = new Date($scope.expense.dueDate);
 				$scope._hasDetail = $scope.expense.detail.length > 0;
 				$scope.gridOptions.data = data.detail;
-				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -67,22 +67,20 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
-			$scope.errorMessage = null;
 			$scope.loading = false;
 		})
 		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
 	Accounts.get()
 		.success(function(data) {
 			$scope.accounts = data;
-			$scope.errorMessage = null;
 			$scope.loading = false;
 		})
 		.error(function(data, status, headers, config) {
-			$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 

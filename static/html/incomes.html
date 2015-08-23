@@ -8,7 +8,8 @@
 	<div class="row">
 		<div class="form-group form-group-sm">
 			<div class="col-sm-4">
-				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar receita</button>
+				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar</button>
+				<button class="btn btn-primary btn-sm" ng-click="openGeneratorModal()">Gerar receitas</button>
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success" ng-click="navigatePreviousMonth()">-1 Mês</button>
 					<button class="btn btn-success" ng-click="navigateActualMonth()">Atual</button>
@@ -49,9 +50,7 @@
 				<span class="fa fa-spinner fa-spin fa-5x"></span>
 			</div>
 
-			<div class="bg-danger error-box" ng-show="errorMessage.length > 0">
-				<span>{{errorMessage}}</span>
-			</div>
+			<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
 		</div>
 	</div>
 

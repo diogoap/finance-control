@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Expenses) {
+app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Expenses) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
@@ -137,6 +137,25 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 		});
     };
 
+    $scope.openGeneratorModal = function () {
+    	var modalInstance = $modal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/generatorModal.html',
+      		controller: generatorModalController,
+      		size: 'lg',
+      		resolve: {
+		        type: function () {
+					return 'Despesa';
+        		}
+      		}
+    	});
+
+        modalInstance.result.then(function (id) {
+			Utils.addSucess($scope, 'Despesa(s) gerada(s) com sucesso!');
+            $scope.getExpenses();
+		});
+    };
+
     $scope.deleteConfirmation = function (ExpenseId) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
@@ -201,11 +220,10 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 		Expenses.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
-				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				$$scope.addError('Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -215,10 +233,11 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 
 		Expenses.create(expense)
 			.success(function(data) {
-				$scope.getExpenses();
+				Utils.addSucess($scope, 'Despesa adicionada com sucesso!');
+                $scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				$scope.addError('Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -228,10 +247,11 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 
 		Expenses.patch(expense._id, expense)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Despesa editada com sucesso!');
 				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -241,10 +261,11 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 
 		Expenses.delete(id)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Despesa excluída com sucesso!');
 				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				$scope.addError('Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -254,15 +275,17 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 
 		Expenses.pay(id)
 			.success(function(data) {
+                Utils.addSucess($scope, 'Despesa paga com sucesso!');
                 $scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao salvar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
 
 	// initialization
-	$scope.errorMessage = '';
+    $scope.Utils = Utils;
+    $scope.alerts = [];
 	$scope.navigateActualMonth();
 });

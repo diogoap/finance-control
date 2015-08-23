@@ -1,14 +1,15 @@
 'use strict';
 
-function accountsModalController($scope, $modalInstance, Accounts, accountId, action) {
+function accountsModalController($scope, $modalInstance, Utils, Accounts, accountId, action) {
 	$scope.loading = true;
-	$scope.errorMessage = '';
+	$scope.Utils = Utils;
+	$scope.alerts = [];
 	$scope.action = action;
  	$scope.submitted = false;
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar conta';
-		$scope.account = { initialBalance: 0 };		
+		$scope.account = { initialBalance: 0 };
 		$scope.loading = false;
 	}
 	else
@@ -18,11 +19,10 @@ function accountsModalController($scope, $modalInstance, Accounts, accountId, ac
 		Accounts.getById(accountId)
 			.success(function(data) {
 				$scope.account = data;
-				$scope.errorMessage = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$scope.errorMessage = 'Erro ao carregar os dados: ' + status;
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};

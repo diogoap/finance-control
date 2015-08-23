@@ -69,7 +69,7 @@ function createItems(params) {
 
         item.description = params.description;
         if (params.descriptionInstallmentNumber == true) {
-            item.description += '[{0}/{1}]'.replace('{0}', i).replace('{1}', params.installments);
+            item.description += ' [{0}/{1}]'.replace('{0}', i).replace('{1}', params.installments);
         }
 
         var y = initialDate.getFullYear(), m = initialDate.getMonth();

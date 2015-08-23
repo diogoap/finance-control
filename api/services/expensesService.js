@@ -153,7 +153,7 @@ module.exports = {
             if (expense == undefined) {
                 callbackError(404);
             }
-            
+
             var categoriesPromisse = Categories.find().exec();
             categoriesPromisse.then(function (categories) {
 
@@ -184,7 +184,7 @@ module.exports = {
         var queryFilter;
 
         if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
-            queryFilter = { dueDate: { $gt: filter.dueDateBegin, $lt: filter.dueDateEnd } };
+            queryFilter = { dueDate: { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd } };
         }
 
         var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();

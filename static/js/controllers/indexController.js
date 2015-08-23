@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('financeControl').controller('indexController', function($scope) {
+var app = angular.module('financeControl');
+
+app.controller('indexController', function($scope, $http, $modal, $locale, Utils) {
 
 	$scope.message = 'Bem-vindo!';
 

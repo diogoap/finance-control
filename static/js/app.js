@@ -7,10 +7,12 @@ var app = angular.module('financeControl', [
     'ui.grid.pagination',
     'ui.grid.autoResize',
     'purplefox.numeric',
+    'utilsService',
     'categoriesService',
     'accountsService',
     'expensesService',
-    'incomesService'
+    'incomesService',
+    'generatorService'
 ]);
 
 app.config(function($routeProvider) {
