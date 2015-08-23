@@ -4,6 +4,7 @@
 foreman start
 OR
 nodemon file.js
+# /*https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md*/
 
 # Heroku - Github - Pushing changes #
 git add -A
@@ -48,7 +49,7 @@ nodemon file.js
 sudo apt-get install ruby-full
 
 ### Heroku ###
-wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh 
+wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
 # Heroku - Login #
 heroku login
