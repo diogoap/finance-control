@@ -28,16 +28,16 @@
         <div class="form-group form-group-sm">
             <label for="generatorParametersDueDateType" class="col-sm-2 control-label">Vencimento</label>
 			<div class="col-sm-4">
-				<select name="generatorParametersDueDateType" required ng-model="generatorParameters.dueDateType" ng-options="type for type in generatorDueDateTypes" class="form-control"></select>
+				<select name="generatorParametersDueDateType" required ng-model="generatorParameters.dueDateType" ng-options="key as value for (key, value) in generatorDueDateTypes" class="form-control"></select>
 				<div class="error" ng-show="(generatorForm.generatorParametersDueDateType.$dirty && generatorForm.generatorParametersDueDateType.$invalid) || (submitted && generatorForm.generatorParametersDueDateType.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersDueDateType.$error.required">O campo Vencimento é obrigatório.</small>
 				</div>
 			</div>
             <label ng-show="generatorParameters.dueDateType == 'DiaEspecifico'" for="generatorParametersdueDateTypeDay" class="col-sm-2 control-label">Dia</label>
 			<div class="col-sm-2" ng-show="generatorParameters.dueDateType == 'DiaEspecifico'">
-				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'" gte-than="0" gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}" name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay" class="form-control"/>
+				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'" gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}" name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay" class="form-control"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersdueDateTypeDay.$dirty && generatorForm.generatorParametersdueDateTypeDay.$invalid) || (submitted && generatorForm.generatorParametersdueDateTypeDay.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersdueDateTypeDay.$error.gteThan || generatorForm.generatorParametersdueDateTypeDay.$error.gtThanZeroOpt">O campo Dia é obrigatório.</small>
+					<small class="error" ng-show="generatorForm.generatorParametersdueDateTypeDay.$error.gtThanZeroOpt">O campo Dia é obrigatório.</small>
 				</div>
 			</div>
 		</div>
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 
-		<div class="form-group form-group-sm">
+		<div class="form-group form-group-sm no-margin-bottom">
 			<label for="generatorParametersDescription" class="col-sm-2 control-label">Descrição</label>
 			<div class="col-sm-10">
 			    <input type="text" name="generatorParametersDescription" ng-model="generatorParameters.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>

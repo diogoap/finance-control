@@ -5,10 +5,13 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
 	$scope.Utils = Utils;
 	$scope.alerts = [];
  	$scope.submitted = false;
- 	$scope.generatorDueDateTypes = ['PrimeiroDia', 'UltimoDia', 'DiaEspecifico'];
- 	$scope.generatorDueDateTypesNames = ['Primeiro dia', 'Último dia', 'Dia específico'];
+ 	$scope.generatorDueDateTypes = {
+		'PrimeiroDia': 'Primeiro dia do mês',
+		'UltimoDia': 'Último dia do mês',
+		'DiaEspecifico': 'Dia específico'
+	};
 
-	$scope.generatorParameters = { type: type, initialDate: new Date(), installments: 0, dueDateType: 'PrimeiroDia', dueDateTypeDay: 0, amount: 0, descriptionInstallmentNumber: false };
+	$scope.generatorParameters = { type: type, initialDate: new Date(), dueDateType: 'PrimeiroDia', descriptionInstallmentNumber: false };
 
 	if (type == 'Despesa') {
 		$scope.screenTitle = 'Gerar despesas';
