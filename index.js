@@ -25,6 +25,7 @@ require('./api/accountsApi.js')(app, url);
 require('./api/expensesApi.js')(app, url);
 require('./api/incomesApi.js')(app, url);
 require('./api/generatorApi.js')(app, url);
+require('./api/transfersApi.js')(app, url);
 
 // listen (start app with node server.js) ======================================
 app.listen(port);

@@ -40,7 +40,7 @@ module.exports = function(app, url) {
 
     app.post('/api/expenses', function(req, res) {
         expensesService.create(req.body,
-            function(expenses) {
+            function(expense) {
                 res.json('OK');
             },
             function(error, status) {

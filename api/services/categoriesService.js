@@ -19,6 +19,10 @@ module.exports = {
         var categoriesPromisse = Categories.findById(id);
 
         categoriesPromisse.then(function (category) {
+            if (category == undefined) {
+                callbackError('not found', 404);
+            }
+
             callbackSuccess(category);
         })
         .then(null, function(error) {

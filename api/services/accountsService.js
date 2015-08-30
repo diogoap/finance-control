@@ -20,6 +20,10 @@ module.exports = {
         var accountsPromisse = Accounts.findById(id);
 
         accountsPromisse.then(function (account) {
+            if (account == undefined) {
+                callbackError('not found', 404);
+            }
+            
             callbackSuccess(account);
         })
         .then(null, function(error) {

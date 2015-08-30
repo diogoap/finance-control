@@ -150,7 +150,7 @@ module.exports = {
         var incomePromisse = Incomes.findById(id);
         incomePromisse.then(function(income) {
             if (income == undefined) {
-                callbackError(404);
+                callbackError('not found', 404);
             }
 
             var categoriesPromisse = Categories.find().exec();
@@ -278,7 +278,7 @@ module.exports = {
                      callbackSuccess();
                 });
             } else {
-                callbackError(404);
+                callbackError('not found', 404);
             };
         })
         .then(null, function(error) {
