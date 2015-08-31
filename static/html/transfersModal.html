@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{screenTitle}}</h4>
+</div>
+<form name="transferForm" class="form-horizontal" novalidate ng-submit="submit()">
+	<div class="modal-body">
+		<div class="form-group form-group-sm">
+			<label for="transferAmount" class="col-sm-3 control-label">Valor</label>
+			<div class="col-sm-9">
+				<input numeric decimals="2" name="transferAmount" ng-model="transfer.amount" required class="form-control"/>
+				<div class="error" ng-show="(transferForm.transferAmount.$dirty && transferForm.transferAmount.$invalid) || (submitted && transferForm.transferAmount.$invalid)">
+					<small class="error" ng-show="transferForm.transferAmount.$error.required">O campo Valor é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<p class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</p>
+		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
+	    <button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
+	</div>
+</form>

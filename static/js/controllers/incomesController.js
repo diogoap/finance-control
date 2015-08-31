@@ -44,10 +44,6 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
         ]
     };
 
-    $scope.gridOptions.onRegisterApi = function (gridApi) {
-         $scope.gridApi = gridApi;
-    }
-
   	$scope.openCalendarDialogBegin = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();

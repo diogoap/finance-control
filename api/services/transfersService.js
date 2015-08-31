@@ -1,6 +1,7 @@
 'use strict';
 
 var Transfers = require('../models/transfersModel');
+var Accounts = require('../models/accountsModel');
 var Validator = require('jsonschema').Validator;
 
 var transferSchema = {
@@ -23,6 +24,22 @@ function validateTransfer(transfer, errors) {
     }
 }
 
+function setAccounts(accountList, obj) {
+    for (var j in accountList) {
+        if (obj.accountOrigin_id == accountList[j].id) {
+            obj._accountOrigin = accountList[j];
+        }
+
+        if (obj.accountTarget_id == accountList[j].id) {
+            obj._accountTarget = accountList[j];
+        }
+
+        if ((obj._accountOrigin != undefined) && (obj._accountTarget != undefined)) {
+            break;
+        }
+    }
+}
+
 module.exports = {
 
     getById: function(id, callbackSuccess, callbackError) {
@@ -33,18 +50,37 @@ module.exports = {
                 callbackError('not found', 404);
             }
 
-            callbackSuccess(transfer);
+            var accountsPromisse = Accounts.find().exec();
+
+            accountsPromisse.then(function (accounts) {
+                setAccounts(accounts, transfer);
+                callbackSuccess(transfer);
+            });
         })
         .then(null, function(error) {
             callbackError(error, 400);
         });
     },
 
-    get: function(callbackSuccess, callbackError) {
-        var transfersPromisse = Transfers.find().sort('date').exec();
+    get: function(filter, callbackSuccess, callbackError) {
+        var queryFilter;
+
+        if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
+            queryFilter = { date: { $gte: filter.dateBegin, $lt: filter.dateEnd } };
+        }
+
+        var transfersPromisse = Transfers.find(queryFilter).sort('date').exec();
 
         transfersPromisse.then(function (transfers) {
-            callbackSuccess(transfers);
+            var accountsPromisse = Accounts.find().exec();
+
+            accountsPromisse.then(function (accounts) {
+                transfers.forEach(function (transfer) {
+                    setAccounts(accounts, transfer);
+                });
+
+                callbackSuccess(transfers);
+            });
         })
         .then(null, function(error) {
             callbackError(error);

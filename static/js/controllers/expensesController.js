@@ -48,10 +48,6 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
         ]
     };
 
-    $scope.gridOptions.onRegisterApi = function (gridApi) {
-         $scope.gridApi = gridApi;
-    }
-
   	$scope.openCalendarDialogBegin = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();

@@ -9,7 +9,7 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 		showColumnFooter: true,
         rowHeight: 23,
         columnDefs: [
-          	{ name: 'Ações', type: 'string', width:'85', minWidth:'85', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+          	{ name: 'Ações', type: 'string', width:'72', minWidth:'72', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
           		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
           		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
         		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'

@@ -24,7 +24,11 @@ module.exports = function(app, url) {
     })
 
     app.get('/api/transfers', function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
         transfersService.get(
+            query,
             function(transfers) {
                 res.json(transfers);
             },

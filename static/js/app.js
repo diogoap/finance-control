@@ -12,7 +12,8 @@ var app = angular.module('financeControl', [
     'accountsService',
     'expensesService',
     'incomesService',
-    'generatorService'
+    'generatorService',
+    'transfersService'
 ]);
 
 app.config(function($routeProvider) {
@@ -36,6 +37,10 @@ app.config(function($routeProvider) {
         .when('/incomes', {
             templateUrl: 'html/incomes.html',
             controller: 'incomesController'
+        })
+        .when('/transfers', {
+            templateUrl: 'html/transfers.html',
+            controller: 'transfersController'
         })
         .otherwise({
         	redirecTo: '/'
