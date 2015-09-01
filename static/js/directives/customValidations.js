@@ -32,7 +32,6 @@ app.directive("gtThanZeroOpt", function() {
         require: "ngModel",
         link: function(scope, element, attributes, ngModel) {
             ngModel.$validators.gtThanZeroOpt = function(modelValue) {
-                alert('**' + attributes.ngModel + '** modelValue: ' + modelValue + ' - attributes: ' + attributes.gtThanZeroOpt);
 				return ((modelValue > 0) && (attributes.gtThanZeroOpt)) || (attributes.gtThanZeroOpt == "false");
             }
         }
