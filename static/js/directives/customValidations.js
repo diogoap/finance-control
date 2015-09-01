@@ -32,8 +32,36 @@ app.directive("gtThanZeroOpt", function() {
         require: "ngModel",
         link: function(scope, element, attributes, ngModel) {
             ngModel.$validators.gtThanZeroOpt = function(modelValue) {
+                alert('**' + attributes.ngModel + '** modelValue: ' + modelValue + ' - attributes: ' + attributes.gtThanZeroOpt);
 				return ((modelValue > 0) && (attributes.gtThanZeroOpt)) || (attributes.gtThanZeroOpt == "false");
             }
         }
     };
 });
+
+app.directive('notEquals', [function() {
+    var link = function(scope, element, attributes, ngModel) {
+        var validate = function(modelValue) {
+            var comparisonModel = attributes.notEquals;
+
+            if(!modelValue || !comparisonModel){
+                ngModel.$setValidity('notEquals', true);
+            }
+
+            ngModel.$setValidity('notEquals', modelValue != comparisonModel);
+            return modelValue;
+        };
+
+        ngModel.$parsers.unshift(validate);
+        ngModel.$formatters.push(validate);
+
+        attributes.$observe('notEquals', function(comparisonModel){
+            return validate(ngModel.$modelValue);
+        });
+    };
+
+    return {
+        require: 'ngModel',
+        link: link
+    };
+}]);

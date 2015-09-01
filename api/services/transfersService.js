@@ -24,6 +24,11 @@ function validateTransfer(transfer, errors) {
     }
 }
 
+function updateTransfer(transfer) {
+    transfer._accountOrigin = null;
+    transfer._accountTarget = null;
+}
+
 function setAccounts(accountList, obj) {
     for (var j in accountList) {
         if (obj.accountOrigin_id == accountList[j].id) {
@@ -92,6 +97,7 @@ module.exports = {
         validateTransfer(transfer, val.errors);
 
         if (val.errors.length == 0) {
+            updateTransfer(transfer);
             var transfersPromisse = Transfers.create(transfer);
 
             transfersPromisse.then(function () {
@@ -121,6 +127,7 @@ module.exports = {
         validateTransfer(transfer, val.errors);
 
         if (val.errors.length == 0) {
+            updateTransfer(transfer);
             var transfersPromisse = Transfers.findByIdAndUpdate(id, transfer);
 
             transfersPromisse.then(function () {

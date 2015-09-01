@@ -3,15 +3,49 @@
 </div>
 <form name="transferForm" class="form-horizontal" novalidate ng-submit="submit()">
 	<div class="modal-body">
+        <div class="form-group form-group-sm">
+            <label for="transferDate" class="col-sm-3 control-label">Data</label>
+			    <div class="col-sm-4">
+			    <div class="input-group input-group-sm">
+				    <input datepicker-popup="shortDate" name="transferDate" ng-model="transfer.date" required class="form-control" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+                    <span class="input-group-btn">
+                	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              	    </span>
+				    <div class="error" ng-show="(transferForm.transferDate.$dirty && transferForm.transferDate.$invalid) || (submitted && transferForm.transferDate.$invalid)">
+					    <small class="error" ng-show="transferForm.transferDate.$error.required">O campo Data é obrigatório.</small>
+				    </div>
+                </div>
+			</div>
+        </div>
 		<div class="form-group form-group-sm">
 			<label for="transferAmount" class="col-sm-3 control-label">Valor</label>
-			<div class="col-sm-9">
+			<div class="col-sm-4">
 				<input numeric decimals="2" name="transferAmount" ng-model="transfer.amount" required class="form-control"/>
 				<div class="error" ng-show="(transferForm.transferAmount.$dirty && transferForm.transferAmount.$invalid) || (submitted && transferForm.transferAmount.$invalid)">
 					<small class="error" ng-show="transferForm.transferAmount.$error.required">O campo Valor é obrigatório.</small>
 				</div>
 			</div>
 		</div>
+        <div class="form-group form-group-sm">
+			<label for="transferAccountOrigin" class="col-sm-3 control-label">Conta Origem</label>
+			<div class="col-sm-9">
+				<select name="transferAccountOrigin" ng-model="transfer.accountOrigin_id" required ng-options="c._id as c.name for c in accounts" class="form-control" not-equals="{{transfer.accountTarget_id}}"></select>
+				<div class="error" ng-show="(transferForm.transferAccountOrigin.$dirty && transferForm.transferAccountOrigin.$invalid) || (submitted && transferForm.transferAccountOrigin.$invalid)">
+					<small class="error" ng-show="transferForm.transferAccountOrigin.$error.required">O campo Conta Origem é obrigatório.</small>
+					<small class="error" ng-show="transferForm.transferAccountOrigin.$error.notEquals">A Conta Origem deve ser diferente da Conta Destino.</small>
+				</div>
+			</div>
+        </div>
+        <div class="form-group form-group-sm">
+			<label for="transferAccountTarget" class="col-sm-3 control-label">Conta Destino</label>
+			<div class="col-sm-9">
+				<select name="transferAccountTarget" ng-model="transfer.accountTarget_id" required ng-options="c._id as c.name for c in accounts" class="form-control" not-equals="{{transfer.accountOrigin_id}}"></select>
+				<div class="error" ng-show="(transferForm.transferAccountTarget.$dirty && transferForm.transferAccountTarget.$invalid) || (submitted && transferForm.transferAccountTarget.$invalid)">
+					<small class="error" ng-show="transferForm.transferAccountTarget.$error.required">O campo Conta Destino é obrigatório.</small>
+					<small class="error" ng-show="transferForm.transferAccountTarget.$error.notEquals">A Conta Destino deve ser diferente da Conta Origem.</small>
+				</div>
+			</div>
+        </div>
 		<p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>

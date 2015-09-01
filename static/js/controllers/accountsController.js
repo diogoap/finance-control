@@ -85,7 +85,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 	$scope.createAccount = function(account) {
 		$scope.loading = true;
 
-		Accounts.create()
+		Accounts.create(account)
 			.success(function(data) {
 				Utils.addSucess($scope, 'Conta adicionada com sucesso!');
                 $scope.getAccounts();

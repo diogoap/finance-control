@@ -20,8 +20,8 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
           	{ name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
           		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
           	},
-          	{ name: 'Conta origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false },
-          	{ name: 'Conta destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
+          	{ name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false },
+          	{ name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
         ]
     };
 
@@ -163,7 +163,7 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
 	$scope.createTransfer = function(transfer) {
 		$scope.loading = true;
 
-		Transfers.create()
+		Transfers.create(transfer)
 			.success(function(data) {
 				Utils.addSucess($scope, 'Transferência adicionada com sucesso!');
                 $scope.getTransfers();
