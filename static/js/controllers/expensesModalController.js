@@ -8,32 +8,38 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
  	$scope.expenseStatus = ['Em aberto', 'Pago'];
  	$scope.submitted = false;
 
+ 	$scope.columns = [
+		{ name: 'Ações', type: 'string', width:'71', minWidth:'71', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+			'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+			'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
+		},
+		{
+			name: 'Descrição', field: 'description', type: 'string', width:'28%', enableColumnMenu: false,
+			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+		},
+		{ name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
+			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+			aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+			footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
+		},
+		{ name: 'Conta', field: '_account.name', type: 'string', width:'20%', enableColumnMenu: false },
+		{ name: 'Categoria', field: '_category.name', type: 'string', width:'20%', enableColumnMenu: false },
+		{ name: 'Situação', field: 'status', type: 'string', width:'11%', enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+		}
+	];
+
 	$scope.gridOptions = {
+		enableColumnResizing: true,		
         enableSorting: true,
 		showColumnFooter: true,
 		rowHeight: 23,
-        columnDefs: [
-          	{ name: 'Ações', type: 'string', width:'71', minWidth:'71', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
-          	},
-          	{
-				name: 'Descrição', field: 'description', type: 'string', width:'28%', enableColumnMenu: false,
-				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
-				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
-			},
-          	{ name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
-          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
-				aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
-				footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
-          	},
-          	{ name: 'Conta', field: '_account.name', type: 'string', width:'20%', enableColumnMenu: false },
-        	{ name: 'Categoria', field: '_category.name', type: 'string', width:'20%', enableColumnMenu: false },
-        	{ name: 'Situação', field: 'status', type: 'string', width:'11%', enableColumnMenu: false,
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
-        	}
-        ]
+		columnDefs: $scope.columns,
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+        }
     };
 
 	if (action == 'new') {
@@ -45,7 +51,11 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	}
 	else
 	{
-		$scope.screenTitle = 'Editar despesa';
+		if (action == 'clone') {
+			$scope.screenTitle = 'Clonar despesa';
+		} else {
+			$scope.screenTitle = 'Editar despesa';
+		}
 
 		Expenses.getById(expenseId)
 			.success(function(data) {
@@ -55,6 +65,12 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 				$scope.expense.dueDate = new Date($scope.expense.dueDate);
 				$scope._hasDetail = $scope.expense.detail.length > 0;
 				$scope.gridOptions.data = data.detail;
+
+				if (action == 'clone') {
+					$scope.expense._id = null;
+					$scope.expense.description += ' - Cópia';
+				}
+
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {

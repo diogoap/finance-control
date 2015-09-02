@@ -17,13 +17,10 @@
     "angular": "~1.4.4",
     "angular-bootstrap": "~0.13.3",
     "angular-route": "~1.4.4",
-    "angular-ui-grid": "~3.0.4",
+    "angular-ui-grid": "~3.0.5",
     "bootstrap": "~3.3.4",
-    "font-awesome": "~4.3.0",
+    "font-awesome": "~4.4.0",
     "angular-numeric-directive": "epeschier/angular-numeric-directive",
     "angular-i18n": "~1.4.4"
-  },
-  "resolutions": {
-    "angular": "1.4.4"
   }
 }

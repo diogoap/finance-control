@@ -4,25 +4,31 @@ var app = angular.module('financeControl');
 
 app.controller('transfersController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Transfers) {
 
+ 	$scope.columns = [
+        { name: 'Ações', type: 'string', width:'72', minWidth:'72', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+            '<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+            '<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+            headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        },
+        { name: 'Data', field: 'date', type: 'date', width:'12%', enableColumnMenu: false,
+            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        },
+        { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+        },
+        { name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false },
+        { name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
+    ];
+
  	$scope.gridOptions = {
+        enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
         rowHeight: 23,
-        columnDefs: [
-          	{ name: 'Ações', type: 'string', width:'72', minWidth:'72', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
-          	},
-            { name: 'Data', field: 'date', type: 'date', width:'12%', enableColumnMenu: false,
-          		cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
-          	},
-          	{ name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
-          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
-          	},
-          	{ name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false },
-          	{ name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
-        ]
+        columnDefs: $scope.columns,
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+        }
     };
 
     $scope.openCalendarDialogBegin = function($event) {

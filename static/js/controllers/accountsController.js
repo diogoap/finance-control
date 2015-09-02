@@ -4,25 +4,31 @@ var app = angular.module('financeControl');
 
 app.controller('accountsController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Accounts) {
 
+ 	$scope.columns = [
+        { name: 'Ações', type: 'string', width:'72', minWidth:'72', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+            '<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
+            '<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+            headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        },
+        {
+            name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false,
+            aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+        },
+        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '30%', enableColumnMenu: false,
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+        }
+    ];
+
  	$scope.gridOptions = {
+        enableColumnResizing: true,        
         enableSorting: true,
 		showColumnFooter: true,
         rowHeight: 23,
-        columnDefs: [
-          	{ name: 'Ações', type: 'string', width:'72', minWidth:'72', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-          		'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-          		'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
-        		headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
-          	},
-          	{
-				name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false,
-				aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
-				footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
-			},
-          	{ name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '30%', enableColumnMenu: false,
-          		cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
-          	}
-        ]
+        columnDefs: $scope.columns,
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+        }
     };
 
   	$scope.openModal = function (accountId, action) {
