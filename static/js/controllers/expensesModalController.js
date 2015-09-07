@@ -9,10 +9,10 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
  	$scope.submitted = false;
 
  	$scope.columns = [
-		{ name: 'Ações', type: 'string', width:'71', minWidth:'71', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-			'<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-			'<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
-			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
+		{ name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
+			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
 		},
 		{
 			name: 'Descrição', field: 'description', type: 'string', width:'28%', enableColumnMenu: false,
@@ -32,7 +32,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	];
 
 	$scope.gridOptions = {
-		enableColumnResizing: true,		
+		enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
 		rowHeight: 23,

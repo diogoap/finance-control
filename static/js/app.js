@@ -6,6 +6,7 @@ var app = angular.module('financeControl', [
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.autoResize',
+    'ui.grid.resizeColumns',
     'purplefox.numeric',
     'utilsService',
     'categoriesService',

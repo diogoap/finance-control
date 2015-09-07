@@ -7,12 +7,12 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'143', minWidth:'143', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-            '<a class="btn btn-primary btn-xs" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' + '&#32' +
-            '<a class="btn btn-primary btn-xs" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' + '&#32' +
-            '<a class="btn btn-primary btn-xs" title="Clonar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' + '&#32' +
-            '<a class="btn btn-primary btn-xs" title="Receber" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.receiveIncomeConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
-            headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-left-align'
+        { name: 'Ações', type: 'string', width:'146', minWidth:'146', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+            '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Receber" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.receiveIncomeConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
+            headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         { name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
@@ -75,8 +75,7 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
         $scope.columns[5].visible = width > 800;
     	$scope.columns[6].visible = width > 600;
     	$scope.columns[7].visible = width > 1000;
-    	$scope.columns[8].visible = width > 1000;
-    	$scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+    	//$scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
     }
 
     $(window).resize(function(){

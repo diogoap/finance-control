@@ -36,6 +36,10 @@ select.form-control.ng-valid {
     margin-bottom: 0px;
 }
 
+.btn-grid {
+    margin-left: 3px;
+}
+
 .red-font-color {
   color: red;
 }
