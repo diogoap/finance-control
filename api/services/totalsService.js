@@ -6,7 +6,11 @@ var Incomes = require('../models/incomesModel');
 var Expenses = require('../models/expensesModel');
 var Transfers = require('../models/transfersModel');
 
-function getData(callbackSuccess, callbackError) {
+function round2d(num) {
+    return Math.round(num * 100) / 100;
+}
+
+function getData(dateFilter, callbackSuccess, callbackError) {
     var totals = {};
 
     //Accounts
@@ -16,7 +20,7 @@ function getData(callbackSuccess, callbackError) {
 
         //Incomes
         var incomesTotal = Incomes.aggregate( [
-            { $match: { account_id: { $ne: null } } },
+            { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
             { $group: { _id: { account_id: '$account_id', status: '$status' }, total: { $sum: '$amount' } } }
         ]).exec();
 
@@ -25,7 +29,7 @@ function getData(callbackSuccess, callbackError) {
 
             //Incomes detail
             var incomesDetailTotal = Incomes.aggregate( [
-                { $match: { account_id: null } },
+                { $match: { account_id: null, dueDate: dateFilter } },
                 { $unwind: '$detail' },
                 { $group: { _id: { account_id: '$detail.account_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
 
@@ -36,7 +40,7 @@ function getData(callbackSuccess, callbackError) {
 
                 //Expenses
                 var expensesTotal = Expenses.aggregate( [
-                    { $match: { account_id: { $ne: null } } },
+                    { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
                     { $group: { _id: { account_id: '$account_id', status: '$status' }, total: { $sum: '$amount' } } }
                 ]).exec();
 
@@ -45,7 +49,7 @@ function getData(callbackSuccess, callbackError) {
 
                     //Expenses detail
                     var expensesDetailTotal = Expenses.aggregate( [
-                        { $match: { account_id: { $ne: null } } },
+                        { $match: { account_id: null, dueDate: dateFilter } },
                         { $unwind: '$detail' },
                         { $group: { _id: { account_id: '$detail.account_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
                     ]).exec();
@@ -55,6 +59,7 @@ function getData(callbackSuccess, callbackError) {
 
                         //Transfers origin
                         var transfersOriginTotal = Transfers.aggregate( [
+                            { $match: { date: dateFilter } },
                             { $group: { _id: { account_id: '$accountOrigin_id' }, total: { $sum: '$amount' } } }
                         ]).exec();
 
@@ -63,6 +68,7 @@ function getData(callbackSuccess, callbackError) {
 
                             //Transfers target
                             var transfersTargetTotal = Transfers.aggregate( [
+                                { $match: { date: dateFilter } },
                                 { $group: { _id: { account_id: "$accountTarget_id" }, total: { $sum: "$amount" } } }
                             ]).exec();
 
@@ -89,13 +95,13 @@ function calculateTotals(totals, status) {
     obj.totalIncomes = 0;
     totals.incomes.forEach(function (inc) {
         if ((status == 'all') || (status == 'completed' && inc._id.status == 'Recebido')) {
-            obj.totalIncomes += inc.total;
+            obj.totalIncomes += round2d(inc.total);
         }
     });
 
     totals.incomesDetail.forEach(function (incDet) {
         if ((status == 'all') || (status == 'completed' && incDet._id.status == 'Recebido')) {
-            obj.totalIncomes += incDet.total;
+            obj.totalIncomes += round2d(incDet.total);
         }
     });
 
@@ -103,75 +109,92 @@ function calculateTotals(totals, status) {
     obj.totalExpenses = 0;
     totals.expenses.forEach(function (exp) {
         if ((status == 'all') || (status == 'completed' && exp._id.status == 'Pago')) {
-            obj.totalExpenses += exp.total;
+            obj.totalExpenses += round2d(exp.total);
         }
     });
 
     totals.expensesDetail.forEach(function (expDet) {
         if ((status == 'all') || (status == 'completed' && expDet._id.status == 'Pago')) {
-            obj.totalExpenses += expDet.total;
+            obj.totalExpenses += round2d(expDet.total);
         }
     });
 
     //Balance
-    obj.totalBalance = obj.totalIncomes - obj.totalExpenses;
+    obj.totalIncomes = round2d(obj.totalIncomes);
+    obj.totalExpenses = round2d(obj.totalExpenses);
+
+    obj.totalBalance = round2d(obj.totalIncomes - obj.totalExpenses);
 
     return obj;
 }
 
-function getAccountBalance(totals, account) {
-    var accountBalance = 0;
+function getAccountPreviousBalance(account, previous) {
+    if (previous == undefined) {
+        return account.initialBalance;
+    }
+
+    for (var i in previous.accounts) {
+        if (String(previous.accounts[i]._id).valueOf() ===  String(account._id).valueOf()) {
+            return previous.accounts[i].actualBalance;
+        }
+    };
+}
+
+function getAccountBalance(totals, account, previous) {
+    var accountBalance = account.initialBalance;
+
+    console.log('Initial balance ' + account.name + ': ' + accountBalance);
 
     //Incomes
     for (var i in totals.incomes) {
         if (totals.incomes[i]._id.account_id == account._id) {
-            console.log('incomes: ' + totals.incomes[i].total);
-            accountBalance += totals.incomes[i].total;
+            console.log('incomes: ' + round2d(totals.incomes[i].total));
+            accountBalance += round2d(totals.incomes[i].total);
         }
     }
 
     for (var i in totals.incomesDetail) {
         if (totals.incomesDetail[i]._id.account_id == account._id) {
-            accountBalance += totals.incomesDetail[i].total;
+            accountBalance += round2d(totals.incomesDetail[i].total);
         }
     }
 
     //Expenses
     for (var i in totals.expenses) {
         if (totals.expenses[i]._id.account_id == account._id) {
-            console.log('expenses: ' + totals.expenses[i].total);
-            accountBalance -= totals.expenses[i].total;
+            console.log('expenses: ' + round2d(totals.expenses[i].total));
+            accountBalance -= round2d(totals.expenses[i].total);
         }
     }
 
     for (var i in totals.expensesDetail) {
         if (totals.expensesDetail[i]._id.account_id == account._id) {
-            accountBalance -= totals.expensesDetail[i].total;
+            accountBalance -= round2d(totals.expensesDetail[i].total);
         }
     }
 
     //Transfers
     for (var i in totals.transfersOrigin) {
         if (totals.transfersOrigin[i]._id.account_id == account._id) {
-            console.log('transfersOrigin: ' + totals.transfersOrigin[i].total);
-            accountBalance -= totals.transfersOrigin[i].total;
+            console.log('transfersOrigin: ' + round2d(totals.transfersOrigin[i].total));
+            accountBalance -= round2d(totals.transfersOrigin[i].total);
         }
     }
 
     for (var i in totals.transfersTarget) {
         if (totals.transfersTarget[i]._id.account_id == account._id) {
-            console.log('transfersTarget: ' + totals.transfersTarget[i].total);
-            accountBalance += totals.transfersTarget[i].total;
+            console.log('transfersTarget: ' + round2d(totals.transfersTarget[i].total));
+            accountBalance += round2d(totals.transfersTarget[i].total);
         }
     }
 
-    console.log(account.name + ': ' + accountBalance);
-    return accountBalance;
+    return round2d(accountBalance);
 }
 
-function calculateAccountsBalace(totals) {
+function calculateAccountsBalace(totals, previous) {
     totals.accounts.forEach(function (account) {
-        account.actualBalance = getAccountBalance(totals, account);
+        account.initialBalance = getAccountPreviousBalance(account, previous);
+        account.actualBalance = getAccountBalance(totals, account, previous);
     });
 
     return totals.accounts;
@@ -179,15 +202,43 @@ function calculateAccountsBalace(totals) {
 
 module.exports = {
 
-    get: function(callbackSuccess, callbackError) {
-        getData(
-            function(totals) {
-                var result = {};
-                result.all = calculateTotals(totals, 'all');
-                result.completed = calculateTotals(totals, 'completed');
-                result.accounts = calculateAccountsBalace(totals);
+    get: function(filter, callbackSuccess, callbackError) {
+        var queryFilterPrevious, queryFilterCurrent;
 
-                callbackSuccess(result);
+        if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
+            var dateBegin = new Date(filter.dateBegin);
+            var dateEnd = new Date(filter.dateEnd);
+
+            queryFilterPrevious = { $lt: dateBegin };
+            queryFilterCurrent = { $gte: dateBegin, $lt: dateEnd };
+        } else {
+            callbackError('date filter is not definied');
+        }
+
+        getData(
+            queryFilterPrevious,
+            function(previousTotals) {
+                //console.log('############## previousTotals ##############');
+                //console.log(queryFilterPrevious);
+                //console.log(previousTotals);
+                var result = { previous: { }, current: { } };
+                result.previous.all = calculateTotals(previousTotals, 'all');
+                result.previous.completed = calculateTotals(previousTotals, 'completed');
+                result.previous.accounts = calculateAccountsBalace(previousTotals, null);
+
+                getData(
+                    queryFilterCurrent,
+                    function(currentTotals) {
+                        //console.log('############## currentTotals ##############');
+                        //console.log(queryFilterCurrent);
+                        //console.log(currentTotals);
+                        result.current.all = calculateTotals(currentTotals, 'all');
+                        result.current.completed = calculateTotals(currentTotals, 'completed');
+                        result.current.accounts = calculateAccountsBalace(currentTotals, previousTotals);
+
+                        callbackSuccess(result);
+                    }
+                )
             },
             function(error) {
                 callbackError(error);

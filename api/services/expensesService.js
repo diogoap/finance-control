@@ -187,6 +187,8 @@ module.exports = {
             queryFilter = { dueDate: { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd } };
         }
 
+        console.log(queryFilter);
+
         var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();
         expensesPromisse.then(function (expenses) {
 

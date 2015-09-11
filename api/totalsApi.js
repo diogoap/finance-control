@@ -13,7 +13,11 @@ function sendError(res, error, status) {
 module.exports = function(app, url) {
 
     app.get('/api/totals', function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
         totalsService.get(
+            query,
             function(totals) {
                 res.json(totals);
             },
