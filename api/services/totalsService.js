@@ -27,7 +27,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
             //Incomes
             var incomesTotal = Incomes.aggregate( [
                 { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
-                { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' } } }
+                { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalReceived: { $sum: '$amountReceived'} } }
             ]).exec();
 
             incomesTotal.then(function(incomes) {
@@ -47,7 +47,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
                     //Expenses
                     var expensesTotal = Expenses.aggregate( [
                         { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
-                        { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' } } }
+                        { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalPaid: { $sum: '$amountPaid'} } }
                     ]).exec();
 
                     expensesTotal.then(function(expenses) {
@@ -108,7 +108,9 @@ function calculateTotals(totals, status, previous) {
     //Total income
     obj.totalIncomes = 0;
     totals.incomes.forEach(function (inc) {
-        if ((status == 'all') || (status == 'completed' && inc._id.status == 'Recebido')) {
+        if (status == 'completed') {
+            obj.totalIncomes += round2d(inc.totalReceived);
+        } else {
             obj.totalIncomes += round2d(inc.total);
         }
     });
@@ -122,7 +124,9 @@ function calculateTotals(totals, status, previous) {
     //Total expense
     obj.totalExpenses = 0;
     totals.expenses.forEach(function (exp) {
-        if ((status == 'all') || (status == 'completed' && exp._id.status == 'Pago')) {
+        if (status == 'completed') {
+            obj.totalExpenses += round2d(exp.totalPaid);
+        } else {
             obj.totalExpenses += round2d(exp.total);
         }
     });
@@ -136,7 +140,7 @@ function calculateTotals(totals, status, previous) {
     //Actual Balance
     obj.totalIncomes = round2d(obj.totalIncomes);
     obj.totalExpenses = round2d(obj.totalExpenses);
-
+    obj.partialBalance = round2d(obj.totalIncomes - obj.totalExpenses);
     obj.actualBalance = round2d(obj.previousBalance + obj.totalIncomes - obj.totalExpenses);
 
     return obj;
@@ -157,50 +161,44 @@ function getAccountPreviousBalance(account, previous) {
 function getAccountBalance(totals, account) {
     var accountBalance = account.initialBalance;
 
-    console.log('Initial balance ' + account.name + ': ' + accountBalance);
-
     //Incomes
-    for (var i in totals.incomes) {
-        if (totals.incomes[i]._id.account_id == account._id) {
-            console.log('incomes: ' + round2d(totals.incomes[i].total));
-            accountBalance += round2d(totals.incomes[i].total);
+    totals.incomes.forEach(function (inc) {
+        if (inc._id.account_id == account._id) {
+            accountBalance += round2d(inc.total);
         }
-    }
+    });
 
-    for (var i in totals.incomesDetail) {
-        if (totals.incomesDetail[i]._id.account_id == account._id) {
-            accountBalance += round2d(totals.incomesDetail[i].total);
+    totals.incomesDetail.forEach(function (incDet) {
+        if (incDet._id.account_id == account._id) {
+            accountBalance += round2d(incDet.total);
         }
-    }
+    });
 
     //Expenses
-    for (var i in totals.expenses) {
-        if (totals.expenses[i]._id.account_id == account._id) {
-            console.log('expenses: ' + round2d(totals.expenses[i].total));
-            accountBalance -= round2d(totals.expenses[i].total);
+    totals.expenses.forEach(function (exp) {
+        if (exp._id.account_id == account._id) {
+            accountBalance -= round2d(exp.total);
         }
-    }
+    });
 
-    for (var i in totals.expensesDetail) {
-        if (totals.expensesDetail[i]._id.account_id == account._id) {
-            accountBalance -= round2d(totals.expensesDetail[i].total);
+    totals.expensesDetail.forEach(function (expDet) {
+        if (expDet._id.account_id == account._id) {
+            accountBalance -= round2d(expDet.total);
         }
-    }
+    });
 
     //Transfers
-    for (var i in totals.transfersOrigin) {
-        if (totals.transfersOrigin[i]._id.account_id == account._id) {
-            console.log('transfersOrigin: ' + round2d(totals.transfersOrigin[i].total));
-            accountBalance -= round2d(totals.transfersOrigin[i].total);
+    totals.transfersOrigin.forEach(function (transOri) {
+        if (transOri._id.account_id == account._id) {
+            accountBalance -= round2d(transOri.total);
         }
-    }
+    });
 
-    for (var i in totals.transfersTarget) {
-        if (totals.transfersTarget[i]._id.account_id == account._id) {
-            console.log('transfersTarget: ' + round2d(totals.transfersTarget[i].total));
-            accountBalance += round2d(totals.transfersTarget[i].total);
+    totals.transfersTarget.forEach(function (transTar) {
+        if (transTar._id.account_id == account._id) {
+            accountBalance += round2d(transTar.total);
         }
-    }
+    });
 
     return round2d(accountBalance);
 }
@@ -218,8 +216,12 @@ function getCategoryTotal(totals, category, status) {
     var totalAmount = 0;
 
     totals.incomes.forEach(function (inc) {
-        if ((String(inc._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && inc._id.status == 'Recebido'))) {
-            totalAmount += round2d(inc.total);
+        if (String(inc._id.category_id).valueOf() === String(category._id).valueOf()) {
+            if (status == 'completed') {
+                totalAmount += round2d(inc.totalReceived);
+            } else {
+                totalAmount += round2d(inc.total);
+            }
         }
     });
 
@@ -230,8 +232,12 @@ function getCategoryTotal(totals, category, status) {
     });
 
     totals.expenses.forEach(function (exp) {
-        if ((String(exp._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && exp._id.status == 'Pago'))) {
-            totalAmount += round2d(exp.total);
+        if (String(exp._id.category_id).valueOf() === String(category._id).valueOf()) {
+            if (status == 'completed') {
+                totalAmount += round2d(exp.totalPaid);
+            } else {
+                totalAmount += round2d(exp.total);
+            }
         }
     });
 
@@ -273,8 +279,7 @@ module.exports = {
         getData(
             queryFilterPrevious,
             function(previousTotals) {
-                console.log('############## previousTotals ##############');
-                //console.log(queryFilterPrevious);
+                //console.log('############## previousTotals ##############');
                 //console.log(previousTotals);
                 var result = { previous: { }, current: { } };
                 result.previous.all = calculateTotals(previousTotals, 'all', null);
@@ -284,8 +289,7 @@ module.exports = {
                 getData(
                     queryFilterCurrent,
                     function(currentTotals) {
-                        console.log('############## currentTotals ##############');
-                        //console.log(queryFilterCurrent);
+                        //console.log('############## currentTotals ##############');
                         //console.log(currentTotals);
                         result.current.all = calculateTotals(currentTotals, 'all', result.previous.all);
                         result.current.all.categories = calculateCategoriesTotal(currentTotals, 'all');
