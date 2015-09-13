@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var Accounts = require('../models/accountsModel');
+var Categories = require('../models/categoriesModel');
 var Incomes = require('../models/incomesModel');
 var Expenses = require('../models/expensesModel');
 var Transfers = require('../models/transfersModel');
@@ -18,64 +19,70 @@ function getData(dateFilter, callbackSuccess, callbackError) {
     accountsPromisse.then(function (accounts) {
         totals.accounts = accounts;
 
-        //Incomes
-        var incomesTotal = Incomes.aggregate( [
-            { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
-            { $group: { _id: { account_id: '$account_id', status: '$status' }, total: { $sum: '$amount' } } }
-        ]).exec();
+        //Categories
+        var categoriesPromisse = Categories.find().exec();
+        categoriesPromisse.then(function (categories) {
+            totals.categories = categories;
 
-        incomesTotal.then(function(incomes) {
-            totals.incomes = incomes;
-
-            //Incomes detail
-            var incomesDetailTotal = Incomes.aggregate( [
-                { $match: { account_id: null, dueDate: dateFilter } },
-                { $unwind: '$detail' },
-                { $group: { _id: { account_id: '$detail.account_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
-
+            //Incomes
+            var incomesTotal = Incomes.aggregate( [
+                { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
+                { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' } } }
             ]).exec();
 
-            incomesDetailTotal.then(function(incomesDetail) {
-                totals.incomesDetail = incomesDetail;
+            incomesTotal.then(function(incomes) {
+                totals.incomes = incomes;
 
-                //Expenses
-                var expensesTotal = Expenses.aggregate( [
-                    { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
-                    { $group: { _id: { account_id: '$account_id', status: '$status' }, total: { $sum: '$amount' } } }
+                //Incomes detail
+                var incomesDetailTotal = Incomes.aggregate( [
+                    { $match: { account_id: null, dueDate: dateFilter } },
+                    { $unwind: '$detail' },
+                    { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
+
                 ]).exec();
 
-                expensesTotal.then(function(expenses) {
-                    totals.expenses = expenses;
+                incomesDetailTotal.then(function(incomesDetail) {
+                    totals.incomesDetail = incomesDetail;
 
-                    //Expenses detail
-                    var expensesDetailTotal = Expenses.aggregate( [
-                        { $match: { account_id: null, dueDate: dateFilter } },
-                        { $unwind: '$detail' },
-                        { $group: { _id: { account_id: '$detail.account_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
+                    //Expenses
+                    var expensesTotal = Expenses.aggregate( [
+                        { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
+                        { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' } } }
                     ]).exec();
 
-                    expensesDetailTotal.then(function(expensesDetail) {
-                        totals.expensesDetail = expensesDetail;
+                    expensesTotal.then(function(expenses) {
+                        totals.expenses = expenses;
 
-                        //Transfers origin
-                        var transfersOriginTotal = Transfers.aggregate( [
-                            { $match: { date: dateFilter } },
-                            { $group: { _id: { account_id: '$accountOrigin_id' }, total: { $sum: '$amount' } } }
+                        //Expenses detail
+                        var expensesDetailTotal = Expenses.aggregate( [
+                            { $match: { account_id: null, dueDate: dateFilter } },
+                            { $unwind: '$detail' },
+                            { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
                         ]).exec();
 
-                        transfersOriginTotal.then(function(transfersOrigin) {
-                            totals.transfersOrigin = transfersOrigin;
+                        expensesDetailTotal.then(function(expensesDetail) {
+                            totals.expensesDetail = expensesDetail;
 
-                            //Transfers target
-                            var transfersTargetTotal = Transfers.aggregate( [
+                            //Transfers origin
+                            var transfersOriginTotal = Transfers.aggregate( [
                                 { $match: { date: dateFilter } },
-                                { $group: { _id: { account_id: "$accountTarget_id" }, total: { $sum: "$amount" } } }
+                                { $group: { _id: { account_id: '$accountOrigin_id' }, total: { $sum: '$amount' } } }
                             ]).exec();
 
-                            transfersTargetTotal.then(function(transfersTarget) {
-                                totals.transfersTarget = transfersTarget;
+                            transfersOriginTotal.then(function(transfersOrigin) {
+                                totals.transfersOrigin = transfersOrigin;
 
-                                callbackSuccess(totals);
+                                //Transfers target
+                                var transfersTargetTotal = Transfers.aggregate( [
+                                    { $match: { date: dateFilter } },
+                                    { $group: { _id: { account_id: "$accountTarget_id" }, total: { $sum: "$amount" } } }
+                                ]).exec();
+
+                                transfersTargetTotal.then(function(transfersTarget) {
+                                    totals.transfersTarget = transfersTarget;
+
+                                    callbackSuccess(totals);
+                                });
                             });
                         });
                     });
@@ -88,8 +95,15 @@ function getData(dateFilter, callbackSuccess, callbackError) {
     });
 }
 
-function calculateTotals(totals, status) {
+function calculateTotals(totals, status, previous) {
     var obj = {};
+
+    //Previous balance
+    if (previous != null) {
+        obj.previousBalance = round2d(previous.actualBalance);
+    } else {
+        obj.previousBalance = 0;
+    }
 
     //Total income
     obj.totalIncomes = 0;
@@ -119,17 +133,17 @@ function calculateTotals(totals, status) {
         }
     });
 
-    //Balance
+    //Actual Balance
     obj.totalIncomes = round2d(obj.totalIncomes);
     obj.totalExpenses = round2d(obj.totalExpenses);
 
-    obj.totalBalance = round2d(obj.totalIncomes - obj.totalExpenses);
+    obj.actualBalance = round2d(obj.previousBalance + obj.totalIncomes - obj.totalExpenses);
 
     return obj;
 }
 
 function getAccountPreviousBalance(account, previous) {
-    if (previous == undefined) {
+    if (previous == null) {
         return account.initialBalance;
     }
 
@@ -140,7 +154,7 @@ function getAccountPreviousBalance(account, previous) {
     };
 }
 
-function getAccountBalance(totals, account, previous) {
+function getAccountBalance(totals, account) {
     var accountBalance = account.initialBalance;
 
     console.log('Initial balance ' + account.name + ': ' + accountBalance);
@@ -194,10 +208,49 @@ function getAccountBalance(totals, account, previous) {
 function calculateAccountsBalace(totals, previous) {
     totals.accounts.forEach(function (account) {
         account.initialBalance = getAccountPreviousBalance(account, previous);
-        account.actualBalance = getAccountBalance(totals, account, previous);
+        account.actualBalance = getAccountBalance(totals, account);
     });
 
     return totals.accounts;
+}
+
+function getCategoryTotal(totals, category, status) {
+    var totalAmount = 0;
+
+    totals.incomes.forEach(function (inc) {
+        if ((String(inc._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && inc._id.status == 'Recebido'))) {
+            totalAmount += round2d(inc.total);
+        }
+    });
+
+    totals.incomesDetail.forEach(function (incDet) {
+        if ((String(incDet._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && incDet._id.status == 'Recebido'))) {
+            totalAmount += round2d(incDet.total);
+        }
+    });
+
+    totals.expenses.forEach(function (exp) {
+        if ((String(exp._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && exp._id.status == 'Pago'))) {
+            totalAmount += round2d(exp.total);
+        }
+    });
+
+    totals.expensesDetail.forEach(function (expDet) {
+        if ((String(expDet._id.category_id).valueOf() === String(category._id).valueOf()) && ((status == 'all') || (status == 'completed' && expDet._id.status == 'Pago'))) {
+            totalAmount += round2d(expDet.total);
+        }
+    });
+
+    return round2d(totalAmount);
+}
+
+function calculateCategoriesTotal(totals, status) {
+    totals.categories.forEach(function (category) {
+        category.totalAmount = getCategoryTotal(totals, category, status);
+        console.log('*** cat: ' + category.name + ': ' + category.totalAmount + ' - ' + category._id);
+    });
+
+    return totals.categories;
 }
 
 module.exports = {
@@ -218,22 +271,24 @@ module.exports = {
         getData(
             queryFilterPrevious,
             function(previousTotals) {
-                //console.log('############## previousTotals ##############');
+                console.log('############## previousTotals ##############');
                 //console.log(queryFilterPrevious);
                 //console.log(previousTotals);
                 var result = { previous: { }, current: { } };
-                result.previous.all = calculateTotals(previousTotals, 'all');
-                result.previous.completed = calculateTotals(previousTotals, 'completed');
+                result.previous.all = calculateTotals(previousTotals, 'all', null);
+                result.previous.completed = calculateTotals(previousTotals, 'completed', null);
                 result.previous.accounts = calculateAccountsBalace(previousTotals, null);
 
                 getData(
                     queryFilterCurrent,
                     function(currentTotals) {
-                        //console.log('############## currentTotals ##############');
+                        console.log('############## currentTotals ##############');
                         //console.log(queryFilterCurrent);
                         //console.log(currentTotals);
-                        result.current.all = calculateTotals(currentTotals, 'all');
-                        result.current.completed = calculateTotals(currentTotals, 'completed');
+                        result.current.all = calculateTotals(currentTotals, 'all', result.previous.all);
+                        result.current.all.categories = calculateCategoriesTotal(currentTotals, 'all');
+                        result.current.completed = calculateTotals(currentTotals, 'completed', result.previous.completed);
+                        result.current.completed.categories = calculateCategoriesTotal(currentTotals, 'completed');
                         result.current.accounts = calculateAccountsBalace(currentTotals, previousTotals);
 
                         callbackSuccess(result);
