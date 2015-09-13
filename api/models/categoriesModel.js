@@ -5,8 +5,7 @@ var Schema = mongoose.Schema;
 
 var categorySchema = new Schema({
  	name: String,
-	type: String,
-	totalAmount: { type: Number, default: 0 }
+	type: String
 });
 
 module.exports = mongoose.model('Category', categorySchema);

@@ -245,12 +245,14 @@ function getCategoryTotal(totals, category, status) {
 }
 
 function calculateCategoriesTotal(totals, status) {
-    totals.categories.forEach(function (category) {
-        category.totalAmount = getCategoryTotal(totals, category, status);
-        console.log('*** cat: ' + category.name + ': ' + category.totalAmount + ' - ' + category._id);
+    var categories = [];
+    totals.categories.forEach(function (cat) {
+        var newCategory = { _id: cat._id, name: cat.name, type: cat.type };
+        newCategory.totalAmount = getCategoryTotal(totals, cat, status);
+        categories.push(newCategory);
     });
 
-    return totals.categories;
+    return categories;
 }
 
 module.exports = {
