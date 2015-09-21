@@ -14,14 +14,15 @@ var app = angular.module('financeControl', [
     'expensesService',
     'incomesService',
     'generatorService',
-    'transfersService'
+    'transfersService',
+    'totalsService'
 ]);
 
 app.config(function($routeProvider) {
     $routeProvider
     	.when('/', {
             templateUrl: 'html/home.html',
-            controller: 'indexController'
+            controller: 'homeController'
         })
         .when('/categories', {
             templateUrl: 'html/categories.html',

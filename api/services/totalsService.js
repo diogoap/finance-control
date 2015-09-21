@@ -15,12 +15,12 @@ function getCommonEntries(callbackSuccess, callbackError) {
     var entries = {};
 
     //Accounts
-    var accountsPromisse = Accounts.find().exec();
+    var accountsPromisse = Accounts.find().sort('name').exec();
     accountsPromisse.then(function (accounts) {
         entries.accounts = accounts;
 
         //Categories
-        var categoriesPromisse = Categories.find().exec();
+        var categoriesPromisse = Categories.find().sort('name').exec();
         categoriesPromisse.then(function (categories) {
             entries.categories = categories;
 
@@ -167,32 +167,44 @@ function getAccountPreviousBalance(account, previousAccountList) {
     };
 }
 
-function getAccountBalance(totals, account) {
+function getAccountBalance(totals, account, status) {
     var accountBalance = account.initialBalance;
 
     //Incomes
     totals.incomes.forEach(function (inc) {
         if (inc._id.account_id == account._id) {
-            accountBalance += round2d(inc.total);
+            if (status == 'completed') {
+                accountBalance += round2d(inc.totalReceived);
+            } else {
+                accountBalance += round2d(inc.total);
+            }
         }
     });
 
     totals.incomesDetail.forEach(function (incDet) {
         if (incDet._id.account_id == account._id) {
-            accountBalance += round2d(incDet.total);
+            if ((status == 'all') || (status == 'completed' && incDet._id.status == 'Recebido')) {
+                accountBalance += round2d(incDet.total);
+            }
         }
     });
 
     //Expenses
     totals.expenses.forEach(function (exp) {
         if (exp._id.account_id == account._id) {
-            accountBalance -= round2d(exp.total);
+            if (status == 'completed') {
+                accountBalance += round2d(exp.totalPaid);
+            } else {
+                accountBalance += round2d(exp.total);
+            }
         }
     });
 
     totals.expensesDetail.forEach(function (expDet) {
         if (expDet._id.account_id == account._id) {
-            accountBalance -= round2d(expDet.total);
+            if ((status == 'all') || (status == 'completed' && expDet._id.status == 'Recebido')) {
+                accountBalance -= round2d(expDet.total);
+            }
         }
     });
 
@@ -212,12 +224,12 @@ function getAccountBalance(totals, account) {
     return round2d(accountBalance);
 }
 
-function calculateAccountsBalace(accountList, totals, previousAccountList) {
+function calculateAccountsBalace(accountList, totals, status, previousAccountList) {
     var newAccounts = [];
     accountList.forEach(function (account) {
         var newAccount = { _id: account._id, name: account.name };
         newAccount.initialBalance = getAccountPreviousBalance(account, previousAccountList);
-        newAccount.actualBalance = getAccountBalance(totals, account);
+        newAccount.actualBalance = getAccountBalance(totals, newAccount, status);
         newAccounts.push(newAccount);
     });
 
@@ -297,8 +309,9 @@ module.exports = {
                         //console.log(previousTotals);
                         var res = { previous: { }, current: { } };
                         res.previous.all = calculateTotals(previousTotals, 'all', null);
+                        res.previous.all.accounts = calculateAccountsBalace(entries.accounts, previousTotals, 'all', null);
                         res.previous.completed = calculateTotals(previousTotals, 'completed', null);
-                        res.previous.accounts = calculateAccountsBalace(entries.accounts, previousTotals, null);
+                        res.previous.completed.accounts = calculateAccountsBalace(entries.accounts, previousTotals, 'completed', null);
 
                         getData(
                             queryFilterCurrent,
@@ -307,9 +320,10 @@ module.exports = {
                                 //console.log(currentTotals);
                                 res.current.all = calculateTotals(currentTotals, 'all', res.previous.all);
                                 res.current.all.categories = calculateCategoriesTotal(entries.categories, currentTotals, 'all');
+                                res.current.all.accounts = calculateAccountsBalace(entries.accounts, currentTotals, 'all', res.previous.all.accounts);
                                 res.current.completed = calculateTotals(currentTotals, 'completed', res.previous.completed);
                                 res.current.completed.categories = calculateCategoriesTotal(entries.categories, currentTotals, 'completed');
-                                res.current.accounts = calculateAccountsBalace(entries.accounts, currentTotals, res.previous.accounts);
+                                res.current.completed.accounts = calculateAccountsBalace(entries.accounts, currentTotals, 'completed', res.previous.completed.accounts);
 
                                 callbackSuccess(res);
                             }

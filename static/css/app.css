@@ -44,6 +44,14 @@ select.form-control.ng-valid {
   color: red;
 }
 
+.td-md{
+   padding:5px !important;
+}
+
+.td-sm{
+   padding:1px !important;
+}
+
 label {
     margin-top: 3px;
     text-align: right;
