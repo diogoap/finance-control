@@ -193,9 +193,9 @@ function getAccountBalance(totals, account, status) {
     totals.expenses.forEach(function (exp) {
         if (exp._id.account_id == account._id) {
             if (status == 'completed') {
-                accountBalance += round2d(exp.totalPaid);
+                accountBalance -= round2d(exp.totalPaid);
             } else {
-                accountBalance += round2d(exp.total);
+                accountBalance -= round2d(exp.total);
             }
         }
     });
