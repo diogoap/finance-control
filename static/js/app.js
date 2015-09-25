@@ -24,6 +24,10 @@ app.config(function($routeProvider) {
             templateUrl: 'html/home.html',
             controller: 'homeController'
         })
+        .when('/login', {
+            templateUrl: 'html/login.html',
+            controller: 'homeController'
+        })
         .when('/categories', {
             templateUrl: 'html/categories.html',
             controller: 'categoriesController'

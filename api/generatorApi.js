@@ -1,14 +1,7 @@
 'use strict';
 
+var utils = require('./services/utilsService');
 var generatorService = require('./services/generatorService');
-
-function sendError(res, error, status) {
-    if (status) {
-        res.status(status).end('Error: ' + error);
-    } else {
-        res.status(500).end(error);
-    };
-}
 
 module.exports = function(app, url) {
 
@@ -18,7 +11,7 @@ module.exports = function(app, url) {
                 res.json('OK');
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })

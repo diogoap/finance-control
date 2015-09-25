@@ -1,0 +1,15 @@
+<div class="container-fluid" ng-controller="homeController">
+	<div class="row">
+		<a href="/auth/google">Login with Google</a>
+	</div>
+
+
+
+	<div class="row">
+		<div class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</div>
+
+		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+	</div>
+</div>

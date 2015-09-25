@@ -12,7 +12,9 @@
     "jsonschema": "^1.0.2",
     "method-override": "2.3.x",
     "mongoose": "4.1.x",
-    "morgan": "1.6.x"
+    "morgan": "1.6.x",
+    "passport": "*",
+    "passport-google-oauth": "*"
   },
   "engines": {
     "node": "0.11.x"

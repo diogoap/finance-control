@@ -1,14 +1,7 @@
 'use strict';
 
+var utils = require('./services/utilsService');
 var totalsService = require('./services/totalsService');
-
-function sendError(res, error, status) {
-    if (status) {
-        res.status(status).end('Error: ' + error);
-    } else {
-        res.status(500).end(error);
-    };
-}
 
 module.exports = function(app, url) {
 
@@ -22,7 +15,7 @@ module.exports = function(app, url) {
                 res.json(totals);
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })

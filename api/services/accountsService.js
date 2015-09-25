@@ -23,7 +23,7 @@ module.exports = {
             if (account == undefined) {
                 callbackError('not found', 404);
             }
-            
+
             callbackSuccess(account);
         })
         .then(null, function(error) {

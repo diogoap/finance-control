@@ -1,14 +1,7 @@
 'use strict';
 
+var utils = require('./services/utilsService');
 var categoriesService = require('./services/categoriesService');
-
-function sendError(res, error, status) {
-    if (status) {
-        res.status(status).end('Error: ' + error);
-    } else {
-        res.status(500).end(error);
-    };
-}
 
 module.exports = function(app, url) {
 
@@ -18,7 +11,7 @@ module.exports = function(app, url) {
                 res.json(category);
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })
@@ -33,7 +26,7 @@ module.exports = function(app, url) {
                 res.json(categories);
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })
@@ -44,7 +37,7 @@ module.exports = function(app, url) {
                 res.json('OK');
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })
@@ -55,7 +48,7 @@ module.exports = function(app, url) {
                 res.json('OK');
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })
@@ -66,7 +59,7 @@ module.exports = function(app, url) {
                 res.json('OK');
             },
             function(error, status) {
-                sendError(res, error, status);
+                utils.sendError(res, error, status);
             }
         );
     })
