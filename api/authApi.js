@@ -23,6 +23,7 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
 
     passport.serializeUser(function(user, done) {
         done(null, user);
+        console.log(user);
     });
 
     passport.deserializeUser(function(obj, done) {
@@ -34,24 +35,35 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
         res.send([{name: "user1"}, {name: "user2"}]);
     });
 
-    app.get('/login', function(req, res){
-        res.render('login', { user: req.user });
-    });
+    //app.get('/login', function(req, res){
+    //    res.render('login', { user: req.user });
+    //});
 
-    app.get('/logout', function(req, res){
-        req.logout();
-        res.json('Logout OK');
-    });
+    //app.get('/logout', function(req, res){
+    //    req.logout();
+    //    res.json('Logout OK');
+    //});
 
     app.get('/auth/google',
-        passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] }),
+        passport.authenticate('google', { session: false, scope: ['https://www.googleapis.com/auth/userinfo.email'] }),
         function(req, res){}
     );
 
-    app.get('/auth/google/callback',
-        passport.authenticate('google'),
+    app.get('/auth/test',
+        passport.authenticate('bearer', { session: false } ),
         function(req, res) {
-            res.json('Login OK');
+            res.send('LOGGED IN as ' + req.user.emails[0].value);
+        }
+    );
+
+    app.get('/auth/google/callback',
+        passport.authenticate('google', { session: false } ),
+        function(req, res) {
+            var url_parts = url.parse(req.url, true);
+            var query = url_parts.query;
+
+            //res.json(req.user);
+            res.redirect('/?email=' + req.user.emails[0].value + '&code=' + query.code + '&name=' + req.user.name.givenName + '&photo=' + req.user.photos[0].value);
         }
     );
 

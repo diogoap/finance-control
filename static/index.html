@@ -39,11 +39,15 @@
 	<script src="js/controllers/incomesController.js"></script>
 	<script src="js/controllers/incomesDetailModalController.js"></script>
 	<script src="js/controllers/incomesModalController.js"></script>
+	<script src="js/controllers/indexController.js"></script>
+	<script src="js/controllers/loginController.js"></script>
 	<script src="js/controllers/transfersController.js"></script>
 	<script src="js/controllers/transfersModalController.js"></script>
 	<script src="js/controllers/homeController.js"></script>
 	<script src="js/directives/customValidations.js"></script>
 	<script src="js/directives/resizableGrid.js"></script>
+	<script src="js/interceptors/authorizationHeaderInterceptor.js"></script>
+	<script src="js/interceptors/unauthorizedInterceptor.js"></script>
 	<script src="js/services/accountsService.js"></script>
 	<script src="js/services/categoriesService.js"></script>
 	<script src="js/services/expensesService.js"></script>
@@ -52,18 +56,18 @@
 	<script src="js/services/transfersService.js"></script>
 	<script src="js/services/utilsService.js"></script>
 	<script src="js/services/totalsService.js"></script>
+	<script src="js/services/localStorageService.js"></script>
 
 	<script type='text/javascript'>
 		$(window).load(function(){
 			$('.navbar-collapse a').click(function(){
     			$(".navbar-collapse").collapse('hide');
 			});
-
 		});
 	</script>
 
 </head>
-<body ng-controller="homeController">
+<body ng-controller="indexController">
     <!-- HEADER AND NAVBAR -->
     <header>
 		<nav id="navbar" class="navbar navbar-default">
@@ -75,17 +79,19 @@
         				<span class="icon-bar"></span>
         				<span class="icon-bar"></span>
       				</button>
-       	        	<a class="navbar-brand" href="#/">Finance Control</a>
+       	        	<a class="navbar-brand" href="/">Finance Control</a>
        	    	</div>
 
        	    	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	    			<ul class="nav navbar-nav navbar-right">
-	       				<li><a href="#/"><i class="fa fa-home fa-lg"></i> Home</a></li>
-	       				<li><a href="#expenses"><i class="fa fa-minus-square fa-lg"></i> Despesas</a></li>
-	       				<li><a href="#incomes"><i class="fa fa-plus-square fa-lg"></i> Receitas</a></li>
-	       				<li><a href="#transfers"><i class="fa fa-exchange fa-lg"></i> Transferências</a></li>
-	       				<li><a href="#categories"><i class="fa fa-list-ol fa-lg"></i> Categorias</a></li>
-	      				<li><a href="#accounts"><i class="fa fa-university fa-lg"></i> Contas</a></li>
+	       				<li><a href="/"><i class="fa fa-home fa-lg"></i> Home</a></li>
+	       				<li><a href="/expenses"><i class="fa fa-minus-square fa-lg"></i> Despesas</a></li>
+	       				<li><a href="/incomes"><i class="fa fa-plus-square fa-lg"></i> Receitas</a></li>
+	       				<li><a href="/transfers"><i class="fa fa-exchange fa-lg"></i> Transferências</a></li>
+	       				<li><a href="/categories"><i class="fa fa-list-ol fa-lg"></i> Categorias</a></li>
+	      				<li><a href="/accounts"><i class="fa fa-university fa-lg"></i> Contas</a></li>
+						<li><a href="/login"><i class="fa fa-sign-in fa-lg"></i> Login</a></li>
+						<li><a href="/login"><img src="{{loggedUserPhoto}}" alt="User Photo" style="width:25px;height:25px;"> {{loggedUserName}}</a></li>
 	    			</ul>
         		</div>
 			</div>

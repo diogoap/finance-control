@@ -9,6 +9,7 @@ var sendError = function(res, error, status) {
 }
 
 var ensureAuth = function(req, res, next) {
+	console.log(req.query.code);
 	if (req.isAuthenticated()) { return next(); }
 		sendError(res, 'Login inválido', 401);
 }

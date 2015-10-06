@@ -15,40 +15,39 @@ var app = angular.module('financeControl', [
     'incomesService',
     'generatorService',
     'transfersService',
-    'totalsService'
+    'totalsService',
+    'localStorageService'
 ]);
 
-app.config(function($routeProvider) {
+app.config(function($routeProvider, $locationProvider) {
     $routeProvider
     	.when('/', {
-            templateUrl: 'html/home.html',
-            controller: 'homeController'
+            templateUrl: 'html/home.html'
         })
         .when('/login', {
-            templateUrl: 'html/login.html',
-            controller: 'homeController'
+            templateUrl: 'html/login.html'
         })
         .when('/categories', {
-            templateUrl: 'html/categories.html',
-            controller: 'categoriesController'
+            templateUrl: 'html/categories.html'
         })
         .when('/accounts', {
-            templateUrl: 'html/accounts.html',
-            controller: 'accountsController'
+            templateUrl: 'html/accounts.html'
         })
         .when('/expenses', {
-            templateUrl: 'html/expenses.html',
-            controller: 'expensesController'
+            templateUrl: 'html/expenses.html'
         })
         .when('/incomes', {
-            templateUrl: 'html/incomes.html',
-            controller: 'incomesController'
+            templateUrl: 'html/incomes.html'
         })
         .when('/transfers', {
-            templateUrl: 'html/transfers.html',
-            controller: 'transfersController'
+            templateUrl: 'html/transfers.html'
         })
         .otherwise({
         	redirecTo: '/'
         });
+
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
 });

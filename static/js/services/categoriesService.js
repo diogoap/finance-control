@@ -2,7 +2,7 @@
 
 angular.module('categoriesService', [])
 
-	.factory('Categories', ['$http',function($http) {
+	.factory('Categories', ['$http', function($http) {
 		return {
 			getById : function(id) {
 				return $http.get('/api/categories/' + id);
