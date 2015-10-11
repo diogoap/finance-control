@@ -5,7 +5,7 @@ var incomesService = require('./services/incomesService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/incomes/:id', function(req, res) {
+    app.get('/api/incomes/:id', utils.ensureAuth, function(req, res) {
         var income = incomesService.getById(req.params.id,
             function(income) {
                 res.json(income);
@@ -16,11 +16,12 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/incomes', function(req, res) {
+    app.get('/api/incomes', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         incomesService.get(
+            utils.getUserId(req),
             query,
             function(incomes) {
                 res.json(incomes);
@@ -31,8 +32,10 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/incomes', function(req, res) {
-        incomesService.create(req.body,
+    app.post('/api/incomes', utils.ensureAuth, function(req, res) {
+        incomesService.create(
+            utils.getUserId(req),
+            req.body,
             function(income) {
                 res.json('OK');
             },
@@ -42,7 +45,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/incomes/:id', function(req, res) {
+    app.delete('/api/incomes/:id', utils.ensureAuth, function(req, res) {
         incomesService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -53,7 +56,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/incomes/:id', function(req, res) {
+    app.patch('/api/incomes/:id', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 

@@ -18,6 +18,7 @@ var expenseSchema = new Schema({
 	status: { type: String, default: '' },
 	notes: String,
 	isLatePayment: { type: Boolean, default: false },
+	user_id: String,
 	detail: [ {
 	 	description: String,
 		amount: { type: Number, default: 0 },

@@ -5,7 +5,7 @@ var transfersService = require('./services/transfersService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/transfers/:id', function(req, res) {
+    app.get('/api/transfers/:id', utils.ensureAuth, function(req, res) {
         var transfer = transfersService.getById(req.params.id,
             function(transfer) {
                 res.json(transfer);
@@ -16,11 +16,12 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/transfers', function(req, res) {
+    app.get('/api/transfers', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         transfersService.get(
+            utils.getUserId(req),
             query,
             function(transfers) {
                 res.json(transfers);
@@ -31,8 +32,10 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/transfers', function(req, res) {
-        transfersService.create(req.body,
+    app.post('/api/transfers', utils.ensureAuth, function(req, res) {
+        transfersService.create(
+            utils.getUserId(req),
+            req.body,
             function(transfer) {
                 res.json('OK');
             },
@@ -42,7 +45,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/transfers/:id', function(req, res) {
+    app.delete('/api/transfers/:id', utils.ensureAuth, function(req, res) {
         transfersService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -53,7 +56,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/transfers/:id', function(req, res) {
+    app.patch('/api/transfers/:id', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 

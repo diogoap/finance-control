@@ -10,6 +10,7 @@ var transferSchema = new Schema({
 	_accountOrigin: Object,
 	accountTarget_id: String,
 	_accountTarget: Object,
+	user_id: String
 });
 
 module.exports = mongoose.model('Transfer', transferSchema);

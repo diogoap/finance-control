@@ -19,6 +19,7 @@ var expenseSchema = {
         "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
         "notes": { "type": "string" },
         "isLatePayment": { "type": "boolean" },
+        "user_id": { "type": "string" },
         "detail": {
             "description": "Expenses detail list",
             "type": "array",
@@ -36,7 +37,7 @@ var expenseSchema = {
             }
         }
     },
-    "required": [ "description", "dueDate", "status", "amount" ],
+    "required": [ "description", "dueDate", "status", "amount", "user_id" ],
     "anyOf": [
         { "required": [ "account_id", "category_id" ] },
         {
@@ -180,12 +181,14 @@ module.exports = {
         });
     },
 
-    get: function(filter, callbackSuccess, callbackError) {
-        var queryFilter;
+    get: function(userId, filter, callbackSuccess, callbackError) {
+        var queryFilter = {};
 
         if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
-            queryFilter = { dueDate: { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd } };
+            queryFilter.dueDate = { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd };
         }
+
+        queryFilter.user_id = userId;
 
         var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();
         expensesPromisse.then(function (expenses) {
@@ -218,7 +221,8 @@ module.exports = {
         });
     },
 
-    create: function(expense, callbackSuccess, callbackError) {
+    create: function(userId, expense, callbackSuccess, callbackError) {
+        expense.user_id = userId;
         var val = new Validator().validate(expense, expenseSchema);
 
         if (val.errors.length == 0) {
@@ -252,10 +256,14 @@ module.exports = {
 
         if (val.errors.length == 0) {
             updateExpenseTotal(expense);
-            var expensesPromisse = Expenses.findByIdAndUpdate(id, expense);
+            var expensesPromisse = Expenses.findByIdAndUpdate(id, expense, { new: true });
 
-            expensesPromisse.then(function() {
-                callbackSuccess();
+            expensesPromisse.then(function(expenseEdited) {
+				if (expenseEdited == null) {
+					callbackError('not found', 404);
+				} else {
+    				callbackSuccess(expenseEdited);
+                }
             })
             .then(null, function(error) {
                 callbackError(error, 400);

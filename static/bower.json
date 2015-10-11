@@ -19,6 +19,7 @@
     "angular-route": "~1.4.4",
     "angular-ui-grid": "~3.0.5",
     "bootstrap": "~3.3.4",
+    "bootstrap-social": "~4.10.1",
     "font-awesome": "~4.4.0",
     "angular-numeric-directive": "epeschier/angular-numeric-directive",
     "angular-i18n": "~1.4.4"

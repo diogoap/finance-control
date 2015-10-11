@@ -89,7 +89,7 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$$scope.addError('Erro ao carregar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};

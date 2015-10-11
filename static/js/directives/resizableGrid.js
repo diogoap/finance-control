@@ -8,10 +8,12 @@ app.directive('resizableGrid', function($window) {
 		// On window resize => resize the app
 		$scope.initializeWindowSize = function() {
 			var obj = document.getElementById('grid');
-			var rect = obj.getBoundingClientRect();
-			$scope.windowHeight = $window.innerHeight - (rect.top + 20) + 'px';
-			$scope.windowWidth = $window.innerWidth - (rect.left + 25) + 'px';
 
+			if (obj != null) {
+				var rect = obj.getBoundingClientRect();
+				$scope.windowHeight = $window.innerHeight - (rect.top + 20) + 'px';
+				$scope.windowWidth = $window.innerWidth - (rect.left + 25) + 'px';
+			}
 		};
 
 		angular.element($window).bind('resize', function() {

@@ -11,9 +11,10 @@ var transferSchema = {
         "date": { "type": "datetime" },
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "accountOrigin_id": { "type": "string" },
-        "accountTarget_id": { "type": "string" }
+        "accountTarget_id": { "type": "string" },
+        "user_id": { "type": "string" }
     },
-    "required": [ "date", "amount", "accountOrigin_id", "accountTarget_id" ]
+    "required": [ "date", "amount", "accountOrigin_id", "accountTarget_id", "user_id" ]
 };
 
 function validateTransfer(transfer, errors) {
@@ -67,12 +68,14 @@ module.exports = {
         });
     },
 
-    get: function(filter, callbackSuccess, callbackError) {
-        var queryFilter;
+    get: function(userId, filter, callbackSuccess, callbackError) {
+        var queryFilter = {};
 
         if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
-            queryFilter = { date: { $gte: filter.dateBegin, $lt: filter.dateEnd } };
+            queryFilter.date = { $gte: filter.dateBegin, $lt: filter.dateEnd };
         }
+
+        queryFilter.user_id = userId;
 
         var transfersPromisse = Transfers.find(queryFilter).sort('date').exec();
 
@@ -92,7 +95,8 @@ module.exports = {
         });
     },
 
-    create: function(transfer, callbackSuccess, callbackError) {
+    create: function(userId, transfer, callbackSuccess, callbackError) {
+        transfer.user_id = userId;
         var val = new Validator().validate(transfer, transferSchema);
         validateTransfer(transfer, val.errors);
 
@@ -128,10 +132,14 @@ module.exports = {
 
         if (val.errors.length == 0) {
             updateTransfer(transfer);
-            var transfersPromisse = Transfers.findByIdAndUpdate(id, transfer);
+            var transfersPromisse = Transfers.findByIdAndUpdate(id, transfer, { new: true });
 
-            transfersPromisse.then(function () {
-                callbackSuccess();
+            transfersPromisse.then(function(transferEdited) {
+				if (transferEdited == null) {
+					callbackError('not found', 404);
+				} else {
+    				callbackSuccess(transferEdited);
+                }
             })
             .then(null, function(error) {
                 callbackError(error, 400);

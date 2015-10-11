@@ -260,7 +260,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
-				$$scope.addError('Erro ao carregar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -274,7 +274,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
                 $scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.addError('Erro ao salvar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
@@ -302,7 +302,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
 				$scope.getExpenses();
 			})
 			.error(function(data, status, headers, config) {
-				$scope.addError('Erro ao salvar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};

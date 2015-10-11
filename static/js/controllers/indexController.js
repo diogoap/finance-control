@@ -5,16 +5,18 @@ var app = angular.module('financeControl');
 app.controller('indexController', function($scope, $localStorage, $http, $locale, $routeParams, $location, Utils) {
 
 	$scope.$on('$routeChangeSuccess', function() {
+		var loggedUserId = $routeParams.id;
 		var loggedUserEmail = $routeParams.email;
-		var loggedUserCode = $routeParams.code;
+		var loggedUserToken = $routeParams.token;
 		var loggedUserName = $routeParams.name;
 		var loggedUserPhoto = $routeParams.photo;
 
-		if ((loggedUserEmail != undefined && loggedUserEmail.length > 0) && (loggedUserCode != undefined && loggedUserCode.length > 0)) {
+		if ((loggedUserId != undefined && loggedUserId.length > 0) && (loggedUserToken != undefined && loggedUserToken.length > 0)) {
 			$location.search('');
 
+			$localStorage.set('loggedUserId', loggedUserId);
 			$localStorage.set('loggedUserEmail', loggedUserEmail);
-			$localStorage.set('loggedUserCode', loggedUserCode);
+			$localStorage.set('loggedUserToken', loggedUserToken);
 			$localStorage.set('loggedUserName', loggedUserName);
 			$localStorage.set('loggedUserPhoto', loggedUserPhoto);
 

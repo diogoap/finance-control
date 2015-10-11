@@ -11,16 +11,17 @@ function round2d(num) {
     return Math.round(num * 100) / 100;
 }
 
-function getCommonEntries(callbackSuccess, callbackError) {
+function getCommonEntries(userId, callbackSuccess, callbackError) {
     var entries = {};
+    var queryFilterUser = { user_id: userId };
 
     //Accounts
-    var accountsPromisse = Accounts.find().sort('name').exec();
+    var accountsPromisse = Accounts.find(queryFilterUser).sort('name').exec();
     accountsPromisse.then(function (accounts) {
         entries.accounts = accounts;
 
         //Categories
-        var categoriesPromisse = Categories.find().sort('name').exec();
+        var categoriesPromisse = Categories.find(queryFilterUser).sort('name').exec();
         categoriesPromisse.then(function (categories) {
             entries.categories = categories;
 
@@ -32,12 +33,12 @@ function getCommonEntries(callbackSuccess, callbackError) {
     });
 }
 
-function getData(dateFilter, callbackSuccess, callbackError) {
+function getData(userId, dateFilter, callbackSuccess, callbackError) {
     var totals = {};
 
     //Incomes
     var incomesTotal = Incomes.aggregate( [
-        { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
+        { $match: { account_id: { $ne: null }, dueDate: dateFilter, user_id: userId } },
         { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalReceived: { $sum: '$amountReceived'} } }
     ]).exec();
 
@@ -46,7 +47,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
 
         //Incomes detail
         var incomesDetailTotal = Incomes.aggregate( [
-            { $match: { account_id: null, dueDate: dateFilter } },
+            { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
             { $unwind: '$detail' },
             { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
 
@@ -57,7 +58,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
 
             //Expenses
             var expensesTotal = Expenses.aggregate( [
-                { $match: { account_id: { $ne: null }, dueDate: dateFilter } },
+                { $match: { account_id: { $ne: null }, dueDate: dateFilter, user_id: userId } },
                 { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalPaid: { $sum: '$amountPaid'} } }
             ]).exec();
 
@@ -66,7 +67,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
 
                 //Expenses detail
                 var expensesDetailTotal = Expenses.aggregate( [
-                    { $match: { account_id: null, dueDate: dateFilter } },
+                    { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
                     { $unwind: '$detail' },
                     { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
                 ]).exec();
@@ -76,7 +77,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
 
                     //Transfers origin
                     var transfersOriginTotal = Transfers.aggregate( [
-                        { $match: { date: dateFilter } },
+                        { $match: { date: dateFilter, user_id: userId } },
                         { $group: { _id: { account_id: '$accountOrigin_id' }, total: { $sum: '$amount' } } }
                     ]).exec();
 
@@ -85,7 +86,7 @@ function getData(dateFilter, callbackSuccess, callbackError) {
 
                         //Transfers target
                         var transfersTargetTotal = Transfers.aggregate( [
-                            { $match: { date: dateFilter } },
+                            { $match: { date: dateFilter, user_id: userId } },
                             { $group: { _id: { account_id: "$accountTarget_id" }, total: { $sum: "$amount" } } }
                         ]).exec();
 
@@ -287,7 +288,7 @@ function calculateCategoriesTotal(categoriesList, totals, status) {
 
 module.exports = {
 
-    get: function(filter, callbackSuccess, callbackError) {
+    get: function(userId, filter, callbackSuccess, callbackError) {
         var queryFilterPrevious, queryFilterCurrent;
 
         if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
@@ -301,12 +302,12 @@ module.exports = {
         }
 
         getCommonEntries(
+            userId,
             function(entries) {
                 getData(
+                    userId,
                     queryFilterPrevious,
                     function(previousTotals) {
-                        //console.log('############## previousTotals ##############');
-                        //console.log(previousTotals);
                         var res = { previous: { }, current: { } };
                         res.previous.all = calculateTotals(previousTotals, 'all', null);
                         res.previous.all.accounts = calculateAccountsBalace(entries.accounts, previousTotals, 'all', null);
@@ -314,10 +315,9 @@ module.exports = {
                         res.previous.completed.accounts = calculateAccountsBalace(entries.accounts, previousTotals, 'completed', null);
 
                         getData(
+                            userId,
                             queryFilterCurrent,
                             function(currentTotals) {
-                                //console.log('############## currentTotals ##############');
-                                //console.log(currentTotals);
                                 res.current.all = calculateTotals(currentTotals, 'all', res.previous.all);
                                 res.current.all.categories = calculateCategoriesTotal(entries.categories, currentTotals, 'all');
                                 res.current.all.accounts = calculateAccountsBalace(entries.accounts, currentTotals, 'all', res.previous.all.accounts);

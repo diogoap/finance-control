@@ -18,6 +18,7 @@ var incomeSchema = {
         "status": { "type": "string", "enum": [ "Em aberto", "Recebido" ] },
         "notes": { "type": "string" },
         "isLatePayment": { "type": "boolean" },
+        "user_id": { "type": "string" },
         "detail": {
             "description": "Incomes detail list",
             "type": "array",
@@ -35,7 +36,7 @@ var incomeSchema = {
             }
         }
     },
-    "required": [ "description", "dueDate", "status", "amount" ],
+    "required": [ "description", "dueDate", "status", "amount", "user_id" ],
     "anyOf": [
         { "required": [ "account_id", "category_id" ] },
         {
@@ -179,12 +180,14 @@ module.exports = {
         });
     },
 
-    get: function(filter, callbackSuccess, callbackError) {
-        var queryFilter;
+    get: function(userId, filter, callbackSuccess, callbackError) {
+        var queryFilter = {};
 
         if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
-            queryFilter = { dueDate: { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd } };
+            queryFilter.dueDate = { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd };
         }
+
+        queryFilter.user_id = userId;
 
         var incomesPromisse = Incomes.find(queryFilter).sort('dueDate').exec();
         incomesPromisse.then(function (incomes) {
@@ -217,7 +220,8 @@ module.exports = {
         });
     },
 
-    create: function(income, callbackSuccess, callbackError) {
+    create: function(userId, income, callbackSuccess, callbackError) {
+        income.user_id = userId;
         var val = new Validator().validate(income, incomeSchema);
 
         if (val.errors.length == 0) {
@@ -251,10 +255,14 @@ module.exports = {
 
         if (val.errors.length == 0) {
             updateIncomeTotal(income);
-            var incomesPromisse = Incomes.findByIdAndUpdate(id, income);
+            var incomesPromisse = Incomes.findByIdAndUpdate(id, income, { new: true });
 
-            incomesPromisse.then(function() {
-                callbackSuccess();
+            incomesPromisse.then(function(incomeEdited) {
+				if (incomeEdited == null) {
+					callbackError('not found', 404);
+				} else {
+    				callbackSuccess(incomeEdited);
+                }
             })
             .then(null, function(error) {
                 callbackError(error, 400);

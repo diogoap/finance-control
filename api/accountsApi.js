@@ -5,7 +5,7 @@ var accountsService = require('./services/accountsService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/accounts/:id', function(req, res) {
+    app.get('/api/accounts/:id', utils.ensureAuth, function(req, res) {
         var account = accountsService.getById(req.params.id,
             function(account) {
                 res.json(account);
@@ -16,8 +16,9 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/accounts', function(req, res) {
+    app.get('/api/accounts', utils.ensureAuth, function(req, res) {
         accountsService.get(
+            utils.getUserId(req),
             function(accounts) {
                 res.json(accounts);
             },
@@ -27,8 +28,10 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/accounts', function(req, res) {
-        accountsService.create(req.body,
+    app.post('/api/accounts', utils.ensureAuth, function(req, res) {
+        accountsService.create(
+            utils.getUserId(req),
+            req.body,
             function(accounts) {
                 res.json('OK');
             },
@@ -38,7 +41,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/accounts/:id', function(req, res) {
+    app.delete('/api/accounts/:id', utils.ensureAuth, function(req, res) {
         accountsService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -49,7 +52,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/accounts/:id', function(req, res) {
+    app.patch('/api/accounts/:id', utils.ensureAuth, function(req, res) {
         accountsService.edit(req.params.id, req.body,
             function(accounts) {
                 res.json('OK');

@@ -19,9 +19,10 @@ var generatorParametersSchema = {
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "scheduledPayment": { "type": "boolean" },
-        "notes": { "type": "string" }
+        "notes": { "type": "string" },
+        "user_id": { "type": "string" }
     },
-    "required": [ "type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id" ],
+    "required": [ "type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id", "user_id" ],
     "oneOf": [
         { "properties": { "dueDateType": { "enum": [ "PrimeiroDia", "UltimoDia" ] } } },
         {
@@ -94,6 +95,7 @@ function createItems(params) {
         item.category_id = params.category_id;
         item.account_id = params.account_id;
         item.notes = params.notes;
+        item.user_id = params.user_id;
 
         items.push(item);
     }
@@ -103,7 +105,8 @@ function createItems(params) {
 
 module.exports = {
 
-    create: function(generatorParameters, callbackSuccess, callbackError) {
+    create: function(userId, generatorParameters, callbackSuccess, callbackError) {
+        generatorParameters.user_id = userId;
         var val = new Validator().validate(generatorParameters, generatorParametersSchema);
 
         if (val.errors.length == 0) {

@@ -5,8 +5,10 @@ var generatorService = require('./services/generatorService');
 
 module.exports = function(app, url) {
 
-    app.post('/api/generator', function(req, res) {
-        generatorService.create(req.body,
+    app.post('/api/generator', utils.ensureAuth, function(req, res) {
+        generatorService.create(
+            utils.getUserId(req),
+            req.body,
             function(generatorParameters) {
                 res.json('OK');
             },

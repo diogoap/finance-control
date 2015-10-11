@@ -5,7 +5,7 @@ var expensesService = require('./services/expensesService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/expenses/:id', function(req, res) {
+    app.get('/api/expenses/:id', utils.ensureAuth, function(req, res) {
         var expense = expensesService.getById(req.params.id,
             function(expense) {
                 res.json(expense);
@@ -16,11 +16,12 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/expenses', function(req, res) {
+    app.get('/api/expenses', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         expensesService.get(
+            utils.getUserId(req),
             query,
             function(expenses) {
                 res.json(expenses);
@@ -31,8 +32,10 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/expenses', function(req, res) {
-        expensesService.create(req.body,
+    app.post('/api/expenses', utils.ensureAuth, function(req, res) {
+        expensesService.create(
+            utils.getUserId(req),
+            req.body,
             function(expense) {
                 res.json('OK');
             },
@@ -42,7 +45,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/expenses/:id', function(req, res) {
+    app.delete('/api/expenses/:id', utils.ensureAuth, function(req, res) {
         expensesService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -53,7 +56,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/expenses/:id', function(req, res) {
+    app.patch('/api/expenses/:id', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 

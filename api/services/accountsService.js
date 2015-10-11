@@ -9,9 +9,10 @@ var accountSchema = {
     "properties": {
         "name": { "type": "string", "minLength": 3, "maxLength": 100 },
         "initialBalance": { "type": "double" },
-        "actualBalance": { "type": "double" }
+        "actualBalance": { "type": "double" },
+        "user_id": { "type": "string" }
     },
-    "required": [ "name" ]
+    "required": [ "name", "user_id" ]
 };
 
 module.exports = {
@@ -31,8 +32,10 @@ module.exports = {
         });
     },
 
-    get: function(callbackSuccess, callbackError) {
-        var accountsPromisse = Accounts.find().sort('name').exec();
+    get: function(userId, callbackSuccess, callbackError) {
+        var queryFilter = { user_id: userId };
+
+        var accountsPromisse = Accounts.find(queryFilter).sort('name').exec();
 
         accountsPromisse.then(function (accounts) {
             callbackSuccess(accounts);
@@ -42,7 +45,8 @@ module.exports = {
         });
     },
 
-    create: function(account, callbackSuccess, callbackError) {
+    create: function(userId, account, callbackSuccess, callbackError) {
+        account.user_id = userId;
         var val = new Validator().validate(account, accountSchema);
 
         if (val.errors.length == 0) {
@@ -74,10 +78,14 @@ module.exports = {
         var val = new Validator().validate(account, accountSchema);
 
         if (val.errors.length == 0) {
-            var accountsPromisse = Accounts.findByIdAndUpdate(id, account);
+            var accountsPromisse = Accounts.findByIdAndUpdate(id, account, { new: true });
 
-            accountsPromisse.then(function () {
-                callbackSuccess();
+            accountsPromisse.then(function(accountEdited) {
+				if (accountEdited == null) {
+					callbackError('not found', 404);
+				} else {
+    				callbackSuccess(accountEdited);
+                }
             })
             .then(null, function(error) {
                 callbackError(error, 400);

@@ -1,6 +1,8 @@
 <div class="container-fluid" ng-controller="loginController">
 	<div class="row">
-		<a href="/auth/google" target="_self">Login with Google</a>
+		<div class="col-sm-4 col-sm-offset-4">
+			<a class="btn btn-block btn-social btn-lg btn-google" href="/auth/google" target="_self"><i class="fa fa-google"></i>Sign in with Google</a>
+		</div>
 	</div>
 
 	<div class="row">
@@ -8,6 +10,6 @@
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</div>
 
-		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+		<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
 	</div>
 </div>
