@@ -38,7 +38,7 @@ module.exports = function(app, url) {
         );
     })
 
-	app.delete('/api/users/:id', utils.ensureAuthAdmin, function(req, res) {
+	app.delete('/api/users/:id', utils.ensureAuthAdmin, utils.ensureAffectedUserIsNotAdmin, function(req, res) {
         usersService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -49,7 +49,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.lock('/api/users/:id', utils.ensureAuthAdmin, function(req, res) {
+    app.lock('/api/users/:id', utils.ensureAuthAdmin, utils.ensureAffectedUserIsNotAdmin, function(req, res) {
         usersService.disable(req.params.id,
             function() {
                 res.json('OK');
@@ -60,7 +60,7 @@ module.exports = function(app, url) {
         );
     })
 
-	app.unlock('/api/users/:id', utils.ensureAuthAdmin, function(req, res) {
+	app.unlock('/api/users/:id', utils.ensureAuthAdmin, utils.ensureAffectedUserIsNotAdmin, function(req, res) {
         usersService.enable(req.params.id,
             function() {
                 res.json('OK');

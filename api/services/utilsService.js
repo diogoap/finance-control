@@ -55,6 +55,21 @@ var validateAuth = function(req, res, next, needsAdmin) {
     );
 }
 
+var ensureAffectedUserIsNotAdmin = function(req, res, next) {
+	var usersPromisse = usersService.getById(req.params.id,
+		function(user) {
+			if (user.emailAuthorized == usersApiAdminEmail) {
+				return sendError(res, 'Operation not allowed against admin user', 403);
+			}
+
+			return next();
+        },
+        function(error, status) {
+			return sendError(res, 'User not found', 404);
+        }
+    );
+}
+
 var getUserId = function(req) {
 	return req.headers['user-id'];
 }
@@ -63,5 +78,6 @@ module.exports = {
 	sendError: sendError,
 	ensureAuth: ensureAuth,
 	ensureAuthAdmin: ensureAuthAdmin,
+	ensureAffectedUserIsNotAdmin: ensureAffectedUserIsNotAdmin,
 	getUserId: getUserId
 }

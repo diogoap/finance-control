@@ -2,6 +2,7 @@
 
 var Users = require('../models/usersModel');
 var Validator = require('jsonschema').Validator;
+var usersApiAdminEmail = process.env.USERS_API_ADMIN_EMAIL;
 
 var userCreateSchema = {
     "description": "Users model validation",
