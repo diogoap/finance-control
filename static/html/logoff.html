@@ -1,0 +1,9 @@
+<div class="container-fluid" ng-controller="logoffController">
+	<div class="row">
+		<div class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</div>
+
+		<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
+	</div>
+</div>

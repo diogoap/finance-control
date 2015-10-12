@@ -1,15 +1,22 @@
-<div class="container-fluid" ng-controller="loginController">
-	<div class="row">
-		<div class="col-sm-4 col-sm-offset-4">
-			<a class="btn btn-block btn-social btn-lg btn-google" href="/auth/google" target="_self"><i class="fa fa-google"></i>Sign in with Google</a>
-		</div>
-	</div>
+<div class="login-page-background">
+	<div class="login-page-box">
+		<div class="container-fluid login-page-box-margin" ng-controller="loginController">
 
-	<div class="row">
-		<div class="loading-box" ng-show="loading">
-			<span class="fa fa-spinner fa-spin fa-5x"></span>
-		</div>
+			<div class="row">
+				<p class="login-page-box-logo">Finance Control</p>
+			</div>
 
-		<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
+			<div class="row login-page-box-button">
+				<a class="btn btn-block btn-social btn-lg btn-google" href="/auth/google" target="_self"><i class="fa fa-google"></i>Entrar com Google</a>
+			</div>
+
+			<div class="row">
+				<div class="loading-box" ng-show="loading">
+					<span class="fa fa-spinner fa-spin fa-5x"></span>
+				</div>
+
+				<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
+			</div>
+		</div>
 	</div>
 </div>

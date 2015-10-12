@@ -42,6 +42,7 @@
 	<script src="js/controllers/incomesModalController.js"></script>
 	<script src="js/controllers/indexController.js"></script>
 	<script src="js/controllers/loginController.js"></script>
+	<script src="js/controllers/logoffController.js"></script>
 	<script src="js/controllers/transfersController.js"></script>
 	<script src="js/controllers/transfersModalController.js"></script>
 	<script src="js/controllers/homeController.js"></script>
@@ -58,6 +59,7 @@
 	<script src="js/services/utilsService.js"></script>
 	<script src="js/services/totalsService.js"></script>
 	<script src="js/services/localStorageService.js"></script>
+	<script src="js/services/logoffService.js"></script>
 
 	<script type='text/javascript'>
 		$(window).load(function(){
@@ -91,8 +93,13 @@
 	       				<li><a href="/transfers"><i class="fa fa-exchange fa-lg"></i> Transferências</a></li>
 	       				<li><a href="/categories"><i class="fa fa-list-ol fa-lg"></i> Categorias</a></li>
 	      				<li><a href="/accounts"><i class="fa fa-university fa-lg"></i> Contas</a></li>
-						<li><a href="/login"><i class="fa fa-sign-in fa-lg"></i> Login</a></li>
-						<li><a href="/login"><img src="{{loggedUserPhoto}}" alt="User Photo" style="width:25px;height:25px;"> {{loggedUserName}}</a></li>
+
+						<li class="dropdown" ng-show="loggedIn">
+				          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{loggedUserPhoto}}" alt="User Photo" style="width:25px;height:25px;"> {{loggedUserName}}<span class="caret"></span></a>
+				          <ul class="dropdown-menu">
+				            <li><a href="/logoff"><i class="fa fa-sign-out fa-lg"></i> Sair</a></li>
+				          </ul>
+				        </li>
 	    			</ul>
         		</div>
 			</div>

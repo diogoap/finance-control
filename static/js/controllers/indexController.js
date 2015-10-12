@@ -4,7 +4,12 @@ var app = angular.module('financeControl');
 
 app.controller('indexController', function($scope, $localStorage, $http, $locale, $routeParams, $location, Utils) {
 
+	$scope.isLoggedIn = function() {
+		return ($localStorage.get('loggedUserToken') != undefined) && ($localStorage.get('loggedUserToken').length > 0);
+	}
+
 	$scope.$on('$routeChangeSuccess', function() {
+
 		var loggedUserId = $routeParams.id;
 		var loggedUserEmail = $routeParams.email;
 		var loggedUserToken = $routeParams.token;
@@ -22,12 +27,14 @@ app.controller('indexController', function($scope, $localStorage, $http, $locale
 
 			$scope.loggedUserName = loggedUserName;
 			$scope.loggedUserPhoto = loggedUserPhoto;
+			$scope.loggedIn = $scope.isLoggedIn();
 		}
   	});
 
 	// initialization
     $scope.loggedUserName = $localStorage.get('loggedUserName');
     $scope.loggedUserPhoto = $localStorage.get('loggedUserPhoto');
+	$scope.loggedIn = $scope.isLoggedIn();
 
     $scope.Utils = Utils;
     $scope.alerts = [];

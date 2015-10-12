@@ -26,7 +26,6 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
                         user.externalId = profile.id;
                         user.externalPhoto = profile.photos[0].value;
                         user.accessToken = passwordHash.generate(accessToken);
-                        user.emailAuthorized = profile.emails[0].value
 
                         if (profile.name.givenName.length == 0) {
                             user.externalName = 'User';
@@ -46,13 +45,13 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
                                 return done(null, userData);
                             },
                             function(error, status) {
-                                console.log('nextTick - login - error on update: ' + error);
+                                console.log('nextTick ==> Login - error on update: ' + error);
                                 return done(null, false, { message: 'Erro na atualização dos dados do usuário.' } );
                             }
                         );
                     },
                     function(error, status) {
-                        console.log('nextTick - user not authorized');
+                        console.log('nextTick ==> User not authorized');
                         return done(null, false, { message: 'Você não está autorizado para accessar essa aplicação.' } );
                     }
                 );
@@ -61,11 +60,11 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
     ));
 
     passport.serializeUser(function(user, done) {
-      done(null, user);
+        done(null, user);
     });
 
     passport.deserializeUser(function(user, done) {
-      done(null, user);
+        done(null, user);
     });
 
     app.get('/auth/google',
@@ -77,28 +76,29 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
    //     passport.authenticate('google', { session: false, failureRedirect: '/auth/error' } ),
    //     function(req, res) {
    //         console.log('callback - OK!!!');
-   //         console.log(req.user);
    //         res.redirect('/?id=' + req.user.id + '&email=' + req.user.emailAuthorized + '&token=' + req.user.accessToken + '&name=' + req.user.externalName + '&photo=' + req.user.externalPhoto);
    //     }
    // );
    //
    // app.get('/auth/error',function(req, res, info) {
    //     console.log('callback - ERR');
-   //     console.log(info);
    //
    //     res.redirect('/login');
    // });
 
-
-
-   //app.get('/logout', function(req, res){
-   //    req.logout();
-   //    res.json('Logout OK');
-   //});
+   app.get('/auth/logoff', function(req, res) {
+       var user = usersService.logOff(utils.getUserId(req),
+            function(userDb) {
+                return res.json('OK');
+           },
+           function(error, status) {
+               utils.sendError(res, 'user not found', 404);
+           }
+       );
+   });
 
    app.get('/auth/google/callback', function(req, res, next) {
        passport.authenticate('google', function(err, user, info) {
-           console.log('/auth/google/callback - IN');
            if (err) {
                console.log('/auth/google/callback - IN - UNEXPECTED ERROR');
                var message = encodeURIComponent('Não foi possível realizar o login. Tente novamente mais tarde.');

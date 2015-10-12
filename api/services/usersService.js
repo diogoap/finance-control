@@ -20,8 +20,7 @@ var userEditSchema = {
         "externalId": { "type": "string", "minLength": 5, "maxLength": 100 },
         "externalName": { "type": "string", "minLength": 1, "maxLength": 300 },
         "externalPhoto": { "type": "string", "minLength": 5, "maxLength": 300 },
-        "accessToken": { "type": "string", "minLength": 5, "maxLength": 500 },
-        "emailAuthorized": { "type": "string", "minLength": 5, "maxLength": 300 }
+        "accessToken": { "type": "string", "minLength": 5, "maxLength": 500 }
     },
 	"additionalProperties": false,
     "required": [ "externalId", "externalName", "externalPhoto", "accessToken" ]
@@ -97,6 +96,30 @@ module.exports = {
         } else {
             callbackError(val.errors, 400)
         }
+    },
+
+    logOff: function(id, callbackSuccess, callbackError) {
+		var usersFindPromisse = Users.findById(id);
+
+		usersFindPromisse.then(function(user) {
+            if (user != undefined) {
+                user.accessToken = '';
+                user.accessTokenCreationDate = null;
+
+                user.save(function(error, raw) {
+                     if (error) {
+                         callbackError(error, 400)
+                     };
+
+                     callbackSuccess();
+                });
+            } else {
+                callbackError('not found', 404);
+            };
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
+        });
     },
 
 	delete: function(id, callbackSuccess, callbackError) {

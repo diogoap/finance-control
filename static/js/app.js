@@ -16,7 +16,8 @@ var app = angular.module('financeControl', [
     'generatorService',
     'transfersService',
     'totalsService',
-    'localStorageService'
+    'localStorageService',
+    'logoffService'
 ]);
 
 app.config(function($routeProvider, $locationProvider) {
@@ -26,6 +27,9 @@ app.config(function($routeProvider, $locationProvider) {
         })
         .when('/login', {
             templateUrl: 'html/login.html'
+        })
+        .when('/logoff', {
+            templateUrl: 'html/logoff.html'
         })
         .when('/categories', {
             templateUrl: 'html/categories.html'
