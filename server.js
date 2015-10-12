@@ -3,10 +3,6 @@ var app = express();
 var mongoose = require('mongoose');
 var port = process.env.PORT || 5000;
 var databaseUrl = process.env.MONGOLAB_URI;
-var googleClientId = process.env.GOOGLE_CLIENT_ID;
-var googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-var googleCallbackURL = process.env.GOOGLE_CALLBACK_URL;
-var usersApiSecret = process.env.USERS_API_SECRET;
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -25,7 +21,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(passport.initialize());
 
 // APIs requests ===============================================================
-require('./api/authApi.js')(app, url, passport, GoogleStrategy, googleClientId, googleClientSecret, googleCallbackURL);
+require('./api/authApi.js')(app, url, passport, GoogleStrategy);
 require('./api/categoriesApi.js')(app, url);
 require('./api/accountsApi.js')(app, url);
 require('./api/expensesApi.js')(app, url);
@@ -33,7 +29,7 @@ require('./api/incomesApi.js')(app, url);
 require('./api/generatorApi.js')(app, url);
 require('./api/transfersApi.js')(app, url);
 require('./api/totalsApi.js')(app, url);
-require('./api/usersApi.js')(app, url, usersApiSecret);
+require('./api/usersApi.js')(app, url);
 
 // Static pages requests =======================================================
 app.use("/", function(req, res, next){

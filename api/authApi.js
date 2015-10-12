@@ -3,8 +3,11 @@
 var passwordHash = require('password-hash');
 var utils = require('./services/utilsService');
 var usersService = require('./services/usersService');
+var googleClientId = process.env.GOOGLE_CLIENT_ID;
+var googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+var googleCallbackURL = process.env.GOOGLE_CALLBACK_URL;
 
-module.exports = function(app, url, passport, GoogleStrategy, googleClientId, googleClientSecret, googleCallbackURL) {
+module.exports = function(app, url, passport, GoogleStrategy) {
 
     passport.use(
         new GoogleStrategy({
@@ -72,20 +75,6 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
         function(req, res){}
     );
 
-   //  app.get('/auth/google/callback',
-   //     passport.authenticate('google', { session: false, failureRedirect: '/auth/error' } ),
-   //     function(req, res) {
-   //         console.log('callback - OK!!!');
-   //         res.redirect('/?id=' + req.user.id + '&email=' + req.user.emailAuthorized + '&token=' + req.user.accessToken + '&name=' + req.user.externalName + '&photo=' + req.user.externalPhoto);
-   //     }
-   // );
-   //
-   // app.get('/auth/error',function(req, res, info) {
-   //     console.log('callback - ERR');
-   //
-   //     res.redirect('/login');
-   // });
-
    app.get('/auth/logoff', function(req, res) {
        var user = usersService.logOff(utils.getUserId(req),
             function(userDb) {
@@ -100,20 +89,19 @@ module.exports = function(app, url, passport, GoogleStrategy, googleClientId, go
    app.get('/auth/google/callback', function(req, res, next) {
        passport.authenticate('google', function(err, user, info) {
            if (err) {
-               console.log('/auth/google/callback - IN - UNEXPECTED ERROR');
+               console.log('/auth/google/callback ==> UNEXPECTED ERROR');
                var message = encodeURIComponent('Não foi possível realizar o login. Tente novamente mais tarde.');
                return res.redirect('/login?error=' + message);
            }
 
            if (!user) {
-               console.log('/auth/google/callback - IN - ERROR ==> ' + info.message);
+               console.log('/auth/google/callback ==> USER NOT FOUND: ' + info.message);
                var message = encodeURIComponent(info.message);
                return res.redirect('/login?error=' + message);
            }
 
            req.login(user, function(err) {
                if (err) { return next(err); }
-               console.log('/auth/google/callback - IN - OK - LOGIN IN!!!');
                return res.redirect('/?id=' + req.user.id + '&email=' + req.user.emailAuthorized + '&token=' + req.user.accessToken + '&name=' + req.user.externalName + '&photo=' + req.user.externalPhoto);
            });
        })(req, res, next);

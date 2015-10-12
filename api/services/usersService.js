@@ -3,7 +3,7 @@
 var Users = require('../models/usersModel');
 var Validator = require('jsonschema').Validator;
 
-var userSchema = {
+var userCreateSchema = {
     "description": "Users model validation",
     "type": "object",
     "properties": {
@@ -41,6 +41,31 @@ function getUser(queryFilter, callbackSuccess, callbackError) {
     });
 };
 
+function changeUserStatus(id, enable, callbackSuccess, callbackError) {
+    var usersFindPromisse = Users.findById(id);
+
+    usersFindPromisse.then(function(user) {
+        if (user != undefined) {
+            user.userEnabled = enable;
+            user.accessToken = '';
+            user.accessTokenCreationDate = null;
+
+            user.save(function(error, raw) {
+                 if (error) {
+                     callbackError(error, 400)
+                 };
+
+                 callbackSuccess();
+            });
+        } else {
+            callbackError('not found', 404);
+        };
+    })
+    .then(null, function(error) {
+        callbackError(error, 400);
+    });
+};
+
 module.exports = {
 
     getById: function(id, callbackSuccess, callbackError) {
@@ -70,7 +95,7 @@ module.exports = {
     },
 
     create: function(user, callbackSuccess, callbackError) {
-        var val = new Validator().validate(user, userSchema);
+        var val = new Validator().validate(user, userCreateSchema);
 
         if (val.errors.length == 0) {
 			var queryFilter = { emailAuthorized: user.emailAuthorized };
@@ -123,31 +148,6 @@ module.exports = {
     },
 
 	delete: function(id, callbackSuccess, callbackError) {
-		var usersFindPromisse = Users.findById(id);
-
-		usersFindPromisse.then(function(user) {
-            if (user != undefined) {
-                user.userEnabled = false;
-                user.accessToken = '';
-                user.accessTokenCreationDate = null;
-
-                user.save(function(error, raw) {
-                     if (error) {
-                         callbackError(error, 400)
-                     };
-
-                     callbackSuccess();
-                });
-            } else {
-                callbackError('not found', 404);
-            };
-        })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
-    },
-
-	deletePhisicaly: function(id, callbackSuccess, callbackError) {
 		var usersPromisse = Users.remove(id);
 
         usersPromisse.then(function () {
@@ -178,6 +178,14 @@ module.exports = {
         } else {
             callbackError(val.errors, 400)
         }
+    },
+
+    disable: function(id, callbackSuccess, callbackError) {
+        changeUserStatus(id, false, callbackSuccess, callbackError);
+    },
+
+    enable: function(id, callbackSuccess, callbackError) {
+        changeUserStatus(id, true, callbackSuccess, callbackError);
     }
 
 }
