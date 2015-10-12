@@ -38,10 +38,11 @@ var validateAuth = function(req, res, next, needsAdmin) {
 
 			if ((needsAdmin) && (user.emailAuthorized.length > 0) && (user.emailAuthorized != usersApiAdminEmail)) {
 				console.log('validateAuth ==> User not admin');
-				return sendError(res, 'User must be admin to perform this operation', 401);
+				return sendError(res, 'User must be admin to perform this operation', 403);
 			}
 
-			if (passwordHash.verify(userToken, user.accessToken) == false) {
+			var validTokenIndex = usersService.getUserTokenIndex(user, userToken);
+			if (validTokenIndex == -1) {
 				console.log('validateAuth ==> Invalid token');
 				return sendError(res, 'Invalid token', 401);
 			}
@@ -49,7 +50,7 @@ var validateAuth = function(req, res, next, needsAdmin) {
 			return next();
         },
         function(error, status) {
-			console.log('validateAuth ==> User not found');
+			console.log('validateAuth ==> User not found - ' + error);
             return sendError(res, 'User not found', 401);
         }
     );
@@ -74,10 +75,15 @@ var getUserId = function(req) {
 	return req.headers['user-id'];
 }
 
+var getUserToken = function(req) {
+	return req.headers['authorization'];
+}
+
 module.exports = {
 	sendError: sendError,
 	ensureAuth: ensureAuth,
 	ensureAuthAdmin: ensureAuthAdmin,
 	ensureAffectedUserIsNotAdmin: ensureAffectedUserIsNotAdmin,
-	getUserId: getUserId
+	getUserId: getUserId,
+	getUserToken: getUserToken
 }

@@ -9,9 +9,11 @@ var userSchema = new Schema({
 	externalId: String,
 	externalName: String,
 	externalPhoto: String,
-	accessToken: String,
-	accessTokenCreationDate: { type: Date, default: Date.Now },
-	userEnabled: { type: Boolean, default: true }
+	userEnabled: { type: Boolean, default: true },
+	accessTokens: [ {
+		token: String,
+		creationDate: { type: Date, default: Date.Now }
+	} ]
 });
 
 module.exports = mongoose.model('User', userSchema);

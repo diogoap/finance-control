@@ -2,7 +2,7 @@
 
 var Users = require('../models/usersModel');
 var Validator = require('jsonschema').Validator;
-var usersApiAdminEmail = process.env.USERS_API_ADMIN_EMAIL;
+var passwordHash = require('password-hash');
 
 var userCreateSchema = {
     "description": "Users model validation",
@@ -12,20 +12,7 @@ var userCreateSchema = {
     },
 	"additionalProperties": false,
     "required": [ "emailAuthorized" ]
-};
-
-var userEditSchema = {
-    "description": "Users edit model validation",
-    "type": "object",
-    "properties": {
-        "externalId": { "type": "string", "minLength": 5, "maxLength": 100 },
-        "externalName": { "type": "string", "minLength": 1, "maxLength": 300 },
-        "externalPhoto": { "type": "string", "minLength": 5, "maxLength": 300 },
-        "accessToken": { "type": "string", "minLength": 5, "maxLength": 500 }
-    },
-	"additionalProperties": false,
-    "required": [ "externalId", "externalName", "externalPhoto", "accessToken" ]
-};
+}
 
 function getUser(queryFilter, callbackSuccess, callbackError) {
     var usersPromisse = Users.find(queryFilter).exec();
@@ -40,7 +27,19 @@ function getUser(queryFilter, callbackSuccess, callbackError) {
     .then(null, function(error) {
         callbackError(error, 400);
     });
-};
+}
+
+function getUserTokenIndex(userObj, userToken) {
+    if ((userObj.accessTokens != undefined) && (userObj.accessTokens.length > 0)) {
+        for (var i in userObj.accessTokens) {
+            if (passwordHash.verify(userToken, userObj.accessTokens[i].token) == true) {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
 
 function changeUserStatus(id, enable, callbackSuccess, callbackError) {
     var usersFindPromisse = Users.findById(id);
@@ -48,24 +47,23 @@ function changeUserStatus(id, enable, callbackSuccess, callbackError) {
     usersFindPromisse.then(function(user) {
         if (user != undefined) {
             user.userEnabled = enable;
-            user.accessToken = '';
-            user.accessTokenCreationDate = null;
+            user.accessTokens = [];
 
             user.save(function(error, raw) {
                  if (error) {
                      callbackError(error, 400)
-                 };
+                 }
 
                  callbackSuccess();
             });
         } else {
             callbackError('not found', 404);
-        };
+        }
     })
     .then(null, function(error) {
         callbackError(error, 400);
     });
-};
+}
 
 module.exports = {
 
@@ -82,6 +80,10 @@ module.exports = {
     getByExternalId: function(externalId, callbackSuccess, callbackError) {
         var queryFilter = { externalId: externalId };
         getUser(queryFilter, callbackSuccess, callbackError);
+    },
+
+    getUserTokenIndex: function(userObj, userToken) {
+        return getUserTokenIndex(userObj, userToken);
     },
 
     get: function(callbackSuccess, callbackError) {
@@ -124,13 +126,57 @@ module.exports = {
         }
     },
 
-    logOff: function(id, callbackSuccess, callbackError) {
-		var usersFindPromisse = Users.findById(id);
+    logIn: function(userData, callbackSuccess, callbackError) {
+        var queryFilter = { emailAuthorized: userData.email };
+        getUser(queryFilter,
+            function(userDb) {
+                if (userDb.userEnabled == false) {
+                    return callbackError('User not enabled', 'Usuário desativado. Contate o administrador do sistema.');
+                }
 
-		usersFindPromisse.then(function(user) {
+                userDb.externalId = userData.externalId;
+                userDb.externalPhoto = userData.photo;
+
+                if (userData.name.length == 0) {
+                    userDb.externalName = 'User';
+                } else {
+                    userDb.externalName = userData.name;
+                }
+
+                var newAccessToken = {};
+                newAccessToken.token = passwordHash.generate(userData.accessToken);
+                newAccessToken.creationDate = new Date();
+
+                userDb.accessTokens.push(newAccessToken);
+
+                userDb.save(function(error, raw) {
+                     if (error) {
+                         return callbackError('User on update', 'Erro na atualização dos dados do usuário.');
+                     };
+
+                     return callbackSuccess(userDb);
+                });
+            },
+            function(error, status) {
+                return callbackError('User not authorized', 'Você não está autorizado para accessar essa aplicação.');
+            }
+        );
+    },
+
+    logOff: function(userId, userToken, allSessions, callbackSuccess, callbackError) {
+        var usersFindPromisse = Users.findById(userId);
+
+    	usersFindPromisse.then(function(user) {
             if (user != undefined) {
-                user.accessToken = '';
-                user.accessTokenCreationDate = null;
+
+                if (allSessions == 'true') {
+                    user.accessTokens = [];
+                } else {
+                    var index = getUserTokenIndex(user, userToken);
+                    if (index > -1) {
+                        user.accessTokens.splice(index, 1);
+                    }
+                }
 
                 user.save(function(error, raw) {
                      if (error) {
@@ -157,28 +203,6 @@ module.exports = {
         .then(null, function(error) {
             callbackError(error, 400);
         });
-    },
-
-	edit: function(id, user, callbackSuccess, callbackError) {
-        var val = new Validator().validate(user, userEditSchema);
-
-        if (val.errors.length == 0) {
-            user.accessTokenCreationDate = new Date();
-            var usersPromisse = Users.findByIdAndUpdate(id, user, { new: true });
-
-            usersPromisse.then(function(userEdited) {
-				if (userEdited == null) {
-					callbackError('not found', 404);
-				} else {
-    				callbackSuccess(userEdited);
-                }
-            })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
-        } else {
-            callbackError(val.errors, 400)
-        }
     },
 
     disable: function(id, callbackSuccess, callbackError) {
