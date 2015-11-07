@@ -162,7 +162,7 @@ function getAccountPreviousBalance(account, previousAccountList) {
     }
 
     for (var i in previousAccountList) {
-        if (String(previousAccountList[i]._id).valueOf() ===  String(account._id).valueOf()) {
+        if (String(previousAccountList[i]._id).valueOf() === String(account._id).valueOf()) {
             return previousAccountList[i].actualBalance;
         }
     };
@@ -173,7 +173,7 @@ function getAccountBalance(totals, account, status) {
 
     //Incomes
     totals.incomes.forEach(function (inc) {
-        if (inc._id.account_id == account._id) {
+        if (String(inc._id.account_id).valueOf() === String(account._id).valueOf()) {
             if (status == 'completed') {
                 accountBalance += round2d(inc.totalReceived);
             } else {
@@ -183,7 +183,7 @@ function getAccountBalance(totals, account, status) {
     });
 
     totals.incomesDetail.forEach(function (incDet) {
-        if (incDet._id.account_id == account._id) {
+        if (String(incDet._id.account_id).valueOf() === String(account._id).valueOf()) {
             if ((status == 'all') || (status == 'completed' && incDet._id.status == 'Recebido')) {
                 accountBalance += round2d(incDet.total);
             }
@@ -192,7 +192,7 @@ function getAccountBalance(totals, account, status) {
 
     //Expenses
     totals.expenses.forEach(function (exp) {
-        if (exp._id.account_id == account._id) {
+        if (String(exp._id.account_id).valueOf() === String(account._id).valueOf()) {
             if (status == 'completed') {
                 accountBalance -= round2d(exp.totalPaid);
             } else {
@@ -202,7 +202,7 @@ function getAccountBalance(totals, account, status) {
     });
 
     totals.expensesDetail.forEach(function (expDet) {
-        if (expDet._id.account_id == account._id) {
+        if (String(expDet._id.account_id).valueOf() === String(account._id).valueOf()) {
             if ((status == 'all') || (status == 'completed' && expDet._id.status == 'Pago')) {
                 accountBalance -= round2d(expDet.total);
             }
@@ -211,13 +211,13 @@ function getAccountBalance(totals, account, status) {
 
     //Transfers
     totals.transfersOrigin.forEach(function (transOri) {
-        if (transOri._id.account_id == account._id) {
+        if (String(transOri._id.account_id).valueOf() === String(account._id).valueOf()) {
             accountBalance -= round2d(transOri.total);
         }
     });
 
     totals.transfersTarget.forEach(function (transTar) {
-        if (transTar._id.account_id == account._id) {
+        if (String(transTar._id.account_id).valueOf() === String(account._id).valueOf()) {
             accountBalance += round2d(transTar.total);
         }
     });
