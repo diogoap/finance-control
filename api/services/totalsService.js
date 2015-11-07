@@ -49,7 +49,7 @@ function getData(userId, dateFilter, callbackSuccess, callbackError) {
         var incomesDetailTotal = Incomes.aggregate( [
             { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
             { $unwind: '$detail' },
-            { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
+            { $group: { _id: { account_id: '$detail.account_id', category_id: '$detail.category_id', status: '$detail.status' }, total: { $sum: '$detail.amount' } } }
 
         ]).exec();
 
@@ -69,7 +69,7 @@ function getData(userId, dateFilter, callbackSuccess, callbackError) {
                 var expensesDetailTotal = Expenses.aggregate( [
                     { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
                     { $unwind: '$detail' },
-                    { $group: { _id: { account_id: '$detail.account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$detail.amount' } } }
+                    { $group: { _id: { account_id: '$detail.account_id', category_id: '$detail.category_id', status: '$detail.status' }, total: { $sum: '$detail.amount' } } }
                 ]).exec();
 
                 expensesDetailTotal.then(function(expensesDetail) {
