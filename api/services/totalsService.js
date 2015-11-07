@@ -203,7 +203,7 @@ function getAccountBalance(totals, account, status) {
 
     totals.expensesDetail.forEach(function (expDet) {
         if (expDet._id.account_id == account._id) {
-            if ((status == 'all') || (status == 'completed' && expDet._id.status == 'Recebido')) {
+            if ((status == 'all') || (status == 'completed' && expDet._id.status == 'Pago')) {
                 accountBalance -= round2d(expDet.total);
             }
         }
