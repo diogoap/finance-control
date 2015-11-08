@@ -29,7 +29,7 @@
 			</div>
             <label for="incomeAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" gt-than="0" name="incomeAmount" ng-model="income.amount" ng-readonly="_hasDetail" class="form-control"/>
+				<input numeric decimals="2" gt-than="0" name="incomeAmount" ng-model="income.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(incomeForm.incomeAmount.$dirty && incomeForm.incomeAmount.$invalid) || (submitted && incomeForm.incomeAmount.$invalid)">
 					<small class="error" ng-show="incomeForm.incomeAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>
@@ -62,7 +62,7 @@
 			</div>
 			<label for="incomeAmountReceived" class="col-sm-2 control-label">Valor recebido</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" gte-than="0" ng-required="income.status =='Recebido'" gt-than-zero-opt="{{income.status == 'Recebido'}}" name="incomeAmountReceived" ng-model="income.amountReceived" ng-readonly="_hasDetail" class="form-control"/>
+				<input numeric decimals="2" gte-than="0" ng-required="income.status =='Recebido'" gt-than-zero-opt="{{income.status == 'Recebido'}}" name="incomeAmountReceived" ng-model="income.amountReceived" ng-readonly="_hasDetail" class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(incomeForm.incomeAmountReceived.$dirty && incomeForm.incomeAmountReceived.$invalid) || (submitted && incomeForm.incomeAmountReceived.$invalid)">
 					<small class="error" ng-show="incomeForm.incomeAmountReceived.$error.gtThanZeroOpt || incomeForm.incomeAmountReceived.$error.gteThan">O campo Valor recebido é obrigatório.</small>
 				</div>
@@ -91,7 +91,7 @@
         <p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
-        
+
 		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
 	</div>
 

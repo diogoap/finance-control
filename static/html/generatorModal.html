@@ -18,7 +18,7 @@
 			</div>
             <label for="generatorParametersInstallments" class="col-sm-2 control-label">Número de parcelas</label>
 			<div class="col-sm-2">
-				<input numeric decimals="0" max="999" gt-than="0" name="generatorParametersInstallments" ng-model="generatorParameters.installments"  class="form-control"/>
+				<input numeric decimals="0" max="999" gt-than="0" name="generatorParametersInstallments" ng-model="generatorParameters.installments"  class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersInstallments.$dirty && generatorForm.generatorParametersInstallments.$invalid) || (submitted && generatorForm.generatorParametersInstallments.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersInstallments.$error.gtThan">O campo Número de parcelas é obrigatório.</small>
 				</div>
@@ -35,7 +35,7 @@
 			</div>
             <label ng-show="generatorParameters.dueDateType == 'DiaEspecifico'" for="generatorParametersdueDateTypeDay" class="col-sm-2 control-label">Dia</label>
 			<div class="col-sm-2" ng-show="generatorParameters.dueDateType == 'DiaEspecifico'">
-				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'" gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}" name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay" class="form-control"/>
+				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'" gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}" name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay" class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersdueDateTypeDay.$dirty && generatorForm.generatorParametersdueDateTypeDay.$invalid) || (submitted && generatorForm.generatorParametersdueDateTypeDay.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersdueDateTypeDay.$error.gtThanZeroOpt">O campo Dia é obrigatório.</small>
 				</div>
@@ -45,7 +45,7 @@
         <div class="form-group form-group-sm">
             <label for="generatorParametersAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" gt-than="0" name="generatorParametersAmount" ng-model="generatorParameters.amount" class="form-control"/>
+				<input numeric decimals="2" gt-than="0" name="generatorParametersAmount" ng-model="generatorParameters.amount" class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersAmount.$dirty && generatorForm.generatorParametersAmount.$invalid) || (submitted && generatorForm.generatorParametersAmount.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>

@@ -17,7 +17,7 @@
 		<div class="form-group form-group-sm">
 			<label for="expenseAmount" class="col-sm-3 control-label">Valor</label>
 			<div class="col-sm-9">
-				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control"/>
+				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(expenseDetailForm.expenseAmount.$dirty && expenseDetailForm.expenseAmount.$invalid) || (submitted && expenseDetailForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>
@@ -54,7 +54,7 @@
         <p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
-        
+
 		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
 	</div>
 
