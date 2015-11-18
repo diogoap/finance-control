@@ -190,7 +190,7 @@ module.exports = {
 
         queryFilter.user_id = userId;
 
-        var expensesPromisse = Expenses.find(queryFilter).sort('dueDate').exec();
+        var expensesPromisse = Expenses.find(queryFilter).sort({ dueDate: 1, description: 1 }).exec();
         expensesPromisse.then(function (expenses) {
 
             var categoriesPromisse = Categories.find().exec();
