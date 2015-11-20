@@ -15,7 +15,12 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 	}
 	else
 	{
-		$scope.screenTitle = 'Editar detalhe';
+		if (action == 'clone') {
+			$scope.screenTitle = 'Clonar detalhe';
+		} else {
+			$scope.screenTitle = 'Editar detalhe';
+		}
+
 		$scope.expenseDetail = {
 			_id: expenseDetail._id,
 			description: expenseDetail.description,
@@ -25,6 +30,12 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			category_id: expenseDetail.category_id,
 			_category: expenseDetail._category,
 			status: expenseDetail.status };
+
+		if (action == 'clone') {
+			$scope.expenseDetail._id = null;
+			$scope.expenseDetail.description += ' - Cópia';
+		}
+
 		$scope.loading = false;
 	};
 

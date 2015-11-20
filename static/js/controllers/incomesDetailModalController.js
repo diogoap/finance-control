@@ -15,7 +15,12 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 	}
 	else
 	{
-		$scope.screenTitle = 'Editar detalhe';
+		if (action == 'clone') {
+			$scope.screenTitle = 'Clonar detalhe';
+		} else {
+			$scope.screenTitle = 'Editar detalhe';
+		}
+
 		$scope.incomeDetail = {
 			_id: incomeDetail._id,
 			description: incomeDetail.description,
@@ -25,6 +30,12 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 			category_id: incomeDetail.category_id,
 			_category: incomeDetail._category,
 			status: incomeDetail.status };
+
+		if (action == 'clone') {
+			$scope.incomeDetail._id = null;
+			$scope.incomeDetail.description += ' - Cópia';
+		}
+
 		$scope.loading = false;
 	};
 

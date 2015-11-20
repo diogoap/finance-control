@@ -9,24 +9,25 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
  	$scope.submitted = false;
 
  	$scope.columns = [
-		{ name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+		{ name: 'Ações', type: 'string', width:'110', minWidth:'110', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
 			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
+			'<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>',
 			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
 		},
 		{
-			name: 'Descrição', field: 'description', type: 'string', width:'28%', enableColumnMenu: false,
+			name: 'Descrição', field: 'description', type: 'string', width:'26%', enableColumnMenu: false,
 			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 		},
-		{ name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
+		{ name: 'Valor', field: 'amount', type: 'number',  width: '11%', enableColumnMenu: false,
 			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 			aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
 		},
 		{ name: 'Conta', field: '_account.name', type: 'string', width:'20%', enableColumnMenu: false },
 		{ name: 'Categoria', field: '_category.name', type: 'string', width:'20%', enableColumnMenu: false },
-		{ name: 'Situação', field: 'status', type: 'string', width:'11%', enableColumnMenu: false,
+		{ name: 'Situação', field: 'status', type: 'string', width:'10%', enableColumnMenu: false,
 			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
 		}
 	];
@@ -177,7 +178,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
     	});
 
 		modalInstance.result.then(function (expenseDetail) {
-	    	if (expenseDetail._action == 'new') {
+	    	if ((expenseDetail._action == 'new') || (expenseDetail._action == 'clone')) {
 	    		$scope.expense.detail.push(expenseDetail);
 	    	} else if (expenseDetail._action == 'edit') {
 				// Replace exising detail object with the new one
