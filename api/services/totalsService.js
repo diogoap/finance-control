@@ -6,6 +6,7 @@ var Categories = require('../models/categoriesModel');
 var Incomes = require('../models/incomesModel');
 var Expenses = require('../models/expensesModel');
 var Transfers = require('../models/transfersModel');
+var Loans = require('../models/loansModel');
 
 function round2d(num) {
     return Math.round(num * 100) / 100;
@@ -93,7 +94,27 @@ function getData(userId, dateFilter, callbackSuccess, callbackError) {
                         transfersTargetTotal.then(function(transfersTarget) {
                             totals.transfersTarget = transfersTarget;
 
-                            callbackSuccess(totals);
+                            //Loans transactions
+                            var loansTransactionsTotal = Loans.aggregate( [
+                                { $match: { transactionDate: dateFilter, user_id: userId, status: 'Em aberto' } },
+                                { $group: { _id: { account_id: "$account_id", type: '$type' }, total: { $sum: "$amount" } } }
+                            ]).exec();
+
+                            loansTransactionsTotal.then(function(loansTransactions) {
+                                totals.loansTransactions = loansTransactions;
+
+                                //Loans payments
+                                var loansPaymentsTotal = Loans.aggregate( [
+                                    { $match: { dueDate: dateFilter, user_id: userId } },
+                                    { $group: { _id: { account_id: "$account_id", type: '$type', status: '$status' }, total: { $sum: "$amount" } } }
+                                ]).exec();
+
+                                loansPaymentsTotal.then(function(loansPayments) {
+                                    totals.loansPayments = loansPayments;
+
+                                    callbackSuccess(totals);
+                                });
+                            });
                         });
                     });
                 });
@@ -147,11 +168,32 @@ function calculateTotals(totals, status, previous) {
         }
     });
 
+    //Loans
+    obj.totalLoans = 0;
+    totals.loansTransactions.forEach(function (loan) {
+        if (loan._id.type == 'Concedido') {
+            obj.totalLoans -= round2d(loan.total);
+        } else {
+            obj.totalLoans += round2d(loan.total);
+        }
+    });
+
+    if (status == 'all') {
+        totals.loansPayments.forEach(function (loan) {
+            if (loan._id.type == 'Concedido') {
+                obj.totalLoans += round2d(loan.total);
+            } else {
+                obj.totalLoans -= round2d(loan.total);
+            }
+        });
+    }
+
     //Actual Balance
     obj.totalIncomes = round2d(obj.totalIncomes);
     obj.totalExpenses = round2d(obj.totalExpenses);
     obj.partialBalance = round2d(obj.totalIncomes - obj.totalExpenses);
-    obj.actualBalance = round2d(obj.previousBalance + obj.totalIncomes - obj.totalExpenses);
+    obj.totalLoans = round2d(obj.totalLoans);
+    obj.actualBalance = round2d(obj.previousBalance + obj.totalIncomes - obj.totalExpenses + obj.totalLoans);
 
     return obj;
 }
@@ -221,6 +263,29 @@ function getAccountBalance(totals, account, status) {
             accountBalance += round2d(transTar.total);
         }
     });
+
+    //Loans
+    totals.loansTransactions.forEach(function (loan) {
+        if (String(loan._id.account_id).valueOf() === String(account._id).valueOf()) {
+            if (loan._id.type == 'Concedido') {
+                accountBalance -= round2d(loan.total);
+            } else {
+                accountBalance += round2d(loan.total);
+            }
+        }
+    });
+
+    if (status == 'all') {
+        totals.loansPayments.forEach(function (loan) {
+            if (String(loan._id.account_id).valueOf() === String(account._id).valueOf()) {
+                if (loan._id.type == 'Concedido') {
+                    accountBalance += round2d(loan.total);
+                } else {
+                    accountBalance -= round2d(loan.total);
+                }
+            }
+        });
+    }
 
     return round2d(accountBalance);
 }

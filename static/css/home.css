@@ -1,0 +1,17 @@
+.totals-list {
+	margin-bottom: 0px;
+}
+
+.categories-list {
+    font-size: 12px;
+	height: 25px;
+	max-height: 25px;
+	line-height: 25px
+}
+
+.home-box {
+	height:250px;
+	background-color:#f8f8f8;
+	border-color: #e7e7e7;
+	overflow:auto;
+}
