@@ -30,6 +30,7 @@ require('./api/generatorApi.js')(app, url);
 require('./api/transfersApi.js')(app, url);
 require('./api/totalsApi.js')(app, url);
 require('./api/usersApi.js')(app, url);
+require('./api/loansApi.js')(app, url);
 
 // Static pages requests =======================================================
 app.use("/", function(req, res, next){
