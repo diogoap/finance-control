@@ -11,15 +11,17 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         { name: 'Data', field: 'date', type: 'date', width:'12%', enableColumnMenu: false,
-            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
-        },
-        { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
-            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
-        },
-        {
-            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false,
+            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align',
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'            
+        },
+        { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+            aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
+        },
+        {
+            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false
         },
         { name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
     ];

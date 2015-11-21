@@ -24,7 +24,9 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
         { name: 'Valor', field: 'amount', type: 'number',  width: '10%', enableColumnMenu: false,
-            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+            aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         },
         { name: 'Conta', field: '_account.name', type: 'string', width:'17%', enableColumnMenu: false },
         { name: 'Tipo', field: 'type', type: 'string', width:'9%', enableColumnMenu: false,
