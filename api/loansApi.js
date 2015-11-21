@@ -60,14 +60,25 @@ module.exports = function(app, url) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        loansService.edit(req.params.id, req.body,
-            function() {
-                res.json('OK');
-            },
-            function(error, status) {
-                utils.sendError(res, error, status);
-            }
-        );
+        if (query.pay == 'true') {
+            loansService.pay(req.params.id,
+                function() {
+                    res.json('OK');
+                },
+                function(error, status) {
+                    utils.sendError(res, error, status);
+                }
+            );
+        } else {
+            loansService.edit(req.params.id, req.body,
+                function() {
+                    res.json('OK');
+                },
+                function(error, status) {
+                    utils.sendError(res, error, status);
+                }
+            );
+        }
     })
 
 }

@@ -16,7 +16,11 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
         { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
-        { name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false },
+        {
+            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false,
+            aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'            
+        },
         { name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
     ];
 

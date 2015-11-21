@@ -64,3 +64,67 @@ app.directive('notEquals', [function() {
         link: link
     };
 }]);
+
+app.directive('gteThanDateControl', [function() {
+    var link = function(scope, element, attributes, ngModel) {
+        var validate = function(modelValue) {
+            var comparisonModel = attributes.gteThanDateControl;
+
+            if(!modelValue || !comparisonModel){
+                ngModel.$setValidity('gteThanDateControl', true);
+            }
+
+            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDay();
+
+            var compModel = comparisonModel.replace(/"/g, "");
+            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDay();
+
+            ngModel.$setValidity('gteThanDateControl', modelDate >= compModelDate);
+            return modelValue;
+        };
+
+        ngModel.$parsers.unshift(validate);
+        ngModel.$formatters.push(validate);
+
+        attributes.$observe('gteThanDateControl', function(comparisonModel){
+            return validate(ngModel.$modelValue);
+        });
+    };
+
+    return {
+        require: 'ngModel',
+        link: link
+    };
+}]);
+
+app.directive('lteThanDateControl', [function() {
+    var link = function(scope, element, attributes, ngModel) {
+        var validate = function(modelValue) {
+            var comparisonModel = attributes.gteThanDateControl;
+
+            if(!modelValue || !comparisonModel){
+                ngModel.$setValidity('gteThanDateControl', true);
+            }
+
+            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDay();
+
+            var compModel = comparisonModel.replace(/"/g, "");
+            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDay();
+
+            ngModel.$setValidity('gteThanDateControl', modelDate <= compModelDate);
+            return modelValue;
+        };
+
+        ngModel.$parsers.unshift(validate);
+        ngModel.$formatters.push(validate);
+
+        attributes.$observe('gteThanDateControl', function(comparisonModel){
+            return validate(ngModel.$modelValue);
+        });
+    };
+
+    return {
+        require: 'ngModel',
+        link: link
+    };
+}]);

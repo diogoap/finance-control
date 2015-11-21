@@ -143,6 +143,27 @@ module.exports = {
         } else {
             callbackError(val.errors, 400)
         }
+    },
+
+    pay: function(id, callbackSuccess, callbackError) {
+        var loanFindPromisse = Loans.findById(id);
+        loanFindPromisse.then(function(loan) {
+            if (loan != undefined) {
+                loan.status = 'Quitado';
+                loan.save(function(error, raw) {
+                     if (error) {
+                         callbackError(error, 400)
+                     };
+
+                     callbackSuccess();
+                });
+            } else {
+                callbackError('not found', 404);
+            };
+        })
+        .then(null, function(error) {
+            callbackError(error, 400);
+        });
     }
 
 }
