@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var accountSchema = new Schema({
 	name: String,
 	initialBalance: { type: Number, default: 0 },
+	order: { type: Number, default: 0 },
 	user_id: String
 });
 

@@ -10,9 +10,10 @@ var accountSchema = {
         "name": { "type": "string", "minLength": 3, "maxLength": 100 },
         "initialBalance": { "type": "double" },
         "actualBalance": { "type": "double" },
+        "order": { "type": "integer", "minimum": 1, "maximum": 999 },
         "user_id": { "type": "string" }
     },
-    "required": [ "name", "user_id" ]
+    "required": [ "name", "order", "user_id" ]
 };
 
 module.exports = {
@@ -35,7 +36,7 @@ module.exports = {
     get: function(userId, callbackSuccess, callbackError) {
         var queryFilter = { user_id: userId };
 
-        var accountsPromisse = Accounts.find(queryFilter).sort('name').exec();
+        var accountsPromisse = Accounts.find(queryFilter).sort('order').exec();
 
         accountsPromisse.then(function (accounts) {
             callbackSuccess(accounts);

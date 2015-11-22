@@ -17,7 +17,7 @@ function getCommonEntries(userId, callbackSuccess, callbackError) {
     var queryFilterUser = { user_id: userId };
 
     //Accounts
-    var accountsPromisse = Accounts.find(queryFilterUser).sort('name').exec();
+    var accountsPromisse = Accounts.find(queryFilterUser).sort('order').exec();
     accountsPromisse.then(function (accounts) {
         entries.accounts = accounts;
 
