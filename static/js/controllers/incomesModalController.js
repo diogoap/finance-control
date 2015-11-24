@@ -80,7 +80,7 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 			});
 	};
 
-	var filter = 'type=Receita';
+	var filter = 'type=Receita&enabled=true';
 	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
@@ -91,7 +91,8 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 			$scope.loading = false;
 		});
 
-	Accounts.get()
+	var filter = 'enabled=true';
+	Accounts.get(filter)
 		.success(function(data) {
 			$scope.accounts = data;
 			$scope.loading = false;

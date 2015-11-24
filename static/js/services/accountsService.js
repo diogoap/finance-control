@@ -6,9 +6,9 @@ angular.module('accountsService', [])
 		return {
 			getById : function(id) {
 				return $http.get('/api/accounts/' + id);
-			},			
-			get : function() {
-				return $http.get('/api/accounts');
+			},
+			get : function(filter) {
+				return $http.get('/api/accounts?' + filter);
 			},
 			create : function(accountData) {
 				return $http.post('/api/accounts', accountData);

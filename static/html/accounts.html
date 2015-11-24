@@ -1,14 +1,29 @@
 <div class="container-fluid" ng-controller="accountsController">
 	<div class="row">
-		<div class="col-sm-12">
-			<div class="text-center screen-title">
-				<h4>Cadastro de contas</h4>
+		<div class="text-center screen-title">
+			<h4>Cadastro de contas</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group form-group-sm">
+			<div class="col-sm-2">
+				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar conta</button>
 			</div>
+			<div class="col-sm-4">
+				<label>
+					<input type="checkbox" name="accountListDisabledAccounts" ng-model="listDisabledAccounts" ng-click="getAccounts()"/> Listar contas inativas?
+				</label>
+			</div>
+		</div>
+	</div>
 
-			<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar conta</button>
-
-			<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
-
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group form-group-sm">
+				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
+			</div>
+			
 			<div class="loading-box" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-5x"></span>
 			</div>

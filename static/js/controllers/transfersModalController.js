@@ -29,7 +29,8 @@ function transfersModalController($scope, $modalInstance, Utils, Transfers, Acco
 			});
 	};
 
-	Accounts.get()
+	var filter = 'enabled=true';
+	Accounts.get(filter)
 		.success(function(data) {
 			$scope.accounts = data;
 			$scope.loading = false;

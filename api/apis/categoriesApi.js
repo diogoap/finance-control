@@ -1,14 +1,14 @@
 'use strict';
 
-var utils = require('./services/utilsService');
-var transfersService = require('./services/transfersService');
+var utils = require('../services/utilsService');
+var categoriesService = require('../services/categoriesService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/transfers/:id', utils.ensureAuth, function(req, res) {
-        var transfer = transfersService.getById(req.params.id,
-            function(transfer) {
-                res.json(transfer);
+    app.get('/api/categories/:id', utils.ensureAuth, function(req, res) {
+        var category = categoriesService.getById(req.params.id,
+            function(category) {
+                res.json(category);
             },
             function(error, status) {
                 utils.sendError(res, error, status);
@@ -16,15 +16,15 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/transfers', utils.ensureAuth, function(req, res) {
+    app.get('/api/categories', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        transfersService.get(
+        categoriesService.get(
             utils.getUserId(req),
             query,
-            function(transfers) {
-                res.json(transfers);
+            function(categories) {
+                res.json(categories);
             },
             function(error, status) {
                 utils.sendError(res, error, status);
@@ -32,11 +32,11 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/transfers', utils.ensureAuth, function(req, res) {
-        transfersService.create(
+    app.post('/api/categories', utils.ensureAuth, function(req, res) {
+        categoriesService.create(
             utils.getUserId(req),
             req.body,
-            function(transfer) {
+            function(categories) {
                 res.json('OK');
             },
             function(error, status) {
@@ -45,8 +45,8 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/transfers/:id', utils.ensureAuth, function(req, res) {
-        transfersService.delete( { _id : req.params.id },
+    app.delete('/api/categories/:id', utils.ensureAuth, function(req, res) {
+        categoriesService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
             },
@@ -56,12 +56,9 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/transfers/:id', utils.ensureAuth, function(req, res) {
-        var url_parts = url.parse(req.url, true);
-        var query = url_parts.query;
-
-        transfersService.edit(req.params.id, req.body,
-            function() {
+    app.patch('/api/categories/:id', utils.ensureAuth, function(req, res) {
+        categoriesService.edit(req.params.id, req.body,
+            function(categories) {
                 res.json('OK');
             },
             function(error, status) {

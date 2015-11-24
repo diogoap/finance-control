@@ -1,7 +1,7 @@
 'use strict';
 
-var utils = require('./services/utilsService');
-var totalsService = require('./services/totalsService');
+var utils = require('../services/utilsService');
+var totalsService = require('../services/totalsService');
 
 module.exports = function(app, url) {
 

@@ -9,7 +9,7 @@ function accountsModalController($scope, $modalInstance, Utils, Accounts, accoun
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar conta';
-		$scope.account = { initialBalance: 0 };
+		$scope.account = { initialBalance: 0, enabled: true };
 		$scope.loading = false;
 	}
 	else

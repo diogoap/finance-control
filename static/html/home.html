@@ -71,7 +71,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Contas</h4>
 			<table class="table table-condensed">
-				<tr ng-repeat="account in totals.current.completed.accounts">
+				<tr ng-repeat="account in totals.current.completed.accounts | filter: { enabled: true }">
 				   <td class="text-left td-sm">{{account.name}}:</td>
 				   <td class="text-right td-sm">{{account.actualBalance | number:2}}</td>
 			    </tr>
@@ -82,7 +82,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Receitas</h4>
 			<table class="table table-condensed categories-list">
-				<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita' }" ng-if="category.totalAmount > 0">
+				<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
 				   <td class="text-left td-sm">{{category.name}}:</td>
 				   <td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
 			    </tr>
@@ -93,7 +93,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Despesas</h4>
 			<table class="table table-condensed categories-list">
-				<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa' }" ng-if="category.totalAmount > 0">
+				<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
 				   <td class="text-left td-sm">{{category.name}}:</td>
 				   <td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
 			    </tr>
@@ -141,7 +141,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Contas</h4>
 			<table class="table table-condensed">
-				<tr ng-repeat="account in totals.current.all.accounts">
+				<tr ng-repeat="account in totals.current.all.accounts | filter: { enabled: true }">
 				   <td class="text-left td-sm">{{account.name}}:</td>
 				   <td class="text-right td-sm">{{account.actualBalance | number:2}}</td>
 			    </tr>
@@ -152,7 +152,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Receitas</h4>
 			<table class="table table-condensed categories-list">
-				<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Receita'}" ng-if="category.totalAmount > 0">
+				<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
 				   <td class="text-left td-sm">{{category.name}}:</td>
 				   <td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
 			    </tr>
@@ -163,7 +163,7 @@
 		<div class="col-sm-3 home-box">
 			<h4>Despesas</h4>
 			<table class="table table-condensed categories-list">
-				<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Despesa' }" ng-if="category.totalAmount > 0">
+				<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
 				   <td class="text-left td-sm">{{category.name}}:</td>
 				   <td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
 			    </tr>

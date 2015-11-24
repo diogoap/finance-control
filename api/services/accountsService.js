@@ -11,9 +11,10 @@ var accountSchema = {
         "initialBalance": { "type": "double" },
         "actualBalance": { "type": "double" },
         "order": { "type": "integer", "minimum": 1, "maximum": 999 },
+        "enabled": { "type": "boolean" },
         "user_id": { "type": "string" }
     },
-    "required": [ "name", "order", "user_id" ]
+    "required": [ "name", "order", "enabled", "user_id" ]
 };
 
 module.exports = {
@@ -33,8 +34,14 @@ module.exports = {
         });
     },
 
-    get: function(userId, callbackSuccess, callbackError) {
-        var queryFilter = { user_id: userId };
+    get: function(userId, filter, callbackSuccess, callbackError) {
+        var queryFilter = {};
+
+        if ((filter != undefined) && (filter.enabled != undefined)) {
+            queryFilter.enabled = filter.enabled;
+        }
+
+        queryFilter.user_id = userId;
 
         var accountsPromisse = Accounts.find(queryFilter).sort('order').exec();
 

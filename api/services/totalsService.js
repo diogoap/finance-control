@@ -293,7 +293,7 @@ function getAccountBalance(totals, account, status) {
 function calculateAccountsBalace(accountList, totals, status, previousAccountList) {
     var newAccounts = [];
     accountList.forEach(function (account) {
-        var newAccount = { _id: account._id, name: account.name };
+        var newAccount = { _id: account._id, name: account.name, enabled: account.enabled };
         newAccount.initialBalance = getAccountPreviousBalance(account, previousAccountList);
         newAccount.actualBalance = getAccountBalance(totals, newAccount, status);
         newAccounts.push(newAccount);
@@ -343,7 +343,7 @@ function getCategoryTotal(totals, category, status) {
 function calculateCategoriesTotal(categoriesList, totals, status) {
     var newCategories = [];
     categoriesList.forEach(function (cat) {
-        var newCategory = { _id: cat._id, name: cat.name, type: cat.type };
+        var newCategory = { _id: cat._id, name: cat.name, type: cat.type, enabled: cat.enabled };
         newCategory.totalAmount = getCategoryTotal(totals, cat, status);
         newCategories.push(newCategory);
     });

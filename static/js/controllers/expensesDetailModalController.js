@@ -39,7 +39,7 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 		$scope.loading = false;
 	};
 
-	var filter = 'type=Despesa';
+	var filter = 'type=Despesa&enabled=true';
 	Categories.get(filter)
 		.success(function(data) {
 			$scope.categories = data;
@@ -50,7 +50,8 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			$scope.loading = false;
 		});
 
-	Accounts.get()
+	var filter = 'enabled=true';
+	Accounts.get(filter)
 		.success(function(data) {
 			$scope.accounts = data;
 			$scope.loading = false;

@@ -1,14 +1,14 @@
 'use strict';
 
-var utils = require('./services/utilsService');
-var expensesService = require('./services/expensesService');
+var utils = require('../services/utilsService');
+var loansService = require('../services/loansService');
 
 module.exports = function(app, url) {
 
-    app.get('/api/expenses/:id', utils.ensureAuth, function(req, res) {
-        var expense = expensesService.getById(req.params.id,
-            function(expense) {
-                res.json(expense);
+    app.get('/api/loans/:id', utils.ensureAuth, function(req, res) {
+        var loan = loansService.getById(req.params.id,
+            function(loan) {
+                res.json(loan);
             },
             function(error, status) {
                 utils.sendError(res, error, status);
@@ -16,15 +16,15 @@ module.exports = function(app, url) {
         );
     })
 
-    app.get('/api/expenses', utils.ensureAuth, function(req, res) {
+    app.get('/api/loans', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        expensesService.get(
+        loansService.get(
             utils.getUserId(req),
             query,
-            function(expenses) {
-                res.json(expenses);
+            function(loans) {
+                res.json(loans);
             },
             function(error, status) {
                 utils.sendError(res, error, status);
@@ -32,11 +32,11 @@ module.exports = function(app, url) {
         );
     })
 
-    app.post('/api/expenses', utils.ensureAuth, function(req, res) {
-        expensesService.create(
+    app.post('/api/loans', utils.ensureAuth, function(req, res) {
+        loansService.create(
             utils.getUserId(req),
             req.body,
-            function(expense) {
+            function(loan) {
                 res.json('OK');
             },
             function(error, status) {
@@ -45,8 +45,8 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/expenses/:id', utils.ensureAuth, function(req, res) {
-        expensesService.delete( { _id : req.params.id },
+    app.delete('/api/loans/:id', utils.ensureAuth, function(req, res) {
+        loansService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
             },
@@ -56,12 +56,12 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/expenses/:id', utils.ensureAuth, function(req, res) {
+    app.patch('/api/loans/:id', utils.ensureAuth, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         if (query.pay == 'true') {
-            expensesService.pay(req.params.id,
+            loansService.pay(req.params.id,
                 function() {
                     res.json('OK');
                 },
@@ -70,7 +70,7 @@ module.exports = function(app, url) {
                 }
             );
         } else {
-            expensesService.edit(req.params.id, req.body,
+            loansService.edit(req.params.id, req.body,
                 function() {
                     res.json('OK');
                 },

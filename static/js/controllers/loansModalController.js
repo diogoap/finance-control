@@ -42,7 +42,8 @@ function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, lo
 			});
 	};
 
-	Accounts.get()
+	var filter = 'enabled=true';
+	Accounts.get(filter)
 		.success(function(data) {
 			$scope.accounts = data;
 			$scope.loading = false;

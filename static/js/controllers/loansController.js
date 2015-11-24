@@ -48,16 +48,12 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
         }
     };
 
-    $scope.getStatusFilter = function() {
+    $scope.getFilter = function() {
         if ($scope.listPaidLoans == false) {
             return 'status=Em aberto';
         }
         return undefined;
 	}
-
-	$scope.filter = function($event) {
-		$scope.getLoans();
-  	};
 
   	$scope.openModal = function (loanId, action) {
     	var modalInstance = $modal.open({
@@ -128,7 +124,7 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
     $scope.getLoans = function() {
 		$scope.loading = true;
 
-		var filter = $scope.getStatusFilter();
+		var filter = $scope.getFilter();
 
 		Loans.get(filter)
 			.success(function(data) {

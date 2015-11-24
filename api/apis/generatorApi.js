@@ -1,7 +1,7 @@
 'use strict';
 
-var utils = require('./services/utilsService');
-var generatorService = require('./services/generatorService');
+var utils = require('../services/utilsService');
+var generatorService = require('../services/generatorService');
 
 module.exports = function(app, url) {
 

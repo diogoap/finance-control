@@ -21,16 +21,16 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(passport.initialize());
 
 // APIs requests ===============================================================
-require('./api/authApi.js')(app, url, passport, GoogleStrategy);
-require('./api/categoriesApi.js')(app, url);
-require('./api/accountsApi.js')(app, url);
-require('./api/expensesApi.js')(app, url);
-require('./api/incomesApi.js')(app, url);
-require('./api/generatorApi.js')(app, url);
-require('./api/transfersApi.js')(app, url);
-require('./api/totalsApi.js')(app, url);
-require('./api/usersApi.js')(app, url);
-require('./api/loansApi.js')(app, url);
+require('./api/apis/authApi.js')(app, url, passport, GoogleStrategy);
+require('./api/apis/categoriesApi.js')(app, url);
+require('./api/apis/accountsApi.js')(app, url);
+require('./api/apis/expensesApi.js')(app, url);
+require('./api/apis/incomesApi.js')(app, url);
+require('./api/apis/generatorApi.js')(app, url);
+require('./api/apis/transfersApi.js')(app, url);
+require('./api/apis/totalsApi.js')(app, url);
+require('./api/apis/usersApi.js')(app, url);
+require('./api/apis/loansApi.js')(app, url);
 
 // Static pages requests =======================================================
 app.use("/", function(req, res, next){

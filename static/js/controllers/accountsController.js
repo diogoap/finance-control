@@ -11,15 +11,19 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width:'50%', enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width:'46%', enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '25%', enableColumnMenu: false,
+        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '24%', enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
-        { name: 'Ordem', field: 'order', type: 'number',  width: '15%', enableColumnMenu: false,
-            cellFilter: 'number:0', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
+        { name: 'Ordem', field: 'order', type: 'number',  width: '10%', enableColumnMenu: false,
+            cellFilter: 'number:0', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        },
+        { name: 'Ativa?', field: 'enableed', type: 'string', width:'10%', enableColumnMenu: false,
+            cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
+            headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
@@ -33,6 +37,13 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
           $scope.gridApi = gridApi;
         }
     };
+
+    $scope.getFilter = function() {
+        if ($scope.listDisabledAccounts == false) {
+            return 'enabled=true';
+        }
+        return undefined;
+	}
 
   	$scope.openModal = function (accountId, action) {
     	var modalInstance = $modal.open({
@@ -80,7 +91,11 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
     };
 
 	$scope.getAccounts = function() {
-		Accounts.get()
+        $scope.loading = true;
+
+		var filter = $scope.getFilter();
+
+        Accounts.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
 				$scope.loading = false;
@@ -136,5 +151,6 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 	// initialization
     $scope.Utils = Utils;
     $scope.alerts = [];
+    $scope.listDisabledAccounts = false;
 	$scope.getAccounts();
 });

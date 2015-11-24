@@ -9,9 +9,10 @@ var categorySchema = {
     "properties": {
         "name": { "type": "string", "minLength": 3, "maxLength": 100 },
         "type": { "type": "string", "enum": [ "Receita", "Despesa" ] },
+        "enabled": { "type": "boolean" },
         "user_id": { "type": "string" }
     },
-    "required": [ "name", "type", "user_id" ]
+    "required": [ "name", "type", "enabled", "user_id" ]
 };
 
 module.exports = {
@@ -33,11 +34,16 @@ module.exports = {
 
     get: function(userId, filter, callbackSuccess, callbackError) {
         var queryFilter = {};
-        queryFilter.user_id = userId;
 
         if ((filter != undefined) && (filter.type != undefined)) {
             queryFilter.type = filter.type;
         }
+
+        if ((filter != undefined) && (filter.enabled != undefined)) {
+            queryFilter.enabled = filter.enabled;
+        }
+
+        queryFilter.user_id = userId;
 
         var categoriesPromisse = Categories.find(queryFilter).sort('name').exec();
 

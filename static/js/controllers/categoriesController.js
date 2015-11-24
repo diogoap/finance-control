@@ -11,11 +11,15 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width:'60%', enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width:'55%', enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Tipo', field: 'type', type: 'string', width:'30%', enableColumnMenu: false }
+        { name: 'Tipo', field: 'type', type: 'string', width:'25%', enableColumnMenu: false },
+        { name: 'Ativa?', field: 'enableed', type: 'string', width:'10%', enableColumnMenu: false,
+            cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
+            headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        }
     ];
 
  	$scope.gridOptions = {
@@ -28,6 +32,13 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
           $scope.gridApi = gridApi;
         }
     };
+
+    $scope.getFilter = function() {
+        if ($scope.listDisabledCategories == false) {
+            return 'enabled=true';
+        }
+        return undefined;
+	}
 
   	$scope.openModal = function (categoryId, action) {
     	var modalInstance = $modal.open({
@@ -75,7 +86,11 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
     };
 
 	$scope.getCategories = function() {
-		Categories.get()
+        $scope.loading = true;
+
+		var filter = $scope.getFilter();
+
+        Categories.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
 				$scope.loading = false;
@@ -131,5 +146,6 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 	// initialization
     $scope.Utils = Utils;
     $scope.alerts = [];
+    $scope.listDisabledCategories = false;
 	$scope.getCategories();
 });

@@ -1,7 +1,7 @@
 'use strict';
 
-var utils = require('./services/utilsService');
-var usersService = require('./services/usersService');
+var utils = require('../services/utilsService');
+var usersService = require('../services/usersService');
 var googleClientId = process.env.GOOGLE_CLIENT_ID;
 var googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 var googleCallbackURL = process.env.GOOGLE_CALLBACK_URL;
