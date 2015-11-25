@@ -184,12 +184,27 @@ module.exports = {
         var queryFilter = {};
 
         if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
-            queryFilter.dueDate = { $gte: filter.dueDateBegin, $lt: filter.dueDateEnd };
+            var dateBegin = new Date(filter.dueDateBegin);
+            var dateEnd = new Date(filter.dueDateEnd);
+
+            queryFilter.dueDate = { $gte: dateBegin, $lt: dateEnd };
         }
 
         queryFilter.user_id = userId;
 
-        var incomesPromisse = Incomes.find(queryFilter).sort('dueDate').exec();
+        var incomesPromisse = Incomes.aggregate( [
+            { $match: { dueDate: queryFilter.dueDate, user_id: queryFilter.user_id } },
+            {
+                $project : {
+                     description: "$description", dueDate: "$dueDate",
+                     amount: "$amount", category_id: "$category_id", account_id: "$account_id", amountReceived: "$amountReceived",
+                     status: "$status", notes: "$notes", isLatePayment: "$isLatePayment", user_id: "$user_id", detail: "$detail",
+                     dueDateOnlyDate: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } }
+                 }
+             },
+             { $sort: { dueDateOnlyDate: 1, description: 1 } }
+        ]).exec();
+
         incomesPromisse.then(function (incomes) {
 
             var categoriesPromisse = Categories.find().exec();
