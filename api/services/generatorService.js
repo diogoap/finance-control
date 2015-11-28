@@ -75,9 +75,9 @@ function createItems(params) {
 
         var y = initialDate.getFullYear(), m = initialDate.getMonth();
         if (params.dueDateType == 'PrimeiroDia') {
-            item.dueDate = new Date(y, m, 1);
+            item.dueDate = new Date(Date.UTC(y, m, 1, 12, 0, 0));
         } else if (params.dueDateType == 'UltimoDia') {
-            item.dueDate = new Date(y, m + 1, 0);
+            item.dueDate = new Date(Date.UTC(y, m + 1, 0, 12, 0, 0));
         } else {
             var lastDay = new Date(y, m + 1, 0).getDate();
 
@@ -86,7 +86,7 @@ function createItems(params) {
                 dueDateDay = lastDay;
             }
 
-            item.dueDate = new Date(y, m, dueDateDay);
+            item.dueDate = new Date(Date.UTC(y, m, dueDateDay, 12, 0, 0));
         }
 
         initialDate = new Date(y, m + 1, 1);
