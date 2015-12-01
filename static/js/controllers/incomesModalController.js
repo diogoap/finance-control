@@ -2,6 +2,7 @@
 
 function incomesModalController($scope, $modal, $modalInstance, uiGridConstants, Utils, Incomes, Categories, Accounts, incomeId, action) {
 	$scope.loading = true;
+	$scope.income = {};
 	$scope.Utils = Utils;
 	$scope.alerts = [];
 	$scope.action = action;
@@ -10,9 +11,9 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 
  	$scope.columns = [
 		{ name: 'Ações', type: 'string', width:'110', minWidth:'110', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>',
+			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
+			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>',
 			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
 		},
 		{
@@ -161,16 +162,20 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 		}
 	}
 
-  	$scope.openDetail = function (incomeDetailId, action) {
+  	$scope.openDetail = function (entity, action) {
 		var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/incomesDetailModal.html',
       		controller: incomesDetailModalController,
       		resolve: {
 		        incomeDetail: function () {
-					// Get object for selected detail
-					var selDetail = $.grep($scope.income.detail, function(e){ return e._id == incomeDetailId });
-					return selDetail[0];
+					if (entity != undefined) {
+						// Get object for selected detail
+						var selDetail = $.grep($scope.income.detail, function(e){ return e.$$hashKey == entity.$$hashKey });
+						return selDetail[0];
+					} else {
+						return null;
+					}
         		},
         		action: function () {
         			return action;
@@ -184,8 +189,9 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 	    	} else if (incomeDetail._action == 'edit') {
 				// Replace exising detail object with the new one
 				for (var i in $scope.income.detail) {
-			        if ($scope.income.detail[i]._id == incomeDetail._id) {
-			            $scope.income.detail[i] = incomeDetail;
+					if ($scope.income.detail[i].$$hashKey == incomeDetail.$$hashKey) {
+						delete incomeDetail.$$hashKey;
+						$scope.income.detail[i] = incomeDetail;
 			            break;
 			        }
 			    }
@@ -195,7 +201,7 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 		});
     };
 
-    $scope.deleteDetailConfirmation = function (incomeDetailId) {
+    $scope.deleteDetailConfirmation = function (entity) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -203,7 +209,7 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 			size: 'sm',
       		resolve: {
 		        data: function () {
-					return incomeDetailId;
+					return entity;
         		},
 		        message: function () {
 					return 'Confirma a exclusão do detalhe?';
@@ -211,10 +217,10 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
       		}
     	});
 
-		modalInstance.result.then(function (id) {
+		modalInstance.result.then(function (entity) {
 			// Replace exising detail object with the new one
 			for (var i in $scope.income.detail) {
-				if ($scope.income.detail[i]._id == id) {
+				if ($scope.income.detail[i].$$hashKey == entity.$$hashKey) {
 					$scope.income.detail.splice(i, 1);
 					break;
 				}

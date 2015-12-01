@@ -22,6 +22,7 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 		}
 
 		$scope.incomeDetail = {
+			$$hashKey: incomeDetail.$$hashKey,
 			_id: incomeDetail._id,
 			description: incomeDetail.description,
 			amount: incomeDetail.amount,
@@ -32,6 +33,7 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 			status: incomeDetail.status };
 
 		if (action == 'clone') {
+			delete $scope.incomeDetail.$$hashKey;
 			delete $scope.incomeDetail._id;
 			$scope.incomeDetail.description += ' - Cópia';
 		}
