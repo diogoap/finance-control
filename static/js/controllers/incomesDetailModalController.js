@@ -32,7 +32,7 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 			status: incomeDetail.status };
 
 		if (action == 'clone') {
-			$scope.incomeDetail._id = null;
+			delete $scope.incomeDetail._id;
 			$scope.incomeDetail.description += ' - Cópia';
 		}
 

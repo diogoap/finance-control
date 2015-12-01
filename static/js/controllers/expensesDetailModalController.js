@@ -32,7 +32,7 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			status: expenseDetail.status };
 
 		if (action == 'clone') {
-			$scope.expenseDetail._id = null;
+			delete $scope.expenseDetail._id;
 			$scope.expenseDetail.description += ' - Cópia';
 		}
 
