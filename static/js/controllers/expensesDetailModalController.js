@@ -22,6 +22,7 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 		}
 
 		$scope.expenseDetail = {
+			$$hashKey: expenseDetail.$$hashKey,
 			_id: expenseDetail._id,
 			description: expenseDetail.description,
 			amount: expenseDetail.amount,
@@ -32,6 +33,7 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			status: expenseDetail.status };
 
 		if (action == 'clone') {
+			delete $scope.expenseDetail.$$hashKey;
 			delete $scope.expenseDetail._id;
 			$scope.expenseDetail.description += ' - Cópia';
 		}
