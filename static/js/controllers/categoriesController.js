@@ -7,7 +7,8 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
  	$scope.columns = [
         { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+            '<a class="btn btn-primary btn-xs btn-grid" title="Inativar" ng-show="row.entity.enabled == true" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Ativar" ng-show="row.entity.enabled == false" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
@@ -64,7 +65,7 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 		});
     };
 
-    $scope.deleteConfirmation = function (categoryId) {
+    $scope.enableDisableConfirmation = function (categoryId, enable) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -72,16 +73,20 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return categoryId;
+					return { id: categoryId, enable: enable };
         		},
 		        message: function () {
-					return 'Confirma a exclusão da categoria?';
+                    if (enable) {
+                        return 'Confirma a ativação da categoria?';
+                    } else {
+                        return 'Confirma a inativação da categoria?';
+                    }
         		}
       		}
     	});
 
-		modalInstance.result.then(function (id) {
-	    	$scope.deleteCategory(id);
+		modalInstance.result.then(function (params) {
+	    	$scope.enableDisableCategory(params.id, params.enable);
 		});
     };
 
@@ -129,19 +134,35 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 			});
 	};
 
-	$scope.deleteCategory = function(id) {
+    $scope.enableDisableCategory = function(id, enable) {
 		$scope.loading = true;
 
-		Categories.delete(id)
-			.success(function(data) {
-			    Utils.addSucess($scope, 'Categoria excluída com sucesso!');
-				$scope.getCategories();
+        Categories.getById(id)
+			.success(function(category) {
+
+                category.enabled = enable;
+
+                Categories.patch(category._id, category)
+        			.success(function(data) {
+                        if (enable) {
+                            Utils.addSucess($scope, 'Categoria ativada com sucesso!');
+                        } else {
+                            Utils.addSucess($scope, 'Categoria inativada com sucesso!');
+                        }
+
+        				$scope.getCategories();
+        			})
+        			.error(function(data, status, headers, config) {
+        				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
+        				$scope.loading = false;
+        			});
 			})
 			.error(function(data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};
+
 
 	// initialization
     $scope.Utils = Utils;

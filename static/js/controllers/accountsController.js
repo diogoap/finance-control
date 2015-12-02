@@ -7,7 +7,8 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
  	$scope.columns = [
         { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
+            '<a class="btn btn-primary btn-xs btn-grid" title="Inativar" ng-show="row.entity.enabled == true" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Ativar" ng-show="row.entity.enabled == false" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
@@ -69,7 +70,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 		});
     };
 
-    $scope.deleteConfirmation = function (accountId) {
+    $scope.enableDisableConfirmation = function (accountId, enable) {
     	var modalInstance = $modal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -77,16 +78,20 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
       		size: 'sm',
       		resolve: {
 		        data: function () {
-					return accountId;
+					return { id: accountId, enable: enable };
         		},
 		        message: function () {
-					return 'Confirma a exclusão da conta?';
+                    if (enable) {
+                        return 'Confirma a ativação da conta?';
+                    } else {
+                        return 'Confirma a inativação da conta?';
+                    }
         		}
       		}
     	});
 
-		modalInstance.result.then(function (id) {
-	    	$scope.deleteAccount(id);
+		modalInstance.result.then(function (params) {
+	    	$scope.enableDisableAccount(params.id, params.enable);
 		});
     };
 
@@ -134,16 +139,31 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 			});
 	};
 
-	$scope.deleteAccount = function(id) {
+	$scope.enableDisableAccount = function(id, enable) {
 		$scope.loading = true;
 
-		Accounts.delete(id)
-			.success(function(data) {
-				Utils.addSucess($scope, 'Conta excluída com sucesso!');
-                $scope.getAccounts();
+        Accounts.getById(id)
+			.success(function(account) {
+
+                account.enabled = enable;
+
+                Accounts.patch(account._id, account)
+        			.success(function(data) {
+                        if (enable) {
+                            Utils.addSucess($scope, 'Conta ativada com sucesso!');
+                        } else {
+                            Utils.addSucess($scope, 'Conta inativada com sucesso!');
+                        }
+
+        				$scope.getAccounts();
+        			})
+        			.error(function(data, status, headers, config) {
+        				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
+        				$scope.loading = false;
+        			});
 			})
 			.error(function(data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
 	};

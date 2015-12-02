@@ -46,14 +46,7 @@ module.exports = function(app, url) {
     })
 
     app.delete('/api/accounts/:id', utils.ensureAuth, function(req, res) {
-        accountsService.delete( { _id : req.params.id },
-            function() {
-                res.json('OK');
-            },
-            function(error, status) {
-                utils.sendError(res, error, status);
-            }
-        );
+        utils.sendError(res, 'Operação não suportada - Inative o registro', 405);
     })
 
     app.patch('/api/accounts/:id', utils.ensureAuth, function(req, res) {
