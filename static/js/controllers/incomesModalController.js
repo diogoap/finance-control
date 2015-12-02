@@ -186,12 +186,14 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 		modalInstance.result.then(function (incomeDetail) {
 	    	if ((incomeDetail._action == 'new') || (incomeDetail._action == 'clone')) {
 	    		$scope.income.detail.push(incomeDetail);
+				$scope.income.detail.sort(Incomes.compare);
 	    	} else if (incomeDetail._action == 'edit') {
 				// Replace exising detail object with the new one
 				for (var i in $scope.income.detail) {
 					if ($scope.income.detail[i].$$hashKey == incomeDetail.$$hashKey) {
 						delete incomeDetail.$$hashKey;
 						$scope.income.detail[i] = incomeDetail;
+						$scope.income.detail.sort(Incomes.compare);
 			            break;
 			        }
 			    }

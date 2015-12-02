@@ -186,12 +186,14 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 		modalInstance.result.then(function (expenseDetail) {
 	    	if ((expenseDetail._action == 'new') || (expenseDetail._action == 'clone')) {
 	    		$scope.expense.detail.push(expenseDetail);
+				$scope.expense.detail.sort(Expenses.compare);
 	    	} else if (expenseDetail._action == 'edit') {
 				// Replace exising detail object with the new one
 				for (var i in $scope.expense.detail) {
 					if ($scope.expense.detail[i].$$hashKey == expenseDetail.$$hashKey) {
 						delete expenseDetail.$$hashKey;
 						$scope.expense.detail[i] = expenseDetail;
+						$scope.expense.detail.sort(Expenses.compare);
 			            break;
 			        }
 			    }
