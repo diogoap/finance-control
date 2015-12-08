@@ -1,6 +1,6 @@
 'use strict';
 
-function incomesModalController($scope, $modal, $modalInstance, uiGridConstants, Utils, Incomes, Categories, Accounts, incomeId, action) {
+function incomesModalController($scope, $modal, $modalInstance, $locale, uiGridConstants, Utils, Incomes, Categories, Accounts, incomeId, action) {
 	$scope.loading = true;
 	$scope.income = {};
 	$scope.Utils = Utils;
@@ -231,5 +231,13 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 			$scope.updateIncomeTotal();
 		});
     };
+
+	$scope.formatNumericAmount = function(e) {
+		$scope.income.amount = Utils.formatPastedNumer(e);
+	}
+
+	$scope.formatNumericAmountReceived = function(e) {
+		$scope.income.amountReceived = Utils.formatPastedNumer(e);
+	}
 
 };
