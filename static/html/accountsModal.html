@@ -17,7 +17,7 @@
 		<div class="form-group form-group-sm">
 			<label for="accountInitialBalance" class="col-sm-3 control-label">Saldo inicial</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" name="accountInitialBalance" ng-model="account.initialBalance" required class="form-control" autocomplete="off"/>
+				<input numeric decimals="2" name="accountInitialBalance" ng-model="account.initialBalance" required class="form-control" autocomplete="off" ng-paste="formatNumericInitialBalance($event);"/>
 				<div class="error" ng-show="(accountForm.accountInitialBalance.$dirty && accountForm.accountInitialBalance.$invalid) || (submitted && accountForm.accountInitialBalance.$invalid)">
 					<small class="error" ng-show="accountForm.accountInitialBalance.$error.required">O campo Saldo inicial é obrigatório.</small>
 				</div>

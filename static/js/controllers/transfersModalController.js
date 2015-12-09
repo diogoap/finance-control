@@ -44,7 +44,7 @@ function transfersModalController($scope, $modalInstance, Utils, Transfers, Acco
 		$event.preventDefault();
 		$event.stopPropagation();
 		$scope.opened = true;
-	};
+	}
 
 	$scope.submit = function () {
     	if ($scope.transferForm.$valid) {
@@ -53,9 +53,13 @@ function transfersModalController($scope, $modalInstance, Utils, Transfers, Acco
     	} else {
       		$scope.submitted = true;
     	}
-	};
+	}
 
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
+	}
+
+	$scope.formatNumericAmount = function(event) {
+		$scope.transfer.amount = Utils.formatPastedNumer(event);
 	}
 };

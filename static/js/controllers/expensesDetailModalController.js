@@ -63,14 +63,12 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			$scope.loading = false;
 		});
 
-	// OPEN CALANDAR ==============================================================
   	$scope.openCalendarDialog = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();
     	$scope.opened = true;
-  	};
+  	}
 
-	// MODAL SUBMIT ===============================================================
 	$scope.submitDetail = function () {
     	if ($scope.expenseDetailForm.$valid) {
 			$scope.expenseDetail._action = $scope.action;
@@ -87,11 +85,14 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
     	} else {
       		$scope.submitted = true;
     	}
-	};
+	}
 
-	// MODAL CANCEL ===============================================================
 	$scope.cancelDetail = function() {
 		$modalInstance.dismiss('cancel');
+	}
+
+	$scope.formatNumericAmount = function(event) {
+		$scope.expenseDetail.amount = Utils.formatPastedNumer(event);
 	}
 
 };

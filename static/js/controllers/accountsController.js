@@ -37,7 +37,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
         onRegisterApi: function(gridApi) {
           $scope.gridApi = gridApi;
         }
-    };
+    }
 
     $scope.getFilter = function() {
         if ($scope.listDisabledAccounts == false) {
@@ -68,7 +68,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 	    		$scope.editAccount(account);
 	    	}
 		});
-    };
+    }
 
     $scope.enableDisableConfirmation = function (accountId, enable) {
     	var modalInstance = $modal.open({
@@ -93,7 +93,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 		modalInstance.result.then(function (params) {
 	    	$scope.enableDisableAccount(params.id, params.enable);
 		});
-    };
+    }
 
 	$scope.getAccounts = function() {
         $scope.loading = true;
@@ -109,7 +109,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
 
 	$scope.createAccount = function(account) {
 		$scope.loading = true;
@@ -123,7 +123,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
 
 	$scope.editAccount = function(account) {
 		$scope.loading = true;
@@ -137,7 +137,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 				Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
 
 	$scope.enableDisableAccount = function(id, enable) {
 		$scope.loading = true;
@@ -166,7 +166,7 @@ app.controller('accountsController', function($scope, $http, $modal, $locale, ui
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
 
 	// initialization
     $scope.Utils = Utils;

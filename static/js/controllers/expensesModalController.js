@@ -201,7 +201,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 			$scope.updateExpenseTotal();
 		});
-    };
+    }
 
     $scope.deleteDetailConfirmation = function (entity) {
     	var modalInstance = $modal.open({
@@ -230,6 +230,14 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 
 			$scope.updateExpenseTotal();
 		});
-    };
+    }
+
+	$scope.formatNumericAmount = function(event) {
+		$scope.expense.amount = Utils.formatPastedNumer(event);
+	}
+
+	$scope.formatNumericAmountPaid = function(event) {
+		$scope.expense.amountPaid = Utils.formatPastedNumer(event);
+	}
 
 };

@@ -17,7 +17,7 @@
 		<div class="form-group form-group-sm">
 			<label for="expenseAmount" class="col-sm-3 control-label">Valor</label>
 			<div class="col-sm-9">
-				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control" autocomplete="off"/>
+				<input numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expenseDetail.amount" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(expenseDetailForm.expenseAmount.$dirty && expenseDetailForm.expenseAmount.$invalid) || (submitted && expenseDetailForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseDetailForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>

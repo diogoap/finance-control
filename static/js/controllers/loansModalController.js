@@ -57,13 +57,13 @@ function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, lo
 		$event.preventDefault();
 		$event.stopPropagation();
 		$scope.transactionDateOpened = true;
-	};
+	}
 
   	$scope.openCalendarDialogDueDate = function($event) {
     	$event.preventDefault();
     	$event.stopPropagation();
     	$scope.dueDateOpened = true;
-  	};
+  	}
 
 	$scope.submit = function () {
     	if ($scope.loanForm.$valid) {
@@ -72,9 +72,13 @@ function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, lo
     	} else {
       		$scope.submitted = true;
     	}
-	};
+	}
 
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
+	}
+
+	$scope.formatNumericAmount = function(event) {
+		$scope.loan.amount = Utils.formatPastedNumer(event);
 	}
 };

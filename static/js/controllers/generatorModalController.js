@@ -50,7 +50,7 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
 		$event.preventDefault();
     	$event.stopPropagation();
     	$scope.opened = true;
-  	};
+  	}
 
 	$scope.submit = function () {
     	if ($scope.generatorForm.$valid) {
@@ -68,10 +68,14 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
     	} else {
       		$scope.submitted = true;
     	}
-	};
+	}
 
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
-	};
+	}
+
+	$scope.formatNumericAmount = function(event) {
+		$scope.generatorParameters.amount = Utils.formatPastedNumer(event);
+	}
 
 };

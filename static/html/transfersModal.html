@@ -20,7 +20,7 @@
 		<div class="form-group form-group-sm">
 			<label for="transferAmount" class="col-sm-3 control-label">Valor</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" name="transferAmount" ng-model="transfer.amount" required class="form-control" autocomplete="off"/>
+				<input numeric decimals="2" name="transferAmount" ng-model="transfer.amount" required class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(transferForm.transferAmount.$dirty && transferForm.transferAmount.$invalid) || (submitted && transferForm.transferAmount.$invalid)">
 					<small class="error" ng-show="transferForm.transferAmount.$error.required">O campo Valor é obrigatório.</small>
 				</div>

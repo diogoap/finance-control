@@ -25,7 +25,7 @@ function accountsModalController($scope, $modalInstance, Utils, Accounts, accoun
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
 
 	$scope.submit = function () {
     	if ($scope.accountForm.$valid) {
@@ -34,9 +34,13 @@ function accountsModalController($scope, $modalInstance, Utils, Accounts, accoun
     	} else {
       		$scope.submitted = true;
     	}
-	};
+	}
 
 	$scope.cancel = function() {
 		$modalInstance.dismiss('cancel');
 	}
+
+	$scope.formatNumericInitialBalance = function(event) {
+    	$scope.account.initialBalance = Utils.formatPastedNumer(event);
+    }
 };
