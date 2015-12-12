@@ -54,14 +54,10 @@ function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, lo
 		});
 
 	$scope.openCalendarDialogTransactionDate = function($event) {
-		$event.preventDefault();
-		$event.stopPropagation();
 		$scope.transactionDateOpened = true;
 	}
 
   	$scope.openCalendarDialogDueDate = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.dueDateOpened = true;
   	}
 

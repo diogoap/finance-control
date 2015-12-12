@@ -18,7 +18,7 @@
             <label for="loanTransactionDate" class="col-sm-3 control-label">Data de lançamento</label>
 			<div class="col-sm-4">
 			    <div class="input-group input-group-sm">
-				    <input datepicker-popup="shortDate" name="loanTransactionDate" ng-model="loan.transactionDate" required class="form-control" is-open="transactionDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+				    <input type="text" uib-datepicker-popup="shortDate" name="loanTransactionDate" ng-model="loan.transactionDate" required class="form-control date-mask" is-open="transactionDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
                     <span class="input-group-btn">
                 	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogTransactionDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               	    </span>
@@ -32,7 +32,7 @@
             <label for="loanDueDate" class="col-sm-3 control-label">Data de vencimento</label>
 			<div class="col-sm-4">
 			    <div class="input-group input-group-sm">
-				    <input datepicker-popup="shortDate" name="loanDueDate" ng-model="loan.dueDate" required gte-than-date-control="{{loan.transactionDate}}" class="form-control" is-open="dueDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+				    <input type="text" uib-datepicker-popup="shortDate" name="loanDueDate" ng-model="loan.dueDate" required gte-than-date-control="{{loan.transactionDate}}" class="form-control date-mask" is-open="dueDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
                     <span class="input-group-btn">
                 	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogDueDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               	    </span>

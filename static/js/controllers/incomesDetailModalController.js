@@ -63,12 +63,6 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 			$scope.loading = false;
 		});
 
-  	$scope.openCalendarDialog = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
-    	$scope.opened = true;
-  	}
-
 	$scope.submitDetail = function () {
     	if ($scope.incomeDetailForm.$valid) {
 			$scope.incomeDetail._action = $scope.action;

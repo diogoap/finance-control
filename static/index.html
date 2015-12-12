@@ -15,14 +15,15 @@
  	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
 	<link rel="styleSheet" href="bower_components/bootstrap-social/bootstrap-social.css"/>
-	<link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
-	<script src="bower_components/angular/angular.js"></script>
+	<link rel="styleSheet" href="bower_components/angular-ui-grid/ui-grid.min.css"/>
+	<script src="bower_components/angular/angular.min.js"></script>
 	<script src="bower_components/angular-i18n/angular-locale_pt-br.js"></script>
-	<script src="bower_components/angular-route/angular-route.js"></script>
-	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
 	<script src="bower_components/angular-numeric-directive/src/numeric-directive.js"></script>
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 	<!-- INTERNAL DEPENDENCIES -->
@@ -52,6 +53,7 @@
 	<script src="js/controllers/loansModalController.js"></script>
 	<script src="js/directives/customValidations.js"></script>
 	<script src="js/directives/resizableGrid.js"></script>
+	<script src="js/directives/datepickerPopup.js"></script>
 	<script src="js/interceptors/authorizationHeaderInterceptor.js"></script>
 	<script src="js/interceptors/unauthorizedInterceptor.js"></script>
 	<script src="js/services/accountsService.js"></script>
@@ -71,6 +73,10 @@
 			$('.navbar-collapse a').click(function(){
     			$(".navbar-collapse").collapse('hide');
 			});
+		});
+
+		$(window).ready(function(){
+ 			$('.date-mask').mask("00/00/00");
 		});
 	</script>
 

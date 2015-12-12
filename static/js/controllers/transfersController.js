@@ -13,7 +13,7 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
         { name: 'Data', field: 'date', type: 'date', width:'12%', enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align',
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
-            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'            
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
         { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
@@ -38,14 +38,10 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
     };
 
     $scope.openCalendarDialogBegin = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.beginOpened = true;
   	};
 
   	$scope.openCalendarDialogEnd = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.endOpened = true;
   	};
 

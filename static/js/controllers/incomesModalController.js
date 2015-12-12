@@ -104,8 +104,6 @@ function incomesModalController($scope, $modal, $modalInstance, uiGridConstants,
 		});
 
   	$scope.openCalendarDialog = function($event) {
-		$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.opened = true;
   	};
 

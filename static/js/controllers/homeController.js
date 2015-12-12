@@ -5,14 +5,10 @@ var app = angular.module('financeControl');
 app.controller('homeController', function($scope, $http, $locale, Utils, Totals) {
 
   	$scope.openCalendarDialogBegin = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
-    	$scope.beginOpened = true;
+        $scope.beginOpened = true;
   	};
 
   	$scope.openCalendarDialogEnd = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.endOpened = true;
   	};
 

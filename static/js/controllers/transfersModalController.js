@@ -41,8 +41,6 @@ function transfersModalController($scope, $modalInstance, Utils, Transfers, Acco
 		});
 
 	$scope.openCalendarDialog = function($event) {
-		$event.preventDefault();
-		$event.stopPropagation();
 		$scope.opened = true;
 	}
 

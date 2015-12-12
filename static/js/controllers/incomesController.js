@@ -85,14 +85,10 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
     });
 
   	$scope.openCalendarDialogBegin = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.beginOpened = true;
   	};
 
   	$scope.openCalendarDialogEnd = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.endOpened = true;
   	};
 

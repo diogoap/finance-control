@@ -47,8 +47,6 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
 		});
 
   	$scope.openCalendarDialog = function($event) {
-		$event.preventDefault();
-    	$event.stopPropagation();
     	$scope.opened = true;
   	}
 

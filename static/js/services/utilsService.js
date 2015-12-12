@@ -36,7 +36,7 @@ angular.module('utilsService', [])
 					event.returnValue = false;
 
 					if (isNaN(value) == false) {
-						return value;
+						return parseFloat(value);
 					}
 				}
 

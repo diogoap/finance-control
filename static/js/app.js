@@ -21,7 +21,7 @@ var app = angular.module('financeControl', [
     'loansService'
 ]);
 
-app.config(function($routeProvider, $locationProvider) {
+app.config(function($routeProvider, $locationProvider, $provide) {
     $routeProvider
     	.when('/', {
             templateUrl: 'html/home.html'

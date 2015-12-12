@@ -63,12 +63,6 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			$scope.loading = false;
 		});
 
-  	$scope.openCalendarDialog = function($event) {
-    	$event.preventDefault();
-    	$event.stopPropagation();
-    	$scope.opened = true;
-  	}
-
 	$scope.submitDetail = function () {
     	if ($scope.expenseDetailForm.$valid) {
 			$scope.expenseDetail._action = $scope.action;

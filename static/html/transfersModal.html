@@ -7,7 +7,7 @@
             <label for="transferDate" class="col-sm-3 control-label">Data</label>
 			    <div class="col-sm-4">
 			    <div class="input-group input-group-sm">
-				    <input datepicker-popup="shortDate" name="transferDate" ng-model="transfer.date" required class="form-control" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+				    <input type="text" uib-datepicker-popup="shortDate" name="transferDate" ng-model="transfer.date" required class="form-control date-mask" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
                     <span class="input-group-btn">
                 	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               	    </span>
