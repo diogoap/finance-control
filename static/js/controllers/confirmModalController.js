@@ -1,14 +1,14 @@
 'use strict';
 
-function confirmModalController($modalInstance, $scope, data, message) {
+function confirmModalController($uibModalInstance, $scope, data, message) {
 
 	$scope.message = message;
 
 	$scope.yes = function () {
-		$modalInstance.close(data);
+		$uibModalInstance.close(data);
 	};
 
 	$scope.no = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 };

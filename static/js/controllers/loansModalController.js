@@ -1,6 +1,6 @@
 'use strict';
 
-function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, loanId, action) {
+function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts, loanId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -64,14 +64,14 @@ function loansModalController($scope, $modalInstance, Utils, Loans, Accounts, lo
 	$scope.submit = function () {
     	if ($scope.loanForm.$valid) {
 			$scope.loan._action = $scope.action;
-			$modalInstance.close($scope.loan);
+			$uibModalInstance.close($scope.loan);
     	} else {
       		$scope.submitted = true;
     	}
 	}
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericAmount = function(event) {

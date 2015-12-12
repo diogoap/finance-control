@@ -15,7 +15,7 @@
 					<button class="btn btn-success" ng-click="navigateNextMonth()">+1 Mês</button>
 				</div>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">
 				<div class="input-group input-group-sm">
 					<input type="text" uib-datepicker-popup="shortDate" name="transferDateBegin" ng-model="transferDateBegin" required class="form-control date-mask" is-open="beginOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
 					<span class="input-group-btn">

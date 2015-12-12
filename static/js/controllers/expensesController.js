@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('expensesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Expenses) {
+app.controller('expensesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Expenses) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
@@ -146,7 +146,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
   	};
 
   	$scope.openModal = function (expenseId, action) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/expensesModal.html',
       		controller: expensesModalController,
@@ -171,7 +171,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
     };
 
     $scope.openGeneratorModal = function () {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/generatorModal.html',
       		controller: generatorModalController,
@@ -190,7 +190,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
     };
 
     $scope.deleteConfirmation = function (ExpenseId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,
@@ -211,7 +211,7 @@ app.controller('expensesController', function($scope, $http, $modal, $locale, ui
     };
 
     $scope.payExpenseConfirmation = function (ExpenseId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,

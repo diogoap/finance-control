@@ -1,6 +1,6 @@
 'use strict';
 
-function expensesModalController($scope, $modal, $modalInstance, uiGridConstants, Utils, Expenses, Categories, Accounts, expenseId, action) {
+function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridConstants, Utils, Expenses, Categories, Accounts, expenseId, action) {
 	$scope.loading = true;
 	$scope.expense = {};
 	$scope.Utils = Utils;
@@ -111,14 +111,14 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
     	if ($scope.expenseForm.$valid) {
 			$scope.updateExpenseTotal();
 			$scope.expense._action = $scope.action;
-			$modalInstance.close($scope.expense);
+			$uibModalInstance.close($scope.expense);
     	} else {
       		$scope.submitted = true;
     	}
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.validExpenseAmountPaid = function(value) {
@@ -161,7 +161,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
 	}
 
   	$scope.openDetail = function (entity, action) {
-		var modalInstance = $modal.open({
+		var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/expensesDetailModal.html',
       		controller: expensesDetailModalController,
@@ -202,7 +202,7 @@ function expensesModalController($scope, $modal, $modalInstance, uiGridConstants
     }
 
     $scope.deleteDetailConfirmation = function (entity) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,

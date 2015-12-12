@@ -41,6 +41,9 @@ angular.module('utilsService', [])
 				}
 
 				return null;
+			},
+			isLowResolution: function() {
+				return $(window).width() < 800;
 			}
 		}
 	}]);

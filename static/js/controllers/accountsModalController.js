@@ -1,6 +1,6 @@
 'use strict';
 
-function accountsModalController($scope, $modalInstance, Utils, Accounts, accountId, action) {
+function accountsModalController($scope, $uibModalInstance, Utils, Accounts, accountId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -30,14 +30,14 @@ function accountsModalController($scope, $modalInstance, Utils, Accounts, accoun
 	$scope.submit = function () {
     	if ($scope.accountForm.$valid) {
 			$scope.account._action = $scope.action;
-			$modalInstance.close($scope.account);
+			$uibModalInstance.close($scope.account);
     	} else {
       		$scope.submitted = true;
     	}
 	}
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericInitialBalance = function(event) {

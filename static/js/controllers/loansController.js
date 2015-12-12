@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('loansController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Loans) {
+app.controller('loansController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Loans) {
 
  	$scope.columns = [
         { name: 'Ações', type: 'string', width:'146', minWidth:'146', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
@@ -56,7 +56,7 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
 	}
 
   	$scope.openModal = function (loanId, action) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/loansModal.html',
       		controller: loansModalController,
@@ -80,7 +80,7 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
     };
 
     $scope.deleteConfirmation = function (loanId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,
@@ -101,7 +101,7 @@ app.controller('loansController', function($scope, $http, $modal, $locale, uiGri
     };
 
     $scope.payLoanConfirmation = function (loanId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,

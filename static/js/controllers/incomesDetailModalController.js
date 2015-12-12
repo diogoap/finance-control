@@ -1,6 +1,6 @@
 'use strict';
 
-function incomesDetailModalController($scope, $modalInstance, Utils, Categories, Accounts, incomeDetail, action) {
+function incomesDetailModalController($scope, $uibModalInstance, Utils, Categories, Accounts, incomeDetail, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -75,14 +75,14 @@ function incomesDetailModalController($scope, $modalInstance, Utils, Categories,
 			var selCategory = $.grep($scope.categories, function(e){ return e._id == $scope.incomeDetail.category_id });
 			$scope.incomeDetail._category = selCategory[0];
 
-			$modalInstance.close($scope.incomeDetail);
+			$uibModalInstance.close($scope.incomeDetail);
     	} else {
       		$scope.submitted = true;
     	}
 	}
 
 	$scope.cancelDetail = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericAmount = function(event) {

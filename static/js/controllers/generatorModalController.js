@@ -1,6 +1,6 @@
 'use strict';
 
-function generatorModalController($scope, $modal, $modalInstance, Utils, Generator, Categories, Accounts, type) {
+function generatorModalController($scope, $uibModal, $uibModalInstance, Utils, Generator, Categories, Accounts, type) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -57,7 +57,7 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
 			Generator.create($scope.generatorParameters)
 				.success(function(data) {
 					$scope.loading = false;
-					$modalInstance.close();
+					$uibModalInstance.close();
 				})
 				.error(function(data, status, headers, config) {
 					Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
@@ -69,7 +69,7 @@ function generatorModalController($scope, $modal, $modalInstance, Utils, Generat
 	}
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericAmount = function(event) {

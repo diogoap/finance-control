@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('transfersController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Transfers) {
+app.controller('transfersController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Transfers) {
 
  	$scope.columns = [
         { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
@@ -94,7 +94,7 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
   	};
 
   	$scope.openModal = function (transferId, action) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/transfersModal.html',
       		controller: transfersModalController,
@@ -118,7 +118,7 @@ app.controller('transfersController', function($scope, $http, $modal, $locale, u
     };
 
     $scope.deleteConfirmation = function (transferId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,

@@ -1,6 +1,6 @@
 'use strict';
 
-function expensesDetailModalController($scope, $modalInstance, Utils, Categories, Accounts, expenseDetail, action) {
+function expensesDetailModalController($scope, $uibModalInstance, Utils, Categories, Accounts, expenseDetail, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -75,14 +75,14 @@ function expensesDetailModalController($scope, $modalInstance, Utils, Categories
 			var selCategory = $.grep($scope.categories, function(e){ return e._id == $scope.expenseDetail.category_id });
 			$scope.expenseDetail._category = selCategory[0];
 
-			$modalInstance.close($scope.expenseDetail);
+			$uibModalInstance.close($scope.expenseDetail);
     	} else {
       		$scope.submitted = true;
     	}
 	}
 
 	$scope.cancelDetail = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericAmount = function(event) {

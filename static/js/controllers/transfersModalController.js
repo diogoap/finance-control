@@ -1,6 +1,6 @@
 'use strict';
 
-function transfersModalController($scope, $modalInstance, Utils, Transfers, Accounts, transferId, action) {
+function transfersModalController($scope, $uibModalInstance, Utils, Transfers, Accounts, transferId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -47,14 +47,14 @@ function transfersModalController($scope, $modalInstance, Utils, Transfers, Acco
 	$scope.submit = function () {
     	if ($scope.transferForm.$valid) {
 			$scope.transfer._action = $scope.action;
-			$modalInstance.close($scope.transfer);
+			$uibModalInstance.close($scope.transfer);
     	} else {
       		$scope.submitted = true;
     	}
 	}
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 
 	$scope.formatNumericAmount = function(event) {

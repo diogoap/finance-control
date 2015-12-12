@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('categoriesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Categories) {
+app.controller('categoriesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Categories) {
 
  	$scope.columns = [
         { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
@@ -42,7 +42,7 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
 	}
 
   	$scope.openModal = function (categoryId, action) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/categoriesModal.html',
       		controller: categoriesModalController,
@@ -66,7 +66,7 @@ app.controller('categoriesController', function($scope, $http, $modal, $locale, 
     };
 
     $scope.enableDisableConfirmation = function (categoryId, enable) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,

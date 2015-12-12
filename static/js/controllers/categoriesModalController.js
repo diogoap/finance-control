@@ -1,6 +1,6 @@
 'use strict';
 
-function categoriesModalController($scope, $modalInstance, Utils, Categories, categoryId, action) {
+function categoriesModalController($scope, $uibModalInstance, Utils, Categories, categoryId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -10,7 +10,7 @@ function categoriesModalController($scope, $modalInstance, Utils, Categories, ca
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar categoria';
-		$scope.loan = { enabled: true };		
+		$scope.loan = { enabled: true };
 		$scope.loading = false;
 	}
 	else
@@ -31,13 +31,13 @@ function categoriesModalController($scope, $modalInstance, Utils, Categories, ca
 	$scope.submit = function () {
     	if ($scope.categoryForm.$valid) {
 			$scope.category._action = $scope.action;
-			$modalInstance.close($scope.category);
+			$uibModalInstance.close($scope.category);
     	} else {
       		$scope.submitted = true;
     	}
 	};
 
 	$scope.cancel = function() {
-		$modalInstance.dismiss('cancel');
+		$uibModalInstance.dismiss('cancel');
 	}
 };

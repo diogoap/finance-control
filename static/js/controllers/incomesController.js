@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('incomesController', function($scope, $http, $modal, $locale, uiGridConstants, Utils, Incomes) {
+app.controller('incomesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Incomes) {
 
     var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
 
@@ -141,7 +141,7 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
   	};
 
   	$scope.openModal = function (incomeId, action) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/incomesModal.html',
       		controller: incomesModalController,
@@ -166,7 +166,7 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
     };
 
     $scope.openGeneratorModal = function () {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/generatorModal.html',
       		controller: generatorModalController,
@@ -185,7 +185,7 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
     };
 
     $scope.deleteConfirmation = function (IncomeId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,
@@ -206,7 +206,7 @@ app.controller('incomesController', function($scope, $http, $modal, $locale, uiG
     };
 
     $scope.receiveIncomeConfirmation = function (IncomeId) {
-    	var modalInstance = $modal.open({
+    	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
       		controller: confirmModalController,
