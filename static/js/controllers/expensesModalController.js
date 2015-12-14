@@ -238,4 +238,10 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		$scope.expense.amountPaid = Utils.formatPastedNumer(event);
 	}
 
+	$scope.onChangeExpenseStatus = function() {
+		if ($scope.expense.status == 'Pago' && $scope.expense.amountPaid == 0) {
+			$scope.expense.amountPaid = $scope.expense.amount;
+		}
+	}
+
 };

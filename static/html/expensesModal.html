@@ -62,7 +62,7 @@
 		<div class="form-group form-group-sm">
 			<label for="expenseStatus" class="col-sm-2 control-label">Situação</label>
 			<div class="col-sm-4">
-				<select name="expenseStatus" required ng-model="expense.status" ng-disabled="_hasDetail" ng-options="type for type in expenseStatus" class="form-control"></select>
+				<select name="expenseStatus" required ng-model="expense.status" ng-disabled="_hasDetail" ng-options="type for type in expenseStatus" ng-change="onChangeExpenseStatus()" class="form-control"></select>
 				<div class="error" ng-show="(expenseForm.expenseStatus.$dirty && expenseForm.expenseStatus.$invalid) || (submitted && expenseForm.expenseStatus.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseStatus.$error.required">O campo Situação é obrigatório.</small>
 				</div>

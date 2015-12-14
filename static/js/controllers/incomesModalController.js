@@ -238,4 +238,10 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 		$scope.income.amountReceived = Utils.formatPastedNumer(event);
 	}
 
+	$scope.onChangeIncomeStatus = function() {
+		if ($scope.income.status == 'Recebido' && $scope.income.amountReceived == 0) {
+			$scope.income.amountReceived = $scope.income.amount;
+		}
+	}
+
 };
