@@ -3,9 +3,13 @@
 var utils = require('../services/utilsService');
 var categoriesService = require('../services/categoriesService');
 
+var ensureCategoryUser = function(req, res, next) {
+	return utils.ensureObjectUser(req, res, next, categoriesService);
+}
+
 module.exports = function(app, url) {
 
-    app.get('/api/categories/:id', utils.ensureAuth, function(req, res) {
+    app.get('/api/categories/:id', utils.ensureAuth, ensureCategoryUser, function(req, res) {
         var category = categoriesService.getById(req.params.id,
             function(category) {
                 res.json(category);
@@ -45,11 +49,11 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/categories/:id', utils.ensureAuth, function(req, res) {
+    app.delete('/api/categories/:id', utils.ensureAuth, ensureCategoryUser, function(req, res) {
         utils.sendError(res, 'Operação não suportada - Inative o registro', 405);
     })
 
-    app.patch('/api/categories/:id', utils.ensureAuth, function(req, res) {
+    app.patch('/api/categories/:id', utils.ensureAuth, ensureCategoryUser, function(req, res) {
         categoriesService.edit(req.params.id, req.body,
             function(categories) {
                 res.json('OK');

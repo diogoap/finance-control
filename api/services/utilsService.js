@@ -71,6 +71,21 @@ var ensureAffectedUserIsNotAdmin = function(req, res, next) {
     );
 }
 
+var ensureObjectUser = function(req, res, next, objService) {
+	var obj = objService.getById(req.params.id,
+        function(obj) {
+            if (obj.user_id == getUserId(req)) {
+                return next();
+			}
+
+            return sendError(res, 'Invalid object for this user', 401);
+        },
+        function(error, status) {
+            return sendError(res, 'Object not found', 404);
+        }
+    );
+}
+
 var getUserId = function(req) {
 	return req.headers['user-id'];
 }
@@ -84,6 +99,7 @@ module.exports = {
 	ensureAuth: ensureAuth,
 	ensureAuthAdmin: ensureAuthAdmin,
 	ensureAffectedUserIsNotAdmin: ensureAffectedUserIsNotAdmin,
+	ensureObjectUser: ensureObjectUser,
 	getUserId: getUserId,
 	getUserToken: getUserToken
 }

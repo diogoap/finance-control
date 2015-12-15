@@ -10,7 +10,7 @@ function categoriesModalController($scope, $uibModalInstance, Utils, Categories,
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar categoria';
-		$scope.loan = { enabled: true };
+		$scope.category = { enabled: true };
 		$scope.loading = false;
 	}
 	else

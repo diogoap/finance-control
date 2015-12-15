@@ -3,9 +3,13 @@
 var utils = require('../services/utilsService');
 var accountsService = require('../services/accountsService');
 
+var ensureAccountUser = function(req, res, next) {
+	return utils.ensureObjectUser(req, res, next, accountsService);
+}
+
 module.exports = function(app, url) {
 
-    app.get('/api/accounts/:id', utils.ensureAuth, function(req, res) {
+    app.get('/api/accounts/:id', utils.ensureAuth, ensureAccountUser, function(req, res) {
         var account = accountsService.getById(req.params.id,
             function(account) {
                 res.json(account);
@@ -45,11 +49,11 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/accounts/:id', utils.ensureAuth, function(req, res) {
+    app.delete('/api/accounts/:id', utils.ensureAuth, ensureAccountUser, function(req, res) {
         utils.sendError(res, 'Operação não suportada - Inative o registro', 405);
     })
 
-    app.patch('/api/accounts/:id', utils.ensureAuth, function(req, res) {
+    app.patch('/api/accounts/:id', utils.ensureAuth, ensureAccountUser, function(req, res) {
         accountsService.edit(req.params.id, req.body,
             function(accounts) {
                 res.json('OK');

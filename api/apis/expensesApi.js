@@ -3,9 +3,13 @@
 var utils = require('../services/utilsService');
 var expensesService = require('../services/expensesService');
 
+var ensureExpenseUser = function(req, res, next) {
+	return utils.ensureObjectUser(req, res, next, expensesService);
+}
+
 module.exports = function(app, url) {
 
-    app.get('/api/expenses/:id', utils.ensureAuth, function(req, res) {
+    app.get('/api/expenses/:id', utils.ensureAuth, ensureExpenseUser, function(req, res) {
         var expense = expensesService.getById(req.params.id,
             function(expense) {
                 res.json(expense);
@@ -45,7 +49,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.delete('/api/expenses/:id', utils.ensureAuth, function(req, res) {
+    app.delete('/api/expenses/:id', utils.ensureAuth, ensureExpenseUser, function(req, res) {
         expensesService.delete( { _id : req.params.id },
             function() {
                 res.json('OK');
@@ -56,7 +60,7 @@ module.exports = function(app, url) {
         );
     })
 
-    app.patch('/api/expenses/:id', utils.ensureAuth, function(req, res) {
+    app.patch('/api/expenses/:id', utils.ensureAuth, ensureExpenseUser, function(req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
