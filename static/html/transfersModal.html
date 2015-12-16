@@ -5,15 +5,15 @@
 	<div class="modal-body">
         <div class="form-group form-group-sm">
             <label for="transferDate" class="col-sm-3 control-label">Data</label>
-			    <div class="col-sm-4">
+			<div class="col-sm-4">
 			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup="shortDate" name="transferDate" ng-model="transfer.date" required class="form-control date-mask" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+				    <input type="text" uib-datepicker-popup name="transferDate" ng-model="transfer.date" required class="form-control date-mask" is-open="opened"/>
                     <span class="input-group-btn">
                 	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               	    </span>
-				    <div class="error" ng-show="(transferForm.transferDate.$dirty && transferForm.transferDate.$invalid) || (submitted && transferForm.transferDate.$invalid)">
-					    <small class="error" ng-show="transferForm.transferDate.$error.required">O campo Data é obrigatório.</small>
-				    </div>
+                </div>
+                <div class="error" ng-show="(transferForm.transferDate.$dirty && transferForm.transferDate.$invalid) || (submitted && transferForm.transferDate.$invalid)">
+                    <small class="error" ng-show="transferForm.transferDate.$error.required">O campo Data é obrigatório.</small>
                 </div>
 			</div>
         </div>

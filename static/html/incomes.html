@@ -18,7 +18,7 @@
 			</div>
 			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">
 				<div class="input-group input-group-sm">
-					<input type="text" uib-datepicker-popup="shortDate" name="incomeDueDateBegin" ng-model="incomeDueDateBegin" required class="form-control date-mask" is-open="beginOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+					<input type="text" uib-datepicker-popup name="incomeDueDateBegin" ng-model="incomeDueDateBegin" required class="form-control date-mask" is-open="beginOpened"/>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
@@ -26,7 +26,7 @@
 						<small class="error" ng-show="incomeForm.incomeDueDateBegin.$error.required">O campo Período inicial é obrigatório.</small>
 					</div>
 
-					<input type="text" uib-datepicker-popup="shortDate" name="incomeDueDateEnd" ng-model="incomeDueDateEnd" required class="form-control date-mask" is-open="endOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+					<input type="text" uib-datepicker-popup name="incomeDueDateEnd" ng-model="incomeDueDateEnd" required class="form-control date-mask" is-open="endOpened"/>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 						<button class="btn btn-default btn-sm" ng-click="filter()">Filtrar</button>

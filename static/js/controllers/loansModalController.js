@@ -41,6 +41,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 				$scope.loading = false;
 			});
 	};
+	$scope.dueDateMinDate = $scope.loan.transactionDate;
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
@@ -60,6 +61,18 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
   	$scope.openCalendarDialogDueDate = function($event) {
     	$scope.dueDateOpened = true;
   	}
+
+	$scope.setDueDateMinDate = function() {
+		$scope.dueDateMinDate = $scope.loan.transactionDate;
+	};
+
+	$scope.validateDueDate = function(element) {
+		var dueDate = new Date($scope.loan.dueDate);
+		dueDate = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+		var transactionDate = new Date($scope.loan.transactionDate);
+		transactionDate = new Date(transactionDate.getFullYear(), transactionDate.getMonth(), transactionDate.getDate());
+		element.$setValidity('gteThanDateControl', dueDate >= transactionDate);
+	};
 
 	$scope.submit = function () {
     	if ($scope.loanForm.$valid) {

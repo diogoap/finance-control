@@ -59,3 +59,15 @@ app.config(function($routeProvider, $locationProvider, $provide) {
         requireBase: false
     });
 });
+
+app.config(['uibDatepickerConfig', function(uibDatepickerConfig) {
+    uibDatepickerConfig.showWeeks = false;
+    uibDatepickerConfig.formatYear = 'yy';
+}]);
+
+app.config(['uibDatepickerPopupConfig', function(uibDatepickerPopupConfig) {
+    uibDatepickerPopupConfig.currentText = "Hoje";
+    uibDatepickerPopupConfig.clearText="Limpar";
+    uibDatepickerPopupConfig.closeText="Fechar";
+    uibDatepickerPopupConfig.datepickerPopup="shortDate";
+}]);

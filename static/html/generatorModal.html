@@ -7,17 +7,17 @@
             <label for="generatorParametersInitialDate" class="col-sm-2 control-label">Data inicial</label>
 			    <div class="col-sm-4">
 			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup="shortDate" name="generatorParametersInitialDate" ng-model="generatorParameters.initialDate" required class="form-control date-mask" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+				    <input type="text" uib-datepicker-popup name="generatorParametersInitialDate" ng-model="generatorParameters.initialDate" required class="form-control date-mask" is-open="opened"/>
                     <span class="input-group-btn">
                 	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               	    </span>
-				    <div class="error" ng-show="(generatorForm.generatorParametersInitialDate.$dirty && generatorForm.generatorParametersInitialDate.$invalid) || (submitted && generatorForm.generatorParametersInitialDate.$invalid)">
-					    <small class="error" ng-show="generatorForm.generatorParametersInitialDate.$error.required">O campo Data inicial é obrigatório.</small>
-				    </div>
+                </div>
+                <div class="error" ng-show="(generatorForm.generatorParametersInitialDate.$dirty && generatorForm.generatorParametersInitialDate.$invalid) || (submitted && generatorForm.generatorParametersInitialDate.$invalid)">
+                    <small class="error" ng-show="generatorForm.generatorParametersInitialDate.$error.required">O campo Data inicial é obrigatório.</small>
                 </div>
 			</div>
             <label for="generatorParametersInstallments" class="col-sm-2 control-label">Número de parcelas</label>
-			<div class="col-sm-2">
+			<div class="col-sm-4">
 				<input numeric decimals="0" max="999" gt-than="0" name="generatorParametersInstallments" ng-model="generatorParameters.installments"  class="form-control" autocomplete="off"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersInstallments.$dirty && generatorForm.generatorParametersInstallments.$invalid) || (submitted && generatorForm.generatorParametersInstallments.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersInstallments.$error.gtThan">O campo Número de parcelas é obrigatório.</small>

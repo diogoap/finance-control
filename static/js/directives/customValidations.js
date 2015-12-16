@@ -74,10 +74,10 @@ app.directive('gteThanDateControl', [function() {
                 ngModel.$setValidity('gteThanDateControl', true);
             }
 
-            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDay();
+            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDate();
 
             var compModel = comparisonModel.replace(/"/g, "");
-            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDay();
+            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDate();
 
             ngModel.$setValidity('gteThanDateControl', modelDate >= compModelDate);
             return modelValue;
@@ -106,10 +106,10 @@ app.directive('lteThanDateControl', [function() {
                 ngModel.$setValidity('gteThanDateControl', true);
             }
 
-            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDay();
+            var modelDate = new Date(modelValue), y = modelDate.getFullYear(), m = modelDate.getMonth(), d = modelDate.getDate();
 
             var compModel = comparisonModel.replace(/"/g, "");
-            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDay();
+            var compModelDate = new Date(compModel), y = compModelDate.getFullYear(), m = compModelDate.getMonth(), d = compModelDate.getDate();
 
             ngModel.$setValidity('gteThanDateControl', modelDate <= compModelDate);
             return modelValue;

@@ -15,33 +15,37 @@
 			</div>
 		</div>
         <div class="form-group form-group-sm">
-            <label for="loanTransactionDate" class="col-sm-3 control-label">Data de lançamento</label>
-			<div class="col-sm-4">
-			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup="shortDate" name="loanTransactionDate" ng-model="loan.transactionDate" required class="form-control date-mask" is-open="transactionDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
-                    <span class="input-group-btn">
-                	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogTransactionDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              	    </span>
-				    <div class="error" ng-show="(loanForm.loanTransactionDate.$dirty && loanForm.loanTransactionDate.$invalid) || (submitted && loanForm.loanTransactionDate.$invalid)">
-					    <small class="error" ng-show="loanForm.loanTransactionDate.$error.required">O campo Data de lançamento é obrigatório.</small>
-				    </div>
+        	<label for="loanTransactionDate" class="col-sm-3 control-label">Data de lançamento</label>
+        	<div class="col-sm-4">
+        		<div class="input-group input-group-sm">
+        			<input type="text" uib-datepicker-popup name="loanTransactionDate" ng-model="loan.transactionDate" required class="form-control date-mask" is-open="transactionDateOpened" ng-change="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);" ng-keyup="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);"/>
+        			<span class="input-group-btn">
+        				<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogTransactionDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        			</span>
+        		</div>
+        	</div>
+            <div class="col-sm-9 col-sm-offset-3">
+                <div class="error" ng-show="(loanForm.loanTransactionDate.$dirty && loanForm.loanTransactionDate.$invalid) || (submitted && loanForm.loanTransactionDate.$invalid)">
+                    <small class="error" ng-show="loanForm.loanTransactionDate.$error.required">O campo Data de lançamento é obrigatório.</small>
                 </div>
-			</div>
+            </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="loanDueDate" class="col-sm-3 control-label">Data de vencimento</label>
-			<div class="col-sm-4">
-			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup="shortDate" name="loanDueDate" ng-model="loan.dueDate" required gte-than-date-control="{{loan.transactionDate}}" class="form-control date-mask" is-open="dueDateOpened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
-                    <span class="input-group-btn">
-                	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogDueDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              	    </span>
-				    <div class="error" ng-show="(loanForm.loanDueDate.$dirty && loanForm.loanDueDate.$invalid) || (submitted && loanForm.loanDueDate.$invalid)">
-					    <small class="error" ng-show="loanForm.loanDueDate.$error.required">O campo Data de vencimento é obrigatório.</small>
-					    <small class="error" ng-show="loanForm.loanDueDate.$error.gteThanDateControl">Não pode ser menor do que a Data de lançamento.</small>
-				    </div>
+        	<label for="loanDueDate" class="col-sm-3 control-label">Data de vencimento</label>
+        	<div class="col-sm-4">
+        		<div class="input-group input-group-sm">
+        			<input type="text" uib-datepicker-popup min-date="dueDateMinDate" name="loanDueDate" ng-model="loan.dueDate" required class="form-control date-mask" is-open="dueDateOpened" ng-change="validateDueDate(loanForm.loanDueDate)" ng-keyup="validateDueDate(loanForm.loanDueDate)"/>
+        			<span class="input-group-btn">
+        				<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogDueDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        			</span>
+        		</div>
+        	</div>
+            <div class="col-sm-9 col-sm-offset-3">
+                <div class="error" ng-show="(loanForm.loanDueDate.$dirty && loanForm.loanDueDate.$invalid) || (submitted && loanForm.loanDueDate.$invalid)">
+                    <small class="error" ng-show="loanForm.loanDueDate.$error.required">O campo Data de vencimento é obrigatório.</small>
+                    <small class="error" ng-show="loanForm.loanDueDate.$error.gteThanDateControl">Não pode ser menor do que a Data de lançamento.</small>
                 </div>
-			</div>
+            </div>
         </div>
 		<div class="form-group form-group-sm">
 			<label for="loanAmount" class="col-sm-3 control-label">Valor</label>
@@ -56,7 +60,9 @@
 			<label for="loanType" class="col-sm-3 control-label">Tipo de empréstimo</label>
 			<div class="col-sm-4">
 				<select name="loanType" required ng-model="loan.type" ng-options="type for type in loanType" class="form-control"></select>
-				<div class="error" ng-show="(loanForm.loanType.$dirty && loanForm.loanType.$invalid) || (submitted && loanForm.loanType.$invalid)">
+			</div>
+            <div class="col-sm-9 col-sm-offset-3">
+                <div class="error" ng-show="(loanForm.loanType.$dirty && loanForm.loanType.$invalid) || (submitted && loanForm.loanType.$invalid)">
 					<small class="error" ng-show="loanForm.loanType.$error.required">O campo Tipo de empréstimo é obrigatório.</small>
 				</div>
 			</div>

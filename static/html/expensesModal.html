@@ -23,15 +23,15 @@
 		</div>
 		<div class="form-group form-group-sm">
             <label for="expenseDueDate" class="col-sm-2 control-label">Vencimento</label>
-			    <div class="col-sm-4">
-			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup="shortDate" name="expenseDueDate" ng-model="expense.dueDate" required class="form-control date-mask" is-open="opened" current-text="Hoje" clear-text="Limpar" close-text="Fechar"/>
+			<div class="col-sm-4">
+                <div class="input-group input-group-sm">
+			        <input type="text" uib-datepicker-popup name="expenseDueDate" ng-model="expense.dueDate" required class="form-control date-mask" is-open="opened"/>
                     <span class="input-group-btn">
-                	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              	    </span>
-				    <div class="error" ng-show="(expenseForm.expenseDueDate.$dirty && expenseForm.expenseDueDate.$invalid) || (submitted && expenseForm.expenseDueDate.$invalid)">
-					    <small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é obrigatório.</small>
-				    </div>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+                <div class="error" ng-show="(expenseForm.expenseDueDate.$dirty && expenseForm.expenseDueDate.$invalid) || (submitted && expenseForm.expenseDueDate.$invalid)">
+                    <small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é obrigatório.</small>
                 </div>
 			</div>
             <label for="expenseAmount" class="col-sm-2 control-label">Valor</label>
