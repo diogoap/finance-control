@@ -12,6 +12,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar empréstimo';
 		$scope.loan = { transactionDate: new Date(), dueDate: new Date(), status: 'Em aberto' };
+		$scope.dueDateMinDate = $scope.loan.transactionDate;
 		$scope.loading = false;
 	}
 	else
@@ -34,6 +35,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 					$scope.loan.description += ' - Cópia';
 				}
 
+				$scope.dueDateMinDate = $scope.loan.transactionDate;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
@@ -41,7 +43,6 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 				$scope.loading = false;
 			});
 	};
-	$scope.dueDateMinDate = $scope.loan.transactionDate;
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
