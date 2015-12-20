@@ -5,32 +5,39 @@ var app = angular.module('financeControl');
 app.controller('categoriesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Categories) {
 
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+        { name: 'Ações', type: 'string', width:'75', minWidth:'75', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Inativar" ng-show="row.entity.enabled == true" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Ativar" ng-show="row.entity.enabled == false" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width:'55%', enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('55%', '60%', '60%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Tipo', field: 'type', type: 'string', width:'25%', enableColumnMenu: false },
-        { name: 'Ativa?', field: 'enableed', type: 'string', width:'10%', enableColumnMenu: false,
+        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('25%', '28%', '28%'), enableColumnMenu: false },
+        { name: 'Ativa?', field: 'enableed', type: 'string', width: Utils.getSizeRes('10%', '12%', '12%'), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
  	$scope.gridOptions = {
+        enableRowSelection: Utils.isLowResolution(),
+    	enableRowHeaderSelection: false,
+    	multiSelect: false,
+    	enableSelectAll: false,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-        rowHeight: 23,
+        rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
           $scope.gridApi = gridApi;
+          gridApi.selection.on.rowSelectionChanged($scope,function(row){
+              $scope.selectedRow = row;
+          });
         }
     };
 
@@ -98,6 +105,7 @@ app.controller('categoriesController', function($scope, $http, $uibModal, $local
         Categories.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                $scope.selectedRow = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {

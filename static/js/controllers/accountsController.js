@@ -54,10 +54,6 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
 	}
 
   	$scope.openModal = function (accountId, action) {
-        if (Utils.validateOperation($scope, accountId, 'editar') == false) {
-            return;
-        }
-
     	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/accountsModal.html',
@@ -82,10 +78,6 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
     }
 
     $scope.enableDisableConfirmation = function (accountId, enable) {
-        if (Utils.validateOperation($scope, accountId, enable ? 'ativar' : 'inativar') == false) {
-            return;
-        }
-
     	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',

@@ -8,11 +8,11 @@
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
 			<div class="col-sm-2" ng-hide="Utils.isLowResolution()"">
-				<button class="btn btn-primary btn-sm" ng-click="openModal(0, 'new')">Adicionar conta</button>
+				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar conta</button>
 			</div>
 			<div class="col-sm-4" ng-show="Utils.isLowResolution()">
-				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(0, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
-				<a class="btn btn-primary btn-sm btn-action" title="Editar" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Inativar" ng-show="selectedRow.entity.enabled == true" href="" ng-click="enableDisableConfirmation(selectedRow.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Ativar" ng-show="selectedRow.entity.enabled == false" href="" ng-click="enableDisableConfirmation(selectedRow.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>
 			</div>

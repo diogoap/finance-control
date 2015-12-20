@@ -5,23 +5,15 @@ function localReplaceAll(str, find, replace) {
   	return str.replace(new RegExp(escapedFind, 'g'), replace);
 }
 
-function localAddError(scope, msg) {
-	scope.alerts.push({ type: 'danger', msg: msg });
-}
-
-function localAddSucess(scope, msg) {
-	scope.alerts.push({ type: 'success', msg: msg });
-}
-
 angular.module('utilsService', [])
 
 	.factory('Utils', ['$locale', function($locale) {
 		return {
 			addError : function(scope, msg) {
-		    	localAddError(scope, msg);
+		    	scope.alerts.push({ type: 'danger', msg: msg });
 		    },
 		    addSucess : function(scope, msg) {
-		    	localAddSucess(scope, msg);
+		    	scope.alerts.push({ type: 'success', msg: msg });
 		    },
 		    closeAlert : function(scope, index) {
 		    	scope.alerts.splice(index, 1);
@@ -64,16 +56,10 @@ angular.module('utilsService', [])
 			},
 			getGridRowHeight: function() {
 				if ($(window).width() < 800) {
-					return 30;
+					return 32;
 				} else {
 					return 23;
 				}
-			},
-			validateOperation : function(scope, id, action) {
-				if ((id == undefined) || (id == null)) {
-					scope.alerts.push({ type: 'danger', msg: 'Selecione um registro para ' + action + '!' });
-		            return false;
-		        }
-		    }
+			}
 		}
 	}]);

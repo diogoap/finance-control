@@ -28,6 +28,13 @@ select.form-control.ng-valid {
     font-size: 12px;
 }
 
+@media only screen and (max-width : 799px)
+{
+    .ui-grid-cell {
+        padding-top: 3px;
+    }
+}
+
 .no-padding-bottom {
     padding-bottom: 0px;
 }
