@@ -12,11 +12,11 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('52%', '44%', '44%'), enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('52%', '43%', '43%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('20%', '24%', '24%'), enableColumnMenu: false,
+        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('20%', '25%', '25%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
         { name: 'Ordem', field: 'order', type: 'number', width: Utils.getSizeRes('10%', '16%', '16%'), enableColumnMenu: false,

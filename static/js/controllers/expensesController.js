@@ -2,57 +2,97 @@
 
 var app = angular.module('financeControl');
 
+function getCellClasses(row, cellClass) {
+    var styles = cellClass;
+    if (row.entity.isLatePayment == true) {
+        styles = styles + ' red-font-color';
+    }
+    return styles;
+}
+
 app.controller('expensesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Expenses) {
 
-    var rowTemplate = '<div ng-class="{\'red-font-color\':row.entity.isLatePayment == true }"><div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div></div>';
-
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'146', minWidth:'146', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+        { name: 'Ações', type: 'string', width:'146', minWidth:'146', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Pagar" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
-        { name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
-            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        {
+            name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '15%', '21%'), enableColumnMenu: false,
+            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, 'ui-grid-cell-center-align')
+            }
         },
         {
-            name: 'Descrição', field: 'description', type: 'string', width:'22%', enableColumnMenu: false,
+            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('22%', '27%', '41%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
-            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
+            footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, '')
+            }
         },
-        { name: 'Valor', field: 'amount', type: 'number',  width: '8%', enableColumnMenu: false,
-            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('9%', '12%', '20%'), enableColumnMenu: false,
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
-            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
+            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, 'ui-grid-cell-right-align')
+            }
         },
-        { name: 'Conta', field: '_accountNames', type: 'string', width:'13%', enableColumnMenu: false },
-        { name: 'Categoria', field: '_categoryNames', type: 'string', width:'13%', enableColumnMenu: false },
-        { name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
-            headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+        {
+            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('13%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, '')
+            }
         },
-        { name: 'Valor pago', field: 'amountPaid', type: 'number', width:'8%', enableColumnMenu: false,
-            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+        {
+            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('13%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, '')
+            }
+        },
+        {
+            name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('9%', '12%', '18%'), enableColumnMenu: false,
+            headerCellClass: 'ui-grid-cell-right-align',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, 'ui-grid-cell-center-align')
+            }
+        },
+        {
+            name: 'Valor pago', field: 'amountPaid', type: 'number', width: Utils.getSizeRes('9%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
-            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
+            footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return getCellClasses(row, 'ui-grid-cell-right-align')
+            }
         },
-        { name: 'Ag.', field: 'scheduledPayment', type: 'string', width:'4%', enableColumnMenu: false,
+        {
+            name: 'Ag.', field: 'scheduledPayment', type: 'string', width: Utils.getSizeRes('4%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
             headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
     $scope.gridOptions = {
+        enableRowSelection: Utils.isLowResolution(),
+    	enableRowHeaderSelection: false,
+    	multiSelect: false,
+    	enableSelectAll: false,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-        rowHeight: 23,
-        rowTemplate: rowTemplate,
+        rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
-          $scope.refreshColumns();
+        	$scope.gridApi = gridApi;
+        	gridApi.selection.on.rowSelectionChanged($scope,function(row){
+        		$scope.selectedRow = row;
+        	});
         }
     };
 
@@ -82,12 +122,6 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
     	$scope.columns[8].visible = width > 1000;
     	//$scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
     }
-
-    $(window).resize(function(){
-    	$scope.$apply(function(){
-    	   $scope.refreshColumns();
-    	});
-    });
 
   	$scope.openCalendarDialogBegin = function($event) {
     	$scope.beginOpened = true;
@@ -253,6 +287,7 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
 		Expenses.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                $scope.selectedRow = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {

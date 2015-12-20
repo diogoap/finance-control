@@ -6,16 +6,30 @@
 	</div>
 
 	<div class="row">
-		<div class="form-group form-group-sm">
-			<div class="col-sm-4">
+		<div class="form-group form-group-sm no-margin-bottom">
+
+			<div class="col-sm-2" ng-hide="Utils.isLowResolution()">
 				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar</button>
 				<button class="btn btn-primary btn-sm" ng-click="openGeneratorModal()">Gerar</button>
+			</div>
+
+			<div class="col-sm-2" style="margin-bottom: 5px;">
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success" ng-click="navigatePreviousMonth()">-1 Mês</button>
 					<button class="btn btn-success" ng-click="navigateActualMonth()">Atual</button>
 					<button class="btn btn-success" ng-click="navigateNextMonth()">+1 Mês</button>
 				</div>
 			</div>
+
+			<div class="col-sm-4" ng-show="Utils.isLowResolution()">
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Pagar" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="payExpenseConfirmation(selectedRow.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Gerar" href="" ng-click="openGeneratorModal(null, 'new')"><i class="fa fa-cog fa-lg fa-fw"></i></a>
+			</div>
+
 			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">
 				<div class="input-group input-group-sm">
 					<input type="text" uib-datepicker-popup name="expenseDueDateBegin" ng-model="expenseDueDateBegin" required class="form-control date-mask" is-open="beginOpened"/>
@@ -42,7 +56,7 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="form-group form-group-sm">
-				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
+				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize ui-grid-selection resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
 			</div>
 
 			<div class="loading-box" ng-show="loading">
