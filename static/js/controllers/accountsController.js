@@ -36,7 +36,7 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-        rowHeight: 23,
+        rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
           $scope.gridApi = gridApi;

@@ -62,6 +62,13 @@ angular.module('utilsService', [])
 					return sizeLg;
 				}
 			},
+			getGridRowHeight: function() {
+				if ($(window).width() < 800) {
+					return 28;
+				} else {
+					return 23;
+				}
+			},
 			validateOperation : function(scope, id, action) {
 				if ((id == undefined) || (id == null)) {
 					scope.alerts.push({ type: 'danger', msg: 'Selecione um registro para ' + action + '!' });
