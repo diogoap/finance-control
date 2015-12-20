@@ -64,7 +64,7 @@ angular.module('utilsService', [])
 			},
 			getGridRowHeight: function() {
 				if ($(window).width() < 800) {
-					return 28;
+					return 30;
 				} else {
 					return 23;
 				}
