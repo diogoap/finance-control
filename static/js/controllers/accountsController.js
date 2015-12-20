@@ -5,30 +5,34 @@ var app = angular.module('financeControl');
 app.controller('accountsController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Accounts) {
 
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+        { name: 'Ações', type: 'string', width:'75', minWidth:'75', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Inativar" ng-show="row.entity.enabled == true" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Ativar" ng-show="row.entity.enabled == false" href="" ng-click="grid.appScope.enableDisableConfirmation(row.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width:'46%', enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('48%', '50%', '50%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: '24%', enableColumnMenu: false,
+        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('25%', '26%', '26%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
-        { name: 'Ordem', field: 'order', type: 'number',  width: '10%', enableColumnMenu: false,
+        { name: 'Ordem', field: 'order', type: 'number', width: Utils.getSizeRes('10%', '12%', '12%'), enableColumnMenu: false,
             cellFilter: 'number:0', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Ativa?', field: 'enableed', type: 'string', width:'10%', enableColumnMenu: false,
+        { name: 'Ativa?', field: 'enableed', type: 'string', width: Utils.getSizeRes('10%', '12%', '12%'), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
  	$scope.gridOptions = {
+        enableRowSelection: Utils.isLowResolution(),
+        enableRowHeaderSelection: false,
+        multiSelect: false,
+        enableSelectAll: false,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
@@ -36,6 +40,9 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
           $scope.gridApi = gridApi;
+          gridApi.selection.on.rowSelectionChanged($scope,function(row){
+              $scope.selectedRow = row;
+          });
         }
     }
 
@@ -47,6 +54,10 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
 	}
 
   	$scope.openModal = function (accountId, action) {
+        if (Utils.validateOperation($scope, accountId, 'editar') == false) {
+            return;
+        }
+
     	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/accountsModal.html',
@@ -71,6 +82,10 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
     }
 
     $scope.enableDisableConfirmation = function (accountId, enable) {
+        if (Utils.validateOperation($scope, accountId, enable ? 'ativar' : 'inativar') == false) {
+            return;
+        }
+
     	var modalInstance = $uibModal.open({
       		animation: $scope.animationsEnabled,
       		templateUrl: 'html/confirmModal.html',
@@ -103,6 +118,7 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
         Accounts.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                $scope.selectedRow = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
@@ -126,7 +142,7 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
 	}
 
 	$scope.editAccount = function(account) {
-		$scope.loading = true;
+        $scope.loading = true;
 
 		Accounts.patch(account._id, account)
 			.success(function(data) {

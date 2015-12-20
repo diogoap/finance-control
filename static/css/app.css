@@ -40,6 +40,11 @@ select.form-control.ng-valid {
     margin-left: 3px;
 }
 
+.btn-action {
+    margin-left: 0px;
+    margin-right: 3px;
+}
+
 .red-font-color {
   color: red;
 }
