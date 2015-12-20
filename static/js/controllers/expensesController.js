@@ -96,33 +96,6 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
         }
     };
 
-    $scope.refreshColumns = function() {
-    	var width = $(window).width();
-
-        if (width <= 600) {
-            $scope.columns[1].width = '18%';
-            $scope.columns[2].width = '35%';
-            $scope.columns[3].width = '18%';
-        } else if (width <= 800) {
-            $scope.columns[1].width = '15%';
-            $scope.columns[2].width = '30%';
-            $scope.columns[3].width = '15%';
-            $scope.columns[6].width = '15%';
-        } else {
-            $scope.columns[1].width = '8%';
-            $scope.columns[2].width = '22%';
-            $scope.columns[3].width = '10%';
-            $scope.columns[6].width = '9%';
-        }
-
-        $scope.columns[4].visible = width > 800;
-        $scope.columns[5].visible = width > 800;
-    	$scope.columns[6].visible = width > 600;
-    	$scope.columns[7].visible = width > 1000;
-    	$scope.columns[8].visible = width > 1000;
-    	//$scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-    }
-
   	$scope.openCalendarDialogBegin = function($event) {
     	$scope.beginOpened = true;
   	};
