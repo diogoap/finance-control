@@ -5,7 +5,7 @@ var app = angular.module('financeControl');
 app.controller('loansController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Loans) {
 
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'146', minWidth:'146', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+        { name: 'Ações', type: 'string', width:'146', minWidth:'146', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
@@ -13,38 +13,45 @@ app.controller('loansController', function($scope, $http, $uibModal, $locale, ui
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Descrição', field: 'description', type: 'string', width:'25%', enableColumnMenu: false,
+            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('25%', '35%', '43%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Data', field: 'transactionDate', type: 'date', width:'8%', enableColumnMenu: false,
+        { name: 'Data', field: 'transactionDate', type: 'date', width: Utils.getSizeRes('8%', '11%', '13%'), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Vencimento', field: 'dueDate', type: 'date', width:'8%', enableColumnMenu: false,
+        { name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Valor', field: 'amount', type: 'number',  width: '10%', enableColumnMenu: false,
+        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('10%', '12%', '16%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         },
-        { name: 'Conta', field: '_account.name', type: 'string', width:'17%', enableColumnMenu: false },
-        { name: 'Tipo', field: 'type', type: 'string', width:'9%', enableColumnMenu: false,
+        { name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('17%', '18%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false },
+        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('9%', '12%', '14%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Situação', field: 'status', type: 'string', width:'9%', enableColumnMenu: false,
+        { name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('9%', '12%', '14%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
  	$scope.gridOptions = {
+        enableRowSelection: Utils.isLowResolution(),
+    	enableRowHeaderSelection: false,
+    	multiSelect: false,
+    	enableSelectAll: false,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-        rowHeight: 23,
+        rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope,function(row){
+                $scope.selectedRow = row;
+            });
         }
     };
 
@@ -129,6 +136,7 @@ app.controller('loansController', function($scope, $http, $uibModal, $locale, ui
 		Loans.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                $scope.selectedRow = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {

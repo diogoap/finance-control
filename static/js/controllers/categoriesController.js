@@ -12,11 +12,11 @@ app.controller('categoriesController', function($scope, $http, $uibModal, $local
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('55%', '60%', '60%'), enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('60%', '60%', '60%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('25%', '28%', '28%'), enableColumnMenu: false },
+        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('22%', '28%', '28%'), enableColumnMenu: false },
         { name: 'Ativa?', field: 'enableed', type: 'string', width: Utils.getSizeRes('10%', '12%', '12%'), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
@@ -34,10 +34,10 @@ app.controller('categoriesController', function($scope, $http, $uibModal, $local
         rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
-          gridApi.selection.on.rowSelectionChanged($scope,function(row){
-              $scope.selectedRow = row;
-          });
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope,function(row){
+                $scope.selectedRow = row;
+            });
         }
     };
 

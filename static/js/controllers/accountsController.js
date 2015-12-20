@@ -12,11 +12,11 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('48%', '50%', '50%'), enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('52%', '50%', '50%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('25%', '26%', '26%'), enableColumnMenu: false,
+        { name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('20%', '26%', '26%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
         { name: 'Ordem', field: 'order', type: 'number', width: Utils.getSizeRes('10%', '12%', '12%'), enableColumnMenu: false,
@@ -39,10 +39,10 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
         rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
-          gridApi.selection.on.rowSelectionChanged($scope,function(row){
-              $scope.selectedRow = row;
-          });
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope,function(row){
+                $scope.selectedRow = row;
+            });
         }
     }
 

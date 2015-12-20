@@ -60,6 +60,15 @@ angular.module('utilsService', [])
 				} else {
 					return 23;
 				}
+			},
+			setVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
+				if ($(window).width() < 600) {
+					return visibleSm;
+				} else if ($(window).width() < 800) {
+					return visibleMd;
+				} else {
+					return visibleLg;
+				}
 			}
 		}
 	}]);
