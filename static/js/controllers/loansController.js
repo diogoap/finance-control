@@ -13,26 +13,26 @@ app.controller('loansController', function($scope, $http, $uibModal, $locale, ui
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
         {
-            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('25%', '35%', '43%'), enableColumnMenu: false,
+            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('25%', '35%', '47%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Data', field: 'transactionDate', type: 'date', width: Utils.getSizeRes('8%', '11%', '13%'), enableColumnMenu: false,
+        { name: 'Data', field: 'transactionDate', type: 'date', width: Utils.getSizeRes('8%', '11%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
         { name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('10%', '12%', '16%'), enableColumnMenu: false,
+        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('10%', '12%', '17%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         },
         { name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('17%', '18%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false },
-        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('9%', '12%', '14%'), enableColumnMenu: false,
+        { name: 'Tipo', field: 'type', type: 'string', width: Utils.getSizeRes('9%', '12%', '18%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
-        { name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('9%', '12%', '14%'), enableColumnMenu: false,
+        { name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('9%', '12%', '18%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         }
     ];

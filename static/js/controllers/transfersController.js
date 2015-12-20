@@ -5,35 +5,42 @@ var app = angular.module('financeControl');
 app.controller('transfersController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Transfers) {
 
  	$scope.columns = [
-        { name: 'Ações', type: 'string', width:'75', minWidth:'75', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+        { name: 'Ações', type: 'string', width:'75', minWidth:'75', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
             '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
             '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
         },
-        { name: 'Data', field: 'date', type: 'date', width:'12%', enableColumnMenu: false,
+        { name: 'Data', field: 'date', type: 'date', width: Utils.getSizeRes('12%', '15%', '15%'), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align',
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
         },
-        { name: 'Valor', field: 'amount', type: 'number',  width: '12%', enableColumnMenu: false,
+        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('12%', '15%', '15%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         },
         {
-            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width:'33%', enableColumnMenu: false
+            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width: Utils.getSizeRes('33%', '35%', '35%'), enableColumnMenu: false
         },
-        { name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width:'33%', enableColumnMenu: false }
+        { name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width: Utils.getSizeRes('33%', '35%', '35%'), enableColumnMenu: false }
     ];
 
  	$scope.gridOptions = {
+        enableRowSelection: Utils.isLowResolution(),
+    	enableRowHeaderSelection: false,
+    	multiSelect: false,
+    	enableSelectAll: false,
         enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-        rowHeight: 23,
+        rowHeight: Utils.getGridRowHeight(),
         columnDefs: $scope.columns,
         onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
+        	$scope.gridApi = gridApi;
+        	gridApi.selection.on.rowSelectionChanged($scope,function(row){
+        		$scope.selectedRow = row;
+        	});
         }
     };
 
@@ -160,6 +167,7 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
 		Transfers.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                $scope.selectedRow = null;
 				$scope.loading = false;
 			})
 			.error(function(data, status, headers, config) {
