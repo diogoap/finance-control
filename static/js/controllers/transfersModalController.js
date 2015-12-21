@@ -60,4 +60,9 @@ function transfersModalController($scope, $uibModalInstance, Utils, Transfers, A
 	$scope.formatNumericAmount = function(event) {
 		$scope.transfer.amount = Utils.formatPastedNumer(event);
 	}
+
+	$scope.$on('$locationChangeStart', function(event, next, current){
+	    event.preventDefault();
+		$scope.cancel();
+	});
 };

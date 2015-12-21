@@ -288,4 +288,8 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 		}
 	}
 
+	$scope.$on('$locationChangeStart', function(event, next, current){
+	    event.preventDefault();
+		$scope.cancel();
+	});
 };

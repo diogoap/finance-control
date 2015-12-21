@@ -89,4 +89,8 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 		$scope.expenseDetail.amount = Utils.formatPastedNumer(event);
 	}
 
+	$scope.$on('$locationChangeStart', function(event, next, current){
+	    event.preventDefault();
+		$scope.cancelDetail();
+	});
 };

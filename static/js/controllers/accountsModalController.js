@@ -43,4 +43,9 @@ function accountsModalController($scope, $uibModalInstance, Utils, Accounts, acc
 	$scope.formatNumericInitialBalance = function(event) {
     	$scope.account.initialBalance = Utils.formatPastedNumer(event);
     }
+
+	$scope.$on('$locationChangeStart', function(event, next, current){
+	    event.preventDefault();
+		$scope.cancel();
+	});
 };

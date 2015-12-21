@@ -76,4 +76,8 @@ function generatorModalController($scope, $uibModal, $uibModalInstance, Utils, G
 		$scope.generatorParameters.amount = Utils.formatPastedNumer(event);
 	}
 
+	$scope.$on('$locationChangeStart', function(event, next, current){
+	    event.preventDefault();
+		$scope.cancel();
+	});
 };
