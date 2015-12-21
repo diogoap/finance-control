@@ -25,7 +25,7 @@
                 </div>
                 <div class="error" ng-show="(incomeForm.incomeDueDate.$dirty && incomeForm.incomeDueDate.$invalid) || (submitted && incomeForm.incomeDueDate.$invalid)">
                     <small class="error" ng-show="incomeForm.incomeDueDate.$error.required">O campo Vencimento é obrigatório.</small>
-                </div>                
+                </div>
 			</div>
             <label for="incomeAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-4">
@@ -78,14 +78,22 @@
 		</div>
 
 		<div class="form-group form-group-sm no-margin-bottom">
-            <div class="col-sm-12">
+            <div class="col-sm-12" ng-hide="Utils.isLowResolution()">
                 <button type="button" class="btn btn-primary btn-sm" ng-click="openDetail(null, 'new')">Adicionar detalhe</button>
             </div>
+
+            <div class="col-sm-12" ng-show="Utils.isLowResolution()">
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openDetail(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteDetailConfirmation(selectedRow.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Receber" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="receiveDetailConfirmation(selectedRow.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
+			</div>
 		</div>
 
         <div class="form-group form-group-sm no-margin-bottom">
 			<div class="col-sm-12">
-                <div ui-grid="gridOptions" style="width: 100%; height: 200px;"></div>
+                <div ui-grid="gridOptions" ui-grid-selection style="width: 100%; height: 200px;"></div>
             </div>
         </div>
 

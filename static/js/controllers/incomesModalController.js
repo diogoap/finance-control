@@ -10,37 +10,52 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
  	$scope.submitted = false;
 
  	$scope.columns = [
-		{ name: 'Ações', type: 'string', width:'110', minWidth:'110', enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
+		{
+			name: 'Ações', type: 'string', width:'146', minWidth:'146', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
 			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
 			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>',
+            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
+            '<a class="btn btn-primary btn-xs btn-grid" title="Receber" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.receiveDetailConfirmation(row.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
 			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
 		},
 		{
-			name: 'Descrição', field: 'description', type: 'string', width:'26%', enableColumnMenu: false,
+			name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('26%', '29%', '36%'), enableColumnMenu: false,
 			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 		},
-		{ name: 'Valor', field: 'amount', type: 'number',  width: '11%', enableColumnMenu: false,
+		{
+			name: 'Valor', field: 'amount', type: 'number', width: Utils.getSizeRes('11%', '15%', '20%'), enableColumnMenu: false,
 			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 			aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
 		},
-		{ name: 'Conta', field: '_account.name', type: 'string', width:'20%', enableColumnMenu: false },
-		{ name: 'Categoria', field: '_category.name', type: 'string', width:'20%', enableColumnMenu: false },
-		{ name: 'Situação', field: 'status', type: 'string', width:'10%', enableColumnMenu: false,
+		{
+			name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('18%', '21%', '26%'), enableColumnMenu: false
+		},
+		{
+			name: 'Categoria', field: '_category.name', type: 'string', width: Utils.getSizeRes('18%', '21%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false
+		},
+		{
+			name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('10%', '14%', '18%'), enableColumnMenu: false,
 			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
 		}
 	];
 
 	$scope.gridOptions = {
+		enableRowSelection: Utils.isLowResolution(),
+    	enableRowHeaderSelection: false,
+    	multiSelect: false,
+    	enableSelectAll: false,
 		enableColumnResizing: true,
         enableSorting: true,
 		showColumnFooter: true,
-		rowHeight: 23,
+		rowHeight: Utils.getGridRowHeight(),
 		columnDefs: $scope.columns,
-        onRegisterApi: function(gridApi) {
-          $scope.gridApi = gridApi;
+		onRegisterApi: function(gridApi) {
+        	$scope.gridApi = gridApi;
+        	gridApi.selection.on.rowSelectionChanged($scope,function(row){
+        		$scope.selectedRow = row;
+        	});
         }
     };
 
@@ -131,6 +146,7 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 	$scope.updateIncomeTotal = function() {
 		$scope._hasDetail = false;
+		$scope.selectedRow = null;
 
 		if (($scope.income.detail != undefined) && ($scope.income.detail.length > 0)) {
 			$scope._hasDetail = true;
@@ -199,7 +215,7 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 			$scope.updateIncomeTotal();
 		});
-    };
+    }
 
     $scope.deleteDetailConfirmation = function (entity) {
     	var modalInstance = $uibModal.open({
@@ -228,7 +244,35 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 			$scope.updateIncomeTotal();
 		});
-    };
+    }
+
+	$scope.receiveDetailConfirmation = function (entity) {
+    	var modalInstance = $uibModal.open({
+      		animation: $scope.animationsEnabled,
+      		templateUrl: 'html/confirmModal.html',
+      		controller: confirmModalController,
+			size: 'sm',
+      		resolve: {
+		        data: function () {
+					return entity;
+        		},
+		        message: function () {
+					return 'Confirma o recebimento do detalhe?';
+        		}
+      		}
+    	});
+
+		modalInstance.result.then(function (entity) {
+			for (var i in $scope.income.detail) {
+				if ($scope.income.detail[i].$$hashKey == entity.$$hashKey) {
+					$scope.income.detail[i].status = 'Recebido';
+					break;
+				}
+			}
+
+			$scope.updateIncomeTotal();
+		});
+    }
 
 	$scope.formatNumericAmount = function(e) {
 		$scope.income.amount = Utils.formatPastedNumer(e);
