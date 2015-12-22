@@ -23,6 +23,10 @@ select.form-control.ng-valid {
     text-align: center;
 }
 
+.ui-grid-cell-focus {
+    outline: 0; background-color: #c9dde1 !important;
+}
+
 @media only screen and (max-width : 799px)
 {
     .ui-grid {

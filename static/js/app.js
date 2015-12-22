@@ -8,6 +8,7 @@ var app = angular.module('financeControl', [
     'ui.grid.autoResize',
     'ui.grid.resizeColumns',
     'ui.grid.selection',
+    'ui.grid.cellNav',
     'purplefox.numeric',
     'utilsService',
     'categoriesService',
