@@ -37,13 +37,13 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, '')
             }
         },
         {
-            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, '')
             }
@@ -56,7 +56,7 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Valor pago', field: 'amountPaid', type: 'number', width: Utils.getSizeRes('9%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
+            name: 'Valor pago', field: 'amountPaid', type: 'number', width: Utils.getSizeRes('9%', '0%', '0%'), visible: Utils.getVisibilityRes(true, false, false), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
@@ -65,7 +65,7 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Ag.', field: 'scheduledPayment', type: 'string', width: Utils.getSizeRes('5%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
+            name: 'Ag.', field: 'scheduledPayment', type: 'string', width: Utils.getSizeRes('5%', '0%', '0%'), visible: Utils.getVisibilityRes(true, false, false), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
             headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         }

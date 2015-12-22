@@ -11,38 +11,30 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
  	$scope.columns = [
 		{
-			name: 'Ações', type: 'string', width:'146', minWidth:'146', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-			'<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openDetail(row.entity, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-			'<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteDetailConfirmation(row.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
-			'<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openDetail(row.entity, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Pagar" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payDetailConfirmation(row.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
-			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
-		},
-		{
-			name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('26%', '29%', '36%'), enableColumnMenu: false,
+			name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('29%', '29%', '36%'), enableColumnMenu: false,
 			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 		},
 		{
-			name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('11%', '15%', '20%'), enableColumnMenu: false,
+			name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('15%', '15%', '20%'), enableColumnMenu: false,
 			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
 			aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
 		},
 		{
-			name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('18%', '21%', '26%'), enableColumnMenu: false
+			name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('21%', '21%', '26%'), enableColumnMenu: false
 		},
 		{
-			name: 'Categoria', field: '_category.name', type: 'string', width: Utils.getSizeRes('18%', '21%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false
+			name: 'Categoria', field: '_category.name', type: 'string', width: Utils.getSizeRes('21%', '21%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false
 		},
 		{
-			name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('10%', '14%', '18%'), enableColumnMenu: false,
-			headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
+			name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('14%', '14%', '18%'), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
 		}
 	];
 
 	$scope.gridOptions = {
-		enableRowSelection: Utils.isLowResolution(),
+		enableRowSelection: true,
     	enableRowHeaderSelection: false,
     	multiSelect: false,
     	enableSelectAll: false,

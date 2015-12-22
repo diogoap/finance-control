@@ -5,17 +5,16 @@
 
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
-			<div class="col-sm-2" ng-hide="Utils.isLowResolution()"">
-				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar empréstimo</button>
-			</div>
-			<div class="col-sm-4" ng-show="Utils.isLowResolution()">
+
+			<div class="col-sm-4">
 				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Quitar" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="payLoanConfirmation(selectedRow.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
 			</div>
-			<div class="col-sm-4">
+
+			<div class="col-sm-4" style="{{Utils.getStyleRes('text-align:center;', 'padding-top:5px;')}}">
 				<label>
 					<input type="checkbox" name="loanListPaidLoans" ng-model="listPaidLoans" ng-click="getLoans()"/> Listar empréstimos quitados?
 				</label>

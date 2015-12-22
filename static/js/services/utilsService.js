@@ -61,13 +61,20 @@ angular.module('utilsService', [])
 					return 23;
 				}
 			},
-			setVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
+			getVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
 				if ($(window).width() < 600) {
 					return visibleSm;
 				} else if ($(window).width() < 800) {
 					return visibleMd;
 				} else {
 					return visibleLg;
+				}
+			},
+			getStyleRes: function(styleLg, styleMdSm) {
+				if ($(window).width() < 800) {
+					return styleMdSm;
+				} else {
+					return styleLg;
 				}
 			}
 		}

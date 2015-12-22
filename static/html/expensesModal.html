@@ -84,11 +84,7 @@
 		</div>
 
 		<div class="form-group form-group-sm no-margin-bottom">
-            <div class="col-sm-12" ng-hide="Utils.isLowResolution()">
-                <button type="button" class="btn btn-primary btn-sm" ng-click="openDetail(null, 'new')">Adicionar detalhe</button>
-            </div>
-
-            <div class="col-sm-12" ng-show="Utils.isLowResolution()">
+            <div class="col-sm-12">
 				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openDetail(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteDetailConfirmation(selectedRow.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
