@@ -1,19 +1,12 @@
 <div class="container-fluid" ng-controller="expensesController">
 	<div class="row">
-		<div class="text-center screen-title">
-			<h4>Cadastro de despesas</h4>
-		</div>
+		<div class="screen-title">Cadastro de despesas</div>
 	</div>
 
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
 
-			<div class="col-sm-2" ng-hide="Utils.isLowResolution()">
-				<button class="btn btn-primary btn-sm" ng-click="openModal(null, 'new')">Adicionar</button>
-				<button class="btn btn-primary btn-sm" ng-click="openGeneratorModal()">Gerar</button>
-			</div>
-
-			<div class="col-sm-2" style="margin-bottom: 5px;">
+			<div class="col-sm-12" ng-show="Utils.isLowResolution()" style="margin-bottom: 5px;">
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success" ng-click="navigatePreviousMonth()">-1 Mês</button>
 					<button class="btn btn-success" ng-click="navigateActualMonth()">Atual</button>
@@ -21,13 +14,21 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4" ng-show="Utils.isLowResolution()">
+			<div class="col-sm-4">
 				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Pagar" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="payExpenseConfirmation(selectedRow.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Gerar" href="" ng-click="openGeneratorModal(null, 'new')"><i class="fa fa-cog fa-lg fa-fw"></i></a>
+			</div>
+
+			<div class="col-sm-4" ng-hide="Utils.isLowResolution()" style="text-align: center;">
+				<div class="btn-group btn-group-sm">
+					<button class="btn btn-success" ng-click="navigatePreviousMonth()">-1 Mês</button>
+					<button class="btn btn-success" ng-click="navigateActualMonth()">Atual</button>
+					<button class="btn btn-success" ng-click="navigateNextMonth()">+1 Mês</button>
+				</div>
 			</div>
 
 			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">

@@ -23,7 +23,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
         },
         {
             name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '15%', '21%'), enableColumnMenu: false,
-            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align',
+            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, 'ui-grid-cell-center-align')
             }
@@ -66,7 +66,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
         },
         {
             name: 'Valor receb.', field: 'amountReceived', type: 'number', width: Utils.getSizeRes('10%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
-            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
+            cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-center-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {

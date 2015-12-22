@@ -1,5 +1,5 @@
 html { overflow-y:scroll; }
-body { padding-top:10px; }
+body { padding-top:5px; }
 
 input.form-control.ng-invalid {
   border: 1px solid red;
@@ -95,8 +95,10 @@ label {
 }
 
 .screen-title {
+    font-size: 15px;
+    text-align: center;
     margin-top: -10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 label {

@@ -14,22 +14,14 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
 
  	$scope.columns = [
         {
-            name: 'Ações', type: 'string', width:'146', minWidth:'146', visible: !Utils.isLowResolution(), enableColumnResizing: false, enableSorting: false, enableColumnMenu: false, cellTemplate:
-            '<a class="btn btn-primary btn-xs btn-grid" title="Editar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'edit\')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Excluir" href="" ng-click="grid.appScope.deleteConfirmation(row.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Clonar" href="" ng-click="grid.appScope.openModal(row.entity._id, \'clone\')"><i class="fa fa-clone fa-lg fa-fw"></i></a>' +
-            '<a class="btn btn-primary btn-xs btn-grid" title="Pagar" ng-show="row.entity.status == \'Em aberto\'" href="" ng-click="grid.appScope.payExpenseConfirmation(row.entity._id)"><i class="fa fa-usd fa-lg fa-fw"></i></a>',
-            headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-left-align'
-        },
-        {
-            name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '15%', '21%'), enableColumnMenu: false,
-            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-right-align',
+            name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('9%', '15%', '21%'), enableColumnMenu: false,
+            cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, 'ui-grid-cell-center-align')
             }
         },
         {
-            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('22%', '27%', '41%'), enableColumnMenu: false,
+            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('26%', '27%', '41%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
@@ -45,20 +37,20 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('13%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, '')
             }
         },
         {
-            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('13%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.setVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, '')
             }
         },
         {
-            name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('9%', '12%', '18%'), enableColumnMenu: false,
-            headerCellClass: 'ui-grid-cell-right-align',
+            name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('10%', '12%', '18%'), enableColumnMenu: false,
+            headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return getCellClasses(row, 'ui-grid-cell-center-align')
             }
@@ -73,14 +65,14 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Ag.', field: 'scheduledPayment', type: 'string', width: Utils.getSizeRes('4%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
+            name: 'Ag.', field: 'scheduledPayment', type: 'string', width: Utils.getSizeRes('5%', '0%', '0%'), visible: Utils.setVisibilityRes(true, false, false), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.scheduledPayment">',
             headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-center-align'
         }
     ];
 
     $scope.gridOptions = {
-        enableRowSelection: Utils.isLowResolution(),
+        enableRowSelection: true,
     	enableRowHeaderSelection: false,
     	multiSelect: false,
     	enableSelectAll: false,
