@@ -139,6 +139,7 @@ app.controller('loansController', function($scope, $http, $uibModal, $locale, ui
 		Loans.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                Utils.clearGridNav($scope.gridApi);
                 $scope.selectedRow = null;
 				$scope.loading = false;
 			})

@@ -76,6 +76,10 @@ angular.module('utilsService', [])
 				} else {
 					return styleLg;
 				}
+			},
+			clearGridNav: function(gridApi) {
+				gridApi.grid.cellNav.clearFocus();
+				gridApi.grid.cellNav.lastRowCol = null;
 			}
 		}
 	}]);

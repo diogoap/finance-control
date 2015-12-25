@@ -252,6 +252,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
 		Incomes.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                Utils.clearGridNav($scope.gridApi);
                 $scope.selectedRow = null;
 				$scope.loading = false;
 			})

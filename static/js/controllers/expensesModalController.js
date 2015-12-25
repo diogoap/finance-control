@@ -141,6 +141,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 	$scope.updateExpenseTotal = function() {
 		$scope._hasDetail = false;
+		Utils.clearGridNav($scope.gridApi);
 		$scope.selectedRow = null;
 
 		if (($scope.expense.detail != undefined) && ($scope.expense.detail.length > 0)) {

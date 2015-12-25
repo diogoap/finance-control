@@ -141,6 +141,7 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 	$scope.updateIncomeTotal = function() {
 		$scope._hasDetail = false;
+		Utils.clearGridNav($scope.gridApi);
 		$scope.selectedRow = null;
 
 		if (($scope.income.detail != undefined) && ($scope.income.detail.length > 0)) {
@@ -282,5 +283,5 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 			$scope.income.amountReceived = $scope.income.amount;
 		}
 	}
-	
+
 };

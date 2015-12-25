@@ -105,6 +105,7 @@ app.controller('categoriesController', function($scope, $http, $uibModal, $local
         Categories.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                Utils.clearGridNav($scope.gridApi);
                 $scope.selectedRow = null;
 				$scope.loading = false;
 			})

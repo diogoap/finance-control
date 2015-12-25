@@ -110,6 +110,7 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
         Accounts.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                Utils.clearGridNav($scope.gridApi);
                 $scope.selectedRow = null;
 				$scope.loading = false;
 			})

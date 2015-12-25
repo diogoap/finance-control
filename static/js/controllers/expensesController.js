@@ -256,6 +256,7 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
 		Expenses.get(filter)
 			.success(function(data) {
 				$scope.gridOptions.data = data;
+                Utils.clearGridNav($scope.gridApi);
                 $scope.selectedRow = null;
 				$scope.loading = false;
 			})
