@@ -91,9 +91,4 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 	$scope.formatNumericAmount = function(event) {
 		$scope.loan.amount = Utils.formatPastedNumer(event);
 	}
-
-	$scope.$on('$locationChangeStart', function(event, next, current){
-	    event.preventDefault();
-		$scope.cancel();
-	});
 };

@@ -40,9 +40,4 @@ function categoriesModalController($scope, $uibModalInstance, Utils, Categories,
 	$scope.cancel = function() {
 		$uibModalInstance.dismiss('cancel');
 	}
-
-	$scope.$on('$locationChangeStart', function(event, next, current){
-	    event.preventDefault();
-		$scope.cancel();
-	});
 };

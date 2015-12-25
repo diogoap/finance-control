@@ -283,8 +283,4 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		}
 	}
 
-	$scope.$on('$locationChangeStart', function(event, next, current){
-	    event.preventDefault();
-		$scope.cancel();
-	});
 };

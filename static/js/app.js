@@ -73,3 +73,27 @@ app.config(['uibDatepickerPopupConfig', function(uibDatepickerPopupConfig) {
     uibDatepickerPopupConfig.closeText="Fechar";
     uibDatepickerPopupConfig.datepickerPopup="shortDate";
 }]);
+
+app.run(['$rootScope', '$uibModalStack', '$location', function ($rootScope, $uibModalStack, $location) {
+    $rootScope.$on('$locationChangeStart', function (event) {
+        event.preventDefault();
+        var top = $uibModalStack.getTop();
+        if (top) {
+            $uibModalStack.dismiss(top.key);
+        } else {
+            //if($rootScope.previousLocation == $location.path()) {
+                //event.preventDefault();
+                //alert('previousLocation: ' + $rootScope.previousLocation + ' - location.path: ' + $location.path());
+                //$rootScope.actualLocation = '/';
+                //$rootScope.previousLocation = '/';
+                //event.defaultPrevented = false;
+                //return $location.path('/');
+            //}
+
+            //$rootScope.previousLocation = $rootScope.actualLocation;
+            //$rootScope.actualLocation = $location.path();
+
+            event.defaultPrevented = false;
+        }
+    });
+}]);

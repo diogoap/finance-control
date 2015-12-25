@@ -282,9 +282,5 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 			$scope.income.amountReceived = $scope.income.amount;
 		}
 	}
-
-	$scope.$on('$locationChangeStart', function(event, next, current){
-	    event.preventDefault();
-		$scope.cancel();
-	});
+	
 };

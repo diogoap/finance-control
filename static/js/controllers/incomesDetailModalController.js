@@ -88,9 +88,4 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 	$scope.formatNumericAmount = function(event) {
 		$scope.incomeDetail.amount = Utils.formatPastedNumer(event);
 	}
-
-	$scope.$on('$locationChangeStart', function(event, next, current){
-	    event.preventDefault();
-		$scope.cancelDetail();
-	});
 };
