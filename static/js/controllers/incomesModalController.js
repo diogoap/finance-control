@@ -230,7 +230,6 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
     	});
 
 		modalInstance.result.then(function (entity) {
-			// Replace exising detail object with the new one
 			for (var i in $scope.income.detail) {
 				if ($scope.income.detail[i].$$hashKey == entity.$$hashKey) {
 					$scope.income.detail.splice(i, 1);
@@ -242,32 +241,15 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 		});
     }
 
-	$scope.receiveDetailConfirmation = function (entity) {
-    	var modalInstance = $uibModal.open({
-      		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/confirmModal.html',
-      		controller: confirmModalController,
-			size: 'sm',
-      		resolve: {
-		        data: function () {
-					return entity;
-        		},
-		        message: function () {
-					return 'Confirma o recebimento do detalhe?';
-        		}
-      		}
-    	});
-
-		modalInstance.result.then(function (entity) {
-			for (var i in $scope.income.detail) {
-				if ($scope.income.detail[i].$$hashKey == entity.$$hashKey) {
-					$scope.income.detail[i].status = 'Recebido';
-					break;
-				}
+	$scope.receiveDetail = function (entity) {
+		for (var i in $scope.income.detail) {
+			if ($scope.income.detail[i].$$hashKey == entity.$$hashKey) {
+				$scope.income.detail[i].status = 'Recebido';
+				break;
 			}
+		}
 
-			$scope.updateIncomeTotal();
-		});
+		$scope.updateIncomeTotal();
     }
 
 	$scope.formatNumericAmount = function(e) {

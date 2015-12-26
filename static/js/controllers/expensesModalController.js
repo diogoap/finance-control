@@ -230,7 +230,6 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
     	});
 
 		modalInstance.result.then(function (entity) {
-			// Replace exising detail object with the new one
 			for (var i in $scope.expense.detail) {
 				if ($scope.expense.detail[i].$$hashKey == entity.$$hashKey) {
 					$scope.expense.detail.splice(i, 1);
@@ -242,32 +241,15 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		});
     }
 
-	$scope.payDetailConfirmation = function (entity) {
-    	var modalInstance = $uibModal.open({
-      		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/confirmModal.html',
-      		controller: confirmModalController,
-			size: 'sm',
-      		resolve: {
-		        data: function () {
-					return entity;
-        		},
-		        message: function () {
-					return 'Confirma o pagamento do detalhe?';
-        		}
-      		}
-    	});
-
-		modalInstance.result.then(function (entity) {
-			for (var i in $scope.expense.detail) {
-				if ($scope.expense.detail[i].$$hashKey == entity.$$hashKey) {
-					$scope.expense.detail[i].status = 'Pago';
-					break;
-				}
+	$scope.payDetail = function (entity) {
+		for (var i in $scope.expense.detail) {
+			if ($scope.expense.detail[i].$$hashKey == entity.$$hashKey) {
+				$scope.expense.detail[i].status = 'Pago';
+				break;
 			}
+		}
 
-			$scope.updateExpenseTotal();
-		});
+		$scope.updateExpenseTotal();
     }
 
 	$scope.formatNumericAmount = function(event) {

@@ -83,7 +83,7 @@
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteDetailConfirmation(selectedRow.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Receber" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="receiveDetailConfirmation(selectedRow.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
+	            <a class="btn btn-primary btn-sm btn-action" title="Receber" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="receiveDetail(selectedRow.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
 			</div>
 		</div>
 

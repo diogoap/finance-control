@@ -31,7 +31,7 @@ app.controller('indexController', function($scope, $localStorage, $http, $locale
   	});
 
 	$scope.changeRoute = function(newRoute) {
-		// If current Route is Home, and NewRoute is not Home, and is not the First Route Route
+		// If current Route is Home, and NewRoute is not Home, and is not the First Route Change
 		// history is kept, otherwise history is not kept (it is replaced)
 		if (($location.path() == '/') && (newRoute != '/') && ($scope.isFirstRouteChange)) {
 			$location.path(newRoute);
