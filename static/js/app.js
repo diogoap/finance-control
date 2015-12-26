@@ -24,6 +24,7 @@ var app = angular.module('financeControl', [
 ]);
 
 app.config(function($routeProvider, $locationProvider, $provide) {
+
     $routeProvider
     	.when('/', {
             templateUrl: 'html/home.html'
@@ -81,18 +82,6 @@ app.run(['$rootScope', '$uibModalStack', '$location', function ($rootScope, $uib
         if (top) {
             $uibModalStack.dismiss(top.key);
         } else {
-            //if($rootScope.previousLocation == $location.path()) {
-                //event.preventDefault();
-                //alert('previousLocation: ' + $rootScope.previousLocation + ' - location.path: ' + $location.path());
-                //$rootScope.actualLocation = '/';
-                //$rootScope.previousLocation = '/';
-                //event.defaultPrevented = false;
-                //return $location.path('/');
-            //}
-
-            //$rootScope.previousLocation = $rootScope.actualLocation;
-            //$rootScope.actualLocation = $location.path();
-
             event.defaultPrevented = false;
         }
     });

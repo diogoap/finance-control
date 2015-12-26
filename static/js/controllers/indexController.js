@@ -9,7 +9,6 @@ app.controller('indexController', function($scope, $localStorage, $http, $locale
 	}
 
 	$scope.$on('$routeChangeSuccess', function() {
-
 		var loggedUserId = $routeParams.id;
 		var loggedUserEmail = $routeParams.email;
 		var loggedUserToken = $routeParams.token;
@@ -31,7 +30,19 @@ app.controller('indexController', function($scope, $localStorage, $http, $locale
 		}
   	});
 
+	$scope.changeRoute = function(newRoute) {
+		// If current Route is Home, and NewRoute is not Home, and is not the First Route Route
+		// history is kept, otherwise history is not kept (it is replaced)
+		if (($location.path() == '/') && (newRoute != '/') && ($scope.isFirstRouteChange)) {
+			$location.path(newRoute);
+			$scope.isFirstRouteChange = false;
+		} else {
+			$location.path(newRoute).replace();
+		}
+	}
+
 	// initialization
+	$scope.isFirstRouteChange = true;
     $scope.loggedUserName = $localStorage.get('loggedUserName');
     $scope.loggedUserPhoto = $localStorage.get('loggedUserPhoto');
 	$scope.loggedIn = $scope.isLoggedIn();
