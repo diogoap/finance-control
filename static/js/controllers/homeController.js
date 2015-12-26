@@ -58,7 +58,7 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
 		if ((isNaN(Date.parse($scope.dateBegin)) == false) && (isNaN(Date.parse($scope.dateEnd))) == false) {
 			$scope.getTotals();
 		}
-  	};
+  	}
 
 	$scope.getDateFilter = function() {
 		var dateBegin, dateEnd, y, m, d;
@@ -88,11 +88,32 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
-	};
+	}
+
+    $scope.configAccordions = function() {
+        var isLowRes = Utils.isLowResolution();
+
+        $scope.accordions = {
+            isDisabled: isLowRes == false,
+            isOpenCompAcc: isLowRes == false,
+            isOpenCompInc: isLowRes == false,
+            isOpenCompExp: isLowRes == false,
+            isOpenAllAcc: isLowRes == false,
+            isOpenAllInc: isLowRes == false,
+            isOpenAllExp: isLowRes == false
+        };
+    }
+
+    $(window).resize(function(){
+    	$scope.$apply(function(){
+    	   $scope.configAccordions();
+    	});
+    });
 
 	// initialization
     $scope.Utils = Utils;
 	$scope.totals = {};
     $scope.alerts = [];
 	$scope.navigateActualMonth();
+    $scope.configAccordions();
 });

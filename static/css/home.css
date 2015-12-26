@@ -10,8 +10,23 @@
 }
 
 .home-box {
-	height:250px;
 	background-color:#f8f8f8;
 	border-color: #e7e7e7;
 	overflow:auto;
+}
+
+@media only screen and (min-width : 800px)
+{
+    .home-box {
+		height:245px;
+    }
+}
+
+.panel-group {
+	margin-bottom: 0px;
+}
+
+.panel-body {
+	padding-top: 0px;
+	padding-bottom: 0px;
 }
