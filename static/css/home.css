@@ -6,7 +6,11 @@
     font-size: 12px;
 	height: 25px;
 	max-height: 25px;
-	line-height: 25px
+	line-height: 25px;
+}
+
+.no-border {
+	border-top: 0px !important;
 }
 
 .home-box {
@@ -27,6 +31,10 @@
 }
 
 .panel-body {
-	padding-top: 0px;
+	padding-top: 5px;
 	padding-bottom: 0px;
+}
+
+.text-muted {
+	color: inherit;
 }

@@ -110,6 +110,14 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
     	});
     });
 
+    $scope.getAcordionStyle = function(isOpen) {
+        if (Utils.isLowResolution()) {
+            return isOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right';
+        }
+
+        return null;
+    }
+
 	// initialization
     $scope.Utils = Utils;
 	$scope.totals = {};

@@ -38,83 +38,6 @@
 	<div class="row">
 		<uib-accordion close-others="false" is-disabled="false">
 
-			<!-- Totais - Completed -->
-			<div class="col-sm-3 home-box">
-				<h4>Caixa - Lançamentos realizados</h4>
-				<table class="table totals-list">
-					<tr>
-						<td class="text-left td-md">Saldo anterior:</td>
-						<td class="text-right td-md">{{totals.current.completed.previousBalance | number:2}}</td>
-					</tr>
-					<tr>
-						<td class="text-left td-md">Receitas:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalIncomes | number:2}}</td>
-					</tr>
-					<tr>
-						<td class="text-left td-md">Despesas:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalExpenses | number:2}}</td>
-					</tr>
-					<tr>
-						<td class="text-left td-md">Saldo período:</td>
-						<td class="text-right td-md">{{totals.current.completed.partialBalance | number:2}}</td>
-					</tr>
-					<tr>
-						<td class="text-left td-md">Empréstimos:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalLoans | number:2}}</td>
-					</tr>
-					<tr>
-						<td class="text-left td-md"><b>Saldo final:</b></td>
-						<td class="text-right td-md"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
-					</tr>
-				</table>
-			</div>
-
-			<!-- Accounts - Completed -->
-			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Contas" is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
-					<table class="table table-condensed">
-						<tr ng-repeat="account in totals.current.completed.accounts | filter: { enabled: true }">
-					   		<td class="text-left td-sm">{{account.name}}:</td>
-					   		<td class="text-right td-sm">{{account.actualBalance | number:2}}</td>
-				    	</tr>
-					</table>
-				</uib-accordion-group>
-			</div>
-
-			<!-- Categories - Incomes - Completed -->
-			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Receitas" is-open="accordions.isOpenCompInc" is-disabled="accordions.isDisabled">
-					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm">{{category.name}}:</td>
-					   		<td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
-				    	</tr>
-					</table>
-				</uib-accordion-group>
-			</div>
-
-			<!-- Categories - Expenses - Completed -->
-			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Despesas" is-open="accordions.isOpenCompExp" is-disabled="accordions.isDisabled">
-					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
-				   			<td class="text-left td-sm">{{category.name}}:</td>
-				   			<td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
-						</tr>
-					</table>
-				</uib-accordion-group>
-			</div>
-
-		</uib-accordion>
-	</div>
-
-	<div class="row">
-		<hr style="margin-top: 15px; margin-bottom: 0px">
-	</div>
-
-	<div class="row">
-		<uib-accordion close-others="false" is-disabled="false">
-
 			<!-- Totais - All -->
 			<div class="col-sm-3 home-box">
 				<h4>Previsões - Todos os lançamentos</h4>
@@ -148,11 +71,16 @@
 
 			<!-- Accounts - All -->
 			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Contas" is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Contas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllAcc)"></i>
+						</div>
+					</uib-accordion-heading>
 					<table class="table table-condensed">
 						<tr ng-repeat="account in totals.current.all.accounts | filter: { enabled: true }">
-					   		<td class="text-left td-sm">{{account.name}}:</td>
-					   		<td class="text-right td-sm">{{account.actualBalance | number:2}}</td>
+					   		<td class="text-left td-sm no-border">{{account.name}}:</td>
+					   		<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
 				    	</tr>
 					</table>
 				</uib-accordion-group>
@@ -160,11 +88,16 @@
 
 			<!-- Categories - Incomes - All -->
 			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Receitas" is-open="accordions.isOpenAllInc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenAllInc" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Receitas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllInc)"></i>
+						</div>
+					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
 						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm">{{category.name}}:</td>
-					   		<td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
+					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
+					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
 				    	</tr>
 					</table>
 				</uib-accordion-group>
@@ -172,17 +105,118 @@
 
 			<!-- Categories - Expenses - All -->
 			<div class="col-sm-3 home-box">
-				<uib-accordion-group heading="Despesas" is-open="accordions.isOpenAllExp" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenAllExp" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Despesas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllExp)"></i>
+						</div>
+					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
 						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm">{{category.name}}:</td>
-					   		<td class="text-right td-sm">{{category.totalAmount | number:2}}</td>
+					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
+					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
 				    	</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 
 		</uib-accordion>
+	</div>
+
+	<div class="row">
+		<hr style="margin-top: 15px; margin-bottom: 0px">
+	</div>
+
+	<div class="row">
+		<uib-accordion close-others="false" is-disabled="false">
+
+			<!-- Totais - Completed -->
+			<div class="col-sm-3 home-box">
+				<h4>Caixa - Lançamentos realizados</h4>
+				<table class="table totals-list">
+					<tr>
+						<td class="text-left td-md">Saldo anterior:</td>
+						<td class="text-right td-md">{{totals.current.completed.previousBalance | number:2}}</td>
+					</tr>
+					<tr>
+						<td class="text-left td-md">Receitas:</td>
+						<td class="text-right td-md">{{totals.current.completed.totalIncomes | number:2}}</td>
+					</tr>
+					<tr>
+						<td class="text-left td-md">Despesas:</td>
+						<td class="text-right td-md">{{totals.current.completed.totalExpenses | number:2}}</td>
+					</tr>
+					<tr>
+						<td class="text-left td-md">Saldo período:</td>
+						<td class="text-right td-md">{{totals.current.completed.partialBalance | number:2}}</td>
+					</tr>
+					<tr>
+						<td class="text-left td-md">Empréstimos:</td>
+						<td class="text-right td-md">{{totals.current.completed.totalLoans | number:2}}</td>
+					</tr>
+					<tr>
+						<td class="text-left td-md"><b>Saldo final:</b></td>
+						<td class="text-right td-md"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- Accounts - Completed -->
+			<div class="col-sm-3 home-box">
+				<uib-accordion-group is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Contas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompAcc)"></i>
+						</div>
+					</uib-accordion-heading>
+					<table class="table table-condensed">
+						<tr class="no-border" ng-repeat="account in totals.current.completed.accounts | filter: { enabled: true }">
+					   		<td class="text-left td-sm no-border">{{account.name}}:</td>
+					   		<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
+				    	</tr>
+					</table>
+				</uib-accordion-group>
+			</div>
+
+			<!-- Categories - Incomes - Completed -->
+			<div class="col-sm-3 home-box">
+				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenCompInc" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Receitas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompInc)"></i>
+						</div>
+					</uib-accordion-heading>
+					<table class="table table-condensed categories-list">
+						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
+					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
+					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+				    	</tr>
+					</table>
+				</uib-accordion-group>
+			</div>
+
+			<!-- Categories - Expenses - Completed -->
+			<div class="col-sm-3 home-box">
+				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenCompExp" is-disabled="accordions.isDisabled">
+					<uib-accordion-heading>
+						<div>Despesas
+							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompExp)"></i>
+						</div>
+					</uib-accordion-heading>
+					<table class="table table-condensed categories-list">
+						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
+				   			<td class="text-left td-sm no-border">{{category.name}}:</td>
+				   			<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+						</tr>
+					</table>
+				</uib-accordion-group>
+			</div>
+
+		</uib-accordion>
+	</div>
+
+	<div class="row">
+		<hr style="margin-top: 15px; margin-bottom: 0px">
 	</div>
 
 	<div class="row">
