@@ -1,3 +1,18 @@
+<script type="text/ng-template" id="group-template.html">
+  <div class="panel {{panelClass || 'panel-default'}}">
+	<div class="panel-heading" style="background-color:#ccccff">
+	  <h4 class="panel-title" style="color:#000080; border-color: #9999ff;">
+		<a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading"><span
+		  ng-class="{'text-muted': isDisabled}">{{heading}}</span></a>
+	  </h4>
+	</div>
+	<div class="panel-collapse collapse" uib-collapse="!isOpen">
+	  <div class="panel-body" style="text-align: right" ng-transclude></div>
+	</div>
+  </div>
+</script>
+
+
 <div class="container-fluid" ng-controller="homeController">
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
@@ -71,7 +86,7 @@
 
 			<!-- Accounts - All -->
 			<div class="col-sm-3 home-box">
-				<uib-accordion-group is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllAcc)"></i>
@@ -163,7 +178,7 @@
 
 			<!-- Accounts - Completed -->
 			<div class="col-sm-3 home-box">
-				<uib-accordion-group is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompAcc)"></i>
@@ -215,7 +230,7 @@
 		</uib-accordion>
 	</div>
 
-	<div class="row">
+	<div class="row" ng-show="Utils.isLowResolution()">
 		<hr style="margin-top: 15px; margin-bottom: 0px">
 	</div>
 

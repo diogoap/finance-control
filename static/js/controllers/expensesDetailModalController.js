@@ -37,8 +37,6 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 			delete $scope.expenseDetail._id;
 			$scope.expenseDetail.description += ' - Cópia';
 		}
-
-		$scope.loading = false;
 	};
 
 	var filter = 'type=Despesa&enabled=true';

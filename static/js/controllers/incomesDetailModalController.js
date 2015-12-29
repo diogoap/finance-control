@@ -37,8 +37,6 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 			delete $scope.incomeDetail._id;
 			$scope.incomeDetail.description += ' - Cópia';
 		}
-
-		$scope.loading = false;
 	};
 
 	var filter = 'type=Receita&enabled=true';
