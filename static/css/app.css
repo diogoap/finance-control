@@ -1,5 +1,4 @@
 html { overflow-y:scroll; }
-body { padding-top:5px; }
 
 input.form-control.ng-invalid {
   border: 1px solid red;
@@ -85,7 +84,7 @@ label {
 }
 
 .loading-box {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     margin-top: -50px;

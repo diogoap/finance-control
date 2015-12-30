@@ -1,24 +1,20 @@
-<div class="">
-	<div class="">
-		<div class="container-fluid login-page-box-margin" ng-controller="loginController">
+<div class="container-fluid login-page-box-margin" ng-controller="loginController">
 
-			<div class="row">
-				<p class="login-page-box-logo">Bem-vindo!</p>
-			</div>
+	<div class="row">
+		<p class="login-page-box-logo">Bem-vindo!</p>
+	</div>
 
-			<div class="row">
-				<div class="col-sm-4 col-sm-offset-4">
-					<a class="btn btn-block btn-social btn-lg btn-google login-page-box-button" href="/auth/google" target="_self"><i class="fa fa-google"></i><span>Entrar com Google</span></a>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="loading-box" ng-show="loading">
-					<span class="fa fa-spinner fa-spin fa-5x"></span>
-				</div>
-
-				<alert class="login-alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
-			</div>
+	<div class="row">
+		<div class="col-sm-4 col-sm-offset-4">
+			<a class="btn btn-block btn-social btn-lg btn-google login-page-box-button" href="/auth/google" target="_self"><i class="fa fa-google"></i><span>Entrar com Google</span></a>
 		</div>
+	</div>
+
+	<div class="row">
+		<div class="loading-box" ng-show="loading">
+			<span class="fa fa-spinner fa-spin fa-5x"></span>
+		</div>
+
+		<alert class="login-alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
 	</div>
 </div>
