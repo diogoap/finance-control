@@ -8,7 +8,7 @@ app.controller('loginController', function($scope, $rootScope, $localStorage, $h
         var loginErrorMessage = $routeParams.error;
 
 		if ((loginErrorMessage != undefined && loginErrorMessage.length > 0)) {
-			$location.search('');
+			$location.search('').replace();
             $rootScope.loginErrorMessage = loginErrorMessage;
 		}
     });

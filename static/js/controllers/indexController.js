@@ -16,7 +16,7 @@ app.controller('indexController', function($scope, $localStorage, $http, $locale
 		var loggedUserPhoto = $routeParams.photo;
 
 		if ((loggedUserId != undefined && loggedUserId.length > 0) && (loggedUserToken != undefined && loggedUserToken.length > 0)) {
-			$location.search('');
+			$location.search('').replace();
 
 			$localStorage.set('loggedUserId', loggedUserId);
 			$localStorage.set('loggedUserEmail', loggedUserEmail);
