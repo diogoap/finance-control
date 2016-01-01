@@ -143,6 +143,8 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 		$scope._hasDetail = false;
 		Utils.clearGridNav($scope.gridApi);
 		$scope.selectedRow = null;
+		
+		$scope.income.dueDate = Utils.clearTime($scope.income.dueDate);
 
 		if (($scope.income.detail != undefined) && ($scope.income.detail.length > 0)) {
 			$scope._hasDetail = true;

@@ -143,6 +143,8 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		$scope._hasDetail = false;
 		Utils.clearGridNav($scope.gridApi);
 		$scope.selectedRow = null;
+		
+		$scope.expense.dueDate = Utils.clearTime($scope.expense.dueDate);
 
 		if (($scope.expense.detail != undefined) && ($scope.expense.detail.length > 0)) {
 			$scope._hasDetail = true;

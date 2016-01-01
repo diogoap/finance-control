@@ -80,6 +80,9 @@ angular.module('utilsService', [])
 			clearGridNav: function(gridApi) {
 				gridApi.grid.cellNav.clearFocus();
 				gridApi.grid.cellNav.lastRowCol = null;
+			},
+			clearTime: function(date) {
+				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 			}
 		}
 	}]);

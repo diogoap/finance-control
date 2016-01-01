@@ -47,6 +47,8 @@ function transfersModalController($scope, $uibModalInstance, Utils, Transfers, A
 	$scope.submit = function () {
     	if ($scope.transferForm.$valid) {
 			$scope.transfer._action = $scope.action;
+			$scope.transfer.date = Utils.clearTime($scope.transfer.date);
+
 			$uibModalInstance.close($scope.transfer);
     	} else {
       		$scope.submitted = true;
