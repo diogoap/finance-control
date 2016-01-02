@@ -73,9 +73,9 @@ angular.module('utilsService', [])
 			},
 			getGridRowHeight: function() {
 				if ($(window).width() < 800) {
-					return 32;
+					return 33;
 				} else {
-					return 23;
+					return 24;
 				}
 			},
 			getVisibilityRes: function(visibleLg, visibleMd, visibleSm) {

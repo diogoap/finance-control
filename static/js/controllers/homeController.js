@@ -106,7 +106,8 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
 
     $(window).resize(function(){
     	$scope.$apply(function(){
-    	   $scope.configAccordions();
+            $scope.configBoxStyle();
+            $scope.configAccordions();
     	});
     });
 
@@ -118,10 +119,27 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
         return null;
     }
 
+    $scope.configBoxStyle = function() {
+        if (Utils.isLowResolution()) {
+            $scope.boxStyle = {};
+        } else {
+            var obj = document.getElementById('boxes');
+
+            if (obj != null) {
+                var rect = obj.getBoundingClientRect();
+                var wh = $(window).height();
+                var boxHeight = ((wh - (rect.top - 30)) / 2) + 'px';
+                $scope.boxStyle = { height: boxHeight };
+            }
+        }
+    }
+
 	// initialization
     $scope.Utils = Utils;
 	$scope.totals = {};
     $scope.alerts = [];
+    $scope.boxStyle = {};
 	$scope.navigateActualMonth();
+    $scope.configBoxStyle();
     $scope.configAccordions();
 });
