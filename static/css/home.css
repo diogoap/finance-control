@@ -27,8 +27,12 @@
     }
 
 	.panel-heading {
-		padding-top: 5px;
-		padding-bottom: 5px;
+		padding-top: 6px;
+		padding-bottom: 6px;
+	}
+
+	.h4-home-title {
+		margin-top: 0px;
 	}
 }
 

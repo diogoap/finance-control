@@ -133,7 +133,6 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
                 var rect = obj.getBoundingClientRect();
                 var wh = $(window).height();
                 var boxHeight = ((wh - (rect.top + 2)) / 2) + 'px';
-                //alert('Windows height: ' + wh + ' - Top: ' + rect.top + ' ==> ' + boxHeight);
                 $scope.boxStyle = { height: boxHeight };
             }
         }
