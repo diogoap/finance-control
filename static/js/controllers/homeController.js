@@ -109,6 +109,10 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
             $scope.configBoxStyle();
             $scope.configAccordions();
     	});
+    })
+
+    angular.element(document).ready(function () {
+        $scope.configBoxStyle();
     });
 
     $scope.getAcordionStyle = function(isOpen) {
@@ -128,7 +132,8 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
             if (obj != null) {
                 var rect = obj.getBoundingClientRect();
                 var wh = $(window).height();
-                var boxHeight = ((wh - (rect.top - 30)) / 2) + 'px';
+                var boxHeight = ((wh - (rect.top + 2)) / 2) + 'px';
+                //alert('Windows height: ' + wh + ' - Top: ' + rect.top + ' ==> ' + boxHeight);
                 $scope.boxStyle = { height: boxHeight };
             }
         }

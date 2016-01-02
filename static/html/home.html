@@ -134,13 +134,16 @@
 					</table>
 				</uib-accordion-group>
 			</div>
-
 		</uib-accordion>
 	</div>
 
-	<div class="row">
-		<hr style="margin-top: 15px; margin-bottom: 0px">
-	</div>
+    <div class="row" ng-show="!Utils.isLowResolution()">
+        <hr style="margin-top: 0px; margin-bottom: 0px">
+    </div>
+
+    <div class="row" ng-show="Utils.isLowResolution()">
+        <hr style="margin-top: 20px; margin-bottom: 0px">
+    </div>
 
 	<div class="row">
 		<uib-accordion close-others="false" is-disabled="false">
