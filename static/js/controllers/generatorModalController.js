@@ -54,7 +54,7 @@ function generatorModalController($scope, $uibModal, $uibModalInstance, Utils, G
     	if ($scope.generatorForm.$valid) {
 			$scope.loading = true;
 
-			$scope.generatorParameters.initialDate = Utils.clearTime($scope.generatorParameters.initialDate);
+			$scope.generatorParameters.initialDate = Utils.getDateDst($scope.generatorParameters.initialDate);
 
 			Generator.create($scope.generatorParameters)
 				.success(function(data) {

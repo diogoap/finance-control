@@ -79,8 +79,8 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
     	if ($scope.loanForm.$valid) {
 			$scope.loan._action = $scope.action;
 
-			$scope.loan.dueDate = Utils.clearTime($scope.loan.dueDate);
-			$scope.loan.transactionDate = Utils.clearTime($scope.loan.transactionDate);
+			$scope.loan.dueDate = Utils.getDateDst($scope.loan.dueDate);
+			$scope.loan.transactionDate = Utils.getDateDst($scope.loan.transactionDate);
 
 			$uibModalInstance.close($scope.loan);
     	} else {

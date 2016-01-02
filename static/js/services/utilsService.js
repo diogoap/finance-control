@@ -5,6 +5,18 @@ function localReplaceAll(str, find, replace) {
   	return str.replace(new RegExp(escapedFind, 'g'), replace);
 }
 
+function getDstTimezoneOffset(date) {
+	// Offset = Difference in minutes from UTC to currente timezone
+	// DST = Daylight Saving Time
+	// This function returns the current timezone offset, considering DST
+	// Example:
+	// For BRT, if DST is on going, function will return 60, if not, result will be 0
+	var jan = new Date(date.getFullYear(), 0, 1);
+    var jul = new Date(date.getFullYear(), 6, 1);
+    var maxOffSet = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+	return (maxOffSet - date.getTimezoneOffset());
+}
+
 angular.module('utilsService', [])
 
 	.factory('Utils', ['$locale', function($locale) {
@@ -81,8 +93,9 @@ angular.module('utilsService', [])
 				gridApi.grid.cellNav.clearFocus();
 				gridApi.grid.cellNav.lastRowCol = null;
 			},
-			clearTime: function(date) {
-				return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			getDateDst: function(date) {
+				// Returns only date (Year, Month and Day) from Date value, adjusting time according Daylight Saving Time
+				return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, getDstTimezoneOffset(date));
 			}
 		}
 	}]);
