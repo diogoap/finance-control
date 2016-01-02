@@ -63,6 +63,11 @@ select.form-control.ng-valid {
     margin-bottom: 0px;
 }
 
+.grid-margins {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .btn-grid {
     margin-left: 3px;
 }

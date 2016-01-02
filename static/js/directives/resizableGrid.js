@@ -9,15 +9,10 @@ app.directive('resizableGrid', function($window) {
 		$scope.initializeWindowSize = function() {
 			var obj = document.getElementById('grid');
 
-			var rightMargin = 15;
-			if ($window.innerWidth < 800) {
-				rightMargin = 5;
-			}
-
 			if (obj != null) {
 				var rect = obj.getBoundingClientRect();
 				$scope.windowHeight = $window.innerHeight - (rect.top + 5) + 'px';
-				$scope.windowWidth = $window.innerWidth - (rect.left + rightMargin) + 'px';
+				$scope.windowWidth = $window.innerWidth - (rect.left + 5) + 'px';
 			}
 		};
 
