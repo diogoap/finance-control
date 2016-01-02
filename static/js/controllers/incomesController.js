@@ -2,14 +2,6 @@
 
 var app = angular.module('financeControl');
 
-function getCellClasses(row, cellClass) {
-    var styles = cellClass;
-    if (row.entity.isLatePayment == true) {
-        styles = styles + ' red-font-color';
-    }
-    return styles;
-}
-
 app.controller('incomesController', function($scope, $http, $uibModal, $locale, uiGridConstants, Utils, Incomes) {
 
  	$scope.columns = [
@@ -17,7 +9,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
             name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('9%', '15%', '21%'), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, 'ui-grid-cell-center-align')
+                return Utils.getCellClassesLatePayment('ui-grid-cell-center-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
@@ -25,7 +17,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, '')
+                return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
@@ -34,26 +26,26 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, 'ui-grid-cell-right-align')
+                return Utils.getCellClassesLatePayment('ui-grid-cell-right-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
             name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('17%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, '')
+                return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
             name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('17%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, '')
+                return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
             name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('10%', '12%', '18%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, 'ui-grid-cell-center-align')
+                return Utils.getCellClassesLatePayment('ui-grid-cell-center-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
@@ -62,7 +54,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
-                return getCellClasses(row, 'ui-grid-cell-right-align')
+                return Utils.getCellClassesLatePayment('ui-grid-cell-right-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         }
     ];

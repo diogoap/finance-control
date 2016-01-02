@@ -18,7 +18,6 @@ var expenseSchema = {
         "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
         "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
         "notes": { "type": "string" },
-        "isLatePayment": { "type": "boolean" },
         "user_id": { "type": "string" },
         "detail": {
             "description": "Expenses detail list",
@@ -56,12 +55,6 @@ var expenseSchema = {
         }
     ]
 };
-
-function fillProperties(obj) {
-    var today = new Date(), y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
-    today = new Date(y, m, d, 0, 0, 0, 0);
-    obj.isLatePayment = (obj.status == 'Em aberto' && obj.dueDate < today);
-}
 
 function setCategory(categoryList, obj) {
     for (var j in categoryList) {
@@ -163,7 +156,6 @@ module.exports = {
 
                     setCategory(categories, expense);
                     setAccount(accounts, expense);
-                    fillProperties(expense);
 
                     expense.detail.forEach(function (det) {
                         setCategory(categories, det);
@@ -199,7 +191,7 @@ module.exports = {
                 $project : {
                      description: "$description", dueDate: "$dueDate", scheduledPayment: "$scheduledPayment",
                      amount: "$amount", category_id: "$category_id", account_id: "$account_id", amountPaid: "$amountPaid",
-                     status: "$status", notes: "$notes", isLatePayment: "$isLatePayment", user_id: "$user_id", detail: "$detail",
+                     status: "$status", notes: "$notes", user_id: "$user_id", detail: "$detail",
                      dueDateOnlyDate: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } }
                  }
              },
@@ -217,7 +209,6 @@ module.exports = {
                     expenses.forEach(function (exp) {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
-                        fillProperties(exp);
 
                         exp.detail.forEach(function (det) {
                             setCategory(categories, det);

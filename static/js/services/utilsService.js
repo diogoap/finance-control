@@ -5,6 +5,11 @@ function localReplaceAll(str, find, replace) {
   	return str.replace(new RegExp(escapedFind, 'g'), replace);
 }
 
+function localGetDateDst(date) {
+	// Returns only date (Year, Month and Day) from Date value, adjusting time according Daylight Saving Time
+	return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, getDstTimezoneOffset(date));
+}
+
 function getDstTimezoneOffset(date) {
 	// Offset = Difference in minutes from UTC to currente timezone
 	// DST = Daylight Saving Time
@@ -94,8 +99,17 @@ angular.module('utilsService', [])
 				gridApi.grid.cellNav.lastRowCol = null;
 			},
 			getDateDst: function(date) {
-				// Returns only date (Year, Month and Day) from Date value, adjusting time according Daylight Saving Time
-				return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, getDstTimezoneOffset(date));
+				return localGetDateDst(date);
+			},
+			getCellClassesLatePayment: function(cellClass, isOpen, dueDate) {
+			    var styles = cellClass;
+			    var today = localGetDateDst(new Date()).toISOString();
+			    var isLatePayment = (isOpen && (dueDate < today));
+
+			    if (isLatePayment) {
+			        styles = styles + ' red-font-color';
+			    }
+			    return styles;
 			}
 		}
 	}]);

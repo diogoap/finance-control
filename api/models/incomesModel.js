@@ -16,7 +16,6 @@ var incomeSchema = new Schema({
 	amountReceived: { type: Number, default: 0 },
 	status: { type: String, default: '' },
 	notes: String,
-	isLatePayment: { type: Boolean, default: false },
 	user_id: String,
 	detail: [ {
 	 	description: String,

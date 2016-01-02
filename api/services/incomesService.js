@@ -17,7 +17,6 @@ var incomeSchema = {
         "amountReceived": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
         "status": { "type": "string", "enum": [ "Em aberto", "Recebido" ] },
         "notes": { "type": "string" },
-        "isLatePayment": { "type": "boolean" },
         "user_id": { "type": "string" },
         "detail": {
             "description": "Incomes detail list",
@@ -55,12 +54,6 @@ var incomeSchema = {
         }
     ]
 };
-
-function fillProperties(obj) {
-    var today = new Date(), y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
-    today = new Date(y, m, d, 0, 0, 0, 0);
-    obj.isLatePayment = (obj.status == 'Em aberto' && obj.dueDate < today);
-}
 
 function setCategory(categoryList, obj) {
     for (var j in categoryList) {
@@ -162,7 +155,6 @@ module.exports = {
 
                     setCategory(categories, income);
                     setAccount(accounts, income);
-                    fillProperties(income);
 
                     income.detail.forEach(function (det) {
                         setCategory(categories, det);
@@ -198,7 +190,7 @@ module.exports = {
                 $project : {
                      description: "$description", dueDate: "$dueDate",
                      amount: "$amount", category_id: "$category_id", account_id: "$account_id", amountReceived: "$amountReceived",
-                     status: "$status", notes: "$notes", isLatePayment: "$isLatePayment", user_id: "$user_id", detail: "$detail",
+                     status: "$status", notes: "$notes", user_id: "$user_id", detail: "$detail",
                      dueDateOnlyDate: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } }
                  }
              },
@@ -216,7 +208,6 @@ module.exports = {
                     incomes.forEach(function (exp) {
                         setCategory(categories, exp);
                         setAccount(accounts, exp);
-                        fillProperties(exp);
 
                         exp.detail.forEach(function (det) {
                             setCategory(categories, det);
