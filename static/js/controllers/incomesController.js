@@ -88,44 +88,42 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
     	$scope.endOpened = true;
   	};
 
-  	$scope.navigatePreviousMonth = function($event) {
-		var date;
-
-		if (isNaN(Date.parse($scope.incomeDueDateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.incomeDueDateBegin;
-		}
-
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.incomeDueDateBegin = new Date(y, m - 1, 1);
-		$scope.incomeDueDateEnd = new Date(y, m, 0);
+    $scope.navigateBeginOfYear = function() {
+        var dates = Utils.getBeginOfYear($scope.incomeDueDateBegin);
+        $scope.incomeDueDateBegin = dates.begin;
+		$scope.incomeDueDateEnd = dates.end;
 
 		$scope.getIncomes();
   	};
 
-  	$scope.navigateActualMonth = function($event) {
-		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-		$scope.incomeDueDateBegin = new Date(y, m, 1);
-		$scope.incomeDueDateEnd = new Date(y, m + 1, 0);
+    $scope.navigatePreviousMonth = function() {
+        var dates = Utils.getPreviousMonth($scope.incomeDueDateBegin);
+        $scope.incomeDueDateBegin = dates.begin;
+		$scope.incomeDueDateEnd = dates.end;
 
 		$scope.getIncomes();
   	};
 
-  	$scope.navigateNextMonth = function($event) {
-		var date;
+  	$scope.navigateActualMonth = function() {
+        var dates = Utils.getActualMonth();
+        $scope.incomeDueDateBegin = dates.begin;
+		$scope.incomeDueDateEnd = dates.end;
 
-		if (isNaN(Date.parse($scope.incomeDueDateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.incomeDueDateBegin;
-		}
+		$scope.getIncomes();
+  	};
 
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.incomeDueDateBegin = new Date(y, m + 1, 1);
-		$scope.incomeDueDateEnd = new Date(y, m + 2, 0);
+  	$scope.navigateNextMonth = function() {
+        var dates = Utils.getNextMonth($scope.incomeDueDateBegin);
+        $scope.incomeDueDateBegin = dates.begin;
+		$scope.incomeDueDateEnd = dates.end;
+
+		$scope.getIncomes();
+  	};
+
+    $scope.navigateEndOfYear = function() {
+        var dates = Utils.getEndOfYear($scope.incomeDueDateBegin);
+        $scope.incomeDueDateBegin = dates.begin;
+		$scope.incomeDueDateEnd = dates.end;
 
 		$scope.getIncomes();
   	};

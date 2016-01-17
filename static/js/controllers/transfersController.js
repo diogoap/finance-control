@@ -54,44 +54,42 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
     	$scope.endOpened = true;
   	};
 
-  	$scope.navigatePreviousMonth = function($event) {
-		var date;
-
-		if (isNaN(Date.parse($scope.transferDateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.transferDateBegin;
-		}
-
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.transferDateBegin = new Date(y, m - 1, 1);
-		$scope.transferDateEnd = new Date(y, m, 0);
+    $scope.navigateBeginOfYear = function() {
+        var dates = Utils.getBeginOfYear($scope.transferDateBegin);
+        $scope.transferDateBegin = dates.begin;
+		$scope.transferDateEnd = dates.end;
 
 		$scope.getTransfers();
   	};
 
-  	$scope.navigateActualMonth = function($event) {
-		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-		$scope.transferDateBegin = new Date(y, m, 1);
-		$scope.transferDateEnd = new Date(y, m + 1, 0);
+    $scope.navigatePreviousMonth = function() {
+        var dates = Utils.getPreviousMonth($scope.transferDateBegin);
+        $scope.transferDateBegin = dates.begin;
+		$scope.transferDateEnd = dates.end;
 
 		$scope.getTransfers();
   	};
 
-  	$scope.navigateNextMonth = function($event) {
-		var date;
+  	$scope.navigateActualMonth = function() {
+        var dates = Utils.getActualMonth();
+        $scope.transferDateBegin = dates.begin;
+		$scope.transferDateEnd = dates.end;
 
-		if (isNaN(Date.parse($scope.transferDateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.transferDateBegin;
-		}
+		$scope.getTransfers();
+  	};
 
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.transferDateBegin = new Date(y, m + 1, 1);
-		$scope.transferDateEnd = new Date(y, m + 2, 0);
+  	$scope.navigateNextMonth = function() {
+        var dates = Utils.getNextMonth($scope.transferDateBegin);
+        $scope.transferDateBegin = dates.begin;
+		$scope.transferDateEnd = dates.end;
+
+		$scope.getTransfers();
+  	};
+
+    $scope.navigateEndOfYear = function() {
+        var dates = Utils.getEndOfYear($scope.transferDateBegin);
+        $scope.transferDateBegin = dates.begin;
+		$scope.transferDateEnd = dates.end;
 
 		$scope.getTransfers();
   	};

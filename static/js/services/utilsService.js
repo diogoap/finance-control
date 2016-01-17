@@ -110,6 +110,98 @@ angular.module('utilsService', [])
 			        styles = styles + ' red-font-color';
 			    }
 			    return styles;
-			}
+			},
+			getPreviousMonth: function(actualDate) {
+				var beginDate;
+				var endDate;
+
+				if (isNaN(Date.parse(actualDate))) {
+					beginDate = new Date();
+				}
+				else {
+					beginDate = actualDate;
+				}
+
+				var y = beginDate.getFullYear(), m = beginDate.getMonth();
+				beginDate = new Date(y, m - 1, 1);
+				endDate = new Date(y, m, 0);
+
+				return { begin: beginDate, end: endDate };
+		  	},
+		  	getActualMonth: function() {
+				var beginDate;
+				var endDate;
+
+				var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+				beginDate = new Date(y, m, 1);
+				endDate = new Date(y, m + 1, 0);
+
+				return { begin: beginDate, end: endDate };
+		  	},
+		  	getNextMonth: function(actualDate) {
+				var beginDate;
+				var endDate;
+
+				if (isNaN(Date.parse(actualDate))) {
+					beginDate = new Date();
+				}
+				else {
+					beginDate = actualDate;
+				}
+
+				var y = beginDate.getFullYear(), m = beginDate.getMonth();
+				beginDate = new Date(y, m + 1, 1);
+				endDate = new Date(y, m + 2, 0);
+
+				return { begin: beginDate, end: endDate };
+		  	},
+			getBeginOfYear: function(actualDate) {
+				var beginDate;
+				var endDate;
+
+				if (isNaN(Date.parse(actualDate))) {
+					beginDate = new Date();
+				}
+				else {
+					beginDate = actualDate;
+				}
+
+				var m = beginDate.getMonth();
+				var y = beginDate.getFullYear();
+
+				//If it's the first month of the year, goes to previous year
+				if (m == 0) {
+					y--;
+				}
+
+				beginDate = new Date(y, 0, 1);
+				endDate = new Date(y, 1, 0);
+
+				return { begin: beginDate, end: endDate };
+		  	},
+			getEndOfYear: function(actualDate) {
+				var beginDate;
+				var endDate;
+
+				if (isNaN(Date.parse(actualDate))) {
+					beginDate = new Date();
+				}
+				else {
+					beginDate = actualDate;
+				}
+
+				var m = beginDate.getMonth();
+				var y = beginDate.getFullYear();
+
+				//If it's the last month of the year, goes to next year
+				if (m == 11) {
+					y++;
+				}
+
+				beginDate = new Date(y, 11, 1);
+				endDate = new Date(y, 12, 0);
+
+				return { begin: beginDate, end: endDate };
+		  	}
 		}
 	}]);

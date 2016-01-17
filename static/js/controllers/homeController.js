@@ -12,44 +12,42 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
     	$scope.endOpened = true;
   	};
 
-  	$scope.navigatePreviousMonth = function($event) {
-		var date;
+    $scope.navigateBeginOfYear = function() {
+        var dates = Utils.getBeginOfYear($scope.dateBegin);
+        $scope.dateBegin = dates.begin;
+    	$scope.dateEnd = dates.end;
 
-		if (isNaN(Date.parse($scope.dateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.dateBegin;
-		}
+    	$scope.getTotals();
+     	};
 
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.dateBegin = new Date(y, m - 1, 1);
-		$scope.dateEnd = new Date(y, m, 0);
-
-		$scope.getTotals();
-  	};
-
-  	$scope.navigateActualMonth = function($event) {
-		var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-		$scope.dateBegin = new Date(y, m, 1);
-		$scope.dateEnd = new Date(y, m + 1, 0);
+  	$scope.navigatePreviousMonth = function() {
+        var dates = Utils.getPreviousMonth($scope.dateBegin);
+        $scope.dateBegin = dates.begin;
+		$scope.dateEnd = dates.end;
 
 		$scope.getTotals();
   	};
 
-  	$scope.navigateNextMonth = function($event) {
-		var date;
+  	$scope.navigateActualMonth = function() {
+        var dates = Utils.getActualMonth();
+        $scope.dateBegin = dates.begin;
+		$scope.dateEnd = dates.end;
 
-		if (isNaN(Date.parse($scope.dateBegin))) {
-			date = new Date();
-		}
-		else {
-			date = $scope.dateBegin;
-		}
+		$scope.getTotals();
+  	};
 
-		var y = date.getFullYear(), m = date.getMonth();
-		$scope.dateBegin = new Date(y, m + 1, 1);
-		$scope.dateEnd = new Date(y, m + 2, 0);
+  	$scope.navigateNextMonth = function() {
+        var dates = Utils.getNextMonth($scope.dateBegin);
+        $scope.dateBegin = dates.begin;
+		$scope.dateEnd = dates.end;
+
+		$scope.getTotals();
+  	};
+
+    $scope.navigateEndOfYear = function() {
+        var dates = Utils.getEndOfYear($scope.dateBegin);
+        $scope.dateBegin = dates.begin;
+		$scope.dateEnd = dates.end;
 
 		$scope.getTotals();
   	};
