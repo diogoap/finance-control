@@ -14,7 +14,7 @@
 					<button class="btn btn-success btn-action" title="Ir para o próximo mês" ng-click="navigateNextMonth()">+1 Mês</button>
 					<button class="btn btn-success btn-action" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
-                <span ng-show="Utils.isLowResolution()" style="margin-left: 20px;"><b>{{incomeDueDateBegin | date: 'MMM/yy' | uppercase }}</b></span>
+				<span ng-show="Utils.isLowResolution()" class="date-label">{{incomeDueDateBegin | date: 'MMM/yy' | uppercase }}</span>
 			</div>
 
 			<div class="col-sm-4">

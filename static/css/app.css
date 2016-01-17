@@ -78,12 +78,20 @@ select.form-control.ng-valid {
   color: red;
 }
 
-.td-md{
+.td-md {
    padding:5px !important;
 }
 
-.td-sm{
+.td-sm {
    padding:1px !important;
+}
+
+.date-label {
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
 }
 
 label {
