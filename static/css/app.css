@@ -86,12 +86,24 @@ select.form-control.ng-valid {
    padding:1px !important;
 }
 
-.date-label {
+.date-nav-btn {
+    margin-left: 0px;
+    margin-right: 3px;
+    width: 65px;
+}
+
+.date-nav-btn-sm {
+    margin-left: 0px;
+    margin-right: 3px;
+    width: 40px;
+}
+
+.date-nav-label {
     margin-left: 20px;
     font-size: 16px;
     font-weight: bold;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: text-top;
 }
 
 label {
