@@ -1,5 +1,6 @@
 .totals-list {
 	margin-bottom: 0px;
+
 }
 
 .categories-list {
@@ -19,6 +20,15 @@
 	overflow:auto;
 }
 
+.home-td-md {
+	padding: 5px !important;
+}
+
+.home-td-md-tot {
+	padding: 5px !important;
+	font-size: 16px;
+}
+
 @media only screen and (max-width : 799px)
 {
     .home-box {
@@ -33,6 +43,17 @@
 
 	.h4-home-title {
 		margin-top: 0px;
+	}
+
+	.home-td-md {
+		padding: 1px !important;
+	}
+
+	.home-td-md-tot {
+	   padding-top: 5px !important;
+	   padding-bottom: 5px !important;
+	   padding-left: 1px !important;
+	   padding-right: 1px !important;
 	}
 }
 
@@ -55,4 +76,16 @@
 
 .text-muted {
 	color: inherit;
+}
+
+.val-pos {
+	color: blue;
+}
+
+.val-neg {
+	color: red;
+}
+
+.val-zero {
+	color: black;
 }

@@ -52,7 +52,7 @@
 	</div>
 
 	<div class="row">
-		<hr style="margin-top: 20px; margin-bottom: 0px">
+		<hr style="margin-top: 10px; margin-bottom: 0px">
 	</div>
 
 	<div id="boxes" class="row">
@@ -63,28 +63,28 @@
 				<h4 class="h4-home-title">Previsões - Todos os lançamentos</h4>
 				<table class="table totals-list">
 					<tr>
-						<td class="text-left td-md">Saldo anterior:</td>
-						<td class="text-right td-md">{{totals.current.all.previousBalance | number:2}}</td>
+						<td class="text-left home-td-md">(+) Saldo anterior:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.previousBalance)">{{totals.current.all.previousBalance | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Receitas:</td>
-						<td class="text-right td-md">{{totals.current.all.totalIncomes | number:2}}</td>
+						<td class="text-left home-td-md">(+) Receitas:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalIncomes)">{{totals.current.all.totalIncomes | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Despesas:</td>
-						<td class="text-right td-md">{{totals.current.all.totalExpenses | number:2}}</td>
+						<td class="text-left home-td-md">(-) Despesas:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalExpenses * -1)">{{(totals.current.all.totalExpenses * -1) | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Saldo período:</td>
-						<td class="text-right td-md">{{totals.current.all.partialBalance | number:2}}</td>
+						<td class="text-left home-td-md"><b>(=) Saldo período:</b></td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.partialBalance)"><b>{{totals.current.all.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Empréstimos:</td>
-						<td class="text-right td-md">{{totals.current.all.totalLoans | number:2}}</td>
+						<td class="text-left home-td-md">(+) Empréstimos:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalLoans)">{{totals.current.all.totalLoans | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md"><b>Saldo final:</b></td>
-						<td class="text-right td-md"><b>{{totals.current.all.actualBalance | number:2}}</b></td>
+						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
+						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.all.actualBalance)"><b>{{totals.current.all.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>
@@ -158,28 +158,28 @@
 				<h4 class="h4-home-title">Caixa - Lançamentos realizados</h4>
 				<table class="table totals-list">
 					<tr>
-						<td class="text-left td-md">Saldo anterior:</td>
-						<td class="text-right td-md">{{totals.current.completed.previousBalance | number:2}}</td>
+						<td class="text-left home-td-md">(+) Saldo anterior:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.previousBalance)">{{totals.current.completed.previousBalance | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Receitas:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalIncomes | number:2}}</td>
+						<td class="text-left home-td-md">(+) Receitas:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalIncomes)">{{totals.current.completed.totalIncomes | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Despesas:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalExpenses | number:2}}</td>
+						<td class="text-left home-td-md">(-) Despesas:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalExpenses * -1)">{{(totals.current.completed.totalExpenses * -1) | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Saldo período:</td>
-						<td class="text-right td-md">{{totals.current.completed.partialBalance | number:2}}</td>
+						<td class="text-left home-td-md"><b>(=) Saldo período:</b></td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.partialBalance)"><b>{{totals.current.completed.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
-						<td class="text-left td-md">Empréstimos:</td>
-						<td class="text-right td-md">{{totals.current.completed.totalLoans | number:2}}</td>
+						<td class="text-left home-td-md">(+) Empréstimos:</td>
+						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalLoans)">{{totals.current.completed.totalLoans | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left td-md"><b>Saldo final:</b></td>
-						<td class="text-right td-md"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
+						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
+						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.completed.actualBalance)"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>

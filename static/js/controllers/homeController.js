@@ -121,6 +121,16 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
         return null;
     }
 
+    $scope.getValueStyle = function(value) {
+        if (value < 0) {
+            return 'val-neg';
+        } else if (value == 0 ) {
+            return 'val-zero';
+        } else {
+            return 'val-pos';
+        }
+    }
+
     $scope.configBoxStyle = function() {
         if (Utils.isLowResolution()) {
             $scope.boxStyle = {};
