@@ -64,15 +64,15 @@
 				<table class="table totals-list">
 					<tr>
 						<td class="text-left home-td-md">(+) Saldo anterior:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.previousBalance)">{{totals.current.all.previousBalance | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.all.previousBalance | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Receitas:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalIncomes)">{{totals.current.all.totalIncomes | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.all.totalIncomes | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left home-td-md">(-) Despesas:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalExpenses * -1)">{{(totals.current.all.totalExpenses * -1) | number:2}}</td>
+						<td class="text-left home-td-md">( - ) Despesas:</td>
+						<td class="text-right home-td-md">{{(totals.current.all.totalExpenses * -1) | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
@@ -80,7 +80,7 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.all.totalLoans)">{{totals.current.all.totalLoans | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.all.totalLoans | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
@@ -159,15 +159,15 @@
 				<table class="table totals-list">
 					<tr>
 						<td class="text-left home-td-md">(+) Saldo anterior:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.previousBalance)">{{totals.current.completed.previousBalance | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.completed.previousBalance | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Receitas:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalIncomes)">{{totals.current.completed.totalIncomes | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.completed.totalIncomes | number:2}}</td>
 					</tr>
 					<tr>
-						<td class="text-left home-td-md">(-) Despesas:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalExpenses * -1)">{{(totals.current.completed.totalExpenses * -1) | number:2}}</td>
+						<td class="text-left home-td-md">(--) Despesas:</td>
+						<td class="text-right home-td-md">{{(totals.current.completed.totalExpenses * -1) | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
@@ -175,7 +175,7 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
-						<td class="text-right home-td-md" ng-class="getValueStyle(totals.current.completed.totalLoans)">{{totals.current.completed.totalLoans | number:2}}</td>
+						<td class="text-right home-td-md">{{totals.current.completed.totalLoans | number:2}}</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
