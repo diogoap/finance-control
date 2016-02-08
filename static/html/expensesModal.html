@@ -36,7 +36,7 @@
 			</div>
             <label for="expenseAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-4">
-				<input type="numeric" numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expense.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
+				<input type="text" pattern="/[0-9]+,?.?/g" numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expense.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
 				</div>
