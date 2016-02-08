@@ -50,7 +50,7 @@
 		<div class="form-group form-group-sm">
 			<label for="loanAmount" class="col-sm-3 control-label">Valor</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" name="loanAmount" ng-model="loan.amount" required class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
+				<input type="tel" numeric decimals="2" name="loanAmount" ng-model="loan.amount" required class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(loanForm.loanAmount.$dirty && loanForm.loanAmount.$invalid) || (submitted && loanForm.loanAmount.$invalid)">
 					<small class="error" ng-show="loanForm.loanAmount.$error.required">O campo Valor é obrigatório.</small>
 				</div>
