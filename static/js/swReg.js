@@ -1,5 +1,5 @@
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('swConfig.js').then(function(reg) {
+  navigator.serviceWorker.register('js/swConfig.js').then(function(reg) {
 
     if(reg.installing) {
       console.log('Service worker installing');
