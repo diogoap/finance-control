@@ -69,7 +69,7 @@
 			</div>
 			<label for="expenseAmountPaid" class="col-sm-2 control-label">Valor pago</label>
 			<div class="col-sm-4">
-				<input numeric decimals="2" gte-than="0" ng-required="expense.status =='Pago'" gt-than-zero-opt="{{expense.status == 'Pago'}}" name="expenseAmountPaid" ng-model="expense.amountPaid" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmountPaid($event);"/>
+				<input type="number" numeric decimals="2" gte-than="0" ng-required="expense.status =='Pago'" gt-than-zero-opt="{{expense.status == 'Pago'}}" name="expenseAmountPaid" ng-model="expense.amountPaid" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmountPaid($event);"/>
 				<div class="error" ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmountPaid.$error.gtThanZeroOpt || expenseForm.expenseAmountPaid.$error.gteThan">O campo Valor pago é obrigatório.</small>
 				</div>
