@@ -10,8 +10,7 @@
 	<title>Finance Control</title>
 
 	<link rel="icon" type="image/png" href="images/favicon.png" />
-	<script src="swReg.js"></script>
-	
+
 	<!-- EXTERNAL DEPENDECIES -->
  	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
@@ -68,22 +67,6 @@
 	<script src="js/services/logoffService.js"></script>
 	<script src="js/services/loansService.js"></script>
 
-	<script type='text/javascript'>
-		$(window).load(function(){
-			$('.navbar-collapse a').click(function(){
-    			$(".navbar-collapse").collapse('hide');
-			});
-
-			$('.navbar-header a').click(function(){
-    			$(".navbar-collapse").collapse('hide');
-			});
-		});
-
-		$(window).ready(function(){
- 			$('.date-mask').mask("00/00/00");
-		});
-	</script>
-
 </head>
 <body ng-controller="indexController">
     <!-- HEADER AND NAVBAR -->
@@ -134,5 +117,7 @@
     <div id="main">
     	<div ng-view></div>
     </div>
+
+	<script src="js/global.js"></script>
 </body>
 </html>
