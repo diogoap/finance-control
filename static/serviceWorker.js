@@ -3,7 +3,7 @@
 /* A version number is useful when updating the worker logic,
    allowing you to remove outdated cache entries during the update.
 */
-var version = 'v1.1.24';
+var version = 'v1.1.25';
 var trace = false;
 
 console.log('WORKER: executing. Version: ' + version);
@@ -26,10 +26,10 @@ var offlineFundamentals = [
 */
 self.addEventListener("install", function(event) {
     console.log('WORKER: install event in progress. Version: ' + version);
+
     /* Using event.waitUntil(p) blocks the installation process on the provided
        promise. If the promise is rejected, the service worker won't be installed.
     */
-
     event.waitUntil(
         /* The caches built-in is a promise-based API that helps you cache responses,
            as well as finding and deleting them.
@@ -65,7 +65,7 @@ self.addEventListener("fetch", function(event) {
 
     /* We should only cache GET requests, and deal with the rest of method in the
        client-side, by handling failed POST,PUT,PATCH,etc. requests.
-       Requests to API also should be skipped
+       Requests to API also should be skipped.
     */
     if (event.request.method !== 'GET' || (event.request.url.indexOf('/api/') !== -1)) {
         /* If we don't block the event as shown below, then the request will go to
