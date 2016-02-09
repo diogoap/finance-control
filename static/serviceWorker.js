@@ -5,7 +5,7 @@ console.log('WORKER: executing.');
 /* A version number is useful when updating the worker logic,
    allowing you to remove outdated cache entries during the update.
 */
-var version = 'v1.1.16';
+var version = 'v1.1.18';
 
 /* These resources will be downloaded and cached by the service worker
    during the installation process. If any resource fails to be downloaded,
@@ -95,13 +95,8 @@ self.addEventListener("fetch", function(event) {
            back to waiting on the network as usual.
         */
 
-        if (cached) {
-            console.log('WORKER: fetch event (*cached*)', event.request.url);
-            return event.request;
-        }
-
-        console.log('WORKER: fetch event', cached ? '(?cached?)' : '(*network*)', event.request.url);
-        return networked;
+        console.log('WORKER: fetch event', cached ? '(cached)' : '(network)', event.request.url);
+        return cached || networked;
 
         function fetchedFromNetwork(response) {
           /* We copy the response before replying to the network request.
