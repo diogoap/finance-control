@@ -5,7 +5,7 @@ console.log('WORKER: executing.');
 /* A version number is useful when updating the worker logic,
    allowing you to remove outdated cache entries during the update.
 */
-var version = 'v1.1.11';
+var version = 'v1.1.16';
 
 /* These resources will be downloaded and cached by the service worker
    during the installation process. If any resource fails to be downloaded,
@@ -54,7 +54,7 @@ self.addEventListener("install", function(event) {
 */
 self.addEventListener("fetch", function(event) {
 
-  console.log('WORKER: fetch event in progress.');
+  console.log('WORKER: fetch event in progress. Version: ' + version);
 
   /* We should only cache GET requests, and deal with the rest of method in the
      client-side, by handling failed POST,PUT,PATCH,etc. requests.
@@ -94,8 +94,14 @@ self.addEventListener("fetch", function(event) {
         /* We return the cached response immediately if there is one, and fall
            back to waiting on the network as usual.
         */
-        console.log('WORKER: fetch event', cached ? '(cached)' : '(network)', event.request.url);
-        return cached || networked;
+
+        if (cached) {
+            console.log('WORKER: fetch event (*cached*)', event.request.url);
+            return event.request;
+        }
+
+        console.log('WORKER: fetch event', cached ? '(?cached?)' : '(*network*)', event.request.url);
+        return networked;
 
         function fetchedFromNetwork(response) {
           /* We copy the response before replying to the network request.
@@ -166,7 +172,7 @@ self.addEventListener("activate", function(event) {
   /* Just like with the install event, event.waitUntil blocks activate on a promise.
      Activation will fail unless the promise is fulfilled.
   */
-  console.log('WORKER: activate event in progress.');
+  console.log('WORKER: activate event in progress. Version: ' + version);
 
   event.waitUntil(
     caches
@@ -191,7 +197,7 @@ self.addEventListener("activate", function(event) {
         );
       })
       .then(function() {
-        console.log('WORKER: activate completed.');
+        console.log('WORKER: activate completed. Version: ' + version);
       })
   );
 });
