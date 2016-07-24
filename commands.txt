@@ -70,13 +70,17 @@ sudo apt-get update
 sudo apt-get install atom
 
 ### Mongo ###
-sudo apt-get remove mongodb-org
-sudo apt-get autoremove
-sudo rm /etc/apt/sources.list.d/mongodb-org-3.0.list
-sudo echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+#Remove
+sudo service mongod stop
+sudo apt-get purge mongodb-org*
+#Install
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+sudo echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 sudo service mongod start
+#Install service
+https://askubuntu.com/questions/770054/mongodb-3-2-doesnt-start-on-lubuntu-16-04lts-as-service/770133#770133?newreg=d296972c09e94a29b73e3156074bc2b2
 
 ### Bower ###
 sudo npm install -g bower

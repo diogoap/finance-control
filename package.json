@@ -1,24 +1,24 @@
 {
   "name": "FinanceControl",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "Finance Control",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "body-parser": "1.13.x",
-    "express": "~4.13.x",
-    "jsonschema": "^1.0.2",
+    "body-parser": "1.15.x",
+    "express": "~4.14.x",
+    "jsonschema": "^1.1.x",
     "method-override": "2.3.x",
-    "mongoose": "4.1.x",
-    "morgan": "1.6.x",
+    "mongoose": "4.5.x",
+    "morgan": "1.7.x",
     "passport": "*",
     "passport-google-oauth": "*",
     "password-hash": "*"
   },
   "engines": {
-    "node": "0.11.x"
+    "node": "0.12.x"
   },
   "repository": {
     "type": "git",
