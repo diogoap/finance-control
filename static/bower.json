@@ -1,6 +1,6 @@
 {
   "name": "FinanceControl",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "authors": [
     "Diogo Augusto Pereira <diogoap82@gmail.com>"
   ],
@@ -14,15 +14,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.4",
-    "angular-bootstrap": "~0.14.3",
-    "angular-route": "~1.4.4",
-    "angular-ui-grid": "~3.0.7",
-    "bootstrap": "~3.3.4",
-    "bootstrap-social": "~4.10.1",
+    "angular": "~1.4.12",
+    "angular-bootstrap": "~2.0.0",
+    "angular-route": "~1.4.12",
+    "angular-ui-grid": "~3.2.1",
+    "bootstrap": "~3.3.6",
+    "bootstrap-social": "~5.0.0",
     "font-awesome": "latest",
     "angular-numeric-directive": "epeschier/angular-numeric-directive",
-    "angular-i18n": "~1.4.4",
+    "angular-i18n": "~1.4.12",
     "jquery-mask-plugin": "latest"
   }
 }
