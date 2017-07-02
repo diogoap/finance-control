@@ -136,6 +136,7 @@ select.form-control.ng-valid {
     font-weight: bolder;
     text-align: center;
     margin-bottom: 0px;
+    margin-top: -5px;
 }
 
 .val-pos {
