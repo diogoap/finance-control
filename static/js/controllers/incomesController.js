@@ -231,7 +231,7 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
 		y = dateEnd.getFullYear(), m = dateEnd.getMonth(), d = dateEnd.getDate();
 		dateEnd = new Date(y, m, d, 23, 59, 59, 999);
 
-		return 'dueDateBegin=' + dateBegin + '&dueDateEnd=' + dateEnd;
+		return 'dateBegin=' + dateBegin + '&dateEnd=' + dateEnd;
 	}
 
 	$scope.getIncomes = function() {
@@ -250,6 +250,16 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
+
+        Incomes.getBalance(filter)
+        	.success(function(data) {
+                $scope.currentPartialBalance = data.current.all.partialBalance;
+        		$scope.loading = false;
+        	})
+        	.error(function(data, status, headers, config) {
+        		Utils.addError($scope, 'Erro ao carregar o saldo: ' + status);
+        		$scope.loading = false;
+        	});
 	};
 
 	$scope.createIncome = function(income) {
@@ -307,6 +317,16 @@ app.controller('incomesController', function($scope, $http, $uibModal, $locale, 
 				$scope.loading = false;
 			});
 	};
+
+    $scope.getValueStyle = function(value) {
+        if (value < 0) {
+            return 'val-neg';
+        } else if (value == 0 ) {
+            return 'val-zero';
+        } else {
+            return 'val-pos';
+        }
+    };
 
 	// initialization
     $scope.Utils = Utils;

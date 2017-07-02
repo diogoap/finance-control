@@ -10,6 +10,9 @@ angular.module('transfersService', [])
 			get : function(filter) {
 				return $http.get('/api/transfers?' + filter);
 			},
+			getBalance: function(filter) {
+				return $http.get('/api/totals/balance?' + filter);
+			},
 			create : function(transferData) {
 				return $http.post('/api/transfers', transferData);
 			},

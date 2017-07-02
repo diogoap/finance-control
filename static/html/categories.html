@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
 
-			<div class="col-sm-4">
+			<div class="col-sm-4 col-sm-top-bar">
 				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Inativar" ng-show="selectedRow.entity.enabled == true" href="" ng-click="enableDisableConfirmation(selectedRow.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>

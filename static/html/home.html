@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
 
-			<div class="col-sm-4">
+			<div class="col-sm-4 col-sm-top-bar">
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
 					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
@@ -28,7 +28,7 @@
                 <span ng-show="Utils.isLowResolution()" class="date-nav-label">{{dateBegin | date: 'MMM/yy' | uppercase }}</span>
 			</div>
 
-			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">
+			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isLowResolution()">
 				<div class="input-group input-group-sm">
 					<input type="text" uib-datepicker-popup name="dateBegin" ng-model="dateBegin" required class="form-control date-mask" is-open="beginOpened"/>
 					<span class="input-group-btn">

@@ -400,6 +400,33 @@ module.exports = {
                 callbackError(error);
             }
         );
+    },
+
+    getBalance: function(userId, filter, callbackSuccess, callbackError) {
+        var queryFilterPrevious, queryFilterCurrent;
+
+        if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
+            var dateBegin = new Date(filter.dateBegin);
+            var dateEnd = new Date(filter.dateEnd);
+
+            queryFilterPrevious = { $lt: dateBegin };
+            queryFilterCurrent = { $gte: dateBegin, $lt: dateEnd };
+        } else {
+            callbackError('date filter is not definied');
+        }
+
+        getData(
+            userId,
+            queryFilterCurrent,
+            function(currentTotals) {
+                var data = { current: { } };
+                data.current.all = calculateTotals(currentTotals, 'all', null);
+                callbackSuccess(data);
+            },
+            function(error) {
+                callbackError(error);
+            }
+        )
     }
 
 }

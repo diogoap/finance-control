@@ -1,6 +1,5 @@
 .totals-list {
 	margin-bottom: 0px;
-
 }
 
 .categories-list {
@@ -29,7 +28,7 @@
 	font-size: 16px;
 }
 
-@media only screen and (max-width : 799px)
+@media only screen and (max-width : 1099px)
 {
     .home-box {
 		padding-top: 10px;
@@ -60,7 +59,7 @@
 	}
 }
 
-@media only screen and (min-width : 800px)
+@media only screen and (min-width : 1100px)
 {
 	.home-box {
 		padding-top: 10px;
@@ -79,16 +78,4 @@
 
 .text-muted {
 	color: inherit;
-}
-
-.val-pos {
-	color: blue;
-}
-
-.val-neg {
-	color: red;
-}
-
-.val-zero {
-	color: black;
 }

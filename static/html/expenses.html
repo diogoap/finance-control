@@ -15,9 +15,14 @@
 					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
 				<span ng-show="Utils.isLowResolution()" class="date-nav-label">{{expenseDueDateBegin | date: 'MMM/yy' | uppercase }}</span>
+
+				<span ng-show="Utils.isLowResolution()" style="float:right;">
+					<p class="balance-label">Saldo</p>
+					<p class="balance-value" ng-class="getValueStyle(currentPartialBalance)">{{currentPartialBalance | number:2}}</p>
+				</span>
 			</div>
 
-			<div class="col-sm-4">
+			<div class="col-sm-4 col-sm-top-bar">
 				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
 				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
 	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
@@ -26,7 +31,7 @@
 				<a class="btn btn-primary btn-sm btn-action" title="Gerar" href="" ng-click="openGeneratorModal(null, 'new')"><i class="fa fa-cog fa-lg fa-fw"></i></a>
 			</div>
 
-			<div class="col-sm-4" ng-hide="Utils.isLowResolution()" style="text-align: center;">
+			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isLowResolution()" style="text-align: center;">
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
 					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
@@ -36,7 +41,7 @@
 				</div>
 			</div>
 
-			<div class="col-sm-4" ng-hide="Utils.isLowResolution()">
+			<div class="col-sm-3 col-sm-top-bar" ng-hide="Utils.isLowResolution()">
 				<div class="input-group input-group-sm">
 					<input type="text" uib-datepicker-popup name="expenseDueDateBegin" ng-model="expenseDueDateBegin" required class="form-control date-mask" is-open="beginOpened"/>
 					<span class="input-group-btn">
@@ -55,6 +60,13 @@
 						<small class="error" ng-show="expenseForm.expenseDueDateEnd.$error.required">O campo Período final é obrigatório.</small>
 					</div>
 				</div>
+			</div>
+
+			<div class="col-sm-1 col-sm-top-bar" ng-hide="Utils.isLowResolution()">
+				<span style="float:right;">
+					<P class="balance-label">Saldo</p>
+					<p class="balance-value" ng-class="getValueStyle(currentPartialBalance)">{{currentPartialBalance | number:2}}</p>
+				</span>
 			</div>
 		</div>
 	</div>

@@ -60,19 +60,19 @@ angular.module('utilsService', [])
 				return null;
 			},
 			isLowResolution: function() {
-				return $(window).width() < 800;
+				return $(window).width() < 1100;
 			},
 			getSizeRes: function(sizeLg, sizeMd, sizeSm) {
 				if ($(window).width() < 600) {
 					return sizeSm;
-				} else if ($(window).width() < 800) {
+				} else if ($(window).width() < 1100) {
 					return sizeMd;
 				} else {
 					return sizeLg;
 				}
 			},
 			getGridRowHeight: function() {
-				if ($(window).width() < 800) {
+				if ($(window).width() < 1100) {
 					return 33;
 				} else {
 					return 24;
@@ -81,14 +81,14 @@ angular.module('utilsService', [])
 			getVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
 				if ($(window).width() < 600) {
 					return visibleSm;
-				} else if ($(window).width() < 800) {
+				} else if ($(window).width() < 1100) {
 					return visibleMd;
 				} else {
 					return visibleLg;
 				}
 			},
 			getStyleRes: function(styleLg, styleMdSm) {
-				if ($(window).width() < 800) {
+				if ($(window).width() < 1100) {
 					return styleMdSm;
 				} else {
 					return styleLg;

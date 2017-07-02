@@ -175,9 +175,9 @@ module.exports = {
     get: function(userId, filter, callbackSuccess, callbackError) {
         var queryFilter = {};
 
-        if ((filter != undefined) && (filter.dueDateBegin != undefined) && (filter.dueDateEnd != undefined)) {
-            var dateBegin = new Date(filter.dueDateBegin);
-            var dateEnd = new Date(filter.dueDateEnd);
+        if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
+            var dateBegin = new Date(filter.dateBegin);
+            var dateEnd = new Date(filter.dateEnd);
 
             queryFilter.dueDate = { $gte: dateBegin, $lt: dateEnd };
         }

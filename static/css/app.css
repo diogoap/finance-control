@@ -32,7 +32,7 @@ select.form-control.ng-valid {
     overflow-x: hidden !important;
 }
 
-@media only screen and (max-width : 799px)
+@media only screen and (max-width : 1099px)
 {
     .ui-grid {
     	margin-top: 5px;
@@ -44,7 +44,7 @@ select.form-control.ng-valid {
     }
 }
 
-@media only screen and (min-width : 800px)
+@media only screen and (min-width : 1100px)
 {
     .ui-grid {
         margin-top: 10px;
@@ -65,13 +65,32 @@ select.form-control.ng-valid {
     padding-right: 5px;
 }
 
+@media only screen and (min-width : 1100px)
+{
+    .col-sm-top-bar {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}
+
 .btn-grid {
     margin-left: 3px;
 }
 
-.btn-action {
-    margin-left: 0px;
-    margin-right: 3px;
+@media only screen and (max-width : 1099px)
+{
+    .btn-action {
+        margin-left: 0px;
+        margin-right: 3px;
+    }
+}
+
+@media only screen and (min-width : 1100px)
+{
+    .btn-action {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
 }
 
 .red-font-color {
@@ -104,6 +123,31 @@ select.form-control.ng-valid {
     font-weight: bold;
     text-align: center;
     vertical-align: text-top;
+}
+
+.balance-label {
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.balance-value {
+    font-size: 13px;
+    font-weight: bolder;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.val-pos {
+	color: blue;
+}
+
+.val-neg {
+	color: red;
+}
+
+.val-zero {
+	color: black;
 }
 
 label {

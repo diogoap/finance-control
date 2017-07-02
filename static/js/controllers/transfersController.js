@@ -175,6 +175,16 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
+
+        Transfers.getBalance(filter)
+        	.success(function(data) {
+                $scope.currentPartialBalance = data.current.all.partialBalance;
+        		$scope.loading = false;
+        	})
+        	.error(function(data, status, headers, config) {
+        		Utils.addError($scope, 'Erro ao carregar o saldo: ' + status);
+        		$scope.loading = false;
+        	});
 	};
 
 	$scope.createTransfer = function(transfer) {
@@ -218,6 +228,16 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
 				$scope.loading = false;
 			});
 	};
+
+    $scope.getValueStyle = function(value) {
+        if (value < 0) {
+            return 'val-neg';
+        } else if (value == 0 ) {
+            return 'val-zero';
+        } else {
+            return 'val-pos';
+        }
+    };
 
 	// initialization
     $scope.Utils = Utils;

@@ -21,4 +21,20 @@ module.exports = function(app, url) {
         );
     })
 
+    app.get('/api/totals/balance', utils.ensureAuth, function(req, res) {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        totalsService.getBalance(
+            utils.getUserId(req),
+            query,
+            function(totals) {
+                res.json(totals);
+            },
+            function(error, status) {
+                utils.sendError(res, error, status);
+            }
+        );
+    })
+
 }

@@ -10,6 +10,9 @@ angular.module('expensesService', [])
 			get: function(filter) {
 				return $http.get('/api/expenses?' + filter);
 			},
+			getBalance: function(filter) {
+				return $http.get('/api/totals/balance?' + filter);				
+			},
 			create: function(expenseData) {
 				return $http.post('/api/expenses', expenseData);
 			},
