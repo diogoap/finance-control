@@ -229,16 +229,6 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
 			});
 	};
 
-    $scope.getValueStyle = function(value) {
-        if (value < 0) {
-            return 'val-neg';
-        } else if (value == 0 ) {
-            return 'val-zero';
-        } else {
-            return 'val-pos';
-        }
-    };
-
 	// initialization
     $scope.Utils = Utils;
     $scope.alerts = [];

@@ -89,7 +89,7 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
 	}
 
     $scope.configAccordions = function() {
-        var isLowRes = Utils.isLowResolution();
+        var isLowRes = Utils.isMidLowResolution();
 
         $scope.accordions = {
             isDisabled: isLowRes == false,
@@ -114,25 +114,15 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
     });
 
     $scope.getAcordionStyle = function(isOpen) {
-        if (Utils.isLowResolution()) {
+        if (Utils.isMidLowResolution()) {
             return isOpen ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right';
         }
 
         return null;
-    }
-
-    $scope.getValueStyle = function(value) {
-        if (value < 0) {
-            return 'val-neg';
-        } else if (value == 0 ) {
-            return 'val-zero';
-        } else {
-            return 'val-pos';
-        }
-    }
+    };
 
     $scope.configBoxStyle = function() {
-        if (Utils.isLowResolution()) {
+        if (Utils.isMidLowResolution()) {
             $scope.boxStyle = {};
         } else {
             var obj = document.getElementById('boxes');
@@ -144,7 +134,7 @@ app.controller('homeController', function($scope, $http, $locale, Utils, Totals)
                 $scope.boxStyle = { height: boxHeight };
             }
         }
-    }
+    };
 
 	// initialization
     $scope.Utils = Utils;

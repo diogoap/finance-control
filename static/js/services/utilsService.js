@@ -22,6 +22,15 @@ function getDstTimezoneOffset(date) {
 	return (maxOffSet - date.getTimezoneOffset());
 }
 
+//2 columns stack
+var _MID_RESOLUTION_START = 768;//600;
+//3 columns stack
+var _HIGH_RESOLUTION_START = 992;//1100;
+
+//if ($(window).width() >= 992 ){ $columns = 3;}
+//else if ($(window).width() >= 768 ){ $columns = 2;}
+//else { $columns = 1;}
+
 angular.module('utilsService', [])
 
 	.factory('Utils', ['$locale', function($locale) {
@@ -59,39 +68,69 @@ angular.module('utilsService', [])
 
 				return null;
 			},
+			isMidLowResolution: function() {
+				return $(window).width() < _HIGH_RESOLUTION_START;
+			},
 			isLowResolution: function() {
-				return $(window).width() < 1100;
+				return $(window).width() < _MID_RESOLUTION_START;
 			},
 			getSizeRes: function(sizeLg, sizeMd, sizeSm) {
-				if ($(window).width() < 600) {
+				if ($(window).width() < _MID_RESOLUTION_START) {
 					return sizeSm;
-				} else if ($(window).width() < 1100) {
+				} else if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return sizeMd;
 				} else {
 					return sizeLg;
 				}
 			},
 			getGridRowHeight: function() {
-				if ($(window).width() < 1100) {
+				if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return 33;
 				} else {
 					return 24;
 				}
 			},
 			getVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
-				if ($(window).width() < 600) {
+				if ($(window).width() < _MID_RESOLUTION_START) {
 					return visibleSm;
-				} else if ($(window).width() < 1100) {
+				} else if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return visibleMd;
 				} else {
 					return visibleLg;
 				}
 			},
 			getStyleRes: function(styleLg, styleMdSm) {
-				if ($(window).width() < 1100) {
+				if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return styleMdSm;
 				} else {
 					return styleLg;
+				}
+			},
+			getValueStyle: function(val) {
+		        if (val < 0) {
+		            return 'val-neg';
+		        } else if (val == 0 ) {
+		            return 'val-zero';
+		        } else {
+		            return 'val-pos';
+		        }
+		    },
+			getColNumberStyle: function(highResCols, lowResCols) {
+				if ($(window).width() < _HIGH_RESOLUTION_START) {
+					if (lowResCols === 2) {
+						return 'col-sm-6';
+					} else {
+						return 'col-sm-12';
+					}
+				} else {
+					if (highResCols === 4) {
+						return 'col-sm-3';
+					}
+					else if (highResCols === 3) {
+						return 'col-sm-4';
+					} else {
+						return 'col-sm-6';
+					}
 				}
 			},
 			clearGridNav: function(gridApi) {

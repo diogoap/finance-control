@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="form-group form-group-sm no-margin-bottom">
 
-			<div class="col-sm-4 col-sm-top-bar">
+			<div class="col-sm-top-bar" ng-class="Utils.getColNumberStyle(3, 1)">
 				<div class="btn-group btn-group-sm">
 					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
 					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
@@ -25,10 +25,10 @@
 					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês" ng-click="navigateNextMonth()">+1 Mês</button>
 					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
-                <span ng-show="Utils.isLowResolution()" class="date-nav-label">{{dateBegin | date: 'MMM/yy' | uppercase }}</span>
+                <span ng-show="Utils.isMidLowResolution()" class="date-nav-label">{{dateBegin | date: 'MMM/yy' | uppercase }}</span>
 			</div>
 
-			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isLowResolution()">
+			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isMidLowResolution()">
 				<div class="input-group input-group-sm">
 					<input type="text" uib-datepicker-popup name="dateBegin" ng-model="dateBegin" required class="form-control date-mask" is-open="beginOpened"/>
 					<span class="input-group-btn">
@@ -59,7 +59,7 @@
 		<uib-accordion close-others="false" is-disabled="false">
 
 			<!-- Totais - All -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<h4 class="h4-home-title">Previsões - Todos os lançamentos</h4>
 				<table class="table totals-list">
 					<tr>
@@ -76,7 +76,7 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.all.partialBalance)"><b>{{totals.current.all.partialBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.all.partialBalance)"><b>{{totals.current.all.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
@@ -84,13 +84,13 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.all.actualBalance)"><b>{{totals.current.all.actualBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.all.actualBalance)"><b>{{totals.current.all.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>
 
 			<!-- Accounts - All -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
@@ -107,7 +107,7 @@
 			</div>
 
 			<!-- Categories - Incomes - All -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenAllInc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Receitas
@@ -124,7 +124,7 @@
 			</div>
 
 			<!-- Categories - Expenses - All -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenAllExp" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Despesas
@@ -142,11 +142,11 @@
 		</uib-accordion>
 	</div>
 
-    <div class="row" ng-show="!Utils.isLowResolution()">
+    <div class="row" ng-show="!Utils.isMidLowResolution()">
         <hr style="margin-top: 0px; margin-bottom: 0px">
     </div>
 
-    <div class="row" ng-show="Utils.isLowResolution()">
+    <div class="row" ng-show="Utils.isMidLowResolution()">
         <hr style="margin-top: 20px; margin-bottom: 0px">
     </div>
 
@@ -154,7 +154,7 @@
 		<uib-accordion close-others="false" is-disabled="false">
 
 			<!-- Totais - Completed -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<h4 class="h4-home-title">Caixa - Lançamentos realizados</h4>
 				<table class="table totals-list">
 					<tr>
@@ -171,7 +171,7 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.completed.partialBalance)"><b>{{totals.current.completed.partialBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.completed.partialBalance)"><b>{{totals.current.completed.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
@@ -179,13 +179,13 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="getValueStyle(totals.current.completed.actualBalance)"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.completed.actualBalance)"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>
 
 			<!-- Accounts - Completed -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
@@ -202,7 +202,7 @@
 			</div>
 
 			<!-- Categories - Incomes - Completed -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenCompInc" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Receitas
@@ -219,7 +219,7 @@
 			</div>
 
 			<!-- Categories - Expenses - Completed -->
-			<div class="col-sm-3 home-box" ng-style="boxStyle">
+			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
 				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenCompExp" is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Despesas
@@ -238,7 +238,7 @@
 		</uib-accordion>
 	</div>
 
-	<div class="row" ng-show="Utils.isLowResolution()">
+	<div class="row" ng-show="Utils.isMidLowResolution()">
 		<hr style="margin-top: 15px; margin-bottom: 0px">
 	</div>
 
