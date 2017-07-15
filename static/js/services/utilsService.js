@@ -23,9 +23,9 @@ function getDstTimezoneOffset(date) {
 }
 
 //2 columns stack
-var _MID_RESOLUTION_START = 768;//600;
+var _MID_RESOLUTION_START = 768;
 //3 columns stack
-var _HIGH_RESOLUTION_START = 992;//1100;
+var _HIGH_RESOLUTION_START = 992;
 
 angular.module('utilsService', [])
 
