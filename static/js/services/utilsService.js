@@ -27,10 +27,6 @@ var _MID_RESOLUTION_START = 768;//600;
 //3 columns stack
 var _HIGH_RESOLUTION_START = 992;//1100;
 
-//if ($(window).width() >= 992 ){ $columns = 3;}
-//else if ($(window).width() >= 768 ){ $columns = 2;}
-//else { $columns = 1;}
-
 angular.module('utilsService', [])
 
 	.factory('Utils', ['$locale', function($locale) {

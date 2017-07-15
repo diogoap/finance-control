@@ -32,7 +32,7 @@ select.form-control.ng-valid {
     overflow-x: hidden !important;
 }
 
-@media only screen and (max-width : 1099px)
+@media only screen and (max-width : 991px)
 {
     .ui-grid {
     	margin-top: 5px;
@@ -44,7 +44,7 @@ select.form-control.ng-valid {
     }
 }
 
-@media only screen and (min-width : 1100px)
+@media only screen and (min-width : 992px)
 {
     .ui-grid {
         margin-top: 10px;
@@ -65,7 +65,7 @@ select.form-control.ng-valid {
     padding-right: 5px;
 }
 
-@media only screen and (min-width : 1100px)
+@media only screen and (min-width : 992px)
 {
     .col-sm-top-bar {
         padding-left: 10px !important;
@@ -77,7 +77,7 @@ select.form-control.ng-valid {
     margin-left: 3px;
 }
 
-@media only screen and (max-width : 1099px)
+@media only screen and (max-width : 991px)
 {
     .btn-action {
         margin-left: 0px;
@@ -85,7 +85,7 @@ select.form-control.ng-valid {
     }
 }
 
-@media only screen and (min-width : 1100px)
+@media only screen and (min-width : 992px)
 {
     .btn-action {
         margin-left: 0px;
