@@ -26,6 +26,7 @@ function getDstTimezoneOffset(date) {
 var _MID_RESOLUTION_START = 768;
 //3 columns stack
 var _HIGH_RESOLUTION_START = 992;
+var _ULTRA_HIGH_RESOLUTION_START = 1200;
 
 angular.module('utilsService', [])
 
@@ -69,6 +70,9 @@ angular.module('utilsService', [])
 			},
 			isLowResolution: function() {
 				return $(window).width() < _MID_RESOLUTION_START;
+			},
+			isUltraHighResolution: function() {
+				return $(window).width() >= _ULTRA_HIGH_RESOLUTION_START;
 			},
 			getSizeRes: function(sizeLg, sizeMd, sizeSm) {
 				if ($(window).width() < _MID_RESOLUTION_START) {
