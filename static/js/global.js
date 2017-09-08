@@ -1,5 +1,5 @@
 (function() {
-	$(window).load(function(){
+	$(window).on('load', function(){
 		$('.navbar-collapse a').click(function(){
 			$(".navbar-collapse").collapse('hide');
 		});

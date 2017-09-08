@@ -1,3 +1,74 @@
+== v1.14.10 (Feb/13 2017 14:18 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing exception when oValue in undefined
+
+== v1.14.9 (Jan/25 2017 11:17 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* don’t use input event when using samsung browser or old chrome versions
+
+== v1.14.8 (Dec/26 2016 13:18 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing caret on android with chrome 28
+
+== v1.14.7 (Dec/25 2016 03:51 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* improving caret positioning when cursor is on the middle
+
+== v1.14.6 (Dec/24 2016 17:14 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fix caret positioning with multiple mask chars
+
+== v1.14.5 (Dec/24 2016 14:42 +0000 by Igor Escobar) ==
+
+Changes:
+
+* fixing reserved word
+
+== v1.14.4 (Dec/24 2016 14:38 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing android cursor positioning (special thanks to @felipejunges and @fernandobandeira)
+
+== v1.14.3 (Nov/28 2016 11:53 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing caret positioning on safari
+
+== v1.14.2 (Nov/27 2016 20:04 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* apply auto maxlength in case the mask doesn't have recursive pattern
+
+== v1.14.1 (Nov/27 2016 19:20 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* Fix input value mangling when inserting before a static mask character
+* fixing caret position issue
+
+== v1.14.0 (Apr/03 2016 17:52 +0100 by Igor Escobar) ==
+
+Bugfixes:
+
+* Fix cursor jumping while editing in non-IE browsers. Thanks to @archwyrm
+
+Features:
+
+* adding masked function for better angular use
+
 == v1.13.9 (Mar/20 2016 16:17 +0000 by Igor Escobar) ==
 
 Changes:

@@ -1,6 +1,6 @@
 /**
  * Numeric directive.
- * Version: 0.9.8
+ * Version: 1.0.0
  * 
  * Numeric only input. Limits input to:
  * - max value: maximum input value. Default undefined (no max).
@@ -10,6 +10,9 @@
  */
 (function () {
     'use strict';
+    if(typeof module !== 'undefined') {
+        module.exports = 'purplefox.numeric';
+    }
 
     /* global angular */
     angular
@@ -43,6 +46,8 @@
             var maxInputLength = 16;            // Maximum input length. Default max ECMA script.
             var max;                            // Maximum value. Default undefined.
             var min;                            // Minimum value. Default undefined.
+            var limitMax = true;                // Limit input to max value (value is capped). Default true.
+            var limitMin = true;                // Limit input to min value (value is capped). Default true.
             var decimals = 2;                   // Number of decimals. Default 2.
             var lastValidValue;                 // Last valid value.
 
@@ -58,6 +63,8 @@
             // Put a watch on the min, max and decimal value changes in the attribute.
             scope.$watch(attrs.min, onMinChanged);
             scope.$watch(attrs.max, onMaxChanged);
+            scope.$watch(attrs.limitMax, onLimitMaxChanged);
+            scope.$watch(attrs.limitMin, onLimitMinChanged);
             scope.$watch(attrs.decimals, onDecimalsChanged);
             scope.$watch(attrs.formatting, onFormattingChanged);
 
@@ -109,6 +116,18 @@
                 }
             }
 
+            function onLimitMinChanged(value) {
+                if (!angular.isUndefined(value)) {
+                    limitMin = (value == "true");
+                }
+            }
+
+            function onLimitMaxChanged(value) {
+                if (!angular.isUndefined(value)) {
+                    limitMax = (value == "true");
+                }
+            }
+
             /**
              * Round the value to the closest decimal.
              */
@@ -122,7 +141,7 @@
              */
             function numberWithCommas(value) {
                 if (formatting) {
-                    var parts = value.toString().split(decimalSeparator);
+                    var parts = (""+value).split(decimalSeparator);
                     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
                     return parts.join(decimalSeparator);
                 }
@@ -155,7 +174,7 @@
                 if (angular.isUndefined(value)) {
                     value = '';
                 }
-                value = value.toString().replace(decimalSeparator, '.');
+                value = (""+value).replace(decimalSeparator, '.');
 
                 // Handle leading decimal point, like ".5"
                 if (value.indexOf('.') === 0) {
@@ -181,10 +200,10 @@
                 } 
                 else {
                     if (regex.test(value) && (value.length <= maxInputLength)) {
-                        if (value > max) {
+                        if ((value > max) && limitMax) {
                             lastValidValue = max;
                         }
-                        else if (value < min) {
+                        else if ((value < min) && limitMin) {
                             lastValidValue = min;
                         }
                         else {
@@ -225,7 +244,7 @@
              * Minimum value validator.
              */
             function minValidator(value) {
-                if (!angular.isUndefined(min)) {
+                if (!angular.isUndefined(min) && limitMin) {
                     if (!ngModelCtrl.$isEmpty(value) && (value < min)) {
                         return min;
                     } else {
@@ -233,6 +252,9 @@
                     }
                 }
                 else {
+                    if (!limitMin) {
+                        ngModelCtrl.$setValidity('min', !(value < min));
+                    }
                     return value;
                 }
             }
@@ -241,7 +263,7 @@
              * Maximum value validator.
              */
             function maxValidator(value) {
-                if (!angular.isUndefined(max)) {
+                if (!angular.isUndefined(max) && limitMax) {
                     if (!ngModelCtrl.$isEmpty(value) && (value > max)) {
                         return max;
                     } else {
@@ -249,6 +271,9 @@
                     }
                 }
                 else {
+                    if (!limitMax) {
+                        ngModelCtrl.$setValidity('max', !(value > max));
+                    }
                     return value;
                 }
             }
@@ -274,7 +299,7 @@
             function onFocus() {
                 var value = ngModelCtrl.$modelValue;
                 if (!angular.isUndefined(value)) {
-                    ngModelCtrl.$viewValue = value.toString().replace(".", decimalSeparator);
+                    ngModelCtrl.$viewValue = (""+value).replace(".", decimalSeparator);
                     ngModelCtrl.$render();
                 }
             }

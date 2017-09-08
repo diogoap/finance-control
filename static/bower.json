@@ -14,15 +14,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.12",
+    "angular": "~1.5.11",
     "angular-bootstrap": "~0.14.3",
-    "angular-route": "~1.4.12",
-    "angular-ui-grid": "~3.2.1",
+    "angular-route": "~1.5.11",
+    "angular-ui-grid": "~4.0.6",
     "bootstrap": "~3.3.6",
     "bootstrap-social": "~5.0.0",
     "font-awesome": "latest",
     "angular-numeric-directive": "epeschier/angular-numeric-directive",
-    "angular-i18n": "~1.4.12",
+    "angular-i18n": "~1.5.11",
     "jquery-mask-plugin": "latest"
   }
 }
