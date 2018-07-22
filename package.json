@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "body-parser": "~1.17.x",
-    "express": "~4.15.x",
+    "express": "^4.16.3",
     "jsonschema": "~1.1.x",
-    "method-override": "~2.3.x",
-    "mongoose": "~4.11.x",
-    "morgan": "*",
-    "passport": "*",
+    "method-override": "^2.3.10",
+    "mongoose": "^5.2.4",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
     "passport-google-oauth": "*",
     "password-hash": "*"
   },

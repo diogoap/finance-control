@@ -11,9 +11,7 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Configuration ===============================================================
-var promise = mongoose.connect(databaseUrl, {
-  useMongoClient: true
-});
+var promise = mongoose.connect(databaseUrl, { useNewUrlParser: true });
 app.use(express.static(__dirname + '/static'))
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
