@@ -39,12 +39,43 @@ function currencyExists(userId, currencyCodeFilter, callbackSuccess, callbackErr
     var currenciesPromisse = Currencies.countDocuments(queryFilter).exec();
 
     currenciesPromisse.then(function (currencies) {
-        console.log(currencies);
         callbackSuccess(currencies > 0);
     })
         .then(null, function (error) {
             callbackError(error);
         });
+}
+
+function currencyDefaultExists(userId, currency, callbackSuccess, callbackError) {
+    if (currency.default == false) {
+        callbackSuccess(false);
+    } else {
+
+        var queryFilter = {
+            default: true,
+            user_id: userId
+        };
+
+        console.log('checking default for ' + currency.id);
+
+        var currenciesPromisse = Currencies.find(queryFilter).exec();
+        currenciesPromisse.then(function (currencies) {
+
+            var existsDefault = false;
+            if ((currencies != undefined) && (currencies.length > 0)) {
+                currencies.forEach(function (item) {
+                    if (currency.id == undefined || item.id != currency.id) {
+                        existsDefault = true;
+                    }
+                })
+            };
+
+            callbackSuccess(existsDefault);
+        })
+            .then(null, function (error) {
+                callbackError(error);
+            });
+    }
 }
 
 module.exports = {
@@ -88,22 +119,33 @@ module.exports = {
         var val = new Validator().validate(currency, currencySchema);
 
         if (val.errors.length == 0) {
-            var currenciesExistsPromisse = currencyExists(userId, currency.currencyCode,
+            var currencyExistsPromisse = currencyExists(userId, currency.currencyCode,
                 function (exists) {
                     if (exists) {
                         callbackError('Moeda já existe', 400);
                     } else {
-                        var currenciesPromisse = Currencies.create(currency);
+                        var currencyDefaultExistsPromisse = currencyDefaultExists(userId, currency,
+                            function (defaultExists) {
+                                if (defaultExists) {
+                                    callbackError('Moeda default já existe', 400);
+                                } else {
 
-                        currenciesPromisse.then(function () {
-                            callbackSuccess();
-                        })
-                            .then(null, function (error) {
+                                    var currenciesPromisse = Currencies.create(currency);
+
+                                    currenciesPromisse.then(function () {
+                                        callbackSuccess();
+                                    })
+                                        .then(null, function (error) {
+                                            callbackError(error, 400);
+                                        });
+                                }
+                            },
+                            function (error) {
                                 callbackError(error, 400);
-                            });
+                            })
                     }
                 },
-                function () {
+                function (error) {
                     callbackError(error, 400);
                 })
         } else {
@@ -126,18 +168,29 @@ module.exports = {
         var val = new Validator().validate(currency, currencySchema);
 
         if (val.errors.length == 0) {
-            var currenciesPromisse = Currencies.findByIdAndUpdate(id, currency, { new: true });
+            var currencyDefaultExistsPromisse = currencyDefaultExists(currency.user_id, currency,
+                function (defaultExists) {
+                    if (defaultExists) {
+                        callbackError('Moeda default já existe', 400);
+                    } else {
 
-            currenciesPromisse.then(function (currencyEdited) {
-                if (currencyEdited == null) {
-                    callbackError('not found', 404);
-                } else {
-                    callbackSuccess(currencyEdited);
-                }
-            })
-                .then(null, function (error) {
+                        var currenciesPromisse = Currencies.findByIdAndUpdate(id, currency, { new: true });
+
+                        currenciesPromisse.then(function (currencyEdited) {
+                            if (currencyEdited == null) {
+                                callbackError('not found', 404);
+                            } else {
+                                callbackSuccess(currencyEdited);
+                            }
+                        })
+                            .then(null, function (error) {
+                                callbackError(error, 400);
+                            });
+                    }
+                },
+                function (error) {
                     callbackError(error, 400);
-                });
+                })
         } else {
             callbackError(val.errors, 400)
         }
