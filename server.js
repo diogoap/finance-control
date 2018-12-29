@@ -31,6 +31,7 @@ require('./api/apis/transfersApi.js')(app, url);
 require('./api/apis/totalsApi.js')(app, url);
 require('./api/apis/usersApi.js')(app, url);
 require('./api/apis/loansApi.js')(app, url);
+require('./api/apis/currenciesApi.js')(app, url);
 
 // Static pages requests =======================================================
 app.use("/", function(req, res, next){
