@@ -7,12 +7,12 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "body-parser": "~1.17.x",
-    "express": "^4.16.3",
+    "body-parser": "latest",
+    "express": "^4.16.4",
     "jsonschema": "~1.1.x",
     "method-override": "^2.3.10",
-    "mongoose": "^5.2.4",
-    "morgan": "^1.9.0",
+    "mongoose": "^5.4.1",
+    "morgan": "latest",
     "passport": "^0.4.0",
     "passport-google-oauth": "*",
     "password-hash": "*"
