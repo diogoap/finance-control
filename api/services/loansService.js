@@ -2,6 +2,7 @@
 
 var Loans = require('../models/loansModel');
 var Accounts = require('../models/accountsModel');
+var Currencies = require('../models/currenciesModel');
 var Validator = require('jsonschema').Validator;
 
 var loanSchema = {
@@ -13,12 +14,13 @@ var loanSchema = {
         "dueDate": { "type": "datetime" },
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "account_id": { "type": "string" },
-        "type": { "type": "string", "enum": [ "Tomado", "Concedido" ] },
-        "status": { "type": "string", "enum": [ "Em aberto", "Quitado" ] },
+        "type": { "type": "string", "enum": ["Tomado", "Concedido"] },
+        "status": { "type": "string", "enum": ["Em aberto", "Quitado"] },
         "notes": { "type": "string" },
-        "user_id": { "type": "string" }
+        "user_id": { "type": "string" },
+        "currency_id": { "type": "string" }
     },
-    "required": [ "description", "transactionDate", "dueDate", "amount", "account_id", "type", "status", "user_id" ]
+    "required": ["description", "transactionDate", "dueDate", "amount", "account_id", "type", "status", "user_id", "currency_id"]
 };
 
 function validateLoan(loan, errors) {
@@ -31,6 +33,7 @@ function validateLoan(loan, errors) {
 
 function updateLoan(loan) {
     loan._account = null;
+    loan._currency = null;
 }
 
 function setAccounts(accountList, obj) {
@@ -42,9 +45,18 @@ function setAccounts(accountList, obj) {
     }
 }
 
+function setCurrencies(currencyList, obj) {
+    for (var j in currencyList) {
+        if (obj.currency_id == currencyList[j].id) {
+            obj._currency = currencyList[j];
+            break;
+        }
+    }
+}
+
 module.exports = {
 
-    getById: function(id, callbackSuccess, callbackError) {
+    getById: function (id, callbackSuccess, callbackError) {
         var loansPromisse = Loans.findById(id);
 
         loansPromisse.then(function (loan) {
@@ -53,18 +65,24 @@ module.exports = {
             }
 
             var accountsPromisse = Accounts.find().exec();
-
             accountsPromisse.then(function (accounts) {
-                setAccounts(accounts, loan);
-                callbackSuccess(loan);
+
+                var currenciesPromisse = Currencies.find().exec();
+                currenciesPromisse.then(function (currencies) {
+
+                    setAccounts(accounts, loan);
+                    setCurrencies(currencies, loan);
+
+                    callbackSuccess(loan);
+                });
             });
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     },
 
-    get: function(userId, filter, callbackSuccess, callbackError) {
+    get: function (userId, filter, callbackSuccess, callbackError) {
         var queryFilter = {};
 
         if ((filter != undefined) && (filter.status != undefined)) {
@@ -77,21 +95,27 @@ module.exports = {
 
         loansPromisse.then(function (loans) {
             var accountsPromisse = Accounts.find().exec();
-
             accountsPromisse.then(function (accounts) {
-                loans.forEach(function (loan) {
-                    setAccounts(accounts, loan);
+
+                var currenciesPromisse = Currencies.find().exec();
+                currenciesPromisse.then(function (currencies) {
+
+                    loans.forEach(function (loan) {
+                        setAccounts(accounts, loan);
+                        setCurrencies(currencies, loan);
+                    });
+
+                    callbackSuccess(loans);
                 });
 
-                callbackSuccess(loans);
             });
         })
-        .then(null, function(error) {
-            callbackError(error);
-        });
+            .then(null, function (error) {
+                callbackError(error);
+            });
     },
 
-    create: function(userId, loan, callbackSuccess, callbackError) {
+    create: function (userId, loan, callbackSuccess, callbackError) {
         loan.user_id = userId;
         var val = new Validator().validate(loan, loanSchema);
         validateLoan(loan, val.errors);
@@ -103,26 +127,26 @@ module.exports = {
             loansPromisse.then(function () {
                 callbackSuccess();
             })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
+                .then(null, function (error) {
+                    callbackError(error, 400);
+                });
         } else {
             callbackError(val.errors, 400)
         }
     },
 
-    delete: function(id, callbackSuccess, callbackError) {
+    delete: function (id, callbackSuccess, callbackError) {
         var loansPromisse = Loans.remove(id);
 
         loansPromisse.then(function () {
             callbackSuccess();
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     },
 
-    edit: function(id, loan, callbackSuccess, callbackError) {
+    edit: function (id, loan, callbackSuccess, callbackError) {
         var val = new Validator().validate(loan, loanSchema);
         validateLoan(loan, val.errors);
 
@@ -130,40 +154,40 @@ module.exports = {
             updateLoan(loan);
             var loansPromisse = Loans.findByIdAndUpdate(id, loan, { new: true });
 
-            loansPromisse.then(function(loanEdited) {
-				if (loanEdited == null) {
-					callbackError('not found', 404);
-				} else {
-    				callbackSuccess(loanEdited);
+            loansPromisse.then(function (loanEdited) {
+                if (loanEdited == null) {
+                    callbackError('not found', 404);
+                } else {
+                    callbackSuccess(loanEdited);
                 }
             })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
+                .then(null, function (error) {
+                    callbackError(error, 400);
+                });
         } else {
             callbackError(val.errors, 400)
         }
     },
 
-    pay: function(id, callbackSuccess, callbackError) {
+    pay: function (id, callbackSuccess, callbackError) {
         var loanFindPromisse = Loans.findById(id);
-        loanFindPromisse.then(function(loan) {
+        loanFindPromisse.then(function (loan) {
             if (loan != undefined) {
                 loan.status = 'Quitado';
-                loan.save(function(error, raw) {
-                     if (error) {
-                         callbackError(error, 400)
-                     };
+                loan.save(function (error, raw) {
+                    if (error) {
+                        callbackError(error, 400)
+                    };
 
-                     callbackSuccess();
+                    callbackSuccess();
                 });
             } else {
                 callbackError('not found', 404);
             };
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     }
 
 }

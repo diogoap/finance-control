@@ -1,13 +1,13 @@
 'use strict';
 
-function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts, loanId, action) {
+function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts, Currencies, loanId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
 	$scope.loanType = ['Tomado', 'Concedido'];
 	$scope.loanStatus = ['Em aberto', 'Quitado'];
 	$scope.action = action;
- 	$scope.submitted = false;
+	$scope.submitted = false;
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar empréstimo';
@@ -15,8 +15,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 		$scope.dueDateMinDate = $scope.loan.transactionDate;
 		$scope.loading = false;
 	}
-	else
-	{
+	else {
 		if (action == 'clone') {
 			$scope.screenTitle = 'Clonar empréstimo';
 		} else {
@@ -24,7 +23,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 		}
 
 		Loans.getById(loanId)
-			.success(function(data) {
+			.success(function (data) {
 				$scope.loan = data;
 				//Need to generate a new to date in order to make date picker work
 				$scope.loan.transactionDate = new Date($scope.loan.transactionDate);
@@ -38,7 +37,7 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 				$scope.dueDateMinDate = $scope.loan.transactionDate;
 				$scope.loading = false;
 			})
-			.error(function(data, status, headers, config) {
+			.error(function (data, status, headers, config) {
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
@@ -46,28 +45,38 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function(data) {
+		.success(function (data) {
 			$scope.accounts = data;
 			$scope.loading = false;
 		})
-		.error(function(data, status, headers, config) {
+		.error(function (data, status, headers, config) {
 			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
-	$scope.openCalendarDialogTransactionDate = function($event) {
+	Currencies.get(filter)
+		.success(function (data) {
+			$scope.currencies = data;
+			$scope.loading = false;
+		})
+		.error(function (data, status, headers, config) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			$scope.loading = false;
+		});
+
+	$scope.openCalendarDialogTransactionDate = function ($event) {
 		$scope.transactionDateOpened = true;
 	}
 
-  	$scope.openCalendarDialogDueDate = function($event) {
-    	$scope.dueDateOpened = true;
-  	}
+	$scope.openCalendarDialogDueDate = function ($event) {
+		$scope.dueDateOpened = true;
+	}
 
-	$scope.setDueDateMinDate = function() {
+	$scope.setDueDateMinDate = function () {
 		$scope.dueDateMinDate = $scope.loan.transactionDate;
 	};
 
-	$scope.validateDueDate = function(element) {
+	$scope.validateDueDate = function (element) {
 		var dueDate = new Date($scope.loan.dueDate);
 		dueDate = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
 		var transactionDate = new Date($scope.loan.transactionDate);
@@ -76,23 +85,23 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 	};
 
 	$scope.submit = function () {
-    	if ($scope.loanForm.$valid) {
+		if ($scope.loanForm.$valid) {
 			$scope.loan._action = $scope.action;
 
 			$scope.loan.dueDate = Utils.getDateDst($scope.loan.dueDate);
 			$scope.loan.transactionDate = Utils.getDateDst($scope.loan.transactionDate);
 
 			$uibModalInstance.close($scope.loan);
-    	} else {
-      		$scope.submitted = true;
-    	}
+		} else {
+			$scope.submitted = true;
+		}
 	}
 
-	$scope.cancel = function() {
+	$scope.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	}
 
-	$scope.formatNumericAmount = function(event) {
+	$scope.formatNumericAmount = function (event) {
 		$scope.loan.amount = Utils.formatPastedNumer(event);
 	}
 };

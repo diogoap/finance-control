@@ -20,7 +20,8 @@ var app = angular.module('financeControl', [
     'totalsService',
     'localStorageService',
     'logoffService',
-    'loansService'
+    'loansService',
+    'currenciesService'
 ]);
 
 app.config(function($routeProvider, $locationProvider, $provide) {
@@ -53,6 +54,9 @@ app.config(function($routeProvider, $locationProvider, $provide) {
         .when('/loans', {
             templateUrl: 'html/loans.html'
         })
+        .when('/currencies', {
+            templateUrl: 'html/currencies.html'
+        })        
         .otherwise({
         	redirecTo: '/'
         });
