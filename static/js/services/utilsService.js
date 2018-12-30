@@ -2,7 +2,7 @@
 
 function localReplaceAll(str, find, replace) {
 	var escapedFind = find.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-  	return str.replace(new RegExp(escapedFind, 'g'), replace);
+	return str.replace(new RegExp(escapedFind, 'g'), replace);
 }
 
 function localGetDateDst(date) {
@@ -17,8 +17,8 @@ function getDstTimezoneOffset(date) {
 	// Example:
 	// For BRT, if DST is on going, function will return 60, if not, result will be 0
 	var jan = new Date(date.getFullYear(), 0, 1);
-    var jul = new Date(date.getFullYear(), 6, 1);
-    var maxOffSet = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+	var jul = new Date(date.getFullYear(), 6, 1);
+	var maxOffSet = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 	return (maxOffSet - date.getTimezoneOffset());
 }
 
@@ -30,24 +30,24 @@ var _ULTRA_HIGH_RESOLUTION_START = 1200;
 
 angular.module('utilsService', [])
 
-	.factory('Utils', ['$locale', function($locale) {
+	.factory('Utils', ['$locale', function ($locale) {
 		return {
-			addError : function(scope, msg) {
-		    	scope.alerts.push({ type: 'danger', msg: msg });
-		    },
-		    addSucess : function(scope, msg) {
-		    	scope.alerts.push({ type: 'success', msg: msg });
-		    },
-		    closeAlert : function(scope, index) {
-		    	scope.alerts.splice(index, 1);
-		    },
-			alertTimeout : function() {
+			addError: function (scope, msg) {
+				scope.alerts.push({ type: 'danger', msg: msg });
+			},
+			addSucess: function (scope, msg) {
+				scope.alerts.push({ type: 'success', msg: msg });
+			},
+			closeAlert: function (scope, index) {
+				scope.alerts.splice(index, 1);
+			},
+			alertTimeout: function () {
 				return 3000;
 			},
 			replaceAll(str, find, replace) {
-  				return localReplaceAll(str, find, replace);
+				return localReplaceAll(str, find, replace);
 			},
-			formatPastedNumer: function(event) {
+			formatPastedNumer: function (event) {
 				if ((event != undefined) && (event.clipboardData != undefined)) {
 					var value = event.clipboardData.getData('text/plain');
 
@@ -65,16 +65,16 @@ angular.module('utilsService', [])
 
 				return null;
 			},
-			isMidLowResolution: function() {
+			isMidLowResolution: function () {
 				return $(window).width() < _HIGH_RESOLUTION_START;
 			},
-			isLowResolution: function() {
+			isLowResolution: function () {
 				return $(window).width() < _MID_RESOLUTION_START;
 			},
-			isUltraHighResolution: function() {
+			isUltraHighResolution: function () {
 				return $(window).width() >= _ULTRA_HIGH_RESOLUTION_START;
 			},
-			getSizeRes: function(sizeLg, sizeMd, sizeSm) {
+			getSizeRes: function (sizeLg, sizeMd, sizeSm) {
 				if ($(window).width() < _MID_RESOLUTION_START) {
 					return sizeSm;
 				} else if ($(window).width() < _HIGH_RESOLUTION_START) {
@@ -83,14 +83,14 @@ angular.module('utilsService', [])
 					return sizeLg;
 				}
 			},
-			getGridRowHeight: function() {
+			getGridRowHeight: function () {
 				if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return 33;
 				} else {
 					return 24;
 				}
 			},
-			getVisibilityRes: function(visibleLg, visibleMd, visibleSm) {
+			getVisibilityRes: function (visibleLg, visibleMd, visibleSm) {
 				if ($(window).width() < _MID_RESOLUTION_START) {
 					return visibleSm;
 				} else if ($(window).width() < _HIGH_RESOLUTION_START) {
@@ -99,23 +99,23 @@ angular.module('utilsService', [])
 					return visibleLg;
 				}
 			},
-			getStyleRes: function(styleLg, styleMdSm) {
+			getStyleRes: function (styleLg, styleMdSm) {
 				if ($(window).width() < _HIGH_RESOLUTION_START) {
 					return styleMdSm;
 				} else {
 					return styleLg;
 				}
 			},
-			getValueStyle: function(val) {
-		        if (val < 0) {
-		            return 'val-neg';
-		        } else if (val == 0 ) {
-		            return 'val-zero';
-		        } else {
-		            return 'val-pos';
-		        }
-		    },
-			getColNumberStyle: function(highResCols, lowResCols) {
+			getValueStyle: function (val) {
+				if (val < 0) {
+					return 'val-neg';
+				} else if (val == 0) {
+					return 'val-zero';
+				} else {
+					return 'val-pos';
+				}
+			},
+			getColNumberStyle: function (highResCols, lowResCols) {
 				if ($(window).width() < _HIGH_RESOLUTION_START) {
 					if (lowResCols === 2) {
 						return 'col-sm-6';
@@ -133,24 +133,24 @@ angular.module('utilsService', [])
 					}
 				}
 			},
-			clearGridNav: function(gridApi) {
+			clearGridNav: function (gridApi) {
 				gridApi.grid.cellNav.clearFocus();
 				gridApi.grid.cellNav.lastRowCol = null;
 			},
-			getDateDst: function(date) {
+			getDateDst: function (date) {
 				return localGetDateDst(date);
 			},
-			getCellClassesLatePayment: function(cellClass, isOpen, dueDate) {
-			    var styles = cellClass;
-			    var today = localGetDateDst(new Date()).toISOString();
-			    var isLatePayment = (isOpen && (dueDate < today));
+			getCellClassesLatePayment: function (cellClass, isOpen, dueDate) {
+				var styles = cellClass;
+				var today = localGetDateDst(new Date()).toISOString();
+				var isLatePayment = (isOpen && (dueDate < today));
 
-			    if (isLatePayment) {
-			        styles = styles + ' red-font-color';
-			    }
-			    return styles;
+				if (isLatePayment) {
+					styles = styles + ' red-font-color';
+				}
+				return styles;
 			},
-			getPreviousMonth: function(actualDate) {
+			getPreviousMonth: function (actualDate) {
 				var beginDate;
 				var endDate;
 
@@ -166,8 +166,8 @@ angular.module('utilsService', [])
 				endDate = new Date(y, m, 0);
 
 				return { begin: beginDate, end: endDate };
-		  	},
-		  	getActualMonth: function() {
+			},
+			getActualMonth: function () {
 				var beginDate;
 				var endDate;
 
@@ -176,8 +176,8 @@ angular.module('utilsService', [])
 				endDate = new Date(y, m + 1, 0);
 
 				return { begin: beginDate, end: endDate };
-		  	},
-		  	getNextMonth: function(actualDate) {
+			},
+			getNextMonth: function (actualDate) {
 				var beginDate;
 				var endDate;
 
@@ -193,8 +193,8 @@ angular.module('utilsService', [])
 				endDate = new Date(y, m + 2, 0);
 
 				return { begin: beginDate, end: endDate };
-		  	},
-			getBeginOfYear: function(actualDate) {
+			},
+			getBeginOfYear: function (actualDate) {
 				var beginDate;
 				var endDate;
 
@@ -217,8 +217,8 @@ angular.module('utilsService', [])
 				endDate = new Date(y, 1, 0);
 
 				return { begin: beginDate, end: endDate };
-		  	},
-			getEndOfYear: function(actualDate) {
+			},
+			getEndOfYear: function (actualDate) {
 				var beginDate;
 				var endDate;
 
@@ -241,6 +241,17 @@ angular.module('utilsService', [])
 				endDate = new Date(y, 12, 0);
 
 				return { begin: beginDate, end: endDate };
-		  	}
+			},
+			getDefaultCurrencyId: function (currencies) {
+				if ((currencies != undefined) && (currencies.length > 0)) {
+					for (var i = 0; i < currencies.length; i++) {
+						if (currencies[i].default == true) {
+							return currencies[i]._id;	
+						}
+					}
+				}
+
+				return '';
+			}
 		}
 	}]);

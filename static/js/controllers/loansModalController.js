@@ -57,6 +57,11 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 	Currencies.get(filter)
 		.success(function (data) {
 			$scope.currencies = data;
+
+			if (action == 'new') {
+				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);		
+			}
+
 			$scope.loading = false;
 		})
 		.error(function (data, status, headers, config) {

@@ -3,7 +3,7 @@
 /* A version number is useful when updating the worker logic,
    allowing you to remove outdated cache entries during the update.
 */
-var version = 'v1.1.28';
+var version = 'v1.1.29';
 var trace = false;
 
 console.log('WORKER: executing. Version: ' + version);
