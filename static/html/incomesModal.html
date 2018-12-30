@@ -27,8 +27,14 @@
                     <small class="error" ng-show="incomeForm.incomeDueDate.$error.required">O campo Vencimento é obrigatório.</small>
                 </div>
 			</div>
-            <label for="incomeAmount" class="col-sm-2 control-label">Valor</label>
-			<div class="col-sm-4">
+			<label for="incomeAmount" class="col-sm-2 control-label">Valor</label>
+			<div class="col-sm-2">
+				<select name="incomeCurrency" ng-model="income.currency_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error" ng-show="(incomeForm.incomeCurrency.$dirty && incomeForm.incomeCurrency.$invalid) || (submitted && incomeForm.incomeCurrency.$invalid)">
+					<small class="error" ng-show="incomeForm.incomeCurrency.$error.required">O campo Conta é obrigatório.</small>
+				</div>
+			</div>			
+			<div class="col-sm-2">
 				<input type="tel" numeric decimals="2" gt-than="0" name="incomeAmount" ng-model="income.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(incomeForm.incomeAmount.$dirty && incomeForm.incomeAmount.$invalid) || (submitted && incomeForm.incomeAmount.$invalid)">
 					<small class="error" ng-show="incomeForm.incomeAmount.$error.gtThan">O campo Valor é obrigatório.</small>

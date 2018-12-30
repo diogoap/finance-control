@@ -10,7 +10,9 @@ var transferSchema = new Schema({
 	_accountOrigin: Object,
 	accountTarget_id: String,
 	_accountTarget: Object,
-	user_id: String
+	user_id: String,
+	currency_id: String,
+	_currency: Object	
 });
 
 module.exports = mongoose.model('Transfer', transferSchema);

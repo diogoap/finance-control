@@ -34,8 +34,14 @@
                     <small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é obrigatório.</small>
                 </div>
 			</div>
-            <label for="expenseAmount" class="col-sm-2 control-label">Valor</label>
-			<div class="col-sm-4">
+			<label for="expenseAmount" class="col-sm-2 control-label">Valor</label>
+			<div class="col-sm-2">
+				<select name="expenseCurrency" ng-model="expense.currency_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error" ng-show="(expenseForm.expenseCurrency.$dirty && expenseForm.expenseCurrency.$invalid) || (submitted && expenseForm.expenseCurrency.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseCurrency.$error.required">O campo Moeda é obrigatório.</small>
+				</div>
+			</div>				
+			<div class="col-sm-2">
 				<input type="tel" numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expense.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
 					<small class="error" ng-show="expenseForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>

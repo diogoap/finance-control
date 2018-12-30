@@ -17,6 +17,8 @@ var incomeSchema = new Schema({
 	status: { type: String, default: '' },
 	notes: String,
 	user_id: String,
+	currency_id: String,
+	_currency: Object,	
 	detail: [ {
 	 	description: String,
 		amount: { type: Number, default: 0 },
@@ -24,7 +26,9 @@ var incomeSchema = new Schema({
 		_category: Object,
 		account_id: ObjectId,
 		_account: Object,
-		status: String
+		status: String,
+		currency_id: String,
+		_currency: Object
 	} ]
 });
 

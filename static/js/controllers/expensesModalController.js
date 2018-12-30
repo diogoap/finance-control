@@ -1,58 +1,62 @@
 'use strict';
 
-function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridConstants, Utils, Expenses, Categories, Accounts, expenseId, action) {
+function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridConstants, Utils, Expenses, Categories, Accounts, Currencies, expenseId, action) {
 	$scope.loading = true;
 	$scope.expense = {};
 	$scope.Utils = Utils;
 	$scope.alerts = [];
 	$scope.action = action;
- 	$scope.expenseStatus = ['Em aberto', 'Pago'];
- 	$scope.submitted = false;
+	$scope.expenseStatus = ['Em aberto', 'Pago'];
+	$scope.submitted = false;
 
- 	$scope.columns = [
+	$scope.columns = [
 		{
-			name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('29%', '29%', '36%'), enableColumnMenu: false,
+			name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('28%', '28%', '35%'), enableColumnMenu: false,
 			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 		},
+        {
+			name: 'Moeda', field: '_currency.currencyCode', type: 'string', width: Utils.getSizeRes('8%', '8%', '12%'), visible: Utils.getVisibilityRes(true, true, true), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        },		
 		{
-			name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('15%', '15%', '20%'), enableColumnMenu: false,
-			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
+			name: 'Valor', field: 'amount', type: 'number', width: Utils.getSizeRes('11%', '11%', '14%'), enableColumnMenu: false,
+			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass: 'ui-grid-cell-right-align',
 			aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
 		},
 		{
-			name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('21%', '21%', '26%'), enableColumnMenu: false
+			name: 'Conta', field: '_account.name', type: 'string', width: Utils.getSizeRes('21%', '21%', '25%'), enableColumnMenu: false
 		},
 		{
 			name: 'Categoria', field: '_category.name', type: 'string', width: Utils.getSizeRes('21%', '21%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false
 		},
 		{
-			name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('14%', '14%', '18%'), enableColumnMenu: false,
-			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+			name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('11%', '11%', '14%'), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', cellClass: 'ui-grid-cell-center-align'
 		}
 	];
 
 	$scope.gridOptions = {
 		enableRowSelection: true,
-    	enableRowHeaderSelection: false,
-    	multiSelect: false,
-    	enableSelectAll: false,
+		enableRowHeaderSelection: false,
+		multiSelect: false,
+		enableSelectAll: false,
 		enableColumnResizing: true,
-        enableSorting: true,
+		enableSorting: true,
 		showColumnFooter: true,
 		rowHeight: Utils.getGridRowHeight(),
 		columnDefs: $scope.columns,
-		onRegisterApi: function(gridApi) {
-        	$scope.gridApi = gridApi;
-        	gridApi.selection.on.rowSelectionChanged($scope,function(row){
-        		$scope.selectedRow = row;
-        	});
-			gridApi.cellNav.on.navigate($scope,function(newRowCol, oldRowCol){
-                $scope.gridApi.selection.selectRow(newRowCol.row.entity);
-            });
-        }
-    };
+		onRegisterApi: function (gridApi) {
+			$scope.gridApi = gridApi;
+			gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+				$scope.selectedRow = row;
+			});
+			gridApi.cellNav.on.navigate($scope, function (newRowCol, oldRowCol) {
+				$scope.gridApi.selection.selectRow(newRowCol.row.entity);
+			});
+		}
+	};
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar despesa';
@@ -61,8 +65,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		$scope._hasDetail = false;
 		$scope.loading = false;
 	}
-	else
-	{
+	else {
 		if (action == 'clone') {
 			$scope.screenTitle = 'Clonar despesa';
 		} else {
@@ -70,7 +73,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		}
 
 		Expenses.getById(expenseId)
-			.success(function(data) {
+			.success(function (data) {
 				$scope.expense = data;
 
 				//Need to generate a new to date in order to make date picker work
@@ -85,7 +88,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 				$scope.loading = false;
 			})
-			.error(function(data, status, headers, config) {
+			.error(function (data, status, headers, config) {
 				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 				$scope.loading = false;
 			});
@@ -93,53 +96,63 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 	var filter = 'type=Despesa&enabled=true';
 	Categories.get(filter)
-		.success(function(data) {
+		.success(function (data) {
 			$scope.categories = data;
 			$scope.loading = false;
 		})
-		.error(function(data, status, headers, config) {
+		.error(function (data, status, headers, config) {
 			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function(data) {
+		.success(function (data) {
 			$scope.accounts = data;
 			$scope.loading = false;
 		})
-		.error(function(data, status, headers, config) {
+		.error(function (data, status, headers, config) {
 			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
-  	$scope.openCalendarDialog = function($event) {
-    	$scope.opened = true;
-  	};
+	Currencies.get(filter)
+		.success(function (data) {
+			$scope.currencies = data;
+			$scope.loading = false;
+		})
+		.error(function (data, status, headers, config) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			$scope.loading = false;
+		});
+
+	$scope.openCalendarDialog = function ($event) {
+		$scope.opened = true;
+	};
 
 	$scope.submit = function () {
-    	if ($scope.expenseForm.$valid) {
+		if ($scope.expenseForm.$valid) {
 			$scope.updateExpenseTotal();
 			$scope.expense._action = $scope.action;
 			$uibModalInstance.close($scope.expense);
-    	} else {
-      		$scope.submitted = true;
-    	}
+		} else {
+			$scope.submitted = true;
+		}
 	};
 
-	$scope.cancel = function() {
+	$scope.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	}
 
-	$scope.validExpenseAmountPaid = function(value) {
-	  	if (($scope.expense != undefined) && ($scope.expense.status == 'Pago') && (value <= 0)) {
-	  		return false;
-	  	}
+	$scope.validExpenseAmountPaid = function (value) {
+		if (($scope.expense != undefined) && ($scope.expense.status == 'Pago') && (value <= 0)) {
+			return false;
+		}
 
 		return true;
 	}
 
-	$scope.updateExpenseTotal = function() {
+	$scope.updateExpenseTotal = function () {
 		$scope._hasDetail = false;
 		Utils.clearGridNav($scope.gridApi);
 		$scope.selectedRow = null;
@@ -154,6 +167,9 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 			$scope.expense.category_id = '';
 			$scope.expense._category = null;
+
+			$scope.expense.currency_id = '';
+			$scope.expense._currency = null;			
 
 			$scope.expense.amount = 0;
 			$scope.expense.amountPaid = 0;
@@ -174,62 +190,62 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		}
 	}
 
-  	$scope.openDetail = function (entity, action) {
+	$scope.openDetail = function (entity, action) {
 		var modalInstance = $uibModal.open({
-      		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/expensesDetailModal.html',
-      		controller: expensesDetailModalController,
-      		resolve: {
-		        expenseDetail: function () {
+			animation: $scope.animationsEnabled,
+			templateUrl: 'html/expensesDetailModal.html',
+			controller: expensesDetailModalController,
+			resolve: {
+				expenseDetail: function () {
 					if (entity != undefined) {
 						// Get object for selected detail
-						var selDetail = $.grep($scope.expense.detail, function(e){ return e.$$hashKey == entity.$$hashKey });
+						var selDetail = $.grep($scope.expense.detail, function (e) { return e.$$hashKey == entity.$$hashKey });
 						return selDetail[0];
 					} else {
 						return null;
 					}
-        		},
-        		action: function () {
-        			return action;
-        		}
-      		}
-    	});
+				},
+				action: function () {
+					return action;
+				}
+			}
+		});
 
 		modalInstance.result.then(function (expenseDetail) {
-	    	if ((expenseDetail._action == 'new') || (expenseDetail._action == 'clone')) {
-	    		$scope.expense.detail.push(expenseDetail);
+			if ((expenseDetail._action == 'new') || (expenseDetail._action == 'clone')) {
+				$scope.expense.detail.push(expenseDetail);
 				$scope.expense.detail.sort(Expenses.compare);
-	    	} else if (expenseDetail._action == 'edit') {
+			} else if (expenseDetail._action == 'edit') {
 				// Replace exising detail object with the new one
 				for (var i in $scope.expense.detail) {
 					if ($scope.expense.detail[i].$$hashKey == expenseDetail.$$hashKey) {
 						delete expenseDetail.$$hashKey;
 						$scope.expense.detail[i] = expenseDetail;
 						$scope.expense.detail.sort(Expenses.compare);
-			            break;
-			        }
-			    }
-	    	}
+						break;
+					}
+				}
+			}
 
 			$scope.updateExpenseTotal();
 		});
-    }
+	}
 
-    $scope.deleteDetailConfirmation = function (entity) {
-    	var modalInstance = $uibModal.open({
-      		animation: $scope.animationsEnabled,
-      		templateUrl: 'html/confirmModal.html',
-      		controller: confirmModalController,
+	$scope.deleteDetailConfirmation = function (entity) {
+		var modalInstance = $uibModal.open({
+			animation: $scope.animationsEnabled,
+			templateUrl: 'html/confirmModal.html',
+			controller: confirmModalController,
 			size: 'sm',
-      		resolve: {
-		        data: function () {
+			resolve: {
+				data: function () {
 					return entity;
-        		},
-		        message: function () {
+				},
+				message: function () {
 					return 'Confirma a exclusão do detalhe?';
-        		}
-      		}
-    	});
+				}
+			}
+		});
 
 		modalInstance.result.then(function (entity) {
 			for (var i in $scope.expense.detail) {
@@ -241,7 +257,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 			$scope.updateExpenseTotal();
 		});
-    }
+	}
 
 	$scope.payDetail = function (entity) {
 		for (var i in $scope.expense.detail) {
@@ -252,17 +268,17 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 		}
 
 		$scope.updateExpenseTotal();
-    }
+	}
 
-	$scope.formatNumericAmount = function(event) {
+	$scope.formatNumericAmount = function (event) {
 		$scope.expense.amount = Utils.formatPastedNumer(event);
 	}
 
-	$scope.formatNumericAmountPaid = function(event) {
+	$scope.formatNumericAmountPaid = function (event) {
 		$scope.expense.amountPaid = Utils.formatPastedNumer(event);
 	}
 
-	$scope.onChangeExpenseStatus = function() {
+	$scope.onChangeExpenseStatus = function () {
 		if ($scope.expense.status == 'Pago' && $scope.expense.amountPaid == 0) {
 			$scope.expense.amountPaid = $scope.expense.amount;
 		}

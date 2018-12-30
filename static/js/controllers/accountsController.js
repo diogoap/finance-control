@@ -6,20 +6,24 @@ app.controller('accountsController', function($scope, $http, $uibModal, $locale,
 
  	$scope.columns = [
         {
-            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('60%', '43%', '43%'), enableColumnMenu: false,
+            name: 'Nome', field: 'name', type: 'string', width: Utils.getSizeRes('54%', '42%', '42%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
-        },
+		},
         {
-            name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('18%', '25%', '25%'), enableColumnMenu: false,
+			name: 'Moeda', field: '_currency.currencyCode', type: 'string', width: Utils.getSizeRes('6%', '10%', '10%'), visible: Utils.getVisibilityRes(true, true, true), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        },		
+        {
+            name: 'Saldo inicial', field: 'initialBalance', type: 'number',  width: Utils.getSizeRes('18%', '20%', '20%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align'
         },
         {
-            name: 'Ordem', field: 'order', type: 'number', width: Utils.getSizeRes('12%', '16%', '16%'), enableColumnMenu: false,
+            name: 'Ordem', field: 'order', type: 'number', width: Utils.getSizeRes('12%', '13%', '13%'), enableColumnMenu: false,
             cellFilter: 'number:0', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         },
         {
-            name: 'Ativa?', field: 'enableed', type: 'string', width: Utils.getSizeRes('10%', '16%', '16%'), enableColumnMenu: false,
+            name: 'Ativa?', field: 'enableed', type: 'string', width: Utils.getSizeRes('10%', '15%', '15%'), enableColumnMenu: false,
             cellTemplate: '<input type="checkbox" onclick="return false" ng-model="row.entity.enabled">',
             headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
         }

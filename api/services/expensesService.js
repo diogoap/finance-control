@@ -3,6 +3,7 @@
 var Expenses = require('../models/expensesModel');
 var Categories = require('../models/categoriesModel');
 var Accounts = require('../models/accountsModel');
+var Currencies = require('../models/currenciesModel');
 var Validator = require('jsonschema').Validator;
 
 var expenseSchema = {
@@ -16,9 +17,10 @@ var expenseSchema = {
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
-        "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] },
+        "status": { "type": "string", "enum": ["Em aberto", "Pago"] },
         "notes": { "type": "string" },
         "user_id": { "type": "string" },
+        "currency_id": { "type": "string" },
         "detail": {
             "description": "Expenses detail list",
             "type": "array",
@@ -30,28 +32,29 @@ var expenseSchema = {
                     "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
                     "category_id": { "type": "string" },
                     "account_id": { "type": "string" },
-                    "status": { "type": "string", "enum": [ "Em aberto", "Pago" ] }
+                    "status": { "type": "string", "enum": ["Em aberto", "Pago"] },
+                    "currency_id": { "type": "string" }
                 },
-                "required": [ "description", "category_id", "account_id", "status", "amount" ]
+                "required": ["description", "category_id", "account_id", "status", "amount", "currency_id"]
             }
         }
     },
-    "required": [ "description", "dueDate", "status", "amount", "user_id" ],
+    "required": ["description", "dueDate", "status", "amount", "user_id"],
     "anyOf": [
-        { "required": [ "account_id", "category_id" ] },
+        { "required": ["account_id", "category_id", "currency_id"] },
         {
             "properties": { "detail": { "minItems": 1 } },
             "required": ["detail"]
         }
     ],
     "oneOf": [
-        { "properties": { "status": { "enum": [ "Em aberto" ] } } },
+        { "properties": { "status": { "enum": ["Em aberto"] } } },
         {
             "properties": {
                 "amountPaid": { "minimum": 0, "exclusiveMinimum": true },
-                "status": { "enum": [ "Pago" ] }
+                "status": { "enum": ["Pago"] }
             },
-            "required": [ "amountPaid" ]
+            "required": ["amountPaid"]
         }
     ]
 };
@@ -74,10 +77,20 @@ function setAccount(accountList, obj) {
     }
 }
 
-function fillDetailAccountsAndCategories(expense) {
+function setCurrencies(currencyList, obj) {
+    for (var j in currencyList) {
+        if (obj.currency_id == currencyList[j].id) {
+            obj._currency = currencyList[j];
+            break;
+        }
+    }
+}
+
+function fillDetailAccountsCategoriesCurrencies(expense) {
     if ((expense.detail != undefined) && (expense.detail.length > 0)) {
         expense._accountNames = '';
         expense._categoryNames = '';
+        expense._currencyCodes = '';
 
         expense.detail.forEach(function (det) {
 
@@ -94,10 +107,23 @@ function fillDetailAccountsAndCategories(expense) {
                 }
                 expense._categoryNames += det._category.name;
             }
+
+            if (det._currency != undefined) {
+                if (expense._currencyCodes.indexOf(det._currency.currencyCode) == -1) {
+                    if (expense._currencyCodes.length > 0) {
+                        expense._currencyCodes += ' - ';
+                    }
+                    expense._currencyCodes += det._currency.currencyCode;
+                }
+            }
         });
     } else {
         expense._accountNames = expense._account.name;
         expense._categoryNames = expense._category.name;
+
+        if (expense._currency != undefined) {
+            expense._currencyCodes = expense._currency.currencyCode;
+        }
     }
 }
 
@@ -108,6 +134,9 @@ function updateExpenseTotal(expense) {
 
         expense.category_id = null;
         expense._category = null;
+
+        expense.currency_id = null;
+        expense._currency = null;
 
         expense.amount = 0;
         expense.amountPaid = 0;
@@ -133,7 +162,7 @@ function payExpense(expense) {
     expense.amountPaid = expense.amount;
 
     if ((expense.detail != undefined) && (expense.detail.length > 0)) {
-        expense.detail.forEach(function(det) {
+        expense.detail.forEach(function (det) {
             det.status = 'Pago';
         })
     }
@@ -141,9 +170,9 @@ function payExpense(expense) {
 
 module.exports = {
 
-    getById: function(id, callbackSuccess, callbackError) {
+    getById: function (id, callbackSuccess, callbackError) {
         var expensePromisse = Expenses.findById(id);
-        expensePromisse.then(function(expense) {
+        expensePromisse.then(function (expense) {
             if (expense == undefined) {
                 callbackError('not found', 404);
             }
@@ -154,26 +183,32 @@ module.exports = {
                 var accountsPromisse = Accounts.find().exec();
                 accountsPromisse.then(function (accounts) {
 
-                    setCategory(categories, expense);
-                    setAccount(accounts, expense);
+                    var currenciesPromisse = Currencies.find().exec();
+                    currenciesPromisse.then(function (currencies) {
 
-                    expense.detail.forEach(function (det) {
-                        setCategory(categories, det);
-                        setAccount(accounts, det);
+                        setCategory(categories, expense);
+                        setAccount(accounts, expense);
+                        setCurrencies(currencies, expense);
+
+                        expense.detail.forEach(function (det) {
+                            setCategory(categories, det);
+                            setAccount(accounts, det);
+                            setCurrencies(currencies, expense);
+                        });
+
+                        fillDetailAccountsCategoriesCurrencies(expense);
+
+                        callbackSuccess(expense);
                     });
-
-                    fillDetailAccountsAndCategories(expense);
-
-                    callbackSuccess(expense);
                 });
             });
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     },
 
-    get: function(userId, filter, callbackSuccess, callbackError) {
+    get: function (userId, filter, callbackSuccess, callbackError) {
         var queryFilter = {};
 
         if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
@@ -185,17 +220,17 @@ module.exports = {
 
         queryFilter.user_id = userId;
 
-        var expensesPromisse = Expenses.aggregate( [
+        var expensesPromisse = Expenses.aggregate([
             { $match: { dueDate: queryFilter.dueDate, user_id: queryFilter.user_id } },
             {
-                $project : {
-                     description: "$description", dueDate: "$dueDate", scheduledPayment: "$scheduledPayment",
-                     amount: "$amount", category_id: "$category_id", account_id: "$account_id", amountPaid: "$amountPaid",
-                     status: "$status", notes: "$notes", user_id: "$user_id", detail: "$detail",
-                     dueDateOnlyDate: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } }
-                 }
-             },
-             { $sort: { dueDateOnlyDate: 1, description: 1 } }
+                $project: {
+                    description: "$description", dueDate: "$dueDate", scheduledPayment: "$scheduledPayment",
+                    amount: "$amount", category_id: "$category_id", account_id: "$account_id", currency_id: "$currency_id",
+                    amountPaid: "$amountPaid", status: "$status", notes: "$notes", user_id: "$user_id", detail: "$detail",
+                    dueDateOnlyDate: { $dateToString: { format: "%Y-%m-%d", date: "$dueDate" } }
+                }
+            },
+            { $sort: { dueDateOnlyDate: 1, description: 1 } }
         ]).exec();
 
         expensesPromisse.then(function (expenses) {
@@ -206,28 +241,34 @@ module.exports = {
                 var accountsPromisse = Accounts.find().exec();
                 accountsPromisse.then(function (accounts) {
 
-                    expenses.forEach(function (exp) {
-                        setCategory(categories, exp);
-                        setAccount(accounts, exp);
+                    var currenciesPromisse = Currencies.find().exec();
+                    currenciesPromisse.then(function (currencies) {
 
-                        exp.detail.forEach(function (det) {
-                            setCategory(categories, det);
-                            setAccount(accounts, det);
+                        expenses.forEach(function (exp) {
+                            setCategory(categories, exp);
+                            setAccount(accounts, exp);
+                            setCurrencies(currencies, exp);
+
+                            exp.detail.forEach(function (det) {
+                                setCategory(categories, det);
+                                setAccount(accounts, det);
+                                setCurrencies(currencies, det);
+                            });
+
+                            fillDetailAccountsCategoriesCurrencies(exp);
                         });
 
-                        fillDetailAccountsAndCategories(exp);
+                        callbackSuccess(expenses);
                     });
-
-                    callbackSuccess(expenses);
                 });
             });
         })
-        .then(null, function(error) {
-            callbackError(error);
-        });
+            .then(null, function (error) {
+                callbackError(error);
+            });
     },
 
-    create: function(userId, expense, callbackSuccess, callbackError) {
+    create: function (userId, expense, callbackSuccess, callbackError) {
         expense.user_id = userId;
         var val = new Validator().validate(expense, expenseSchema);
 
@@ -238,67 +279,67 @@ module.exports = {
             expensesPromisse.then(function () {
                 callbackSuccess();
             })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
+                .then(null, function (error) {
+                    callbackError(error, 400);
+                });
         } else {
             callbackError(val.errors, 400)
         }
     },
 
-    delete: function(id, callbackSuccess, callbackError) {
+    delete: function (id, callbackSuccess, callbackError) {
         var expensesPromisse = Expenses.remove(id);
 
         expensesPromisse.then(function () {
             callbackSuccess();
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     },
 
-    edit: function(id, expense, callbackSuccess, callbackError) {
+    edit: function (id, expense, callbackSuccess, callbackError) {
         var val = new Validator().validate(expense, expenseSchema);
 
         if (val.errors.length == 0) {
             updateExpenseTotal(expense);
             var expensesPromisse = Expenses.findByIdAndUpdate(id, expense, { new: true });
 
-            expensesPromisse.then(function(expenseEdited) {
-				if (expenseEdited == null) {
-					callbackError('not found', 404);
-				} else {
-    				callbackSuccess(expenseEdited);
+            expensesPromisse.then(function (expenseEdited) {
+                if (expenseEdited == null) {
+                    callbackError('not found', 404);
+                } else {
+                    callbackSuccess(expenseEdited);
                 }
             })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
+                .then(null, function (error) {
+                    callbackError(error, 400);
+                });
         } else {
             callbackError(val.errors, 400)
         }
     },
 
-    pay: function(id, callbackSuccess, callbackError) {
+    pay: function (id, callbackSuccess, callbackError) {
         var expenseFindPromisse = Expenses.findById(id);
         expenseFindPromisse.then(function (expense) {
             if (expense != undefined) {
                 payExpense(expense);
 
-                expense.save(function(error, raw) {
-                     if (error) {
-                         callbackError(error, 400)
-                     };
+                expense.save(function (error, raw) {
+                    if (error) {
+                        callbackError(error, 400)
+                    };
 
-                     callbackSuccess();
+                    callbackSuccess();
                 });
             } else {
                 callbackError('not found', 404);
             };
         })
-        .then(null, function(error) {
-            callbackError(error, 400);
-        });
+            .then(null, function (error) {
+                callbackError(error, 400);
+            });
     }
 
 }

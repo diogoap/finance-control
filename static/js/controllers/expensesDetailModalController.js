@@ -1,20 +1,19 @@
 'use strict';
 
-function expensesDetailModalController($scope, $uibModalInstance, Utils, Categories, Accounts, expenseDetail, action) {
+function expensesDetailModalController($scope, $uibModalInstance, Utils, Categories, Accounts, Currencies, expenseDetail, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
 	$scope.action = action;
- 	$scope.expenseStatus = ['Em aberto', 'Pago'];
- 	$scope.submitted = false;
+	$scope.expenseStatus = ['Em aberto', 'Pago'];
+	$scope.submitted = false;
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar detalhe';
 		$scope.expenseDetail = { status: 'Em aberto' };
 		$scope.loading = false;
 	}
-	else
-	{
+	else {
 		if (action == 'clone') {
 			$scope.screenTitle = 'Clonar detalhe';
 		} else {
@@ -30,7 +29,10 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 			_account: expenseDetail._account,
 			category_id: expenseDetail.category_id,
 			_category: expenseDetail._category,
-			status: expenseDetail.status };
+			currency_id: expenseDetail.currency_id,
+			_currency: expenseDetail._currency,			
+			status: expenseDetail.status
+		};
 
 		if (action == 'clone') {
 			delete $scope.expenseDetail.$$hashKey;
@@ -41,49 +43,63 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 
 	var filter = 'type=Despesa&enabled=true';
 	Categories.get(filter)
-		.success(function(data) {
+		.success(function (data) {
 			$scope.categories = data;
 			$scope.loading = false;
 		})
-		.error(function(data, status, headers, config) {
+		.error(function (data, status, headers, config) {
 			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function(data) {
+		.success(function (data) {
 			$scope.accounts = data;
 			$scope.loading = false;
 		})
-		.error(function(data, status, headers, config) {
+		.error(function (data, status, headers, config) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			$scope.loading = false;
+		});
+
+	Currencies.get(filter)
+		.success(function (data) {
+			$scope.currencies = data;
+			$scope.loading = false;
+		})
+		.error(function (data, status, headers, config) {
 			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
 			$scope.loading = false;
 		});
 
 	$scope.submitDetail = function () {
-    	if ($scope.expenseDetailForm.$valid) {
+		if ($scope.expenseDetailForm.$valid) {
 			$scope.expenseDetail._action = $scope.action;
 
 			// Get object for selected account
-			var selAccount = $.grep($scope.accounts, function(e){ return e._id == $scope.expenseDetail.account_id });
+			var selAccount = $.grep($scope.accounts, function (e) { return e._id == $scope.expenseDetail.account_id });
 			$scope.expenseDetail._account = selAccount[0];
 
 			// Get object for selected category
-			var selCategory = $.grep($scope.categories, function(e){ return e._id == $scope.expenseDetail.category_id });
+			var selCategory = $.grep($scope.categories, function (e) { return e._id == $scope.expenseDetail.category_id });
 			$scope.expenseDetail._category = selCategory[0];
 
+			// Get object for selected currency
+			var selCurrency = $.grep($scope.currencies, function (e) { return e._id == $scope.expenseDetail.currency_id });
+			$scope.expenseDetail._currency = selCurrency[0];			
+
 			$uibModalInstance.close($scope.expenseDetail);
-    	} else {
-      		$scope.submitted = true;
-    	}
+		} else {
+			$scope.submitted = true;
+		}
 	}
 
-	$scope.cancelDetail = function() {
+	$scope.cancelDetail = function () {
 		$uibModalInstance.dismiss('cancel');
 	}
 
-	$scope.formatNumericAmount = function(event) {
+	$scope.formatNumericAmount = function (event) {
 		$scope.expenseDetail.amount = Utils.formatPastedNumer(event);
 	}
 

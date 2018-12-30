@@ -6,21 +6,28 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
 
  	$scope.columns = [
         {
-            name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('9%', '15%', '21%'), enableColumnMenu: false,
+            name: 'Vencimento', field: 'dueDate', type: 'date', width: Utils.getSizeRes('8%', '12%', '17%'), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return Utils.getCellClassesLatePayment('ui-grid-cell-center-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
-            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('26%', '27%', '41%'), enableColumnMenu: false,
+            name: 'Descrição', field: 'description', type: 'string', width: Utils.getSizeRes('25%', '26%', '41%'), enableColumnMenu: false,
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
-        },
-        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('9%', '12%', '20%'), enableColumnMenu: false,
+		},
+        {
+			name: 'Moeda', field: '_currencyCodes', type: 'string', width: Utils.getSizeRes('6%', '8%', '11%'), visible: Utils.getVisibilityRes(true, true, true), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', 
+            cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
+                return Utils.getCellClassesLatePayment('ui-grid-cell-center-align', row.entity.status == 'Em aberto', row.entity.dueDate);
+            }			
+        },		
+        { name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('8%', '11%', '16%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',
@@ -29,26 +36,26 @@ app.controller('expensesController', function($scope, $http, $uibModal, $locale,
             }
         },
         {
-            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Conta', field: '_accountNames', type: 'string', width: Utils.getSizeRes('16%', '16%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
-            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('16%', '17%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
+            name: 'Categoria', field: '_categoryNames', type: 'string', width: Utils.getSizeRes('16%', '16%', '0%'), visible: Utils.getVisibilityRes(true, true, false), enableColumnMenu: false,
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return Utils.getCellClassesLatePayment('', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
-            name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('10%', '12%', '18%'), enableColumnMenu: false,
+            name: 'Situação', field: 'status', type: 'string', width: Utils.getSizeRes('8%', '11%', '15%'), enableColumnMenu: false,
             headerCellClass: 'ui-grid-cell-center-align',
             cellClass: function(grid, row, col, rowRenderIndex, colRenderIndex) {
                 return Utils.getCellClassesLatePayment('ui-grid-cell-center-align', row.entity.status == 'Em aberto', row.entity.dueDate);
             }
         },
         {
-            name: 'Valor pago', field: 'amountPaid', type: 'number', width: Utils.getSizeRes('9%', '0%', '0%'), visible: Utils.getVisibilityRes(true, false, false), enableColumnMenu: false,
+            name: 'Valor pago', field: 'amountPaid', type: 'number', width: Utils.getSizeRes('8%', '0%', '0%'), visible: Utils.getVisibilityRes(true, false, false), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>',

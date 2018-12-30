@@ -15,7 +15,7 @@ var loanSchema = new Schema({
 	notes: String,
 	user_id: String,
 	currency_id: String,
-	_currency: Object,	
+	_currency: Object
 });
 
 module.exports = mongoose.model('Loan', loanSchema);

@@ -16,7 +16,13 @@
 		</div>
 		<div class="form-group form-group-sm">
 			<label for="incomeAmount" class="col-sm-3 control-label">Valor</label>
-			<div class="col-sm-9">
+			<div class="col-sm-2">
+				<select name="incomeCurrency" ng-model="incomeDetail.currency_id" required ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error" ng-show="(incomeDetailForm.incomeCurrency.$dirty && incomeDetailForm.incomeCurrency.$invalid) || (submitted && incomeDetailForm.incomeCurrency.$invalid)">
+					<small class="error" ng-show="incomeDetailForm.incomeCurrency.$error.required">O campo Moeda é obrigatório.</small>
+				</div>
+			</div>			
+			<div class="col-sm-7">
 				<input type="tel" numeric decimals="2" gt-than="0" name="incomeAmount" ng-model="incomeDetail.amount" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(incomeDetailForm.incomeAmount.$dirty && incomeDetailForm.incomeAmount.$invalid) || (submitted && incomeDetailForm.incomeAmount.$invalid)">
 					<small class="error" ng-show="incomeDetailForm.incomeAmount.$error.gtThan">O campo Valor é obrigatório.</small>

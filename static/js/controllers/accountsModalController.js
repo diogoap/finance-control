@@ -1,6 +1,6 @@
 'use strict';
 
-function accountsModalController($scope, $uibModalInstance, Utils, Accounts, accountId, action) {
+function accountsModalController($scope, $uibModalInstance, Utils, Accounts, Currencies, accountId, action) {
 	$scope.loading = true;
 	$scope.Utils = Utils;
 	$scope.alerts = [];
@@ -26,6 +26,17 @@ function accountsModalController($scope, $uibModalInstance, Utils, Accounts, acc
 				$scope.loading = false;
 			});
 	}
+	
+	var filter = 'enabled=true';
+	Currencies.get(filter)
+		.success(function (data) {
+			$scope.currencies = data;
+			$scope.loading = false;
+		})
+		.error(function (data, status, headers, config) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			$scope.loading = false;
+		});	
 
 	$scope.submit = function () {
     	if ($scope.accountForm.$valid) {

@@ -6,22 +6,26 @@ app.controller('transfersController', function($scope, $http, $uibModal, $locale
 
  	$scope.columns = [
         {
-            name: 'Data', field: 'date', type: 'date', width: Utils.getSizeRes('14%', '21%', '21%'), enableColumnMenu: false,
+            name: 'Data', field: 'date', type: 'date', width: Utils.getSizeRes('14%', '16%', '16%'), enableColumnMenu: false,
             cellFilter: 'date:"shortDate"', headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align',
             aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
-        },
+		},
         {
-            name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('14%', '21%', '21%'), enableColumnMenu: false,
+			name: 'Moeda', field: '_currency.currencyCode', type: 'string', width: Utils.getSizeRes('6%', '10%', '10%'), visible: Utils.getVisibilityRes(true, true, true), enableColumnMenu: false,
+			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
+        },		
+        {
+            name: 'Valor', field: 'amount', type: 'number',  width: Utils.getSizeRes('12%', '18%', '18%'), enableColumnMenu: false,
             cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass:'ui-grid-cell-right-align',
             aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
             footerCellTemplate: '<div class="ui-grid-cell-contents ui-grid-cell-right-align" >{{col.getAggregationValue() | number:2 }}</div>'
         },
         {
-            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width: Utils.getSizeRes('36%', '29%', '29%'), enableColumnMenu: false
+            name: 'Conta Origem', field: '_accountOrigin.name', type: 'string', width: Utils.getSizeRes('34%', '28%', '28%'), enableColumnMenu: false
         },
         {
-            name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width: Utils.getSizeRes('36%', '29%', '29%'), enableColumnMenu: false
+            name: 'Conta Destino', field: '_accountTarget.name', type: 'string', width: Utils.getSizeRes('34%', '28%', '28%'), enableColumnMenu: false
         }
     ];
 
