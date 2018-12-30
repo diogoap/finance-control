@@ -68,7 +68,7 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 			$scope.currencies = data;
 
 			if (action == 'new') {
-				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.incomeDetail.currency_id = Utils.getDefaultCurrencyId(data);		
 			}
 
 			$scope.loading = false;

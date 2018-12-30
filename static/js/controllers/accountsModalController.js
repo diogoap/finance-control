@@ -33,7 +33,7 @@ function accountsModalController($scope, $uibModalInstance, Utils, Accounts, Cur
 			$scope.currencies = data;
 
 			if (action == 'new') {
-				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.account.currency_id = Utils.getDefaultCurrencyId(data);		
 			}
 
 			$scope.loading = false;

@@ -121,7 +121,7 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 			$scope.currencies = data;
 
 			if (action == 'new') {
-				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.expense.currency_id = Utils.getDefaultCurrencyId(data);		
 			}
 
 			$scope.loading = false;

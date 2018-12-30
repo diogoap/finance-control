@@ -44,7 +44,7 @@ function transfersModalController($scope, $uibModalInstance, Utils, Transfers, A
 			$scope.currencies = data;
 
 			if (action == 'new') {
-				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.transfer.currency_id = Utils.getDefaultCurrencyId(data);		
 			}
 
 			$scope.loading = false;
