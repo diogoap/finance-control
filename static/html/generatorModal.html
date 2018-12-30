@@ -43,8 +43,14 @@
 		</div>
 
         <div class="form-group form-group-sm">
-            <label for="generatorParametersAmount" class="col-sm-2 control-label">Valor</label>
-			<div class="col-sm-4">
+			<label for="generatorParametersAmount" class="col-sm-2 control-label">Valor</label>
+			<div class="col-sm-2">
+				<select name="generatorParametersCurrency" ng-model="generatorParameters.currency_id" required ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error" ng-show="(generatorForm.generatorParametersCurrency.$dirty && generatorForm.generatorParametersCurrency.$invalid) || (submitted && generatorForm.generatorParametersCurrency.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersCurrency.$error.required">O campo Moeda é obrigatório.</small>
+				</div>
+			</div>				
+			<div class="col-sm-2">
 				<input type="tel" numeric decimals="2" gt-than="0" name="generatorParametersAmount" ng-model="generatorParameters.amount" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
 				<div class="error" ng-show="(generatorForm.generatorParametersAmount.$dirty && generatorForm.generatorParametersAmount.$invalid) || (submitted && generatorForm.generatorParametersAmount.$invalid)">
 					<small class="error" ng-show="generatorForm.generatorParametersAmount.$error.gtThan">O campo Valor é obrigatório.</small>

@@ -20,9 +20,10 @@ var generatorParametersSchema = {
         "account_id": { "type": "string" },
         "scheduledPayment": { "type": "boolean" },
         "notes": { "type": "string" },
-        "user_id": { "type": "string" }
+        "user_id": { "type": "string" },
+        "currency_id": { "type": "string" },        
     },
-    "required": [ "type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id", "user_id" ],
+    "required": [ "type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id", "user_id", "currency_id" ],
     "oneOf": [
         { "properties": { "dueDateType": { "enum": [ "PrimeiroDia", "UltimoDia" ] } } },
         {
@@ -94,6 +95,7 @@ function createItems(params) {
         item.status = 'Em aberto';
         item.category_id = params.category_id;
         item.account_id = params.account_id;
+        item.currency_id = params.currency_id;       
         item.notes = params.notes;
         item.user_id = params.user_id;
 
