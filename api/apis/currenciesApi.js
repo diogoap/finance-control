@@ -64,4 +64,20 @@ module.exports = function (app, url) {
         );
     })
 
+    app.patch('/api/updateCurrencies', utils.ensureAuth, function (req, res) {
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        currenciesService.updateCurrency(
+            utils.getUserId(req),
+            query,
+            function() {
+                res.json('ok');
+            },
+            function(error, status) {
+                utils.sendError(res, error, status);
+            }
+        );
+    })    
+
 }

@@ -2,6 +2,8 @@
 
 var Currencies = require('../models/currenciesModel');
 var Validator = require('jsonschema').Validator;
+var Incomes = require('../models/incomesModel');
+var Expenses = require('../models/expensesModel');
 
 var currencySchema = {
     "description": "Currency model validation.",
@@ -46,6 +48,26 @@ function currencyExists(userId, currencyCodeFilter, callbackSuccess, callbackErr
         });
 }
 
+function getCurrencyIdDefault(userId, callbackSuccess, callbackError) {
+    var queryFilter = {
+        default: true,
+        user_id: userId
+    };
+
+    var currenciesPromisse = Currencies.find(queryFilter).exec();
+
+    currenciesPromisse.then(function (currencies) {
+        if (currencies.length > 0) {
+            callbackSuccess(currencies[0])
+        } else {
+            callbackError('There is no default currency');
+        }
+    })
+        .then(null, function (error) {
+            callbackError(error);
+        });
+}
+
 function currencyDefaultExists(userId, currency, callbackSuccess, callbackError) {
     if (currency.default == false) {
         callbackSuccess(false);
@@ -76,6 +98,60 @@ function currencyDefaultExists(userId, currency, callbackSuccess, callbackError)
                 callbackError(error);
             });
     }
+}
+
+function updateCurrency(queryFilter, currencyDefault, Model, callbackSuccess, callbackError) {
+    var itemsPromisse = Model.find(queryFilter).sort('date').exec();
+    itemsPromisse.then(function (list) {
+
+        list.forEach(function (item) {
+
+            let needsUpdate = false;
+
+            console.log('Processing item: ' + item.description + ' - Cur: ' + item.currency_id);
+
+            if (item.detail.length > 0) {
+                item.detail.forEach(function (det) {
+                    if (det.currency_id == undefined) {
+                        console.log('   detail without currency => ' + det.description);
+                        item.currency_id = null;
+                        item._currency = null
+                        det.currency_id = currencyDefault._id;
+                        det._currency = currencyDefault;
+                        needsUpdate = true;
+                    }
+                });
+            } else {
+                if (item.currency_id == undefined) {
+                    console.log('item without currency => ' + item.description);
+                    item.currency_id = currencyDefault._id;
+                    item._currency = currencyDefault;
+                    needsUpdate = true;
+                }
+            }
+
+            if (needsUpdate) {
+                console.log('Need update for: ' + item.description);
+
+                let updateFilter = { _id: item._id };
+
+                let updatePromisse = Model.updateOne(updateFilter, item);
+
+                updatePromisse.then(function () {
+                    console.log('Update complete for: ' + item.description);
+                })
+                    .then(null, function (error) {
+                        console.log('error: ' + error);
+                        callbackError(error, 400);
+                    });
+            }
+        });
+
+        callbackSuccess();
+    })
+        .then(null, function (error) {
+            callbackError(error);
+        });
 }
 
 module.exports = {
@@ -194,6 +270,45 @@ module.exports = {
         } else {
             callbackError(val.errors, 400)
         }
-    }
+    },
 
+    updateCurrency: function (userId, filter, callbackSuccess, callbackError) {
+
+        getCurrencyIdDefault(userId,
+            function (currencyDefault) {
+
+                var queryFilter = {};
+                var dateBegin, dateEnd;
+
+                if ((filter != undefined) && (filter.year != undefined)) {
+                    var y = parseInt(filter.year, 10); 
+                    dateBegin = new Date(y, 0, 1);
+                    dateEnd = new Date(y + 1, 0, 1);
+                } else {
+                    var date = new Date(), y = date.getFullYear();
+                    dateBegin = new Date(y, 0, 1);
+                    dateEnd = new Date(y + 1, 0, 0);
+                }
+
+                queryFilter.dueDate = { $gte: dateBegin, $lt: dateEnd };
+                queryFilter.user_id = userId;
+
+                updateCurrency(queryFilter, currencyDefault, Incomes,
+                    function () {
+                        updateCurrency(queryFilter, currencyDefault, Expenses,
+                            function () {
+                                callbackSuccess();
+                            },
+                            function (error) {
+                                callbackError(error);
+                            });
+                    },
+                    function (error) {
+                        callbackError(error);
+                    });
+            },
+            function (error) {
+                callbackError(error);
+            })
+    }
 }
