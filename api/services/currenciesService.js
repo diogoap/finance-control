@@ -78,8 +78,6 @@ function currencyDefaultExists(userId, currency, callbackSuccess, callbackError)
             user_id: userId
         };
 
-        console.log('checking default for ' + currency.id);
-
         var currenciesPromisse = Currencies.find(queryFilter).exec();
         currenciesPromisse.then(function (currencies) {
 
@@ -105,15 +103,11 @@ function updateCurrency(queryFilter, currencyDefault, Model, callbackSuccess, ca
     itemsPromisse.then(function (list) {
 
         list.forEach(function (item) {
-
             let needsUpdate = false;
-
-            console.log('Processing item: ' + item.description + ' - Cur: ' + item.currency_id);
 
             if (item.detail.length > 0) {
                 item.detail.forEach(function (det) {
                     if (det.currency_id == undefined) {
-                        console.log('   detail without currency => ' + det.description);
                         item.currency_id = null;
                         item._currency = null
                         det.currency_id = currencyDefault._id;
@@ -123,7 +117,6 @@ function updateCurrency(queryFilter, currencyDefault, Model, callbackSuccess, ca
                 });
             } else {
                 if (item.currency_id == undefined) {
-                    console.log('item without currency => ' + item.description);
                     item.currency_id = currencyDefault._id;
                     item._currency = currencyDefault;
                     needsUpdate = true;
@@ -142,7 +135,7 @@ function updateCurrency(queryFilter, currencyDefault, Model, callbackSuccess, ca
                 })
                     .then(null, function (error) {
                         console.log('error: ' + error);
-                        callbackError(error, 400);
+                        callbackError(error, 500);
                     });
             }
         });
