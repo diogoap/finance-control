@@ -19,7 +19,13 @@ function getDstTimezoneOffset(date) {
 	var jan = new Date(date.getFullYear(), 0, 1);
 	var jul = new Date(date.getFullYear(), 6, 1);
 	var maxOffSet = Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-	return (maxOffSet - date.getTimezoneOffset());
+	var timezoneOffSet = date.getTimezoneOffset();
+
+	if (timezoneOffSet > 0) {
+		return (maxOffSet - timezoneOffSet);
+	} else {
+		return Math.abs(timezoneOffSet);
+	}
 }
 
 //2 columns stack
