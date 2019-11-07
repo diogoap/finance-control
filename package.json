@@ -11,7 +11,7 @@
     "express": "^4.16.4",
     "jsonschema": "~1.1.x",
     "method-override": "^2.3.10",
-    "mongoose": "^5.4.1",
+    "mongoose": "^5.7.5",
     "morgan": "latest",
     "passport": "^0.4.0",
     "passport-google-oauth": "*",
