@@ -272,7 +272,7 @@ module.exports = {
                 var dateBegin, dateEnd;
 
                 if ((filter != undefined) && (filter.year != undefined)) {
-                    var y = parseInt(filter.year, 10); 
+                    var y = parseInt(filter.year, 10);
                     dateBegin = new Date(y, 0, 1);
                     dateEnd = new Date(y + 1, 0, 1);
                 } else {

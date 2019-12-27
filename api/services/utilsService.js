@@ -4,7 +4,7 @@ var passwordHash = require('password-hash');
 var usersService = require('./usersService');
 var usersApiAdminEmail = process.env.USERS_API_ADMIN_EMAIL;
 
-var sendError = function(res, error, status) {
+var sendError = function (res, error, status) {
 	if (status) {
 		res.status(status).end('Error: ' + error);
 	} else {
@@ -12,15 +12,15 @@ var sendError = function(res, error, status) {
 	};
 }
 
-var ensureAuth = function(req, res, next) {
+var ensureAuth = function (req, res, next) {
 	return validateAuth(req, res, next, false);
 }
 
-var ensureAuthAdmin = function(req, res, next) {
+var ensureAuthAdmin = function (req, res, next) {
 	return validateAuth(req, res, next, true);
 }
 
-var validateAuth = function(req, res, next, needsAdmin) {
+var validateAuth = function (req, res, next, needsAdmin) {
 	var userToken = req.headers['authorization'];
 	var userId = req.headers['user-id'];
 
@@ -30,7 +30,7 @@ var validateAuth = function(req, res, next, needsAdmin) {
 	}
 
 	var user = usersService.getById(userId,
-        function(user) {
+		function (user) {
 			if (user.userEnabled == false) {
 				console.log('validateAuth ==> User not enabled');
 				return sendError(res, 'User not enabled', 401);
@@ -48,49 +48,49 @@ var validateAuth = function(req, res, next, needsAdmin) {
 			}
 
 			return next();
-        },
-        function(error, status) {
+		},
+		function (error, status) {
 			console.log('validateAuth ==> User not found - ' + error);
-            return sendError(res, 'User not found', 401);
-        }
-    );
+			return sendError(res, 'User not found', 401);
+		}
+	);
 }
 
-var ensureAffectedUserIsNotAdmin = function(req, res, next) {
+var ensureAffectedUserIsNotAdmin = function (req, res, next) {
 	var usersPromisse = usersService.getById(req.params.id,
-		function(user) {
+		function (user) {
 			if (user.emailAuthorized == usersApiAdminEmail) {
 				return sendError(res, 'Operation not allowed against admin user', 403);
 			}
 
 			return next();
-        },
-        function(error, status) {
+		},
+		function (error, status) {
 			return sendError(res, 'User not found', 404);
-        }
-    );
+		}
+	);
 }
 
-var ensureObjectUser = function(req, res, next, objService) {
+var ensureObjectUser = function (req, res, next, objService) {
 	var obj = objService.getById(req.params.id,
-        function(obj) {
-            if (obj.user_id == getUserId(req)) {
-                return next();
+		function (obj) {
+			if (obj.user_id == getUserId(req)) {
+				return next();
 			}
 
-            return sendError(res, 'Invalid object for this user', 401);
-        },
-        function(error, status) {
-            return sendError(res, 'Object not found', 404);
-        }
-    );
+			return sendError(res, 'Invalid object for this user', 401);
+		},
+		function (error, status) {
+			return sendError(res, 'Object not found', 404);
+		}
+	);
 }
 
-var getUserId = function(req) {
+var getUserId = function (req) {
 	return req.headers['user-id'];
 }
 
-var getUserToken = function(req) {
+var getUserToken = function (req) {
 	return req.headers['authorization'];
 }
 

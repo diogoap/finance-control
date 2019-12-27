@@ -29,87 +29,87 @@ function getCommonEntries(userId, callbackSuccess, callbackError) {
             callbackSuccess(entries);
         });
     })
-    .then(null, function(error) {
-        callbackError(error);
-    });
+        .then(null, function (error) {
+            callbackError(error);
+        });
 }
 
 function getData(userId, dateFilter, callbackSuccess, callbackError) {
     var totals = {};
 
     //Incomes
-    var incomesTotal = Incomes.aggregate( [
+    var incomesTotal = Incomes.aggregate([
         { $match: { account_id: { $ne: null }, dueDate: dateFilter, user_id: userId } },
-        { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalReceived: { $sum: '$amountReceived'} } }
+        { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalReceived: { $sum: '$amountReceived' } } }
     ]).exec();
 
-    incomesTotal.then(function(incomes) {
+    incomesTotal.then(function (incomes) {
         totals.incomes = incomes;
 
         //Incomes detail
-        var incomesDetailTotal = Incomes.aggregate( [
+        var incomesDetailTotal = Incomes.aggregate([
             { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
             { $unwind: '$detail' },
             { $group: { _id: { account_id: '$detail.account_id', category_id: '$detail.category_id', status: '$detail.status' }, total: { $sum: '$detail.amount' } } }
 
         ]).exec();
 
-        incomesDetailTotal.then(function(incomesDetail) {
+        incomesDetailTotal.then(function (incomesDetail) {
             totals.incomesDetail = incomesDetail;
 
             //Expenses
-            var expensesTotal = Expenses.aggregate( [
+            var expensesTotal = Expenses.aggregate([
                 { $match: { account_id: { $ne: null }, dueDate: dateFilter, user_id: userId } },
-                { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalPaid: { $sum: '$amountPaid'} } }
+                { $group: { _id: { account_id: '$account_id', category_id: '$category_id', status: '$status' }, total: { $sum: '$amount' }, totalPaid: { $sum: '$amountPaid' } } }
             ]).exec();
 
-            expensesTotal.then(function(expenses) {
+            expensesTotal.then(function (expenses) {
                 totals.expenses = expenses;
 
                 //Expenses detail
-                var expensesDetailTotal = Expenses.aggregate( [
+                var expensesDetailTotal = Expenses.aggregate([
                     { $match: { account_id: null, dueDate: dateFilter, user_id: userId } },
                     { $unwind: '$detail' },
                     { $group: { _id: { account_id: '$detail.account_id', category_id: '$detail.category_id', status: '$detail.status' }, total: { $sum: '$detail.amount' } } }
                 ]).exec();
 
-                expensesDetailTotal.then(function(expensesDetail) {
+                expensesDetailTotal.then(function (expensesDetail) {
                     totals.expensesDetail = expensesDetail;
 
                     //Transfers origin
-                    var transfersOriginTotal = Transfers.aggregate( [
+                    var transfersOriginTotal = Transfers.aggregate([
                         { $match: { date: dateFilter, user_id: userId } },
                         { $group: { _id: { account_id: '$accountOrigin_id' }, total: { $sum: '$amount' } } }
                     ]).exec();
 
-                    transfersOriginTotal.then(function(transfersOrigin) {
+                    transfersOriginTotal.then(function (transfersOrigin) {
                         totals.transfersOrigin = transfersOrigin;
 
                         //Transfers target
-                        var transfersTargetTotal = Transfers.aggregate( [
+                        var transfersTargetTotal = Transfers.aggregate([
                             { $match: { date: dateFilter, user_id: userId } },
                             { $group: { _id: { account_id: "$accountTarget_id" }, total: { $sum: "$amount" } } }
                         ]).exec();
 
-                        transfersTargetTotal.then(function(transfersTarget) {
+                        transfersTargetTotal.then(function (transfersTarget) {
                             totals.transfersTarget = transfersTarget;
 
                             //Loans transactions
-                            var loansTransactionsTotal = Loans.aggregate( [
+                            var loansTransactionsTotal = Loans.aggregate([
                                 { $match: { transactionDate: dateFilter, user_id: userId, status: 'Em aberto' } },
                                 { $group: { _id: { account_id: "$account_id", type: '$type' }, total: { $sum: "$amount" } } }
                             ]).exec();
 
-                            loansTransactionsTotal.then(function(loansTransactions) {
+                            loansTransactionsTotal.then(function (loansTransactions) {
                                 totals.loansTransactions = loansTransactions;
 
                                 //Loans payments
-                                var loansPaymentsTotal = Loans.aggregate( [
+                                var loansPaymentsTotal = Loans.aggregate([
                                     { $match: { dueDate: dateFilter, user_id: userId } },
                                     { $group: { _id: { account_id: "$account_id", type: '$type', status: '$status' }, total: { $sum: "$amount" } } }
                                 ]).exec();
 
-                                loansPaymentsTotal.then(function(loansPayments) {
+                                loansPaymentsTotal.then(function (loansPayments) {
                                     totals.loansPayments = loansPayments;
 
                                     callbackSuccess(totals);
@@ -121,9 +121,9 @@ function getData(userId, dateFilter, callbackSuccess, callbackError) {
             });
         });
     })
-    .then(null, function(error) {
-        callbackError(error);
-    });
+        .then(null, function (error) {
+            callbackError(error);
+        });
 }
 
 function calculateTotals(totals, status, previous) {
@@ -353,7 +353,7 @@ function calculateCategoriesTotal(categoriesList, totals, status) {
 
 module.exports = {
 
-    get: function(userId, filter, callbackSuccess, callbackError) {
+    get: function (userId, filter, callbackSuccess, callbackError) {
         var queryFilterPrevious, queryFilterCurrent;
 
         if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
@@ -368,12 +368,12 @@ module.exports = {
 
         getCommonEntries(
             userId,
-            function(entries) {
+            function (entries) {
                 getData(
                     userId,
                     queryFilterPrevious,
-                    function(previousTotals) {
-                        var res = { previous: { }, current: { } };
+                    function (previousTotals) {
+                        var res = { previous: {}, current: {} };
                         res.previous.all = calculateTotals(previousTotals, 'all', null);
                         res.previous.all.accounts = calculateAccountsBalace(entries.accounts, previousTotals, 'all', null);
                         res.previous.completed = calculateTotals(previousTotals, 'completed', null);
@@ -382,7 +382,7 @@ module.exports = {
                         getData(
                             userId,
                             queryFilterCurrent,
-                            function(currentTotals) {
+                            function (currentTotals) {
                                 res.current.all = calculateTotals(currentTotals, 'all', res.previous.all);
                                 res.current.all.categories = calculateCategoriesTotal(entries.categories, currentTotals, 'all');
                                 res.current.all.accounts = calculateAccountsBalace(entries.accounts, currentTotals, 'all', res.previous.all.accounts);
@@ -396,13 +396,13 @@ module.exports = {
                     }
                 )
             },
-            function(error) {
+            function (error) {
                 callbackError(error);
             }
         );
     },
 
-    getBalance: function(userId, filter, callbackSuccess, callbackError) {
+    getBalance: function (userId, filter, callbackSuccess, callbackError) {
         var queryFilterPrevious, queryFilterCurrent;
 
         if ((filter != undefined) && (filter.dateBegin != undefined) && (filter.dateEnd != undefined)) {
@@ -418,12 +418,12 @@ module.exports = {
         getData(
             userId,
             queryFilterCurrent,
-            function(currentTotals) {
-                var data = { current: { } };
+            function (currentTotals) {
+                var data = { current: {} };
                 data.current.all = calculateTotals(currentTotals, 'all', null);
                 callbackSuccess(data);
             },
-            function(error) {
+            function (error) {
                 callbackError(error);
             }
         )

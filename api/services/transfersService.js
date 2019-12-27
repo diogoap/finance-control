@@ -106,7 +106,7 @@ module.exports = {
 
                     transfers.forEach(function (transfer) {
                         setAccounts(accounts, transfer);
-                        setCurrencies(currencies, transfer);                       
+                        setCurrencies(currencies, transfer);
                     });
 
                     callbackSuccess(transfers);

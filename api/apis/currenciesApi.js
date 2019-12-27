@@ -71,13 +71,13 @@ module.exports = function (app, url) {
         currenciesService.updateCurrency(
             utils.getUserId(req),
             query,
-            function() {
+            function () {
                 res.json('ok');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
-    })    
+    })
 
 }

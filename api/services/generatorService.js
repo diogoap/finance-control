@@ -8,10 +8,10 @@ var generatorParametersSchema = {
     "description": "Generator Parameters model validation",
     "type": "object",
     "properties": {
-        "type": { "type": "string", "enum": [ "Despesa", "Receita" ] },
+        "type": { "type": "string", "enum": ["Despesa", "Receita"] },
         "initialDate": { "type": "datetime" },
         "installments": { "type": "integer", "minimum": 1, "maximum": 999 },
-        "dueDateType": { "type": "string", "enum": [ "PrimeiroDia", "UltimoDia", "DiaEspecifico" ] },
+        "dueDateType": { "type": "string", "enum": ["PrimeiroDia", "UltimoDia", "DiaEspecifico"] },
         "dueDateTypeDay": { "type": "integer" },
         "amount": { "type": "double", "minimum": 0, "exclusiveMinimum": true },
         "description": { "type": "string", "minLength": 3, "maxLength": 100 },
@@ -21,14 +21,14 @@ var generatorParametersSchema = {
         "scheduledPayment": { "type": "boolean" },
         "notes": { "type": "string" },
         "user_id": { "type": "string" },
-        "currency_id": { "type": "string" },        
+        "currency_id": { "type": "string" },
     },
-    "required": [ "type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id", "user_id", "currency_id" ],
+    "required": ["type", "initialDate", "installments", "dueDateType", "amount", "description", "descriptionInstallmentNumber", "category_id", "account_id", "user_id", "currency_id"],
     "oneOf": [
-        { "properties": { "dueDateType": { "enum": [ "PrimeiroDia", "UltimoDia" ] } } },
+        { "properties": { "dueDateType": { "enum": ["PrimeiroDia", "UltimoDia"] } } },
         {
-            "properties": { "dueDateTypeDay": { "minimum": 1, "maximum": 31 }},
-            "required": [ "dueDateTypeDay" ]
+            "properties": { "dueDateTypeDay": { "minimum": 1, "maximum": 31 } },
+            "required": ["dueDateTypeDay"]
         }
     ]
 };
@@ -95,7 +95,7 @@ function createItems(params) {
         item.status = 'Em aberto';
         item.category_id = params.category_id;
         item.account_id = params.account_id;
-        item.currency_id = params.currency_id;       
+        item.currency_id = params.currency_id;
         item.notes = params.notes;
         item.user_id = params.user_id;
 
@@ -107,7 +107,7 @@ function createItems(params) {
 
 module.exports = {
 
-    create: function(userId, generatorParameters, callbackSuccess, callbackError) {
+    create: function (userId, generatorParameters, callbackSuccess, callbackError) {
         generatorParameters.user_id = userId;
         var val = new Validator().validate(generatorParameters, generatorParametersSchema);
 
@@ -125,9 +125,9 @@ module.exports = {
             promisseCreate.then(function () {
                 callbackSuccess();
             })
-            .then(null, function(error) {
-                callbackError(error, 400);
-            });
+                .then(null, function (error) {
+                    callbackError(error, 400);
+                });
         } else {
             callbackError(val.errors, 400)
         }

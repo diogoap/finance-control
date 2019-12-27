@@ -3,82 +3,82 @@
 var utils = require('../services/utilsService');
 var incomesService = require('../services/incomesService');
 
-var ensureIncomeUser = function(req, res, next) {
-	return utils.ensureObjectUser(req, res, next, incomesService);
+var ensureIncomeUser = function (req, res, next) {
+    return utils.ensureObjectUser(req, res, next, incomesService);
 }
 
-module.exports = function(app, url) {
+module.exports = function (app, url) {
 
-    app.get('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function(req, res) {
+    app.get('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function (req, res) {
         var income = incomesService.getById(req.params.id,
-            function(income) {
+            function (income) {
                 res.json(income);
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.get('/api/incomes', utils.ensureAuth, function(req, res) {
+    app.get('/api/incomes', utils.ensureAuth, function (req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         incomesService.get(
             utils.getUserId(req),
             query,
-            function(incomes) {
+            function (incomes) {
                 res.json(incomes);
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.post('/api/incomes', utils.ensureAuth, function(req, res) {
+    app.post('/api/incomes', utils.ensureAuth, function (req, res) {
         incomesService.create(
             utils.getUserId(req),
             req.body,
-            function(income) {
+            function (income) {
                 res.json('OK');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.delete('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function(req, res) {
-        incomesService.delete( { _id : req.params.id },
-            function() {
+    app.delete('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function (req, res) {
+        incomesService.delete({ _id: req.params.id },
+            function () {
                 res.json('OK');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.patch('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function(req, res) {
+    app.patch('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function (req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         if (query.receive == 'true') {
             incomesService.receive(req.params.id,
-                function() {
+                function () {
                     res.json('OK');
                 },
-                function(error, status) {
+                function (error, status) {
                     utils.sendError(res, error, status);
                 }
             );
         } else {
             incomesService.edit(req.params.id, req.body,
-                function() {
+                function () {
                     res.json('OK');
                 },
-                function(error, status) {
+                function (error, status) {
                     utils.sendError(res, error, status);
                 }
             );

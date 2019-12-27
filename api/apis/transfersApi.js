@@ -3,72 +3,72 @@
 var utils = require('../services/utilsService');
 var transfersService = require('../services/transfersService');
 
-var ensureTransferUser = function(req, res, next) {
-	return utils.ensureObjectUser(req, res, next, transfersService);
+var ensureTransferUser = function (req, res, next) {
+    return utils.ensureObjectUser(req, res, next, transfersService);
 }
 
-module.exports = function(app, url) {
+module.exports = function (app, url) {
 
-    app.get('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function(req, res) {
+    app.get('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function (req, res) {
         var transfer = transfersService.getById(req.params.id,
-            function(transfer) {
+            function (transfer) {
                 res.json(transfer);
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.get('/api/transfers', utils.ensureAuth, function(req, res) {
+    app.get('/api/transfers', utils.ensureAuth, function (req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         transfersService.get(
             utils.getUserId(req),
             query,
-            function(transfers) {
+            function (transfers) {
                 res.json(transfers);
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.post('/api/transfers', utils.ensureAuth, function(req, res) {
+    app.post('/api/transfers', utils.ensureAuth, function (req, res) {
         transfersService.create(
             utils.getUserId(req),
             req.body,
-            function(transfer) {
+            function (transfer) {
                 res.json('OK');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.delete('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function(req, res) {
-        transfersService.delete( { _id : req.params.id },
-            function() {
+    app.delete('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function (req, res) {
+        transfersService.delete({ _id: req.params.id },
+            function () {
                 res.json('OK');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
     })
 
-    app.patch('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function(req, res) {
+    app.patch('/api/transfers/:id', utils.ensureAuth, ensureTransferUser, function (req, res) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
         transfersService.edit(req.params.id, req.body,
-            function() {
+            function () {
                 res.json('OK');
             },
-            function(error, status) {
+            function (error, status) {
                 utils.sendError(res, error, status);
             }
         );
