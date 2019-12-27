@@ -153,6 +153,7 @@ module.exports = {
 
                 userDb.save(function(error, raw) {
                      if (error) {
+                         console.log(error);
                          return callbackError('User on update', 'Erro na atualização dos dados do usuário.');
                      };
 
