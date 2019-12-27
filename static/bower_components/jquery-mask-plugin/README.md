@@ -3,6 +3,8 @@ A jQuery Plugin to make masks on form fields and HTML elements.
 
 [![Build Status](https://travis-ci.org/igorescobar/jQuery-Mask-Plugin.png)](https://travis-ci.org/igorescobar/jQuery-Mask-Plugin)
 [![Code Climate](https://codeclimate.com/github/igorescobar/jQuery-Mask-Plugin.png)](https://codeclimate.com/github/igorescobar/jQuery-Mask-Plugin)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/jquery-mask-plugin/badge?style=rounded)](https://www.jsdelivr.com/package/npm/jquery-mask-plugin)
+[![CDNJS](https://img.shields.io/cdnjs/v/jquery.mask.svg)](https://cdnjs.com/libraries/jquery.mask)
 
 # Documentation, Demos & Usage Examples
 https://igorescobar.github.io/jQuery-Mask-Plugin/
@@ -27,6 +29,9 @@ https://igorescobar.github.io/jQuery-Mask-Plugin/
   * Compatibility with React/UMD/Zepto.js/Angular.JS.
   * HTML5 placeholder support.
   * Clear the field if it not matches support.
+
+## Want to buy me a beer? :heart_eyes:
+http://paypal.me/igorcescobar
 
 ## Install it via Package Managers
 ### Bower
@@ -72,7 +77,7 @@ jQuery Mask Plugin has been tested with jQuery 1.7+ on all major browsers:
  * Android Default Browser v4+
 
 ## Typescript support
-Definition can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/jquery-mask-plugin).
+Definition can be found [here](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jquery-mask-plugin).
 
 To install, open terminal and navigate to your working directory.
 
@@ -82,7 +87,7 @@ To install, open terminal and navigate to your working directory.
 ### Typescript 2.x users
   * Use npm `npm install --save-dev @types/jquery-mask-plugin`.
 
-For configuration options and troubleshooting refer to these repositories: 
+For configuration options and troubleshooting refer to these repositories:
 * [Typings](https://github.com/typings/typings)
 * [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)
 * [Typescript](https://github.com/Microsoft/TypeScript)
@@ -92,15 +97,17 @@ For configuration options and troubleshooting refer to these repositories:
 Before opening a new [issue](https://github.com/igorescobar/jQuery-Mask-Plugin/issues) take a look on those frequently asked questions:
 #### [How to integrate with React.js?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/498)
 #### [How to integrate with Angular.js?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/499)
+#### [How to integrate with Vue.js?](https://github.com/ankurk91/vue-jquery-mask)
 #### [Problems with old versions of Android keyboard](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/135)
 #### [Negative numbers, or currency related problems](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/436#issuecomment-253176511)
 #### [Prefix or sufix on the Mask](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/166)
 #### [Add validation?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/387#issuecomment-192998092)
 #### [Field type number, email not working?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/450#issuecomment-253225719)
-#### [Want to keep the placeholder as the user types?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/450#issuecomment-253225719)
+#### [Want to keep the placeholder as the user types?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/633#issuecomment-350819224)
+#### [E-mail mask?](https://github.com/igorescobar/jQuery-Mask-Plugin/issues/582)
 
 ## Bugs?
-Did you read our [docs](https://igorescobar.github.io/jQuery-Mask-Plugin/)? Yes? Cool! So now... make sure that you have a *functional* [jsfiddle](http://jsfiddle.net/) exemplifying your problem and open an [issue](https://github.com/igorescobar/jQuery-Mask-Plugin/issues) for us. Don't know how to do it? Use this [fiddle example](http://jsfiddle.net/igorescobar/6pco4om7/).
+Did you read our [docs](https://igorescobar.github.io/jQuery-Mask-Plugin/docs.html)? Yes? Cool! So now... make sure that you have a *functional* [jsfiddle](http://jsfiddle.net/) exemplifying your problem and open an [issue](https://github.com/igorescobar/jQuery-Mask-Plugin/issues) for us. Don't know how to do it? Use this [fiddle example](http://jsfiddle.net/igorescobar/6pco4om7/).
 
 ## Contributing
  * **Bug Reporting**: Yes! You can contribute opening [issues](https://github.com/igorescobar/jQuery-Mask-Plugin/issues)!
@@ -128,23 +135,3 @@ grunt test
  * [Gabriel Schammah](https://github.com/gschammah)
  * [Marcelo Manzan](https://github.com/kawamanza)
  * [See the full list](https://github.com/igorescobar/jQuery-Mask-Plugin/graphs/contributors)
-
-## Help us!
-[![Click here to lend your support to: jQuery Mask Plugin and make a donation at pledgie.com !](https://pledgie.com/campaigns/22649.png?skin_name=chrome)](https://pledgie.com/campaigns/22649)
-
-[![Flattr this](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=igorescobar&url=https%3A%2F%2Fflattr.com%2Fprofile%2Figorescobar)
-
-## Donators (Thanks!)
- * Rinaldo Morato
- * [Marcelo Otowicz](http://www.ofen.com.br/)
- * Marcia Cristina Cava
- * [Igor Lima](https://github.com/igorlima)
- * Steve Binder
- * Douglas Patrocinio
- * Paulo Diogo Rodrigues Leão
- * Dorijan Covran
- * Amaro Mariño Malvido
- * Mark Guadagna
- * Serdar Selim Tulunoğlu
- * [Software Download](http://software-download.name)
- * [Full list](https://pledgie.com/campaigns/22649#donors)

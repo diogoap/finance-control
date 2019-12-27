@@ -1,3 +1,36 @@
+== v1.14.15 (Mar/08 2018 22:59 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* rolling back change to fix caret positioning. it didn’t worked on some devices
+
+== v1.14.14 (Mar/02 2018 16:55 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing mask positioning delays
+* unmask: also removing place holder if added on the first place.
+* unmask: unsetting maxlength if we set it in the first place
+
+== v1.14.13 (Dec/11 2017 18:59 +0000 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixes caret issue explained on #636
+* fixing use strict issue
+
+== v1.14.12 (Oct/04 2017 09:57 +0100 by Igor Escobar) ==
+
+Bugfixes:
+
+* bug fixing on caret positioning on some devices
+
+== v1.14.11 (May/30 2017 21:53 +0100 by Igor Escobar) ==
+
+Bugfixes:
+
+* fixing a lot of caret positioning issues. Thanks to @onuradsay
+
 == v1.14.10 (Feb/13 2017 14:18 +0000 by Igor Escobar) ==
 
 Bugfixes:
@@ -862,14 +895,6 @@ Features:
 * A for alphanumeric digit
 * 0 to 9 for numeric digit.
 
-== v0.1.1.1 (Mar/10 2012 21:49 +0000 by Igor Escobar) ==
-
-- Isolando instancia do jQuery para dentro do Plugin
-- Crossbrowser keyCode
-- Implementando mascaras sequencias
-- Aprimorando preenchimento das mascaras
-- Adicionando as setas do teclado como byPassKeys
-
 == v0.1.1 (Mar/10 2012 14:05 +0000 by Igor Escobar) ==
 
 Bugfixes:
@@ -887,7 +912,3 @@ Features:
 Changes:
 
 * Refatorando o codigo para suportar multiplas instancias
-
-== v0.0.0.1 (Mar/10 2012 01:13 +0000 by Igor Escobar) ==
-
-Primeira versão do jQuery-Mask-Plugin.
