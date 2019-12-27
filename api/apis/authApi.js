@@ -48,7 +48,7 @@ module.exports = function(app, url, passport, GoogleStrategy) {
     });
 
     app.get('/auth/google',
-        passport.authenticate('google', { session: false, scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }),//userinfo.email plus.login
+        passport.authenticate('google', { session: false, scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }),
         function(req, res){}
     );
 
