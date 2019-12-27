@@ -31,8 +31,7 @@ module.exports = function(app, url, passport, GoogleStrategy) {
                         return done(null, userData);
                     },
                     function(error, errorMessage) {
-                        console.log('nextTick ==> ' + error);
-                        console.log('nextTick ==> ' + errorMessage);
+                        console.log('nextTick ==> ' + error + ' - ' + errorMessage);
                         return done(null, false, { message: errorMessage } );
                     }
                 );

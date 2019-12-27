@@ -124,8 +124,6 @@ function updateCurrency(queryFilter, currencyDefault, Model, callbackSuccess, ca
             }
 
             if (needsUpdate) {
-                console.log('Need update for: ' + item.description);
-
                 let updateFilter = { _id: item._id };
 
                 let updatePromisse = Model.updateOne(updateFilter, item);

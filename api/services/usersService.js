@@ -149,11 +149,8 @@ module.exports = {
 
                 userDb.accessTokens.push(newAccessToken);
 
-                console.log(userDb);
-
                 userDb.save(function(error, raw) {
                      if (error) {
-                         console.log(error);
                          return callbackError('User on update', 'Erro na atualização dos dados do usuário.');
                      };
 
