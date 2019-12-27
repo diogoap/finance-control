@@ -48,7 +48,7 @@ module.exports = function(app, url, passport, GoogleStrategy) {
     });
 
     app.get('/auth/google',
-        passport.authenticate('google', { session: false, scope: ['https://www.googleapis.com/auth/userinfo.email'] }),
+        passport.authenticate('google', { session: false, scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }),//userinfo.email plus.login
         function(req, res){}
     );
 
@@ -69,25 +69,21 @@ module.exports = function(app, url, passport, GoogleStrategy) {
        );
    });
 
-   app.get('/auth/google/callback', function(req, res, next) {
-       passport.authenticate('google', function(err, user, info) {
-           if (err) {
-               console.log('/auth/google/callback ==> UNEXPECTED ERROR');
-               var message = encodeURIComponent('Não foi possível realizar o login. Tente novamente mais tarde.');
-               return res.redirect('/login?error=' + message);
-           }
+   app.get('/auth/google/callback', 
+       passport.authenticate('google', { failureRedirect: '/login' }),
+       function(req, res) {
+            let user = req.user;
 
-           if (!user) {
-               console.log('/auth/google/callback ==> USER NOT FOUND: ' + info.message);
-               var message = encodeURIComponent(info.message);
-               return res.redirect('/login?error=' + message);
-           }
+            if (!user) {
+                console.log('/auth/google/callback ==> USER NOT FOUND: ' + info.message);
+                var message = encodeURIComponent(info.message);
+                return res.redirect('/login?error=' + message);
+            }
 
-           req.login(user, function(err) {
-               if (err) { return next(err); }
-               return res.redirect('/?id=' + req.user.id + '&email=' + req.user.email + '&token=' + req.user.accessToken + '&name=' + req.user.name + '&photo=' + req.user.photo);
-           });
-       })(req, res, next);
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.redirect('/?id=' + user.id + '&email=' + user.email + '&token=' + user.accessToken + '&name=' + user.name + '&photo=' + user.photo);
+            });
    });
 
 }
