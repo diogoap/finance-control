@@ -2,7 +2,7 @@
 
 var app = angular.module('financeControl');
 
-app.controller('indexController', function ($scope, $localStorage, $http, $locale, $routeParams, $location, Utils) {
+app.controller('indexController', function ($scope, $localStorage, $routeParams, $location, Utils) {
 
 	$scope.isLoggedIn = function () {
 		return ($localStorage.get('loggedUserToken') != undefined) && ($localStorage.get('loggedUserToken').length > 0);
