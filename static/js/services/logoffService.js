@@ -2,9 +2,9 @@
 
 angular.module('logoffService', [])
 
-	.factory('Logoff', ['$http',function($http) {
+	.factory('Logoff', ['$http', function ($http) {
 		return {
-			get : function(query) {
+			get: function (query) {
 				return $http.get('/auth/logoff?' + query);
 			}
 		}

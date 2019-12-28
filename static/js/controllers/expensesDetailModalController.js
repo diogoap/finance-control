@@ -30,7 +30,7 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 			category_id: expenseDetail.category_id,
 			_category: expenseDetail._category,
 			currency_id: expenseDetail.currency_id,
-			_currency: expenseDetail._currency,			
+			_currency: expenseDetail._currency,
 			status: expenseDetail.status
 		};
 
@@ -43,38 +43,38 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 
 	var filter = 'type=Despesa&enabled=true';
 	Categories.get(filter)
-		.success(function (data) {
-			$scope.categories = data;
+		.then(function onSucess(response) {
+			$scope.categories = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.expenseDetail.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.expenseDetail.currency_id = Utils.getDefaultCurrencyId(response.data);
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
@@ -92,7 +92,7 @@ function expensesDetailModalController($scope, $uibModalInstance, Utils, Categor
 
 			// Get object for selected currency
 			var selCurrency = $.grep($scope.currencies, function (e) { return e._id == $scope.expenseDetail.currency_id });
-			$scope.expenseDetail._currency = selCurrency[0];			
+			$scope.expenseDetail._currency = selCurrency[0];
 
 			$uibModalInstance.close($scope.expenseDetail);
 		} else {

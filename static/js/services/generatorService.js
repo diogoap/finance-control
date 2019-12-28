@@ -2,9 +2,9 @@
 
 angular.module('generatorService', [])
 
-	.factory('Generator', ['$http',function($http) {
+	.factory('Generator', ['$http', function ($http) {
 		return {
-			create : function(generatorParameters) {
+			create: function (generatorParameters) {
 				return $http.post('/api/generator', generatorParameters);
 			}
 		}

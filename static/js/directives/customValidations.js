@@ -2,48 +2,48 @@
 
 var app = angular.module('financeControl');
 
-app.directive("gteThan", function() {
+app.directive("gteThan", function () {
     return {
         restrict: "A",
         require: "ngModel",
-        link: function(scope, element, attributes, ngModel) {
-            ngModel.$validators.gteThan = function(modelValue) {
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$validators.gteThan = function (modelValue) {
                 return modelValue >= attributes.gteThan;
             }
         }
     };
 });
 
-app.directive("gtThan", function() {
+app.directive("gtThan", function () {
     return {
         restrict: "A",
         require: "ngModel",
-        link: function(scope, element, attributes, ngModel) {
-            ngModel.$validators.gtThan = function(modelValue) {
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$validators.gtThan = function (modelValue) {
                 return modelValue > attributes.gtThan;
             }
         }
     };
 });
 
-app.directive("gtThanZeroOpt", function() {
+app.directive("gtThanZeroOpt", function () {
     return {
         restrict: "A",
         require: "ngModel",
-        link: function(scope, element, attributes, ngModel) {
-            ngModel.$validators.gtThanZeroOpt = function(modelValue) {
-				return ((modelValue > 0) && (attributes.gtThanZeroOpt)) || (attributes.gtThanZeroOpt == "false");
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$validators.gtThanZeroOpt = function (modelValue) {
+                return ((modelValue > 0) && (attributes.gtThanZeroOpt)) || (attributes.gtThanZeroOpt == "false");
             }
         }
     };
 });
 
-app.directive('notEquals', [function() {
-    var link = function(scope, element, attributes, ngModel) {
-        var validate = function(modelValue) {
+app.directive('notEquals', [function () {
+    var link = function (scope, element, attributes, ngModel) {
+        var validate = function (modelValue) {
             var comparisonModel = attributes.notEquals;
 
-            if(!modelValue || !comparisonModel){
+            if (!modelValue || !comparisonModel) {
                 ngModel.$setValidity('notEquals', true);
             }
 
@@ -54,7 +54,7 @@ app.directive('notEquals', [function() {
         ngModel.$parsers.unshift(validate);
         ngModel.$formatters.push(validate);
 
-        attributes.$observe('notEquals', function(comparisonModel){
+        attributes.$observe('notEquals', function (comparisonModel) {
             return validate(ngModel.$modelValue);
         });
     };
@@ -65,12 +65,12 @@ app.directive('notEquals', [function() {
     };
 }]);
 
-app.directive('gteThanDateControl', [function() {
-    var link = function(scope, element, attributes, ngModel) {
-        var validate = function(modelValue) {
+app.directive('gteThanDateControl', [function () {
+    var link = function (scope, element, attributes, ngModel) {
+        var validate = function (modelValue) {
             var comparisonModel = attributes.gteThanDateControl;
 
-            if(!modelValue || !comparisonModel){
+            if (!modelValue || !comparisonModel) {
                 ngModel.$setValidity('gteThanDateControl', true);
             }
 
@@ -86,7 +86,7 @@ app.directive('gteThanDateControl', [function() {
         ngModel.$parsers.unshift(validate);
         ngModel.$formatters.push(validate);
 
-        attributes.$observe('gteThanDateControl', function(comparisonModel){
+        attributes.$observe('gteThanDateControl', function (comparisonModel) {
             return validate(ngModel.$modelValue);
         });
     };
@@ -97,12 +97,12 @@ app.directive('gteThanDateControl', [function() {
     };
 }]);
 
-app.directive('lteThanDateControl', [function() {
-    var link = function(scope, element, attributes, ngModel) {
-        var validate = function(modelValue) {
+app.directive('lteThanDateControl', [function () {
+    var link = function (scope, element, attributes, ngModel) {
+        var validate = function (modelValue) {
             var comparisonModel = attributes.gteThanDateControl;
 
-            if(!modelValue || !comparisonModel){
+            if (!modelValue || !comparisonModel) {
                 ngModel.$setValidity('gteThanDateControl', true);
             }
 
@@ -118,7 +118,7 @@ app.directive('lteThanDateControl', [function() {
         ngModel.$parsers.unshift(validate);
         ngModel.$formatters.push(validate);
 
-        attributes.$observe('gteThanDateControl', function(comparisonModel){
+        attributes.$observe('gteThanDateControl', function (comparisonModel) {
             return validate(ngModel.$modelValue);
         });
     };

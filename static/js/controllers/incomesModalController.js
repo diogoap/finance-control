@@ -15,10 +15,10 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 			aggregationType: uiGridConstants.aggregationTypes.count, aggregationHideLabel: true,
 			footerCellTemplate: '<div class="ui-grid-cell-contents" >{{col.getAggregationValue()}} registros</div>'
 		},
-        {
+		{
 			name: 'Moeda', field: '_currency.currencyCode', type: 'string', width: Utils.getSizeRes('8%', '8%', '12%'), visible: Utils.getVisibilityRes(true, true, true), enableColumnMenu: false,
-			headerCellClass: 'ui-grid-cell-center-align', cellClass:'ui-grid-cell-center-align'
-        },		
+			headerCellClass: 'ui-grid-cell-center-align', cellClass: 'ui-grid-cell-center-align'
+		},
 		{
 			name: 'Valor', field: 'amount', type: 'number', width: Utils.getSizeRes('11%', '11%', '14%'), enableColumnMenu: false,
 			cellFilter: 'number:2', headerCellClass: 'ui-grid-cell-right-align', cellClass: 'ui-grid-cell-right-align',
@@ -73,13 +73,13 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 		}
 
 		Incomes.getById(incomeId)
-			.success(function (data) {
-				$scope.income = data;
+			.then(function onSucess(response) {
+				$scope.income = response.data;
 
 				//Need to generate a new to date in order to make date picker work
 				$scope.income.dueDate = new Date($scope.income.dueDate);
 				$scope._hasDetail = $scope.income.detail.length > 0;
-				$scope.gridOptions.data = data.detail;
+				$scope.gridOptions.data = response.data.detail;
 
 				if (action == 'clone') {
 					$scope.income._id = null;
@@ -88,46 +88,46 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 				$scope.loading = false;
 			})
-			.error(function (data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			.catch(function onError(response) {
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 				$scope.loading = false;
 			});
 	};
 
 	var filter = 'type=Receita&enabled=true';
 	Categories.get(filter)
-		.success(function (data) {
-			$scope.categories = data;
+		.then(function onSucess(response) {
+			$scope.categories = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.income.currency_id = Utils.getDefaultCurrencyId(data);	;		
+				$scope.income.currency_id = Utils.getDefaultCurrencyId(response.data);;
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
@@ -174,7 +174,7 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 			$scope.income._category = null;
 
 			$scope.income.currency_id = '';
-			$scope.income._currency = null;			
+			$scope.income._currency = null;
 
 			$scope.income.amount = 0;
 			$scope.income.amountReceived = 0;

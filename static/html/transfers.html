@@ -8,53 +8,77 @@
 
 			<div class="col-sm-12" ng-show="Utils.isMidLowResolution()" style="margin-bottom: 5px;">
 				<div class="btn-group btn-group-sm">
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual" ng-click="navigateActualMonth()">Atual</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês" ng-click="navigateNextMonth()">+1 Mês</button>
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano"
+						ng-click="navigateBeginOfYear()">&lt;&lt;</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior"
+						ng-click="navigatePreviousMonth()">-1 Mês</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual"
+						ng-click="navigateActualMonth()">Atual</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês"
+						ng-click="navigateNextMonth()">+1 Mês</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano"
+						ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
-				<span ng-show="Utils.isMidLowResolution()" class="date-nav-label">{{transferDateBegin | date: 'MMM/yy' | uppercase }}</span>
+				<span ng-show="Utils.isMidLowResolution()"
+					class="date-nav-label">{{transferDateBegin | date: 'MMM/yy' | uppercase }}</span>
 
 				<span ng-show="Utils.isMidLowResolution()" style="float:right;">
 					<p class="balance-label">Saldo</p>
-					<p class="balance-value" ng-class="Utils.getValueStyle(currentPartialBalance)">{{currentPartialBalance | number:2}}</p>
+					<p class="balance-value" ng-class="Utils.getValueStyle(currentPartialBalance)">
+						{{currentPartialBalance | number:2}}</p>
 				</span>
 			</div>
 
 			<div class="col-sm-top-bar" ng-class="Utils.getColNumberStyle(3, 1)">
-				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
-				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href=""
+					ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href=""
+					ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href=""
+					ng-click="deleteConfirmation(selectedRow.entity._id)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
 			</div>
 
 			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isMidLowResolution()" style="text-align: center;">
 				<div class="btn-group btn-group-sm">
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual" ng-click="navigateActualMonth()">Atual</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês" ng-click="navigateNextMonth()">+1 Mês</button>
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano"
+						ng-click="navigateBeginOfYear()">&lt;&lt;</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior"
+						ng-click="navigatePreviousMonth()">-1 Mês</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual"
+						ng-click="navigateActualMonth()">Atual</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês"
+						ng-click="navigateNextMonth()">+1 Mês</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano"
+						ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
 			</div>
 
 			<div class="col-sm-3 col-sm-top-bar" ng-hide="Utils.isMidLowResolution()">
 				<div class="input-group input-group-sm">
-					<input type="text" uib-datepicker-popup name="transferDateBegin" ng-model="transferDateBegin" required class="form-control date-mask" is-open="beginOpened"/>
+					<input type="text" uib-datepicker-popup name="transferDateBegin" ng-model="transferDateBegin"
+						required class="form-control date-mask" is-open="beginOpened" />
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						<button type="button" class="btn btn-default btn-sm"
+							ng-click="openCalendarDialogBegin($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
 					</span>
-					<div class="error" ng-show="(transferForm.transferDateBegin.$dirty && transferForm.transferDateBegin.$invalid) || (submitted && transferForm.transferDateBegin.$invalid)">
-						<small class="error" ng-show="transferForm.transferDateBegin.$error.required">O campo Período inicial é obrigatório.</small>
+					<div class="error"
+						ng-show="(transferForm.transferDateBegin.$dirty && transferForm.transferDateBegin.$invalid) || (submitted && transferForm.transferDateBegin.$invalid)">
+						<small class="error" ng-show="transferForm.transferDateBegin.$error.required">O campo Período
+							inicial é obrigatório.</small>
 					</div>
 
-					<input type="text" uib-datepicker-popup name="transferDateEnd" ng-model="transferDateEnd" required class="form-control date-mask" is-open="endOpened"/>
+					<input type="text" uib-datepicker-popup name="transferDateEnd" ng-model="transferDateEnd" required
+						class="form-control date-mask" is-open="endOpened" />
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
 						<button class="btn btn-default btn-sm" ng-click="filter()">Filtrar</button>
 					</span>
-					<div class="error" ng-show="(transferForm.transferDateEnd.$dirty && transferForm.transferDateEnd.$invalid) || (submitted && transferForm.transferDateEnd.$invalid)">
-						<small class="error" ng-show="transferForm.transferDateEnd.$error.required">O campo Período final é obrigatório.</small>
+					<div class="error"
+						ng-show="(transferForm.transferDateEnd.$dirty && transferForm.transferDateEnd.$invalid) || (submitted && transferForm.transferDateEnd.$invalid)">
+						<small class="error" ng-show="transferForm.transferDateEnd.$error.required">O campo Período
+							final é obrigatório.</small>
 					</div>
 				</div>
 			</div>
@@ -62,7 +86,8 @@
 			<div class="col-sm-1 col-sm-top-bar" ng-hide="Utils.isMidLowResolution()">
 				<span style="float:right;">
 					<P class="balance-label">Saldo</p>
-					<p class="balance-value" ng-class="Utils.getValueStyle(currentPartialBalance)">{{currentPartialBalance | number:2}}</p>
+					<p class="balance-value" ng-class="Utils.getValueStyle(currentPartialBalance)">
+						{{currentPartialBalance | number:2}}</p>
 				</span>
 			</div>
 		</div>
@@ -71,14 +96,18 @@
 	<div class="row">
 		<div class="col-sm-12 grid-margins">
 			<div class="form-group form-group-sm no-margin-bottom">
-				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize ui-grid-selection ui-grid-cellNav resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
+				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize
+					ui-grid-selection ui-grid-cellNav resizable-grid
+					style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
 			</div>
 
 			<div class="loading-box" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-5x"></span>
 			</div>
 
-			<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+			<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+				close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+			</uib-alert>
 		</div>
 	</div>
 

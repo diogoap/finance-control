@@ -2,24 +2,24 @@
 
 angular.module('transfersService', [])
 
-	.factory('Transfers', ['$http',function($http) {
+	.factory('Transfers', ['$http', function ($http) {
 		return {
-			getById : function(id) {
+			getById: function (id) {
 				return $http.get('/api/transfers/' + id);
 			},
-			get : function(filter) {
+			get: function (filter) {
 				return $http.get('/api/transfers?' + filter);
 			},
-			getBalance: function(filter) {
+			getBalance: function (filter) {
 				return $http.get('/api/totals/balance?' + filter);
 			},
-			create : function(transferData) {
+			create: function (transferData) {
 				return $http.post('/api/transfers', transferData);
 			},
-			delete : function(id) {
+			delete: function (id) {
 				return $http.delete('/api/transfers/' + id);
 			},
-			patch : function(_id, transferData) {
+			patch: function (_id, transferData) {
 				return $http.patch('/api/transfers/' + _id, transferData);
 			}
 		}

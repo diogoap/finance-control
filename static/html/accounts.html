@@ -7,15 +7,24 @@
 		<div class="form-group form-group-sm no-margin-bottom">
 
 			<div class="col-sm-4 col-sm-top-bar">
-				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
-				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Inativar" ng-show="selectedRow.entity.enabled == true" href="" ng-click="enableDisableConfirmation(selectedRow.entity._id, false)"><i class="fa fa-times fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Ativar" ng-show="selectedRow.entity.enabled == false" href="" ng-click="enableDisableConfirmation(selectedRow.entity._id, true)"><i class="fa fa-check fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href=""
+					ng-click="openModal(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href=""
+					ng-click="openModal(selectedRow.entity._id, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Inativar"
+					ng-show="selectedRow.entity.enabled == true" href=""
+					ng-click="enableDisableConfirmation(selectedRow.entity._id, false)"><i
+						class="fa fa-times fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Ativar"
+					ng-show="selectedRow.entity.enabled == false" href=""
+					ng-click="enableDisableConfirmation(selectedRow.entity._id, true)"><i
+						class="fa fa-check fa-lg fa-fw"></i></a>
 			</div>
 
 			<div class="col-sm-4" style="{{Utils.getStyleRes('text-align:center;', 'padding-top:5px;')}}">
 				<label>
-					<input type="checkbox" name="accountListDisabledAccounts" ng-model="listDisabledAccounts" ng-click="getAccounts()"/> Listar contas inativas?
+					<input type="checkbox" name="accountListDisabledAccounts" ng-model="listDisabledAccounts"
+						ng-change="getAccounts()" /> Listar contas inativas?
 				</label>
 			</div>
 		</div>
@@ -24,14 +33,18 @@
 	<div class="row">
 		<div class="col-sm-12 grid-margins">
 			<div class="form-group form-group-sm no-margin-bottom">
-				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize ui-grid-selection ui-grid-cellNav resizable-grid style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
+				<div ui-grid="gridOptions" id="grid" class="grid" ui-grid-resize-columns ui-grid-auto-resize
+					ui-grid-selection ui-grid-cellNav resizable-grid
+					style="width: {{windowWidth}}; height: {{windowHeight}}"></div>
 			</div>
 
 			<div class="loading-box" ng-show="loading">
 				<span class="fa fa-spinner fa-spin fa-5x"></span>
 			</div>
 
-			<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+			<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+				close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+			</uib-alert>
 		</div>
 	</div>
 </div>

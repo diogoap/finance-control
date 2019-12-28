@@ -30,7 +30,7 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 			category_id: incomeDetail.category_id,
 			_category: incomeDetail._category,
 			currency_id: incomeDetail.currency_id,
-			_currency: incomeDetail._currency,				
+			_currency: incomeDetail._currency,
 			status: incomeDetail.status
 		};
 
@@ -43,38 +43,38 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 
 	var filter = 'type=Receita&enabled=true';
 	Categories.get(filter)
-		.success(function (data) {
-			$scope.categories = data;
+		.then(function onSucess(response) {
+			$scope.categories = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.incomeDetail.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.incomeDetail.currency_id = Utils.getDefaultCurrencyId(response.data);
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
@@ -92,7 +92,7 @@ function incomesDetailModalController($scope, $uibModalInstance, Utils, Categori
 
 			// Get object for selected currency
 			var selCurrency = $.grep($scope.currencies, function (e) { return e._id == $scope.incomeDetail.currency_id });
-			$scope.incomeDetail._currency = selCurrency[0];			
+			$scope.incomeDetail._currency = selCurrency[0];
 
 			$uibModalInstance.close($scope.incomeDetail);
 		} else {

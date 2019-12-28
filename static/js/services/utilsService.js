@@ -252,7 +252,7 @@ angular.module('utilsService', [])
 				if ((currencies != undefined) && (currencies.length > 0)) {
 					for (var i = 0; i < currencies.length; i++) {
 						if (currencies[i].default == true) {
-							return currencies[i]._id;	
+							return currencies[i]._id;
 						}
 					}
 				}

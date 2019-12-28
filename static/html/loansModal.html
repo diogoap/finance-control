@@ -1,97 +1,132 @@
 <div class="modal-header">
-    <h4 class="modal-title">{{screenTitle}}</h4>
+	<h4 class="modal-title">{{screenTitle}}</h4>
 </div>
 <form name="loanForm" class="form-horizontal" novalidate ng-submit="submit()">
 	<div class="modal-body">
-        <div class="form-group form-group-sm">
+		<div class="form-group form-group-sm">
 			<label for="loanDescription" class="col-sm-3 control-label">Descrição</label>
 			<div class="col-sm-9">
-			    <input type="text" name="loanDescription" ng-model="loan.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
-			    <div class="error" ng-show="(loanForm.loanDescription.$dirty && loanForm.loanDescription.$invalid) || (submitted && loanForm.loanDescription.$invalid)">
-				    <small class="error" ng-show="loanForm.loanDescription.$error.required">O campo Descrição é obrigatório.</small>
-				    <small class="error" ng-show="loanForm.loanDescription.$error.minlength">O campo Descrição deve possuir no mínimo 3 caracteres.</small>
-				    <small class="error" ng-show="loanForm.loanDescription.$error.maxlength">O campo Descrição deve possuir no máximo 100 caracteres.</small>
-                </div>
+				<input type="text" name="loanDescription" ng-model="loan.description" required ng-maxlength=100
+					ng-minLength=3 class="form-control" />
+				<div class="error"
+					ng-show="(loanForm.loanDescription.$dirty && loanForm.loanDescription.$invalid) || (submitted && loanForm.loanDescription.$invalid)">
+					<small class="error" ng-show="loanForm.loanDescription.$error.required">O campo Descrição é
+						obrigatório.</small>
+					<small class="error" ng-show="loanForm.loanDescription.$error.minlength">O campo Descrição deve
+						possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="loanForm.loanDescription.$error.maxlength">O campo Descrição deve
+						possuir no máximo 100 caracteres.</small>
+				</div>
 			</div>
 		</div>
-        <div class="form-group form-group-sm">
-        	<label for="loanTransactionDate" class="col-sm-3 control-label">Data de lançamento</label>
-        	<div class="col-sm-4">
-        		<div class="input-group input-group-sm">
-        			<input type="text" uib-datepicker-popup name="loanTransactionDate" ng-model="loan.transactionDate" required class="form-control date-mask" is-open="transactionDateOpened" ng-change="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);" ng-keyup="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);"/>
-        			<span class="input-group-btn">
-        				<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogTransactionDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        			</span>
-        		</div>
-        	</div>
-            <div class="col-sm-9 col-sm-offset-3">
-                <div class="error" ng-show="(loanForm.loanTransactionDate.$dirty && loanForm.loanTransactionDate.$invalid) || (submitted && loanForm.loanTransactionDate.$invalid)">
-                    <small class="error" ng-show="loanForm.loanTransactionDate.$error.required">O campo Data de lançamento é obrigatório.</small>
-                </div>
-            </div>
-        </div>
-        <div class="form-group form-group-sm">
-        	<label for="loanDueDate" class="col-sm-3 control-label">Data de vencimento</label>
-        	<div class="col-sm-4">
-        		<div class="input-group input-group-sm">
-        			<input type="text" uib-datepicker-popup min-date="dueDateMinDate" name="loanDueDate" ng-model="loan.dueDate" required class="form-control date-mask" is-open="dueDateOpened" ng-change="validateDueDate(loanForm.loanDueDate)" ng-keyup="validateDueDate(loanForm.loanDueDate)"/>
-        			<span class="input-group-btn">
-        				<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogDueDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-        			</span>
-        		</div>
-        	</div>
-            <div class="col-sm-9 col-sm-offset-3">
-                <div class="error" ng-show="(loanForm.loanDueDate.$dirty && loanForm.loanDueDate.$invalid) || (submitted && loanForm.loanDueDate.$invalid)">
-                    <small class="error" ng-show="loanForm.loanDueDate.$error.required">O campo Data de vencimento é obrigatório.</small>
-                    <small class="error" ng-show="loanForm.loanDueDate.$error.gteThanDateControl">Não pode ser menor do que a Data de lançamento.</small>
-                </div>
-            </div>
-        </div>
+		<div class="form-group form-group-sm">
+			<label for="loanTransactionDate" class="col-sm-3 control-label">Data de lançamento</label>
+			<div class="col-sm-4">
+				<div class="input-group input-group-sm">
+					<input type="text" uib-datepicker-popup name="loanTransactionDate" ng-model="loan.transactionDate"
+						required class="form-control date-mask" is-open="transactionDateOpened"
+						ng-change="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);"
+						ng-keyup="setDueDateMinDate(); validateDueDate(loanForm.loanDueDate);" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-sm"
+							ng-click="openCalendarDialogTransactionDate($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3">
+				<div class="error"
+					ng-show="(loanForm.loanTransactionDate.$dirty && loanForm.loanTransactionDate.$invalid) || (submitted && loanForm.loanTransactionDate.$invalid)">
+					<small class="error" ng-show="loanForm.loanTransactionDate.$error.required">O campo Data de
+						lançamento é obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="loanDueDate" class="col-sm-3 control-label">Data de vencimento</label>
+			<div class="col-sm-4">
+				<div class="input-group input-group-sm">
+					<input type="text" uib-datepicker-popup min-date="dueDateMinDate" name="loanDueDate"
+						ng-model="loan.dueDate" required class="form-control date-mask" is-open="dueDateOpened"
+						ng-change="validateDueDate(loanForm.loanDueDate)"
+						ng-keyup="validateDueDate(loanForm.loanDueDate)" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-sm"
+							ng-click="openCalendarDialogDueDate($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-9 col-sm-offset-3">
+				<div class="error"
+					ng-show="(loanForm.loanDueDate.$dirty && loanForm.loanDueDate.$invalid) || (submitted && loanForm.loanDueDate.$invalid)">
+					<small class="error" ng-show="loanForm.loanDueDate.$error.required">O campo Data de vencimento é
+						obrigatório.</small>
+					<small class="error" ng-show="loanForm.loanDueDate.$error.gteThanDateControl">Não pode ser menor do
+						que a Data de lançamento.</small>
+				</div>
+			</div>
+		</div>
 		<div class="form-group form-group-sm">
 			<label for="loanAmount" class="col-sm-3 control-label">Valor</label>
 			<div class="col-sm-2">
-				<select name="loanCurrency" ng-model="loan.currency_id" required ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
-				<div class="error" ng-show="(loanForm.loanCurrency.$dirty && loanForm.loanCurrency.$invalid) || (submitted && loanForm.loanCurrency.$invalid)">
-					<small class="error" ng-show="loanForm.loanCurrency.$error.required">O campo Moeda é obrigatório.</small>
+				<select name="loanCurrency" ng-model="loan.currency_id" required
+					ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error"
+					ng-show="(loanForm.loanCurrency.$dirty && loanForm.loanCurrency.$invalid) || (submitted && loanForm.loanCurrency.$invalid)">
+					<small class="error" ng-show="loanForm.loanCurrency.$error.required">O campo Moeda é
+						obrigatório.</small>
 				</div>
-			</div>			
+			</div>
 			<div class="col-sm-4">
-				<input type="tel" numeric decimals="2" name="loanAmount" ng-model="loan.amount" required class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
-				<div class="error" ng-show="(loanForm.loanAmount.$dirty && loanForm.loanAmount.$invalid) || (submitted && loanForm.loanAmount.$invalid)">
-					<small class="error" ng-show="loanForm.loanAmount.$error.required">O campo Valor é obrigatório.</small>
+				<input type="tel" numeric decimals="2" name="loanAmount" ng-model="loan.amount" required
+					class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);" />
+				<div class="error"
+					ng-show="(loanForm.loanAmount.$dirty && loanForm.loanAmount.$invalid) || (submitted && loanForm.loanAmount.$invalid)">
+					<small class="error" ng-show="loanForm.loanAmount.$error.required">O campo Valor é
+						obrigatório.</small>
 				</div>
 			</div>
 		</div>
-        <div class="form-group form-group-sm">
+		<div class="form-group form-group-sm">
 			<label for="loanType" class="col-sm-3 control-label">Tipo de empréstimo</label>
 			<div class="col-sm-4">
-				<select name="loanType" required ng-model="loan.type" ng-options="type for type in loanType" class="form-control"></select>
+				<select name="loanType" required ng-model="loan.type" ng-options="type for type in loanType"
+					class="form-control"></select>
 			</div>
-            <div class="col-sm-9 col-sm-offset-3">
-                <div class="error" ng-show="(loanForm.loanType.$dirty && loanForm.loanType.$invalid) || (submitted && loanForm.loanType.$invalid)">
-					<small class="error" ng-show="loanForm.loanType.$error.required">O campo Tipo de empréstimo é obrigatório.</small>
-				</div>
-			</div>
-        </div>
-        <div class="form-group form-group-sm">
-            <label for="loanStatus" class="col-sm-3 control-label">Situação</label>
-			<div class="col-sm-4">
-				<select name="loanStatus" required ng-model="loan.status" ng-options="type for type in loanStatus" class="form-control"></select>
-				<div class="error" ng-show="(loanForm.loanStatus.$dirty && loanForm.loanStatus.$invalid) || (submitted && loanForm.loanStatus.$invalid)">
-					<small class="error" ng-show="loanForm.loanStatus.$error.required">O campo Situação é obrigatório.</small>
+			<div class="col-sm-9 col-sm-offset-3">
+				<div class="error"
+					ng-show="(loanForm.loanType.$dirty && loanForm.loanType.$invalid) || (submitted && loanForm.loanType.$invalid)">
+					<small class="error" ng-show="loanForm.loanType.$error.required">O campo Tipo de empréstimo é
+						obrigatório.</small>
 				</div>
 			</div>
 		</div>
-        <div class="form-group form-group-sm">
-			<label for="loanAccount" class="col-sm-3 control-label">Conta</label>
-			<div class="col-sm-9">
-				<select name="loanAccount" ng-model="loan.account_id" required ng-options="c._id as c.name for c in accounts" class="form-control"></select>
-				<div class="error" ng-show="(loanForm.loanAccount.$dirty && loanForm.loanAccount.$invalid) || (submitted && loanForm.loanAccount.$invalid)">
-					<small class="error" ng-show="loanForm.loanAccount.$error.required">O campo Conta é obrigatório.</small>
+		<div class="form-group form-group-sm">
+			<label for="loanStatus" class="col-sm-3 control-label">Situação</label>
+			<div class="col-sm-4">
+				<select name="loanStatus" required ng-model="loan.status" ng-options="type for type in loanStatus"
+					class="form-control"></select>
+				<div class="error"
+					ng-show="(loanForm.loanStatus.$dirty && loanForm.loanStatus.$invalid) || (submitted && loanForm.loanStatus.$invalid)">
+					<small class="error" ng-show="loanForm.loanStatus.$error.required">O campo Situação é
+						obrigatório.</small>
 				</div>
 			</div>
-        </div>
-        <div class="form-group form-group-sm">
+		</div>
+		<div class="form-group form-group-sm">
+			<label for="loanAccount" class="col-sm-3 control-label">Conta</label>
+			<div class="col-sm-9">
+				<select name="loanAccount" ng-model="loan.account_id" required
+					ng-options="c._id as c.name for c in accounts" class="form-control"></select>
+				<div class="error"
+					ng-show="(loanForm.loanAccount.$dirty && loanForm.loanAccount.$invalid) || (submitted && loanForm.loanAccount.$invalid)">
+					<small class="error" ng-show="loanForm.loanAccount.$error.required">O campo Conta é
+						obrigatório.</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group form-group-sm">
 			<label for="loanNotes" class="col-sm-3 control-label">Observações</label>
 			<div class="col-sm-9">
 				<textarea name="loanNotes" ng-model="loan.notes" rows="3" class="form-control"></textarea>
@@ -101,10 +136,12 @@
 		<p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
-		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+		<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+		</uib-alert>
 	</div>
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
-	    <button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
+		<button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
 	</div>
 </form>

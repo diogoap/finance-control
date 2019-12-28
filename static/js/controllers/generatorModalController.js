@@ -25,34 +25,34 @@ function generatorModalController($scope, $uibModal, $uibModalInstance, Utils, G
 
 	var filter = 'type=' + type + '&enabled=true';
 	Categories.get(filter)
-		.success(function (data) {
-			$scope.categories = data;
+		.then(function onSucess(response) {
+			$scope.categories = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
-			$scope.generatorParameters.currency_id = Utils.getDefaultCurrencyId(data);;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
+			$scope.generatorParameters.currency_id = Utils.getDefaultCurrencyId(response.data);;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
@@ -67,12 +67,12 @@ function generatorModalController($scope, $uibModal, $uibModalInstance, Utils, G
 			$scope.generatorParameters.initialDate = Utils.getDateDst($scope.generatorParameters.initialDate);
 
 			Generator.create($scope.generatorParameters)
-				.success(function (data) {
+				.then(function onSucess() {
 					$scope.loading = false;
 					$uibModalInstance.close();
 				})
-				.error(function (data, status, headers, config) {
-					Utils.addError($scope, 'Erro ao salvar os dados: ' + status);
+				.catch(function onError(response) {
+					Utils.addError($scope, 'Erro ao salvar os dados: ' + response.status);
 					$scope.loading = false;
 				});
 		} else {

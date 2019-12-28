@@ -4,6 +4,7 @@
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</div>
 
-		<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
+		<alert class="alert-box-big" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)">{{alert.msg}}</uib-alert>
 	</div>
 </div>

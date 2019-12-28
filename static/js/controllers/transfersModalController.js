@@ -16,41 +16,41 @@ function transfersModalController($scope, $uibModalInstance, Utils, Transfers, A
 		$scope.screenTitle = 'Editar transferência';
 
 		Transfers.getById(transferId)
-			.success(function (data) {
-				$scope.transfer = data;
+			.then(function onSucess(response) {
+				$scope.transfer = response.data;
 				//Need to generate a new to date in order to make date picker work
 				$scope.transfer.date = new Date($scope.transfer.date);
 				$scope.loading = false;
 			})
-			.error(function (data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			.catch(function onError(response) {
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 				$scope.loading = false;
 			});
 	};
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.transfer.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.transfer.currency_id = Utils.getDefaultCurrencyId(response.data);
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 

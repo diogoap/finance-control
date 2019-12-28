@@ -1,65 +1,91 @@
 <div class="modal-header">
-    <h4 class="modal-title">{{screenTitle}}</h4>
+	<h4 class="modal-title">{{screenTitle}}</h4>
 </div>
 <form name="generatorForm" class="form-horizontal" novalidate ng-submit="submit()">
 	<div class="modal-body no-padding-bottom">
-        <div class="form-group form-group-sm">
-            <label for="generatorParametersInitialDate" class="col-sm-2 control-label">Data inicial</label>
-			    <div class="col-sm-4">
-			    <div class="input-group input-group-sm">
-				    <input type="text" uib-datepicker-popup name="generatorParametersInitialDate" ng-model="generatorParameters.initialDate" required class="form-control date-mask" is-open="opened"/>
-                    <span class="input-group-btn">
-                	    <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              	    </span>
-                </div>
-                <div class="error" ng-show="(generatorForm.generatorParametersInitialDate.$dirty && generatorForm.generatorParametersInitialDate.$invalid) || (submitted && generatorForm.generatorParametersInitialDate.$invalid)">
-                    <small class="error" ng-show="generatorForm.generatorParametersInitialDate.$error.required">O campo Data inicial é obrigatório.</small>
-                </div>
-			</div>
-            <label for="generatorParametersInstallments" class="col-sm-2 control-label">Número de parcelas</label>
+		<div class="form-group form-group-sm">
+			<label for="generatorParametersInitialDate" class="col-sm-2 control-label">Data inicial</label>
 			<div class="col-sm-4">
-				<input numeric decimals="0" max="999" gt-than="0" name="generatorParametersInstallments" ng-model="generatorParameters.installments"  class="form-control" autocomplete="off"/>
-				<div class="error" ng-show="(generatorForm.generatorParametersInstallments.$dirty && generatorForm.generatorParametersInstallments.$invalid) || (submitted && generatorForm.generatorParametersInstallments.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersInstallments.$error.gtThan">O campo Número de parcelas é obrigatório.</small>
+				<div class="input-group input-group-sm">
+					<input type="text" uib-datepicker-popup name="generatorParametersInitialDate"
+						ng-model="generatorParameters.initialDate" required class="form-control date-mask"
+						is-open="opened" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersInitialDate.$dirty && generatorForm.generatorParametersInitialDate.$invalid) || (submitted && generatorForm.generatorParametersInitialDate.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersInitialDate.$error.required">O campo
+						Data inicial é obrigatório.</small>
+				</div>
+			</div>
+			<label for="generatorParametersInstallments" class="col-sm-2 control-label">Número de parcelas</label>
+			<div class="col-sm-4">
+				<input numeric decimals="0" max="999" gt-than="0" name="generatorParametersInstallments"
+					ng-model="generatorParameters.installments" class="form-control" autocomplete="off" />
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersInstallments.$dirty && generatorForm.generatorParametersInstallments.$invalid) || (submitted && generatorForm.generatorParametersInstallments.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersInstallments.$error.gtThan">O campo
+						Número de parcelas é obrigatório.</small>
 				</div>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm">
-            <label for="generatorParametersDueDateType" class="col-sm-2 control-label">Vencimento</label>
+		<div class="form-group form-group-sm">
+			<label for="generatorParametersDueDateType" class="col-sm-2 control-label">Vencimento</label>
 			<div class="col-sm-4">
-				<select name="generatorParametersDueDateType" required ng-model="generatorParameters.dueDateType" ng-options="key as value for (key, value) in generatorDueDateTypes" class="form-control"></select>
-				<div class="error" ng-show="(generatorForm.generatorParametersDueDateType.$dirty && generatorForm.generatorParametersDueDateType.$invalid) || (submitted && generatorForm.generatorParametersDueDateType.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersDueDateType.$error.required">O campo Vencimento é obrigatório.</small>
+				<select name="generatorParametersDueDateType" required ng-model="generatorParameters.dueDateType"
+					ng-options="key as value for (key, value) in generatorDueDateTypes" class="form-control"></select>
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersDueDateType.$dirty && generatorForm.generatorParametersDueDateType.$invalid) || (submitted && generatorForm.generatorParametersDueDateType.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersDueDateType.$error.required">O campo
+						Vencimento é obrigatório.</small>
 				</div>
 			</div>
-            <label ng-show="generatorParameters.dueDateType == 'DiaEspecifico'" for="generatorParametersdueDateTypeDay" class="col-sm-2 control-label">Dia</label>
+			<label ng-show="generatorParameters.dueDateType == 'DiaEspecifico'" for="generatorParametersdueDateTypeDay"
+				class="col-sm-2 control-label">Dia</label>
 			<div class="col-sm-2" ng-show="generatorParameters.dueDateType == 'DiaEspecifico'">
-				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'" gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}" name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay" class="form-control" autocomplete="off"/>
-				<div class="error" ng-show="(generatorForm.generatorParametersdueDateTypeDay.$dirty && generatorForm.generatorParametersdueDateTypeDay.$invalid) || (submitted && generatorForm.generatorParametersdueDateTypeDay.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersdueDateTypeDay.$error.gtThanZeroOpt">O campo Dia é obrigatório.</small>
+				<input numeric decimals="0" max="31" ng-required="generatorParameters.dueDateType == 'DiaEspecifico'"
+					gt-than-zero-opt="{{generatorParameters.dueDateType == 'DiaEspecifico'}}"
+					name="generatorParametersdueDateTypeDay" ng-model="generatorParameters.dueDateTypeDay"
+					class="form-control" autocomplete="off" />
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersdueDateTypeDay.$dirty && generatorForm.generatorParametersdueDateTypeDay.$invalid) || (submitted && generatorForm.generatorParametersdueDateTypeDay.$invalid)">
+					<small class="error"
+						ng-show="generatorForm.generatorParametersdueDateTypeDay.$error.gtThanZeroOpt">O campo Dia é
+						obrigatório.</small>
 				</div>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm">
+		<div class="form-group form-group-sm">
 			<label for="generatorParametersAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-2">
-				<select name="generatorParametersCurrency" ng-model="generatorParameters.currency_id" required ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
-				<div class="error" ng-show="(generatorForm.generatorParametersCurrency.$dirty && generatorForm.generatorParametersCurrency.$invalid) || (submitted && generatorForm.generatorParametersCurrency.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersCurrency.$error.required">O campo Moeda é obrigatório.</small>
-				</div>
-			</div>				
-			<div class="col-sm-2">
-				<input type="tel" numeric decimals="2" gt-than="0" name="generatorParametersAmount" ng-model="generatorParameters.amount" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
-				<div class="error" ng-show="(generatorForm.generatorParametersAmount.$dirty && generatorForm.generatorParametersAmount.$invalid) || (submitted && generatorForm.generatorParametersAmount.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersAmount.$error.gtThan">O campo Valor é obrigatório.</small>
+				<select name="generatorParametersCurrency" ng-model="generatorParameters.currency_id" required
+					ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersCurrency.$dirty && generatorForm.generatorParametersCurrency.$invalid) || (submitted && generatorForm.generatorParametersCurrency.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersCurrency.$error.required">O campo
+						Moeda é obrigatório.</small>
 				</div>
 			</div>
-            <div class="col-sm-4 col-sm-offset-2">
+			<div class="col-sm-2">
+				<input type="tel" numeric decimals="2" gt-than="0" name="generatorParametersAmount"
+					ng-model="generatorParameters.amount" class="form-control" autocomplete="off"
+					ng-paste="formatNumericAmount($event);" />
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersAmount.$dirty && generatorForm.generatorParametersAmount.$invalid) || (submitted && generatorForm.generatorParametersAmount.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersAmount.$error.gtThan">O campo Valor é
+						obrigatório.</small>
+				</div>
+			</div>
+			<div class="col-sm-4 col-sm-offset-2">
 				<div class="checkbox" ng-show="generatorParameters.type == 'Despesa'">
 					<label>
-						<input type="checkbox" name="generatorParametersScheduledPayment" ng-model="generatorParameters.scheduledPayment"/>Pagamento agendado
+						<input type="checkbox" name="generatorParametersScheduledPayment"
+							ng-model="generatorParameters.scheduledPayment" />Pagamento agendado
 					</label>
 				</div>
 			</div>
@@ -68,20 +94,27 @@
 		<div class="form-group form-group-sm no-margin-bottom">
 			<label for="generatorParametersDescription" class="col-sm-2 control-label">Descrição</label>
 			<div class="col-sm-10">
-			    <input type="text" name="generatorParametersDescription" ng-model="generatorParameters.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
-			    <div class="error" ng-show="(generatorForm.generatorParametersDescription.$dirty && generatorForm.generatorParametersDescription.$invalid) || (submitted && generatorForm.generatorParametersDescription.$invalid)">
-				    <small class="error" ng-show="generatorForm.generatorParametersDescription.$error.required">O campo Descrição é obrigatório.</small>
-				    <small class="error" ng-show="generatorForm.generatorParametersDescription.$error.minlength">O campo Descrição deve possuir no mínimo 3 caracteres.</small>
-				    <small class="error" ng-show="generatorForm.generatorParametersDescription.$error.maxlength">O campo Descrição deve possuir no máximo 100 caracteres.</small>
-                </div>
+				<input type="text" name="generatorParametersDescription" ng-model="generatorParameters.description"
+					required ng-maxlength=100 ng-minLength=3 class="form-control" />
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersDescription.$dirty && generatorForm.generatorParametersDescription.$invalid) || (submitted && generatorForm.generatorParametersDescription.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersDescription.$error.required">O campo
+						Descrição é obrigatório.</small>
+					<small class="error" ng-show="generatorForm.generatorParametersDescription.$error.minlength">O campo
+						Descrição deve possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="generatorForm.generatorParametersDescription.$error.maxlength">O campo
+						Descrição deve possuir no máximo 100 caracteres.</small>
+				</div>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm">
-            <div class="col-sm-10 col-sm-offset-2">
+		<div class="form-group form-group-sm">
+			<div class="col-sm-10 col-sm-offset-2">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="generatorParametersDescriptionInstallmentNumber" ng-model="generatorParameters.descriptionInstallmentNumber"/>Inserir o número da parcela na descrição
+						<input type="checkbox" name="generatorParametersDescriptionInstallmentNumber"
+							ng-model="generatorParameters.descriptionInstallmentNumber" />Inserir o número da parcela na
+						descrição
 					</label>
 				</div>
 			</div>
@@ -90,9 +123,12 @@
 		<div class="form-group form-group-sm">
 			<label for="generatorParametersAccount" class="col-sm-2 control-label">Conta</label>
 			<div class="col-sm-10">
-				<select name="generatorParametersAccount" ng-model="generatorParameters.account_id" ng-options="c._id as c.name for c in accounts" required class="form-control"></select>
-				<div class="error" ng-show="(generatorForm.generatorParametersAccount.$dirty && generatorForm.generatorParametersAccount.$invalid) || (submitted && generatorForm.generatorParametersAccount.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersAccount.$error.required">O campo Conta é obrigatório.</small>
+				<select name="generatorParametersAccount" ng-model="generatorParameters.account_id"
+					ng-options="c._id as c.name for c in accounts" required class="form-control"></select>
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersAccount.$dirty && generatorForm.generatorParametersAccount.$invalid) || (submitted && generatorForm.generatorParametersAccount.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersAccount.$error.required">O campo
+						Conta é obrigatório.</small>
 				</div>
 			</div>
 		</div>
@@ -100,29 +136,35 @@
 		<div class="form-group form-group-sm">
 			<label for="generatorParametersCategory" class="col-sm-2 control-label">Categoria</label>
 			<div class="col-sm-10">
-				<select name="generatorParametersCategory" ng-model="generatorParameters.category_id" ng-options="c._id as c.name for c in categories" required class="form-control"></select>
-				<div class="error" ng-show="(generatorForm.generatorParametersCategory.$dirty && generatorForm.generatorParametersCategory.$invalid) || (submitted && generatorForm.generatorParametersCategory.$invalid)">
-					<small class="error" ng-show="generatorForm.generatorParametersCategory.$error.required">O campo Categoria é obrigatório.</small>
+				<select name="generatorParametersCategory" ng-model="generatorParameters.category_id"
+					ng-options="c._id as c.name for c in categories" required class="form-control"></select>
+				<div class="error"
+					ng-show="(generatorForm.generatorParametersCategory.$dirty && generatorForm.generatorParametersCategory.$invalid) || (submitted && generatorForm.generatorParametersCategory.$invalid)">
+					<small class="error" ng-show="generatorForm.generatorParametersCategory.$error.required">O campo
+						Categoria é obrigatório.</small>
 				</div>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm" style="margin-bottom: 10px">
+		<div class="form-group form-group-sm" style="margin-bottom: 10px">
 			<label for="generatorParametersNotes" class="col-sm-2 control-label">Observações</label>
 			<div class="col-sm-10">
-				<textarea name="generatorParametersNotes" ng-model="generatorParameters.notes" rows="1" class="form-control"></textarea>
+				<textarea name="generatorParametersNotes" ng-model="generatorParameters.notes" rows="1"
+					class="form-control"></textarea>
 			</div>
 		</div>
 
-        <p class="loading-box" ng-show="loading">
+		<p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
 
-		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+		<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+		</uib-alert>
 	</div>
 
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
-	    <button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
+		<button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
 	</div>
 </form>

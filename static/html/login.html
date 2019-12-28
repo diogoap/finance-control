@@ -6,7 +6,8 @@
 
 	<div class="row">
 		<div class="col-sm-4 col-sm-offset-4">
-			<a class="btn btn-block btn-social btn-lg btn-google login-page-box-button" href="/auth/google" target="_self"><i class="fa fa-google"></i><span>Entrar com Google</span></a>
+			<a class="btn btn-block btn-social btn-lg btn-google login-page-box-button" href="/auth/google"
+				target="_self"><i class="fa fa-google"></i><span>Entrar com Google</span></a>
 		</div>
 	</div>
 
@@ -15,6 +16,7 @@
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</div>
 
-		<alert class="login-alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)">{{alert.msg}}</alert>
+		<alert class="login-alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)">{{alert.msg}}</uib-alert>
 	</div>
 </div>

@@ -19,32 +19,47 @@
 
 			<div class="col-sm-top-bar" ng-class="Utils.getColNumberStyle(3, 1)">
 				<div class="btn-group btn-group-sm">
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano" ng-click="navigateBeginOfYear()">&lt;&lt;</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior" ng-click="navigatePreviousMonth()">-1 Mês</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual" ng-click="navigateActualMonth()">Atual</button>
-					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês" ng-click="navigateNextMonth()">+1 Mês</button>
-					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano" ng-click="navigateEndOfYear()">&gt;&gt;</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o início do ano"
+						ng-click="navigateBeginOfYear()">&lt;&lt;</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês anterior"
+						ng-click="navigatePreviousMonth()">-1 Mês</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o mês atual"
+						ng-click="navigateActualMonth()">Atual</button>
+					<button class="btn btn-success date-nav-btn" title="Ir para o próximo mês"
+						ng-click="navigateNextMonth()">+1 Mês</button>
+					<button class="btn btn-success date-nav-btn-sm" title="Ir para o fim do ano"
+						ng-click="navigateEndOfYear()">&gt;&gt;</button>
 				</div>
-                <span ng-show="Utils.isMidLowResolution()" class="date-nav-label">{{dateBegin | date: 'MMM/yy' | uppercase }}</span>
+				<span ng-show="Utils.isMidLowResolution()"
+					class="date-nav-label">{{dateBegin | date: 'MMM/yy' | uppercase }}</span>
 			</div>
 
 			<div class="col-sm-4 col-sm-top-bar" ng-hide="Utils.isMidLowResolution()">
 				<div class="input-group input-group-sm">
-					<input type="text" uib-datepicker-popup name="dateBegin" ng-model="dateBegin" required class="form-control date-mask" is-open="beginOpened"/>
+					<input type="text" uib-datepicker-popup name="dateBegin" ng-model="dateBegin" required
+						class="form-control date-mask" is-open="beginOpened" />
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogBegin($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						<button type="button" class="btn btn-default btn-sm"
+							ng-click="openCalendarDialogBegin($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
 					</span>
-					<div class="error" ng-show="(totalsForm.dateBegin.$dirty && totalsForm.dateBegin.$invalid) || (submitted && totalsForm.dateBegin.$invalid)">
-						<small class="error" ng-show="totalsForm.dateBegin.$error.required">O campo Período inicial é obrigatório.</small>
+					<div class="error"
+						ng-show="(totalsForm.dateBegin.$dirty && totalsForm.dateBegin.$invalid) || (submitted && totalsForm.dateBegin.$invalid)">
+						<small class="error" ng-show="totalsForm.dateBegin.$error.required">O campo Período inicial é
+							obrigatório.</small>
 					</div>
 
-					<input type="text" uib-datepicker-popup name="dateEnd" ng-model="dateEnd" required class="form-control date-mask" is-open="endOpened"/>
+					<input type="text" uib-datepicker-popup name="dateEnd" ng-model="dateEnd" required
+						class="form-control date-mask" is-open="endOpened" />
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialogEnd($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
 						<button class="btn btn-default btn-sm" ng-click="filter()">Filtrar</button>
 					</span>
-					<div class="error" ng-show="(totalsForm.dateEnd.$dirty && totalsForm.dateEnd.$invalid) || (submitted && totalsForm.dateEnd.$invalid)">
-						<small class="error" ng-show="totalsForm.dateEnd.$error.required">O campo Período final é obrigatório.</small>
+					<div class="error"
+						ng-show="(totalsForm.dateEnd.$dirty && totalsForm.dateEnd.$invalid) || (submitted && totalsForm.dateEnd.$invalid)">
+						<small class="error" ng-show="totalsForm.dateEnd.$error.required">O campo Período final é
+							obrigatório.</small>
 					</div>
 				</div>
 			</div>
@@ -76,7 +91,9 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.all.partialBalance)"><b>{{totals.current.all.partialBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot"
+							ng-class="Utils.getValueStyle(totals.current.all.partialBalance)">
+							<b>{{totals.current.all.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
@@ -84,14 +101,17 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.all.actualBalance)"><b>{{totals.current.all.actualBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot"
+							ng-class="Utils.getValueStyle(totals.current.all.actualBalance)">
+							<b>{{totals.current.all.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>
 
 			<!-- Accounts - All -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenAllAcc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenAllAcc"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllAcc)"></i>
@@ -99,56 +119,60 @@
 					</uib-accordion-heading>
 					<table class="table table-condensed">
 						<tr ng-repeat="account in totals.current.all.accounts | filter: { enabled: true }">
-					   		<td class="text-left td-sm no-border">{{account.name}}:</td>
-					   		<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
-				    	</tr>
+							<td class="text-left td-sm no-border">{{account.name}}:</td>
+							<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
+						</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 
 			<!-- Categories - Incomes - All -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenAllInc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenAllInc"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Receitas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllInc)"></i>
 						</div>
 					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
-					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
-				    	</tr>
+						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Receita', enabled: true }"
+							ng-if="category.totalAmount > 0">
+							<td class="text-left td-sm no-border">{{category.name}}:</td>
+							<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+						</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 
 			<!-- Categories - Expenses - All -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenAllExp" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenAllExp"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Despesas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenAllExp)"></i>
 						</div>
 					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
-					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
-				    	</tr>
+						<tr ng-repeat="category in totals.current.all.categories | filter: { type: 'Despesa', enabled: true }"
+							ng-if="category.totalAmount > 0">
+							<td class="text-left td-sm no-border">{{category.name}}:</td>
+							<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+						</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 		</uib-accordion>
 	</div>
 
-    <div class="row" ng-show="!Utils.isMidLowResolution()">
-        <hr style="margin-top: 0px; margin-bottom: 0px">
-    </div>
+	<div class="row" ng-show="!Utils.isMidLowResolution()">
+		<hr style="margin-top: 0px; margin-bottom: 0px">
+	</div>
 
-    <div class="row" ng-show="Utils.isMidLowResolution()">
-        <hr style="margin-top: 20px; margin-bottom: 0px">
-    </div>
+	<div class="row" ng-show="Utils.isMidLowResolution()">
+		<hr style="margin-top: 20px; margin-bottom: 0px">
+	</div>
 
 	<div class="row">
 		<uib-accordion close-others="false" is-disabled="false">
@@ -167,11 +191,14 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(-) Despesas:</td>
-						<td class="text-right home-td-md">{{(totals.current.completed.totalExpenses * -1) | number:2}}</td>
+						<td class="text-right home-td-md">{{(totals.current.completed.totalExpenses * -1) | number:2}}
+						</td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo período:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.completed.partialBalance)"><b>{{totals.current.completed.partialBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot"
+							ng-class="Utils.getValueStyle(totals.current.completed.partialBalance)">
+							<b>{{totals.current.completed.partialBalance | number:2}}</b></td>
 					</tr>
 					<tr>
 						<td class="text-left home-td-md">(+) Empréstimos:</td>
@@ -179,57 +206,65 @@
 					</tr>
 					<tr>
 						<td class="text-left home-td-md-tot"><b>(=) Saldo final:</b></td>
-						<td class="text-right home-td-md-tot" ng-class="Utils.getValueStyle(totals.current.completed.actualBalance)"><b>{{totals.current.completed.actualBalance | number:2}}</b></td>
+						<td class="text-right home-td-md-tot"
+							ng-class="Utils.getValueStyle(totals.current.completed.actualBalance)">
+							<b>{{totals.current.completed.actualBalance | number:2}}</b></td>
 					</tr>
 				</table>
 			</div>
 
 			<!-- Accounts - Completed -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenCompAcc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group template-url="group-template.html" is-open="accordions.isOpenCompAcc"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Contas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompAcc)"></i>
 						</div>
 					</uib-accordion-heading>
 					<table class="table table-condensed">
-						<tr class="no-border" ng-repeat="account in totals.current.completed.accounts | filter: { enabled: true }">
-					   		<td class="text-left td-sm no-border">{{account.name}}:</td>
-					   		<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
-				    	</tr>
+						<tr class="no-border"
+							ng-repeat="account in totals.current.completed.accounts | filter: { enabled: true }">
+							<td class="text-left td-sm no-border">{{account.name}}:</td>
+							<td class="text-right td-sm no-border">{{account.actualBalance | number:2}}</td>
+						</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 
 			<!-- Categories - Incomes - Completed -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenCompInc" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-success" is-open="accordions.isOpenCompInc"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Receitas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompInc)"></i>
 						</div>
 					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita', enabled: true }" ng-if="category.totalAmount > 0">
-					   		<td class="text-left td-sm no-border">{{category.name}}:</td>
-					   		<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
-				    	</tr>
+						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Receita', enabled: true }"
+							ng-if="category.totalAmount > 0">
+							<td class="text-left td-sm no-border">{{category.name}}:</td>
+							<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+						</tr>
 					</table>
 				</uib-accordion-group>
 			</div>
 
 			<!-- Categories - Expenses - Completed -->
 			<div class="home-box" ng-class="Utils.getColNumberStyle(4, 1)" ng-style="boxStyle">
-				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenCompExp" is-disabled="accordions.isDisabled">
+				<uib-accordion-group panel-class="panel-danger" is-open="accordions.isOpenCompExp"
+					is-disabled="accordions.isDisabled">
 					<uib-accordion-heading>
 						<div>Despesas
 							<i class="pull-right glyphicon" ng-class="getAcordionStyle(accordions.isOpenCompExp)"></i>
 						</div>
 					</uib-accordion-heading>
 					<table class="table table-condensed categories-list">
-						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa', enabled: true }" ng-if="category.totalAmount > 0">
-				   			<td class="text-left td-sm no-border">{{category.name}}:</td>
-				   			<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
+						<tr ng-repeat="category in totals.current.completed.categories | filter: { type: 'Despesa', enabled: true }"
+							ng-if="category.totalAmount > 0">
+							<td class="text-left td-sm no-border">{{category.name}}:</td>
+							<td class="text-right td-sm no-border">{{category.totalAmount | number:2}}</td>
 						</tr>
 					</table>
 				</uib-accordion-group>
@@ -247,6 +282,8 @@
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</div>
 
-		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+		<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+		</uib-alert>
 	</div>
 </div>

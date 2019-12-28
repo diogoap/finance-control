@@ -23,8 +23,8 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 		}
 
 		Loans.getById(loanId)
-			.success(function (data) {
-				$scope.loan = data;
+			.then(function onSucess(response) {
+				$scope.loan = response.data;
 				//Need to generate a new to date in order to make date picker work
 				$scope.loan.transactionDate = new Date($scope.loan.transactionDate);
 				$scope.loan.dueDate = new Date($scope.loan.dueDate);
@@ -37,35 +37,35 @@ function loansModalController($scope, $uibModalInstance, Utils, Loans, Accounts,
 				$scope.dueDateMinDate = $scope.loan.transactionDate;
 				$scope.loading = false;
 			})
-			.error(function (data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			.catch(function onError(response) {
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 				$scope.loading = false;
 			});
 	};
 
 	var filter = 'enabled=true';
 	Accounts.get(filter)
-		.success(function (data) {
-			$scope.accounts = data;
+		.then(function onSucess(response) {
+			$scope.accounts = response.data;
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.loan.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.loan.currency_id = Utils.getDefaultCurrencyId(response.data);
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
 		});
 

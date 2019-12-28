@@ -1,88 +1,124 @@
 <div class="modal-header">
-    <h4 class="modal-title">{{screenTitle}}</h4>
+	<h4 class="modal-title">{{screenTitle}}</h4>
 </div>
 <form name="expenseForm" class="form-horizontal" novalidate ng-submit="submit()">
 	<div class="modal-body no-padding-bottom">
 		<div class="form-group form-group-sm">
 			<label for="expenseDescription" class="col-sm-2 control-label">Descrição</label>
 			<div class="col-sm-6">
-			    <input type="text" name="expenseDescription" ng-model="expense.description" required ng-maxlength=100 ng-minLength=3 class="form-control"/>
-			    <div class="error" ng-show="(expenseForm.expenseDescription.$dirty && expenseForm.expenseDescription.$invalid) || (submitted && expenseForm.expenseDescription.$invalid)">
-				    <small class="error" ng-show="expenseForm.expenseDescription.$error.required">O campo Descrição é obrigatório.</small>
-				    <small class="error" ng-show="expenseForm.expenseDescription.$error.minlength">O campo Descrição deve possuir no mínimo 3 caracteres.</small>
-				    <small class="error" ng-show="expenseForm.expenseDescription.$error.maxlength">O campo Descrição deve possuir no máximo 100 caracteres.</small>
-                </div>
+				<input type="text" name="expenseDescription" ng-model="expense.description" required ng-maxlength=100
+					ng-minLength=3 class="form-control" />
+				<div class="error"
+					ng-show="(expenseForm.expenseDescription.$dirty && expenseForm.expenseDescription.$invalid) || (submitted && expenseForm.expenseDescription.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.required">O campo Descrição é
+						obrigatório.</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.minlength">O campo Descrição
+						deve possuir no mínimo 3 caracteres.</small>
+					<small class="error" ng-show="expenseForm.expenseDescription.$error.maxlength">O campo Descrição
+						deve possuir no máximo 100 caracteres.</small>
+				</div>
 			</div>
-            <div class="col-sm-4">
+			<div class="col-sm-4">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="expenseScheduledPayment" ng-model="expense.scheduledPayment"/>Pagamento agendado
+						<input type="checkbox" name="expenseScheduledPayment"
+							ng-model="expense.scheduledPayment" />Pagamento agendado
 					</label>
 				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-sm">
-            <label for="expenseDueDate" class="col-sm-2 control-label">Vencimento</label>
+			<label for="expenseDueDate" class="col-sm-2 control-label">Vencimento</label>
 			<div class="col-sm-4">
-                <div class="input-group input-group-sm">
-			        <input type="text" uib-datepicker-popup name="expenseDueDate" ng-model="expense.dueDate" required class="form-control date-mask" is-open="opened"/>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                </div>
-                <div class="error" ng-show="(expenseForm.expenseDueDate.$dirty && expenseForm.expenseDueDate.$invalid) || (submitted && expenseForm.expenseDueDate.$invalid)">
-                    <small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é obrigatório.</small>
-                </div>
+				<div class="input-group input-group-sm">
+					<input type="text" uib-datepicker-popup name="expenseDueDate" ng-model="expense.dueDate" required
+						class="form-control date-mask" is-open="opened" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-sm" ng-click="openCalendarDialog($event)"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+				<div class="error"
+					ng-show="(expenseForm.expenseDueDate.$dirty && expenseForm.expenseDueDate.$invalid) || (submitted && expenseForm.expenseDueDate.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseDueDate.$error.required">O campo Vencimento é
+						obrigatório.</small>
+				</div>
 			</div>
 			<label for="expenseAmount" class="col-sm-2 control-label">Valor</label>
 			<div class="col-sm-2">
-				<select name="expenseCurrency" ng-model="expense.currency_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.currencyCode for c in currencies" class="form-control"></select>
-				<div class="error" ng-show="(expenseForm.expenseCurrency.$dirty && expenseForm.expenseCurrency.$invalid) || (submitted && expenseForm.expenseCurrency.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseCurrency.$error.required">O campo Moeda é obrigatório.</small>
+				<select name="expenseCurrency" ng-model="expense.currency_id" ng-required="_hasDetail == false"
+					ng-disabled="_hasDetail" ng-options="c._id as c.currencyCode for c in currencies"
+					class="form-control"></select>
+				<div class="error"
+					ng-show="(expenseForm.expenseCurrency.$dirty && expenseForm.expenseCurrency.$invalid) || (submitted && expenseForm.expenseCurrency.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseCurrency.$error.required">O campo Moeda é
+						obrigatório.</small>
 				</div>
-			</div>				
+			</div>
 			<div class="col-sm-2">
-				<input type="tel" numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expense.amount" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmount($event);"/>
-				<div class="error" ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseAmount.$error.gtThan">O campo Valor é obrigatório.</small>
+				<input type="tel" numeric decimals="2" gt-than="0" name="expenseAmount" ng-model="expense.amount"
+					ng-readonly="_hasDetail" class="form-control" autocomplete="off"
+					ng-paste="formatNumericAmount($event);" />
+				<div class="error"
+					ng-show="(expenseForm.expenseAmount.$dirty && expenseForm.expenseAmount.$invalid) || (submitted && expenseForm.expenseAmount.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseAmount.$error.gtThan">O campo Valor é
+						obrigatório.</small>
 				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-sm">
 			<label for="expenseAccount" class="col-sm-2 control-label">Conta</label>
 			<div class="col-sm-4">
-				<select name="expenseAccount" ng-model="expense.account_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.name for c in accounts" class="form-control"></select>
-				<div class="error" ng-show="(expenseForm.expenseAccount.$dirty && expenseForm.expenseAccount.$invalid) || (submitted && expenseForm.expenseAccount.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseAccount.$error.required">O campo Conta é obrigatório.</small>
+				<select name="expenseAccount" ng-model="expense.account_id" ng-required="_hasDetail == false"
+					ng-disabled="_hasDetail" ng-options="c._id as c.name for c in accounts"
+					class="form-control"></select>
+				<div class="error"
+					ng-show="(expenseForm.expenseAccount.$dirty && expenseForm.expenseAccount.$invalid) || (submitted && expenseForm.expenseAccount.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseAccount.$error.required">O campo Conta é
+						obrigatório.</small>
 				</div>
 			</div>
 
 			<label for="expenseCategory" class="col-sm-2 control-label">Categoria</label>
 			<div class="col-sm-4">
-				<select name="expenseCategory" ng-model="expense.category_id" ng-required="_hasDetail == false" ng-disabled="_hasDetail" ng-options="c._id as c.name for c in categories" class="form-control"></select>
-				<div class="error" ng-show="(expenseForm.expenseCategory.$dirty && expenseForm.expenseCategory.$invalid) || (submitted && expenseForm.expenseCategory.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseCategory.$error.required">O campo Categoria é obrigatório.</small>
+				<select name="expenseCategory" ng-model="expense.category_id" ng-required="_hasDetail == false"
+					ng-disabled="_hasDetail" ng-options="c._id as c.name for c in categories"
+					class="form-control"></select>
+				<div class="error"
+					ng-show="(expenseForm.expenseCategory.$dirty && expenseForm.expenseCategory.$invalid) || (submitted && expenseForm.expenseCategory.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseCategory.$error.required">O campo Categoria é
+						obrigatório.</small>
 				</div>
 			</div>
 		</div>
 		<div class="form-group form-group-sm">
 			<label for="expenseStatus" class="col-sm-2 control-label">Situação</label>
 			<div class="col-sm-4">
-				<select name="expenseStatus" required ng-model="expense.status" ng-disabled="_hasDetail" ng-options="type for type in expenseStatus" ng-change="onChangeExpenseStatus()" class="form-control"></select>
-				<div class="error" ng-show="(expenseForm.expenseStatus.$dirty && expenseForm.expenseStatus.$invalid) || (submitted && expenseForm.expenseStatus.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseStatus.$error.required">O campo Situação é obrigatório.</small>
+				<select name="expenseStatus" required ng-model="expense.status" ng-disabled="_hasDetail"
+					ng-options="type for type in expenseStatus" ng-change="onChangeExpenseStatus()"
+					class="form-control"></select>
+				<div class="error"
+					ng-show="(expenseForm.expenseStatus.$dirty && expenseForm.expenseStatus.$invalid) || (submitted && expenseForm.expenseStatus.$invalid)">
+					<small class="error" ng-show="expenseForm.expenseStatus.$error.required">O campo Situação é
+						obrigatório.</small>
 				</div>
 			</div>
 			<label for="expenseAmountPaid" class="col-sm-2 control-label">Valor pago</label>
 			<div class="col-sm-4">
-				<input type="tel" numeric decimals="2" gte-than="0" ng-required="expense.status =='Pago'" gt-than-zero-opt="{{expense.status == 'Pago'}}" name="expenseAmountPaid" ng-model="expense.amountPaid" ng-readonly="_hasDetail" class="form-control" autocomplete="off" ng-paste="formatNumericAmountPaid($event);"/>
-				<div class="error" ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
-					<small class="error" ng-show="expenseForm.expenseAmountPaid.$error.gtThanZeroOpt || expenseForm.expenseAmountPaid.$error.gteThan">O campo Valor pago é obrigatório.</small>
+				<input type="tel" numeric decimals="2" gte-than="0" ng-required="expense.status =='Pago'"
+					gt-than-zero-opt="{{expense.status == 'Pago'}}" name="expenseAmountPaid"
+					ng-model="expense.amountPaid" ng-readonly="_hasDetail" class="form-control" autocomplete="off"
+					ng-paste="formatNumericAmountPaid($event);" />
+				<div class="error"
+					ng-show="(expenseForm.expenseAmountPaid.$dirty && expenseForm.expenseAmountPaid.$invalid) || (submitted && expenseForm.expenseAmountPaid.$invalid)">
+					<small class="error"
+						ng-show="expenseForm.expenseAmountPaid.$error.gtThanZeroOpt || expenseForm.expenseAmountPaid.$error.gteThan">O
+						campo Valor pago é obrigatório.</small>
 				</div>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm" style="margin-bottom: 10px">
+		<div class="form-group form-group-sm" style="margin-bottom: 10px">
 			<label for="expenseNotes" class="col-sm-2 control-label">Observações</label>
 			<div class="col-sm-10">
 				<textarea name="expenseNotes" ng-model="expense.notes" rows="2" class="form-control"></textarea>
@@ -90,30 +126,39 @@
 		</div>
 
 		<div class="form-group form-group-sm no-margin-bottom">
-            <div class="col-sm-12">
-				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href="" ng-click="openDetail(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
-				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href="" ng-click="deleteDetailConfirmation(selectedRow.entity)"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href="" ng-click="openDetail(selectedRow.entity, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
-	            <a class="btn btn-primary btn-sm btn-action" title="Pagar" ng-show="selectedRow.entity.status == 'Em aberto'" href="" ng-click="payDetail(selectedRow.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
+			<div class="col-sm-12">
+				<a class="btn btn-primary btn-sm btn-action" title="Adicionar" href=""
+					ng-click="openDetail(null, 'new')"><i class="fa fa-plus fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Editar" ng-show="selectedRow != undefined" href=""
+					ng-click="openDetail(selectedRow.entity, 'edit')"><i class="fa fa-pencil fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Excluir" ng-show="selectedRow != undefined" href=""
+					ng-click="deleteDetailConfirmation(selectedRow.entity)"><i
+						class="fa fa-trash-o fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Clonar" ng-show="selectedRow != undefined" href=""
+					ng-click="openDetail(selectedRow.entity, 'clone')"><i class="fa fa-clone fa-lg fa-fw"></i></a>
+				<a class="btn btn-primary btn-sm btn-action" title="Pagar"
+					ng-show="selectedRow.entity.status == 'Em aberto'" href=""
+					ng-click="payDetail(selectedRow.entity)"><i class="fa fa-usd fa-lg fa-fw"></i></a>
 			</div>
 		</div>
 
-        <div class="form-group form-group-sm no-margin-bottom">
+		<div class="form-group form-group-sm no-margin-bottom">
 			<div class="col-sm-12 grid-margins">
-                <div ui-grid="gridOptions" ui-grid-selection ui-grid-cellNav style="width: 100%; height: 200px;"></div>
-            </div>
-        </div>
+				<div ui-grid="gridOptions" ui-grid-selection ui-grid-cellNav style="width: 100%; height: 200px;"></div>
+			</div>
+		</div>
 
-        <p class="loading-box" ng-show="loading">
+		<p class="loading-box" ng-show="loading">
 			<span class="fa fa-spinner fa-spin fa-5x"></span>
 		</p>
 
-		<alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}" close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}</alert>
+		<uib-alert class="alert-box" ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="Utils.closeAlert(this, $index)" dismiss-On-Timeout="{{Utils.alertTimeout()}}">{{alert.msg}}
+		</uib-alert>
 	</div>
 
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
-	    <button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
+		<button class="btn btn-default btn-sm" ng-click="cancel()">Cancelar</button>
 	</div>
 </form>

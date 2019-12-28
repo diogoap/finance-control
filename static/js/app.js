@@ -79,6 +79,10 @@ app.config(['uibDatepickerPopupConfig', function(uibDatepickerPopupConfig) {
     uibDatepickerPopupConfig.datepickerPopup="shortDate";
 }]);
 
+app.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
+
 app.run(['$rootScope', '$uibModalStack', '$location', function ($rootScope, $uibModalStack, $location) {
     $rootScope.$on('$locationChangeStart', function (event) {
         event.preventDefault();

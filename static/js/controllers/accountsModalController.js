@@ -5,58 +5,57 @@ function accountsModalController($scope, $uibModalInstance, Utils, Accounts, Cur
 	$scope.Utils = Utils;
 	$scope.alerts = [];
 	$scope.action = action;
- 	$scope.submitted = false;
+	$scope.submitted = false;
 
 	if (action == 'new') {
 		$scope.screenTitle = 'Adicionar conta';
 		$scope.account = { initialBalance: 0, enabled: true };
 		$scope.loading = false;
 	}
-	else
-	{
+	else {
 		$scope.screenTitle = 'Editar conta';
 
 		Accounts.getById(accountId)
-			.success(function(data) {
-				$scope.account = data;
+			.then(function onSucess(response) {
+				$scope.account = response.data;
 				$scope.loading = false;
 			})
-			.error(function(data, status, headers, config) {
-				Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+			.catch(function onError(response) {
+				Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 				$scope.loading = false;
 			});
 	}
-	
+
 	var filter = 'enabled=true';
 	Currencies.get(filter)
-		.success(function (data) {
-			$scope.currencies = data;
+		.then(function onSucess(response) {
+			$scope.currencies = response.data;
 
 			if (action == 'new') {
-				$scope.account.currency_id = Utils.getDefaultCurrencyId(data);		
+				$scope.account.currency_id = Utils.getDefaultCurrencyId(response.data);
 			}
 
 			$scope.loading = false;
 		})
-		.error(function (data, status, headers, config) {
-			Utils.addError($scope, 'Erro ao carregar os dados: ' + status);
+		.catch(function onError(response) {
+			Utils.addError($scope, 'Erro ao carregar os dados: ' + response.status);
 			$scope.loading = false;
-		});	
+		});
 
 	$scope.submit = function () {
-    	if ($scope.accountForm.$valid) {
+		if ($scope.accountForm.$valid) {
 			$scope.account._action = $scope.action;
 			$uibModalInstance.close($scope.account);
-    	} else {
-      		$scope.submitted = true;
-    	}
+		} else {
+			$scope.submitted = true;
+		}
 	}
 
-	$scope.cancel = function() {
+	$scope.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
 	}
 
-	$scope.formatNumericInitialBalance = function(event) {
-    	$scope.account.initialBalance = Utils.formatPastedNumer(event);
-    }
+	$scope.formatNumericInitialBalance = function (event) {
+		$scope.account.initialBalance = Utils.formatPastedNumer(event);
+	}
 };

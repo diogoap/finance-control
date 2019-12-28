@@ -2,11 +2,11 @@
 
 var app = angular.module('financeControl');
 
-app.directive('resizableGrid', function($window) {
-	return function($scope) {
+app.directive('resizableGrid', function ($window) {
+	return function ($scope) {
 
 		// On window resize => resize the app
-		$scope.initializeWindowSize = function() {
+		$scope.initializeWindowSize = function () {
 			var obj = document.getElementById('grid');
 
 			if (obj != null) {
@@ -16,7 +16,7 @@ app.directive('resizableGrid', function($window) {
 			}
 		};
 
-		angular.element($window).bind('resize', function() {
+		angular.element($window).bind('resize', function () {
 			$scope.initializeWindowSize();
 			$scope.$apply();
 		});
@@ -26,7 +26,7 @@ app.directive('resizableGrid', function($window) {
 			$scope.$apply();
 		});
 
-		angular.element($window).bind('_page_ready', function() {
+		angular.element($window).bind('_page_ready', function () {
 			$scope.initializeWindowSize();
 			$scope.$apply();
 		});

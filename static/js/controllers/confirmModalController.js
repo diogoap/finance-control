@@ -7,7 +7,7 @@ function confirmModalController($uibModalInstance, $scope, data, message) {
 		$uibModalInstance.close(data);
 	};
 
-	$scope.no = function() {
+	$scope.no = function () {
 		$uibModalInstance.dismiss('cancel');
 	}
 };

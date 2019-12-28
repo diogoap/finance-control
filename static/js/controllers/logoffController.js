@@ -2,9 +2,9 @@
 
 var app = angular.module('financeControl');
 
-app.controller('logoffController', function($scope, $localStorage, $http, $locale, $location, $window, $routeParams, Utils, Logoff) {
+app.controller('logoffController', function ($scope, $localStorage, $routeParams, Utils, Logoff) {
 
-    $scope.handleLogoff = function() {
+    $scope.handleLogoff = function () {
         $localStorage.remove('loggedUserId');
         $localStorage.remove('loggedUserEmail');
         $localStorage.remove('loggedUserToken');
@@ -15,7 +15,7 @@ app.controller('logoffController', function($scope, $localStorage, $http, $local
         window.location.replace('/login');
     }
 
-    $scope.$on('$routeChangeSuccess', function() {
+    $scope.$on('$routeChangeSuccess', function () {
         $scope.loading = true;
 
         var query;
@@ -26,13 +26,13 @@ app.controller('logoffController', function($scope, $localStorage, $http, $local
         }
 
         Logoff.get(query)
-            .success(function(data) {
+            .then(function onSucess() {
                 $scope.handleLogoff();
-        	})
-        	.error(function(data, status, headers, config) {
-        		$scope.handleLogoff();
-        	});
-  	});
+            })
+            .catch(function onError() {
+                $scope.handleLogoff();
+            });
+    });
 
     // initialization
     $scope.Utils = Utils;

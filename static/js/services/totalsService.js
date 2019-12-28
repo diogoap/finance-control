@@ -2,9 +2,9 @@
 
 angular.module('totalsService', [])
 
-	.factory('Totals', ['$http',function($http) {
+	.factory('Totals', ['$http', function ($http) {
 		return {
-			get : function(filter) {
+			get: function (filter) {
 				return $http.get('/api/totals?' + filter);
 			}
 		}
