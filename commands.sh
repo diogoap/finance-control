@@ -1,23 +1,5 @@
 ### Heroku ###
 
-# Heroku - Run locally #
-foreman start
-OR
-nodemon file.js
-# /*https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md*/
-
-# Heroku - Github - Pushing changes #
-git add -A
-git commit -m "Message"
-git push origin master
-heroku open
-
-# Heroku - Pushing changes #
-git add -A
-git commit -m "Message"
-git push heroku master
-heroku open
-
 # Heroku - View logs (Control+C to stop streaming the logs) #
 heroku logs --tail
 
@@ -30,6 +12,8 @@ npm install jsonschema --save
 npm install
 
 ### Installing Bower packages ###
+sudo npm install -g bower
+bower init
 bower install angular-ui/ui-grid.info --save
 ________________________________________________________________________________
 
@@ -45,30 +29,6 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo npm install -g nodemon
 nodemon file.js
 
-### Ruby ###
-sudo apt-get install ruby-full
-
-### Heroku ###
-wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
-
-# Heroku - Login #
-heroku login
-
-# Heroku - Init #
-heroku git:clone -a finance-control
-heroku ps:scale web=1
-heroku open
-
-### Sublime ###
-sudo add-apt-repository ppa:webupd8team/sublime-text-3
-sudo apt-get update
-sudo apt-get install sublime-text-installer
-
-### Atom ###
-sudo add-apt-repository ppa:webupd8team/atom
-sudo apt-get update
-sudo apt-get install atom
-
 ### Mongo ###
 #Remove
 sudo service mongod stop
@@ -82,6 +42,34 @@ sudo service mongod start
 #Install service
 https://askubuntu.com/questions/770054/mongodb-3-2-doesnt-start-on-lubuntu-16-04lts-as-service/770133#770133?newreg=d296972c09e94a29b73e3156074bc2b2
 
-### Bower ###
-sudo npm install -g bower
-bower init
+### Docker ### 
+References:
+https://nodejs.org/fr/docs/guides/nodejs-docker-webapp/
+https://www.digitalocean.com/community/tutorials/containerizing-a-node-js-application-for-development-with-docker-compose
+
+#Build/run container
+docker build -t diogo/finance-control-web .
+docker run -it --rm --name finance-control-web --network finance-control -p 5000:5000 -d diogo/finance-control-web
+
+#Build/run compose
+docker-compose -f "docker-compose.yml" up -d --build
+
+#Kill/Stop/Remove container
+docker kill finance-control-web
+docker stop finance-control-web
+docker container rm finance-control-web
+docker container rm finance-control-web -f
+
+#Get container ID
+docker ps
+docker-compose ps
+
+# Print app output
+docker logs container_id
+
+# Enter the container
+docker exec -it finance-control-web /bin/bash
+
+# Restore database
+docker exec -it finance-control-db sh /backups/run_backup.sh
+docker exec -it finance-control-db sh /backups/run_restore.sh

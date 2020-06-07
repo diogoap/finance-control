@@ -5,3 +5,4 @@ finance-control.sublime-project
 finance-control.sublime-workspace
 npm-debug.log
 nodemon.json
+.env

@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+  web:  
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    container_name: finance-control-web
+    depends_on:
+      - mongodb    
+    ports:
+     - "5000:5000"
+    networks:
+      - fc-network
+    volumes:
+      - .:/web
+      - node_modules:/web/node_modules
+    env_file: .env
+
+  mongodb:
+    image: mongo:3.6.18
+    container_name: finance-control-db
+    ports:
+      - "27017:27017"
+    networks:
+      - fc-network
+    volumes:
+      - ./backups:/backups/
+
+networks:
+  fc-network:
+    driver: bridge
+
+volumes:
+  backups:
+  node_modules:
