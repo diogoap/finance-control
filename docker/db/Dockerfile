@@ -1,4 +1,4 @@
-FROM mongo:3.6.18
+FROM mongo:4.2.9
 
 COPY backups /backups
 
