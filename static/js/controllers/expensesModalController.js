@@ -83,7 +83,10 @@ function expensesModalController($scope, $uibModal, $uibModalInstance, uiGridCon
 
 				if (action == 'clone') {
 					$scope.expense._id = null;
-					$scope.expense.description += ' - Cópia';
+
+					var currentDate = $scope.expense.dueDate;
+					var dueDateNextMonth = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+					$scope.expense.dueDate = dueDateNextMonth;
 				}
 
 				$scope.loading = false;

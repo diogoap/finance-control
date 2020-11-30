@@ -83,7 +83,10 @@ function incomesModalController($scope, $uibModal, $uibModalInstance, uiGridCons
 
 				if (action == 'clone') {
 					$scope.income._id = null;
-					$scope.income.description += ' - Cópia';
+
+					var currentDate = $scope.income.dueDate;
+					var dueDateNextMonth = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+					$scope.income.dueDate = dueDateNextMonth;
 				}
 
 				$scope.loading = false;
