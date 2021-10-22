@@ -12,7 +12,7 @@ var incomeSchema = {
     "properties": {
         "description": { "type": "string", "minLength": 3, "maxLength": 100 },
         "dueDate": { "type": "datetime" },
-        "amount": { "type": "number", "minimum": 0.01, "exclusiveMinimum": true },
+        "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
         "amountReceived": { "type": "number", "minimum": 0 },
