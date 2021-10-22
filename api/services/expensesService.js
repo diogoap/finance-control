@@ -16,7 +16,7 @@ var expenseSchema = {
         "amount": { "type": "number", "minimum": 0, "exclusiveMinimum": true },
         "category_id": { "type": "string" },
         "account_id": { "type": "string" },
-        "amountPaid": { "type": "number", "minimum": 0, "exclusiveMinimum": false },
+        "amountPaid": { "type": "number", "minimum": 0 },
         "status": { "type": "string", "enum": ["Em aberto", "Pago"] },
         "notes": { "type": "string" },
         "user_id": { "type": "string" },
