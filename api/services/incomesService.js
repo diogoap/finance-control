@@ -45,16 +45,6 @@ var incomeSchema = {
             "properties": { "detail": { "minItems": 1 } },
             "required": ["detail"]
         }
-    ],
-    "oneOf": [
-        { "properties": { "status": { "enum": ["Em aberto"] } } },
-        {
-            "properties": {
-                "amountReceived": { "minimum": 0, "exclusiveMinimum": true },
-                "status": { "enum": ["Recebido"] }
-            },
-            "required": ["amountReceived"]
-        }
     ]
 };
 
@@ -315,7 +305,7 @@ module.exports = {
                     callbackError(error, 400);
                 });
         } else {
-            callbackError(val.errors, 400)
+            callbackError('validation errors:' + val.errors, 400)
         }
     },
 
