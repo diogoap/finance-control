@@ -136,14 +136,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var loansPromisse = Loans.remove(id);
+        var loansPromisse = Loans.deleteOne({ _id: id });
 
-        loansPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        loansPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 500);
+        });
     },
 
     edit: function (id, loan, callbackSuccess, callbackError) {

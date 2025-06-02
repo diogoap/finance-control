@@ -74,14 +74,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var categoriesPromisse = Categories.remove(id);
+        var categoriesPromisse = Categories.deleteOne({ _id: id });
 
-        categoriesPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        categoriesPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 500);
+        });
     },
 
     edit: function (id, category, callbackSuccess, callbackError) {

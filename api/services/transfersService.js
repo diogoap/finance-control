@@ -139,14 +139,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var transfersPromisse = Transfers.remove(id);
+        var transfersPromisse = Transfers.deleteOne({ _id: id });
 
-        transfersPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        transfersPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 500);
+        });
     },
 
     edit: function (id, transfer, callbackSuccess, callbackError) {
