@@ -49,13 +49,13 @@ function changeUserStatus(id, enable, callbackSuccess, callbackError) {
             user.userEnabled = enable;
             user.accessTokens = [];
 
-            user.save(function (error, raw) {
-                if (error) {
-                    callbackError(error, 400)
-                }
-
-                callbackSuccess();
-            });
+            user.save()
+                .then(function (raw) {
+                    callbackSuccess();
+                })
+                .catch(function (error) {
+                    callbackError(error, 500);
+                });
         } else {
             callbackError('not found', 404);
         }
@@ -149,13 +149,13 @@ module.exports = {
 
                 userDb.accessTokens.push(newAccessToken);
 
-                userDb.save(function (error, raw) {
-                    if (error) {
-                        return callbackError('User on update', 'Erro na atualização dos dados do usuário.');
-                    };
-
-                    return callbackSuccess(userDb);
-                });
+                userDb.save()
+                    .then(function (raw) {
+                        callbackSuccess(userDb);
+                    })
+                    .catch(function (error) {
+                        callbackError('User on update', 'Erro na atualização dos dados do usuário.');
+                    });
             },
             function (error, status) {
                 return callbackError('User not authorized', 'Você não está autorizado para accessar essa aplicação.');
@@ -178,13 +178,13 @@ module.exports = {
                     }
                 }
 
-                user.save(function (error, raw) {
-                    if (error) {
-                        callbackError(error, 400)
-                    };
-
-                    callbackSuccess();
-                });
+                user.save()
+                    .then(function (raw) {
+                        callbackSuccess();
+                    })
+                    .catch(function (error) {
+                        callbackError(error, 400);
+                    });
             } else {
                 callbackError('not found', 404);
             };

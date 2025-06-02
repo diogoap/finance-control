@@ -328,13 +328,13 @@ module.exports = {
             if (income != undefined) {
                 receiveIncome(income);
 
-                income.save(function (error, raw) {
-                    if (error) {
-                        callbackError(error, 400)
-                    };
-
-                    callbackSuccess();
-                });
+                income.save()
+                    .then(function (raw) {
+                        callbackSuccess();
+                    })
+                    .catch(function (error) {
+                        callbackError(error, 500);
+                    });
             } else {
                 callbackError('not found', 404);
             };

@@ -329,13 +329,13 @@ module.exports = {
             if (expense != undefined) {
                 payExpense(expense);
 
-                expense.save(function (error, raw) {
-                    if (error) {
-                        callbackError(error, 400)
-                    };
-
-                    callbackSuccess();
-                });
+                expense.save()
+                    .then(function (raw) {
+                        callbackSuccess();
+                    })
+                    .catch(function (error) {
+                        callbackError(error, 500);
+                    });
             } else {
                 callbackError('not found', 404);
             };

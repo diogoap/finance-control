@@ -177,13 +177,13 @@ module.exports = {
         loanFindPromisse.then(function (loan) {
             if (loan != undefined) {
                 loan.status = 'Quitado';
-                loan.save(function (error, raw) {
-                    if (error) {
-                        callbackError(error, 400)
-                    };
-
-                    callbackSuccess();
-                });
+                loan.save()
+                    .then(function (raw) {
+                        callbackSuccess();
+                    })
+                    .catch(function (error) {
+                        callbackError(error, 500);
+                    });
             } else {
                 callbackError('not found', 404);
             };
