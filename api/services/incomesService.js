@@ -287,14 +287,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var incomesPromisse = Incomes.remove(id);
+        var incomesPromisse = Incomes.deleteOne({ _id: id });
 
-        incomesPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        incomesPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 400);
+        });
     },
 
     edit: function (id, income, callbackSuccess, callbackError) {
