@@ -14,28 +14,29 @@ module.exports = function (app, url, passport, GoogleStrategy) {
             clientSecret: googleClientSecret,
             callbackURL: googleCallbackURL
         },
-            function (accessToken, refreshToken, profile, done) {
-                process.nextTick(function () {
+            async function (accessToken, refreshToken, profile, done) {
+                try {
+                    const userData = {
+                        externalId: profile.id,
+                        email: profile.emails[0].value,
+                        accessToken: accessToken,
+                        name: profile.name.givenName,
+                        photo: profile.photos[0].value
+                    };
 
-                    var userData = {};
-                    userData.externalId = profile.id;
-                    userData.email = profile.emails[0].value;
-                    userData.accessToken = accessToken;
-                    userData.name = profile.name.givenName;
-                    userData.photo = profile.photos[0].value;
+                    const user = await new Promise((resolve, reject) => {
+                        usersService.logIn(userData, resolve, reject);
+                    });
 
-                    var user = usersService.logIn(
-                        userData,
-                        function (userUpdated) {
-                            userData.id = userUpdated.id;
-                            return done(null, userData);
-                        },
-                        function (error, errorMessage) {
-                            console.log('nextTick ==> ' + error + ' - ' + errorMessage);
-                            return done(null, false, { message: errorMessage });
-                        }
-                    );
-                });
+                    if (user) {
+                        userData.id = user.id;
+                        return done(null, userData);
+                    }
+                    return done(null, false, { message: 'Authentication failed' });
+                } catch (error) {
+                    console.error('Authentication error:', error);
+                    return done(null, false, { message: 'Authentication failed' });
+                }
             }
         ));
 

@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongodb    
     ports:
-     - "5000:5000"
+     - "8000:8000"
     networks:
       - fc-network
     volumes:
@@ -18,7 +18,7 @@ services:
     env_file: .env
 
   mongodb:
-    image: mongo:5.0.5
+    image: mongo:8.0.9
     container_name: finance-control-db
     ports:
       - "27017:27017"
