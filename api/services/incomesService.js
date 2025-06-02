@@ -296,7 +296,7 @@ module.exports = {
                 callbackSuccess();
             }
         }).catch(function (error) {
-            callbackError(error, 400);
+            callbackError(error, 500);
         });
     },
 

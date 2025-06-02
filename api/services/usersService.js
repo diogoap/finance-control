@@ -195,14 +195,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var usersPromisse = Users.remove(id);
+        var usersPromisse = Users.deleteOne({ _id: id });
 
-        usersPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        usersPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 500);
+        });
     },
 
     disable: function (id, callbackSuccess, callbackError) {

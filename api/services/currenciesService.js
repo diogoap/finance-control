@@ -221,14 +221,17 @@ module.exports = {
     },
 
     delete: function (id, callbackSuccess, callbackError) {
-        var currenciesPromisse = Currencies.remove(id);
+        var currenciesPromisse = Currencies.deleteOne({ _id: id });
 
-        currenciesPromisse.then(function () {
-            callbackSuccess();
-        })
-            .then(null, function (error) {
-                callbackError(error, 400);
-            });
+        currenciesPromisse.then(function (result) {
+            if (result.deletedCount === 0) {
+                callbackError('not found', 404);
+            } else {
+                callbackSuccess();
+            }
+        }).catch(function (error) {
+            callbackError(error, 500);
+        });
     },
 
     edit: function (id, currency, callbackSuccess, callbackError) {
