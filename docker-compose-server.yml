@@ -19,8 +19,8 @@ services:
     networks:
       - fc-network
     volumes:
-      - mongo_data:/data/db 
-      - backup_data:/backups/ 
+      - /opt/finance-control/data/db:/config:/data/db 
+      - /opt/finance-control/backup_data:/backups/ 
 
 networks:
   fc-network:
