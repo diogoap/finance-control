@@ -12,6 +12,12 @@ services:
       - "8500:8500"
     networks:
       - fc-network
+    environment:
+      - MONGO_ATLAS_URI
+      - GOOGLE_CLIENT_ID 
+      - GOOGLE_CLIENT_SECRET
+      - GOOGLE_CALLBACK_URL
+      - USERS_API_ADMIN_EMAIL
 
   mongodb:
     image: mongo:8.0.9
