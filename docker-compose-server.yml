@@ -12,7 +12,6 @@ services:
       - "8000:8000"
     networks:
       - fc-network
-    env_file: .env
 
   mongodb:
     image: mongo:8.0.9
