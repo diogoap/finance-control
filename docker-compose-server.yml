@@ -26,8 +26,8 @@ services:
     networks:
       - fc-network
     volumes:
-      - /opt/finance-control/data/db:/config:/data/db 
-      - /opt/finance-control/backup_data:/backups/ 
+      - /opt/finance-control/data/:/config:/data/
+      - /opt/finance-control/backup_data:/backups/
 
 networks:
   fc-network:
