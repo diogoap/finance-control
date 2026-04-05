@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8500;
 var databaseUrl = process.env.MONGO_ATLAS_URI;
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
