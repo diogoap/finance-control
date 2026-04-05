@@ -19,7 +19,7 @@ https://www.digitalocean.com/community/tutorials/containerizing-a-node-js-applic
 
 #Build/run container
 docker build -t diogo/finance-control-web .
-docker run -it --rm --name finance-control-web --network finance-control -p 8000:8000 -d diogo/finance-control-web
+docker run -it --rm --name finance-control-web --network finance-control -p 8500:8500 -d diogo/finance-control-web
 
 #Build/run compose
 docker-compose -f "docker-compose.yml" up -d --build
