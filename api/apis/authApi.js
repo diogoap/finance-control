@@ -71,7 +71,7 @@ module.exports = function (app, url, passport, GoogleStrategy) {
     });
 
     app.get('/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login' }),
+        passport.authenticate('google', { failureRedirect: '/login', session: false }),
         function (req, res) {
             let user = req.user;
 
