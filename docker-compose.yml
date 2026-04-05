@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongodb    
     ports:
-     - "8000:8000"
+     - "8500:8500"
     networks:
       - fc-network
     volumes:
