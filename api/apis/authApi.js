@@ -81,10 +81,7 @@ module.exports = function (app, url, passport, GoogleStrategy) {
                 return res.redirect('/login?error=' + message);
             }
 
-            req.login(user, function (err) {
-                if (err) { return next(err); }
-                return res.redirect('/?id=' + user.id + '&email=' + user.email + '&token=' + user.accessToken + '&name=' + user.name + '&photo=' + user.photo);
-            });
+            return res.redirect('/?id=' + user.id + '&email=' + user.email + '&token=' + user.accessToken + '&name=' + user.name + '&photo=' + user.photo);
         });
 
 }
