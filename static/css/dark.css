@@ -1,0 +1,221 @@
+/* DARK MODE - automatically applied when the OS/browser is in dark mode */
+
+@media (prefers-color-scheme: dark) {
+
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    /* Navbar */
+    .navbar-default {
+        background-color: #222;
+        border-color: #333;
+    }
+    .navbar-default .navbar-brand,
+    .navbar-default .navbar-nav > li > a,
+    .navbar-default .navbar-text {
+        color: #e0e0e0;
+    }
+    .navbar-default .navbar-nav > li > a:hover,
+    .navbar-default .navbar-nav > li > a:focus,
+    .navbar-default .navbar-brand:hover {
+        color: #fff;
+        background-color: #2c2c2c;
+    }
+    .navbar-default .navbar-toggle {
+        border-color: #444;
+    }
+    .navbar-default .navbar-toggle .icon-bar {
+        background-color: #ccc;
+    }
+    .navbar-default .navbar-toggle:hover,
+    .navbar-default .navbar-toggle:focus {
+        background-color: #2c2c2c;
+    }
+    .dropdown-toggle {
+        color: #e0e0e0 !important;
+    }
+    .dropdown-menu {
+        background-color: #2a2a2a;
+        border-color: #444;
+    }
+    .dropdown-menu > li > a {
+        color: #e0e0e0;
+    }
+    .dropdown-menu > li > a:hover,
+    .dropdown-menu > li > a:focus {
+        background-color: #3a3a3a;
+        color: #fff;
+    }
+
+    /* Panels / boxes */
+    .home-box,
+    .panel-default,
+    .panel {
+        background-color: #2a2a2a !important;
+        border-color: #3a3a3a !important;
+        color: #e0e0e0;
+    }
+    .panel-default > .panel-heading {
+        background-color: #333 !important;
+        color: #e0e0e0 !important;
+        border-color: #3a3a3a !important;
+    }
+    .panel-success > .panel-heading {
+        background-color: #1f3a24 !important;
+        color: #b6e2c2 !important;
+        border-color: #2a4a30 !important;
+    }
+    .panel-success {
+        border-color: #2a4a30 !important;
+    }
+    .panel-danger > .panel-heading {
+        background-color: #3d1f1f !important;
+        color: #f0b8b8 !important;
+        border-color: #4a2a2a !important;
+    }
+    .panel-danger {
+        border-color: #4a2a2a !important;
+    }
+
+    /* Override inline styles in home.html group-template */
+    .panel-heading[style*="cce0ff"] {
+        background-color: #1f2d4d !important;
+    }
+    .panel-heading .panel-title,
+    .panel-heading .panel-title a,
+    .panel-heading .panel-title span {
+        color: #cfe0ff !important;
+        border-color: #3a4a6a !important;
+    }
+
+    /* Tables */
+    .table {
+        color: #e0e0e0;
+    }
+    .table > thead > tr > th,
+    .table > tbody > tr > td,
+    .table > tbody > tr > th,
+    .table > tfoot > tr > td {
+        border-color: #3a3a3a;
+    }
+    .table-hover > tbody > tr:hover {
+        background-color: #333;
+    }
+
+    /* Forms */
+    .form-control,
+    .input-group-addon {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    .form-control:focus {
+        border-color: #5a9eff;
+        box-shadow: 0 0 4px rgba(90, 158, 255, 0.4);
+    }
+    .form-control::placeholder {
+        color: #888;
+    }
+
+    /* Buttons */
+    .btn-default {
+        background-color: #333;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    .btn-default:hover,
+    .btn-default:focus {
+        background-color: #3f3f3f;
+        border-color: #555;
+        color: #fff;
+    }
+
+    /* Value colors (override app.css) */
+    .val-pos {
+        color: #5a9eff;
+    }
+    .val-neg {
+        color: #ff6b6b;
+    }
+    .val-zero {
+        color: #e0e0e0;
+    }
+
+    /* HR and dividers */
+    hr {
+        border-top-color: #3a3a3a;
+    }
+
+    /* UI grid */
+    .ui-grid,
+    .ui-grid-viewport,
+    .ui-grid-canvas,
+    .ui-grid-row > [ui-grid-row] > .ui-grid-cell,
+    .ui-grid-header-cell {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #3a3a3a;
+    }
+    .ui-grid-cell-focus {
+        background-color: #2c4a52 !important;
+    }
+    .ui-grid-row:nth-child(odd) .ui-grid-cell {
+        background-color: #262626;
+    }
+
+    /* Datepicker popup */
+    .uib-datepicker-popup,
+    .uib-datepicker {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #444;
+    }
+    .uib-datepicker .btn-default {
+        background-color: transparent;
+        border-color: transparent;
+        color: #e0e0e0;
+    }
+    .uib-datepicker .text-muted {
+        color: #777 !important;
+    }
+
+    /* Modals */
+    .modal-content {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #444;
+    }
+    .modal-header,
+    .modal-footer {
+        border-color: #3a3a3a;
+    }
+    .close {
+        color: #e0e0e0;
+        text-shadow: none;
+        opacity: 0.7;
+    }
+    .close:hover {
+        color: #fff;
+        opacity: 1;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar-track {
+        background-color: #222;
+        border-left: 1px solid #333;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #555;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #777;
+    }
+
+    /* Login page */
+    .login-page-box-logo {
+        color: #e0e0e0;
+    }
+
+}
