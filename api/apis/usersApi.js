@@ -39,7 +39,7 @@ module.exports = function (app, url) {
     })
 
     app.delete('/api/users/:id', utils.ensureAuthAdmin, utils.ensureAffectedUserIsNotAdmin, function (req, res) {
-        usersService.delete({ _id: req.params.id },
+        usersService.delete(req.params.id,
             function () {
                 res.json('OK');
             },

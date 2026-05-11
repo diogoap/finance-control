@@ -76,12 +76,19 @@ module.exports = function (app, url, passport, GoogleStrategy) {
             let user = req.user;
 
             if (!user) {
-                console.log('/auth/google/callback ==> USER NOT FOUND: ' + info.message);
-                var message = encodeURIComponent(info.message);
+                var message = encodeURIComponent('Authentication failed');
                 return res.redirect('/login?error=' + message);
             }
 
-            return res.redirect('/?id=' + user.id + '&email=' + user.email + '&token=' + user.accessToken + '&name=' + user.name + '&photo=' + user.photo);
+            var params = [
+                'id=' + encodeURIComponent(user.id),
+                'email=' + encodeURIComponent(user.email),
+                'token=' + encodeURIComponent(user.accessToken),
+                'name=' + encodeURIComponent(user.name),
+                'photo=' + encodeURIComponent(user.photo)
+            ].join('&');
+
+            return res.redirect('/#' + params);
         });
 
 }

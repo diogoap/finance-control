@@ -5,11 +5,21 @@ var usersService = require('./usersService');
 var usersApiAdminEmail = process.env.USERS_API_ADMIN_EMAIL;
 
 var sendError = function (res, error, status) {
-	if (status) {
-		res.status(status).end('Error: ' + error);
+	var statusCode = status || 500;
+	var safeMessage;
+
+	if (statusCode >= 500) {
+		safeMessage = 'Internal server error';
+		console.error('sendError ==> ', error);
+	} else if (typeof error === 'string') {
+		safeMessage = error;
+	} else if (error && error.message) {
+		safeMessage = error.message;
 	} else {
-		res.status(500).end(error);
-	};
+		safeMessage = 'Request failed';
+	}
+
+	res.status(statusCode).json({ error: safeMessage });
 }
 
 var ensureAuth = function (req, res, next) {

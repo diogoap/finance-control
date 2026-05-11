@@ -13,11 +13,15 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Configuration ===============================================================
 var promise = mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true, retryWrites: false });
+
+app.set('trust proxy', 1);
+app.disable('x-powered-by');
+
 app.use(express.static(__dirname + '/static'))
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({'extended':'true'}));
-app.use(bodyParser.json());
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
+app.use(bodyParser.json({ limit: '1mb' }));
+app.use(bodyParser.json({ type: 'application/vnd.api+json', limit: '1mb' }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(passport.initialize());
 

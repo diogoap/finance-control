@@ -50,7 +50,7 @@ module.exports = function (app, url) {
     })
 
     app.delete('/api/incomes/:id', utils.ensureAuth, ensureIncomeUser, function (req, res) {
-        incomesService.delete({ _id: req.params.id },
+        incomesService.delete(req.params.id,
             function () {
                 res.json('OK');
             },
