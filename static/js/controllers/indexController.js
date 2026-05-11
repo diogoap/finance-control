@@ -2,33 +2,50 @@
 
 var app = angular.module('financeControl');
 
-app.controller('indexController', function ($scope, $localStorage, $routeParams, $location, Utils) {
+app.controller('indexController', function ($scope, $localStorage, $routeParams, $location, $window, Utils) {
 
 	$scope.isLoggedIn = function () {
 		return ($localStorage.get('loggedUserToken') != undefined) && ($localStorage.get('loggedUserToken').length > 0);
 	}
 
-	$scope.$on('$routeChangeSuccess', function () {
-		var loggedUserId = $routeParams.id;
-		var loggedUserEmail = $routeParams.email;
-		var loggedUserToken = $routeParams.token;
-		var loggedUserName = $routeParams.name;
-		var loggedUserPhoto = $routeParams.photo;
+	function parseHashParams(hash) {
+		var params = {};
+		if (!hash) return params;
+		if (hash.charAt(0) === '#') hash = hash.slice(1);
+		hash.split('&').forEach(function (pair) {
+			var idx = pair.indexOf('=');
+			if (idx === -1) return;
+			var key = decodeURIComponent(pair.slice(0, idx));
+			var value = decodeURIComponent(pair.slice(idx + 1));
+			params[key] = value;
+		});
+		return params;
+	}
 
-		if ((loggedUserId != undefined && loggedUserId.length > 0) && (loggedUserToken != undefined && loggedUserToken.length > 0)) {
-			$location.search('').replace();
+	function consumeLoginHash() {
+		var rawHash = $window.location.hash || $location.hash();
+		var hashParams = parseHashParams(rawHash);
 
-			$localStorage.set('loggedUserId', loggedUserId);
-			$localStorage.set('loggedUserEmail', loggedUserEmail);
-			$localStorage.set('loggedUserToken', loggedUserToken);
-			$localStorage.set('loggedUserName', loggedUserName);
-			$localStorage.set('loggedUserPhoto', loggedUserPhoto);
+		if (hashParams.id && hashParams.token) {
+			$localStorage.set('loggedUserId', hashParams.id);
+			$localStorage.set('loggedUserEmail', hashParams.email || '');
+			$localStorage.set('loggedUserToken', hashParams.token);
+			$localStorage.set('loggedUserName', hashParams.name || '');
+			$localStorage.set('loggedUserPhoto', hashParams.photo || '');
 
-			$scope.loggedUserName = loggedUserName;
-			$scope.loggedUserPhoto = loggedUserPhoto;
+			$scope.loggedUserName = hashParams.name || '';
+			$scope.loggedUserPhoto = hashParams.photo || '';
 			$scope.loggedIn = $scope.isLoggedIn();
+
+			if ($window.history && $window.history.replaceState) {
+				$window.history.replaceState(null, '', $window.location.pathname + $window.location.search);
+			}
+			$location.hash('');
 		}
-	});
+	}
+
+	consumeLoginHash();
+	$scope.$on('$routeChangeSuccess', consumeLoginHash);
 
 	$scope.changeRoute = function (newRoute) {
 		// If current Route is Home, and NewRoute is not Home, and is not the First Route Change
