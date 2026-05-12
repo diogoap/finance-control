@@ -3,7 +3,7 @@
 /* A version number is useful when updating the worker logic,
    allowing you to remove outdated cache entries during the update.
 */
-var version = 'v1.1.31';
+var version = 'v1.2.0';
 var trace = false;
 
 console.log('WORKER: executing. Version: ' + version);
@@ -67,7 +67,7 @@ self.addEventListener("fetch", function (event) {
        client-side, by handling failed POST,PUT,PATCH,etc. requests.
        Requests to API also should be skipped.
     */
-    if (event.request.method !== 'GET' || (event.request.url.indexOf('/api/') !== -1)) {
+    if (event.request.method !== 'GET' || (event.request.url.indexOf('/api/') !== -1) || (event.request.url.indexOf('/app/') !== -1)) {
         /* If we don't block the event as shown below, then the request will go to
            the network as usual.
         */

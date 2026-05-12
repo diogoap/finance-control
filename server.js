@@ -18,6 +18,7 @@ app.set('trust proxy', 1);
 app.disable('x-powered-by');
 
 app.use(express.static(__dirname + '/static'))
+app.use('/app', express.static(__dirname + '/web/dist'))
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
@@ -39,6 +40,10 @@ require('./api/apis/loansApi.js')(app, url);
 require('./api/apis/currenciesApi.js')(app, url);
 
 // Static pages requests =======================================================
+app.get(/^\/app(\/.*)?$/, function(req, res){
+    res.sendFile(__dirname + '/web/dist/index.html');
+});
+
 app.use("/", function(req, res, next){
     res.sendFile(__dirname + '/static/index.html');
 });

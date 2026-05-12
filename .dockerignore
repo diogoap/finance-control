@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+.DS_Store
+node_modules
+web/node_modules
+backups
+docs
+*.md
+.vscode

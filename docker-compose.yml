@@ -1,13 +1,11 @@
-version: '3.1'
-
 services:
-  web:  
+  web:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
     container_name: finance-control-web
     depends_on:
-      - mongodb    
+      - mongodb
     ports:
      - "8500:8500"
     networks:
@@ -15,7 +13,23 @@ services:
     volumes:
       - .:/web
       - node_modules:/web/node_modules
+      - web_frontend_node_modules:/web/web/node_modules
     env_file: .env
+
+  web-frontend:
+    image: node:20
+    container_name: finance-control-web-frontend
+    working_dir: /web
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./web:/web
+      - web_frontend_node_modules:/web/node_modules
+    ports:
+      - "5173:5173"
+    networks:
+      - fc-network
+    depends_on:
+      - web
 
   mongodb:
     image: mongo:8.0.9
@@ -34,3 +48,4 @@ networks:
 volumes:
   backups:
   node_modules:
+  web_frontend_node_modules:
