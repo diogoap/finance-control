@@ -155,7 +155,7 @@
         field="amount"
         header="Valor"
         sortable
-        style="width: 9rem"
+        style="width: 8rem"
         header-class="header-end"
       >
         <template #body="{ data }">
@@ -177,16 +177,16 @@
         field="_categoryNames"
         header="Categoria"
         sortable
-        style="width: 12rem"
+        style="width: 15rem"
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
-      <Column field="status" header="Situação" sortable style="width: 8rem" class="text-center" />
+      <Column field="status" header="Situação" sortable style="width: 7rem" class="text-center" />
       <Column
         field="amountReceived"
         header="Valor receb."
         sortable
-        style="width: 9rem"
+        style="width: 8rem"
         class="hidden md:table-cell"
         header-class="header-end hidden md:table-cell"
         footer-class="hidden md:table-cell"
