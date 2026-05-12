@@ -1,6 +1,12 @@
 <template>
   <div class="container mx-auto px-4 py-6">
-    <h1 class="text-xl font-semibold mb-4">Cadastro de receitas</h1>
+    <div class="flex items-center justify-between mb-4 gap-4">
+      <h1 class="text-xl font-semibold">Cadastro de receitas</h1>
+      <div class="flex items-baseline gap-2">
+        <span class="text-sm text-slate-500">Saldo:</span>
+        <span :class="['font-semibold', balanceClass]">{{ formatNumber(balance) }}</span>
+      </div>
+    </div>
 
     <Toolbar class="mb-4">
       <template #start>
@@ -101,7 +107,7 @@
       </template>
 
       <template #end>
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="hidden md:flex flex-wrap items-center gap-2">
           <DatePicker
             v-model="dueDateBegin"
             date-format="dd/mm/yy"
@@ -115,12 +121,6 @@
             input-class="!w-32"
           />
           <Button label="Filtrar" size="small" severity="secondary" @click="fetchAll" />
-          <div class="flex flex-col items-end ml-4">
-            <span class="text-xs text-slate-500 leading-none">Saldo</span>
-            <span :class="['font-semibold leading-tight', balanceClass]">{{
-              formatNumber(balance)
-            }}</span>
-          </div>
         </div>
       </template>
     </Toolbar>
@@ -156,7 +156,7 @@
         header="Valor"
         sortable
         style="width: 9rem"
-        header-class="!justify-end"
+        header-class="header-end"
       >
         <template #body="{ data }">
           <span class="block text-right">{{ formatNumber(data.amount) }}</span>
@@ -173,7 +173,7 @@
         header="Valor receb."
         sortable
         style="width: 9rem"
-        header-class="!justify-end"
+        header-class="header-end"
       >
         <template #body="{ data }">
           <span class="block text-right">{{ formatNumber(data.amountReceived) }}</span>

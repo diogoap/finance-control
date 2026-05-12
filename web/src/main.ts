@@ -7,6 +7,7 @@ import Tooltip from 'primevue/tooltip';
 import App from './App.vue';
 import router from './router';
 import { primevueConfig } from './primevue';
+import './composables/useTheme';
 import './style.css';
 
 const app = createApp(App);

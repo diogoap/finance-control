@@ -40,6 +40,16 @@
         />
         <span class="hidden sm:inline text-sm">{{ session.name }}</span>
         <Button
+          :icon="themeIcon"
+          severity="secondary"
+          text
+          rounded
+          aria-label="Tema"
+          v-tooltip.bottom="themeTooltip"
+          @click="toggleThemeMenu"
+        />
+        <Menu ref="themeMenu" :model="themeItems" :popup="true" />
+        <Button
           icon="pi pi-sign-out"
           severity="secondary"
           text
@@ -53,14 +63,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import Menubar from 'primevue/menubar';
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import type { MenuItem } from 'primevue/menuitem';
 import { getSession } from '../lib/session';
+import { useTheme, type ThemeMode } from '../composables/useTheme';
 
 const session = getSession();
+const { mode: themeMode, setMode } = useTheme();
 
 interface NavItem extends MenuItem {
   to?: string;
@@ -74,6 +86,30 @@ const items = ref<NavItem[]>([
   { label: 'Categorias', icon: 'pi pi-list', to: '/categories' },
   { label: 'Contas', icon: 'pi pi-building', url: '/accounts' },
 ]);
+
+const themeMeta: Record<ThemeMode, { label: string; icon: string }> = {
+  system: { label: 'Sistema', icon: 'pi pi-desktop' },
+  light: { label: 'Claro', icon: 'pi pi-sun' },
+  dark: { label: 'Escuro', icon: 'pi pi-moon' },
+};
+const THEME_ORDER: ThemeMode[] = ['system', 'light', 'dark'];
+
+const themeIcon = computed(() => themeMeta[themeMode.value].icon);
+const themeTooltip = computed(() => `Tema: ${themeMeta[themeMode.value].label}`);
+
+const themeMenu = ref();
+const themeItems = computed<MenuItem[]>(() =>
+  THEME_ORDER.map((value) => ({
+    label: themeMeta[value].label,
+    icon: themeMeta[value].icon,
+    class: themeMode.value === value ? 'p-menubar-item-active' : undefined,
+    command: () => setMode(value),
+  })),
+);
+
+function toggleThemeMenu(event: Event) {
+  themeMenu.value?.toggle(event);
+}
 
 const logoffMenu = ref();
 const logoffItems = ref<MenuItem[]>([
