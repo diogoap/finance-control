@@ -11,14 +11,20 @@
       <ProgressSpinner style="width: 3rem; height: 3rem" />
     </div>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form
+      v-else
+      class="flex flex-col gap-4"
+      data-form-type="other"
+      @submit.prevent="handleSubmit"
+    >
       <div class="flex flex-col gap-1">
-        <label for="categoryName" class="text-sm font-medium">Nome</label>
+        <label for="categoryName" class="text-sm font-medium">Descrição</label>
         <InputText
           id="categoryName"
           v-model="form.name"
           :invalid="submitted && !!errors.name"
           autofocus
+          autocomplete="off"
         />
         <small v-if="submitted && errors.name" class="text-red-600">{{ errors.name }}</small>
       </div>
@@ -91,9 +97,9 @@ const title = computed(() => (props.mode === 'new' ? 'Adicionar categoria' : 'Ed
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = 'O campo Nome é obrigatório.';
-  else if (name.length < 3) out.name = 'O campo Nome deve possuir no mínimo 3 caracteres.';
-  else if (name.length > 100) out.name = 'O campo Nome deve possuir no máximo 100 caracteres.';
+  if (!name) out.name = 'O campo Descrição é obrigatório.';
+  else if (name.length < 3) out.name = 'O campo Descrição deve possuir no mínimo 3 caracteres.';
+  else if (name.length > 100) out.name = 'O campo Descrição deve possuir no máximo 100 caracteres.';
   if (!form.type) out.type = 'O campo Tipo é obrigatório.';
   return out;
 });
