@@ -86,6 +86,16 @@ export function useReferenceData() {
     return list.find((c) => c.default === true)?._id ?? '';
   }
 
+  function invalidate(key: 'accounts' | 'currencies'): void {
+    if (key === 'accounts') {
+      accounts.value = null;
+      accountsPromise = null;
+    } else if (key === 'currencies') {
+      currencies.value = null;
+      currenciesPromise = null;
+    }
+  }
+
   return {
     currencies,
     accounts,
@@ -93,5 +103,6 @@ export function useReferenceData() {
     loadAccounts,
     loadCategories,
     getDefaultCurrencyId,
+    invalidate,
   };
 }
