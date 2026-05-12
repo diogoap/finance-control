@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CategoriesView from './views/CategoriesView.vue';
 import IncomesView from './views/IncomesView.vue';
+import ExpensesView from './views/ExpensesView.vue';
 
 const router = createRouter({
   history: createWebHistory('/app/'),
@@ -8,6 +9,7 @@ const router = createRouter({
     { path: '/', redirect: '/categories' },
     { path: '/categories', name: 'categories', component: CategoriesView },
     { path: '/incomes', name: 'incomes', component: IncomesView },
+    { path: '/expenses', name: 'expenses', component: ExpensesView },
   ],
 });
 

@@ -67,7 +67,7 @@ interface NavItem extends MenuItem {
 }
 
 const items = ref<NavItem[]>([
-  { label: 'Despesas', icon: 'pi pi-minus-circle', url: '/expenses' },
+  { label: 'Despesas', icon: 'pi pi-minus-circle', to: '/expenses' },
   { label: 'Receitas', icon: 'pi pi-plus-circle', to: '/incomes' },
   { label: 'Transferências', icon: 'pi pi-arrows-h', url: '/transfers' },
   { label: 'Empréstimos', icon: 'pi pi-dollar', url: '/loans' },
