@@ -81,10 +81,10 @@ interface NavItem extends MenuItem {
 const items = ref<NavItem[]>([
   { label: 'Despesas', icon: 'pi pi-minus-circle', to: '/expenses' },
   { label: 'Receitas', icon: 'pi pi-plus-circle', to: '/incomes' },
-  { label: 'Transferências', icon: 'pi pi-arrows-h', url: '/transfers' },
-  { label: 'Empréstimos', icon: 'pi pi-dollar', url: '/loans' },
+  { label: 'Transferências', icon: 'pi pi-arrows-h', to: '/transfers' },
+  { label: 'Empréstimos', icon: 'pi pi-dollar', to: '/loans' },
   { label: 'Categorias', icon: 'pi pi-list', to: '/categories' },
-  { label: 'Contas', icon: 'pi pi-building', url: '/accounts' },
+  { label: 'Contas', icon: 'pi pi-building', to: '/accounts' },
 ]);
 
 const themeMeta: Record<ThemeMode, { label: string; icon: string }> = {
