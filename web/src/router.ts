@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from './views/HomeView.vue';
 import CategoriesView from './views/CategoriesView.vue';
 import IncomesView from './views/IncomesView.vue';
 import ExpensesView from './views/ExpensesView.vue';
@@ -9,7 +10,7 @@ import LoansView from './views/LoansView.vue';
 const router = createRouter({
   history: createWebHistory('/app/'),
   routes: [
-    { path: '/', redirect: '/categories' },
+    { path: '/', name: 'home', component: HomeView },
     { path: '/categories', name: 'categories', component: CategoriesView },
     { path: '/incomes', name: 'incomes', component: IncomesView },
     { path: '/expenses', name: 'expenses', component: ExpensesView },

@@ -1,9 +1,12 @@
 <template>
   <Menubar :model="items" class="rounded-none border-x-0 border-t-0 px-4">
     <template #start>
-      <a href="/" class="flex items-center gap-2 font-semibold text-lg no-underline text-current">
+      <router-link
+        to="/"
+        class="flex items-center gap-2 font-semibold text-lg no-underline text-current"
+      >
         Finance Control
-      </a>
+      </router-link>
     </template>
 
     <template #item="{ item, props, hasSubmenu }">
@@ -79,6 +82,7 @@ interface NavItem extends MenuItem {
 }
 
 const items = ref<NavItem[]>([
+  { label: 'Home', icon: 'pi pi-home', to: '/' },
   { label: 'Despesas', icon: 'pi pi-minus-circle', to: '/expenses' },
   { label: 'Receitas', icon: 'pi pi-plus-circle', to: '/incomes' },
   { label: 'Transferências', icon: 'pi pi-arrows-h', to: '/transfers' },
