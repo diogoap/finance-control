@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 html,
 body,
 #app {
@@ -11,6 +13,46 @@ body,
 }
 
 body {
-  background-color: var(--p-surface-50, #fafafa);
-  color: var(--p-surface-900, #18181b);
+  background-color: var(--p-content-background, #fafafa);
+  color: var(--p-text-color, #18181b);
+}
+
+.dark body {
+  background-color: var(--p-content-background, #0a0a0a);
+  color: var(--p-text-color, #fafafa);
+}
+
+/* Condensed data tables: tighter padding + slightly smaller font so more rows fit */
+.p-datatable.p-datatable-sm {
+  font-size: 0.8125rem;
+}
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th,
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td,
+.p-datatable.p-datatable-sm .p-datatable-tfoot > tr > td {
+  padding: 0.4rem 0.5rem;
+}
+
+/* Right-aligned column headers (PrimeVue v4 puts flex on the inner content wrapper) */
+.p-datatable .p-datatable-thead > tr > th.header-end .p-datatable-column-header-content {
+  justify-content: flex-end;
+}
+
+/* Mobile navbar: hamburger button before the app title */
+@media (max-width: 960px) {
+  .p-menubar {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .p-menubar > .p-menubar-button {
+    order: 1;
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+  .p-menubar > .p-menubar-start {
+    order: 2;
+  }
+  .p-menubar > .p-menubar-end {
+    order: 3;
+    margin-left: auto;
+  }
 }
