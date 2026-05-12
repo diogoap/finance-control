@@ -11,7 +11,12 @@
       <ProgressSpinner style="width: 3rem; height: 3rem" />
     </div>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form
+      v-else
+      class="flex flex-col gap-4"
+      data-form-type="other"
+      @submit.prevent="handleSubmit"
+    >
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
           <label for="genInitialDate" class="text-sm font-medium">Data inicial</label>
@@ -116,6 +121,7 @@
           id="genDescription"
           v-model="form.description"
           maxlength="100"
+          autocomplete="off"
           :invalid="submitted && !!errors.description"
         />
         <small v-if="submitted && errors.description" class="text-red-600">{{
@@ -168,7 +174,7 @@
 
       <div class="flex flex-col gap-1">
         <label for="genNotes" class="text-sm font-medium">Observações</label>
-        <Textarea id="genNotes" v-model="form.notes" rows="1" />
+        <Textarea id="genNotes" v-model="form.notes" rows="1" autocomplete="off" />
       </div>
     </form>
 

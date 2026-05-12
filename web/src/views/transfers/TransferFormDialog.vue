@@ -11,7 +11,12 @@
       <ProgressSpinner style="width: 3rem; height: 3rem" />
     </div>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form
+      v-else
+      class="flex flex-col gap-4"
+      data-form-type="other"
+      @submit.prevent="handleSubmit"
+    >
       <div class="flex flex-col gap-1 sm:w-48">
         <label for="transferDate" class="text-sm font-medium">Data</label>
         <DatePicker

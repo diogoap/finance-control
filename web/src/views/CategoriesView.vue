@@ -64,7 +64,7 @@
       class="p-datatable-sm"
     >
       <template #footer>{{ rows.length }} registros</template>
-      <Column field="name" header="Nome" sortable />
+      <Column field="name" header="Descrição" sortable />
       <Column field="type" header="Tipo" sortable style="width: 10rem" />
       <Column header="Ativa?" style="width: 6rem" class="text-center">
         <template #body="{ data }">

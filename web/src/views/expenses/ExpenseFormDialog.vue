@@ -11,7 +11,12 @@
       <ProgressSpinner style="width: 3rem; height: 3rem" />
     </div>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form
+      v-else
+      class="flex flex-col gap-4"
+      data-form-type="other"
+      @submit.prevent="handleSubmit"
+    >
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-8 flex flex-col gap-1">
           <label for="expenseDescription" class="text-sm font-medium">Descrição</label>
@@ -20,6 +25,7 @@
             v-model="form.description"
             :invalid="submitted && !!errors.description"
             autofocus
+            autocomplete="off"
             maxlength="100"
           />
           <small v-if="submitted && errors.description" class="text-red-600">{{
@@ -153,7 +159,7 @@
 
       <div class="flex flex-col gap-1">
         <label for="expenseNotes" class="text-sm font-medium">Observações</label>
-        <Textarea id="expenseNotes" v-model="form.notes" rows="2" />
+        <Textarea id="expenseNotes" v-model="form.notes" rows="2" autocomplete="off" />
       </div>
 
       <div class="flex flex-col gap-2">
