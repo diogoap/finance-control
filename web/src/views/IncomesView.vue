@@ -165,15 +165,31 @@
           <span class="block text-right">{{ formatNumber(amountTotal) }}</span>
         </template>
       </Column>
-      <Column field="_accountNames" header="Conta" sortable style="width: 12rem" />
-      <Column field="_categoryNames" header="Categoria" sortable style="width: 12rem" />
+      <Column
+        field="_accountNames"
+        header="Conta"
+        sortable
+        style="width: 12rem"
+        class="hidden md:table-cell"
+        header-class="hidden md:table-cell"
+      />
+      <Column
+        field="_categoryNames"
+        header="Categoria"
+        sortable
+        style="width: 12rem"
+        class="hidden md:table-cell"
+        header-class="hidden md:table-cell"
+      />
       <Column field="status" header="Situação" sortable style="width: 8rem" class="text-center" />
       <Column
         field="amountReceived"
         header="Valor receb."
         sortable
         style="width: 9rem"
-        header-class="header-end"
+        class="hidden md:table-cell"
+        header-class="header-end hidden md:table-cell"
+        footer-class="hidden md:table-cell"
       >
         <template #body="{ data }">
           <span class="block text-right">{{ formatNumber(data.amountReceived) }}</span>
