@@ -68,3 +68,17 @@ body {
 .home-box .p-panel-header {
   padding: 0.4rem 0.75rem;
 }
+
+/* Default light tint for Panel headers; CategoryBox overrides via Tailwind utilities */
+.home-box-header {
+  background-color: rgb(248 250 252); /* slate-50 */
+}
+.dark .home-box-header {
+  background-color: rgb(30 41 59 / 0.4); /* slate-800/40 */
+}
+
+/* Render Color emojis in a softened, near-monochrome tone to match minimal app aesthetics */
+.home-emoji {
+  filter: grayscale(1) contrast(0.95);
+  opacity: 0.85;
+}

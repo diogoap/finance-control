@@ -3,9 +3,18 @@
     :class="['home-box', borderClass]"
     :toggleable="isMobile"
     v-model:collapsed="collapsed"
+    :pt="{
+      header: {
+        onClick: onHeaderClick,
+        class: ['home-box-header', headerBgClass, isMobile ? 'cursor-pointer' : ''],
+      },
+    }"
   >
     <template #header>
-      <span class="text-sm font-semibold">{{ title }}</span>
+      <span class="text-sm font-semibold flex items-center gap-1.5">
+        <span class="home-emoji" aria-hidden="true">{{ emoji }}</span>
+        {{ title }}
+      </span>
     </template>
     <table v-if="filtered.length" class="w-full text-xs">
       <tbody>
@@ -47,10 +56,25 @@ const borderClass = computed(() =>
     : 'border-l-4 border-l-red-500',
 );
 
+const headerBgClass = computed(() =>
+  props.severity === 'success'
+    ? 'bg-green-50 dark:bg-green-900/20'
+    : 'bg-red-50 dark:bg-red-900/20',
+);
+
+const emoji = computed(() => (props.severity === 'success' ? '📈' : '📉'));
+
 const { isMobile } = useIsMobile();
 const collapsed = ref(isMobile.value);
 
 watch(isMobile, (mobile) => {
   collapsed.value = mobile;
 });
+
+function onHeaderClick(event: MouseEvent) {
+  if (!isMobile.value) return;
+  const target = event.target as HTMLElement | null;
+  if (target?.closest('button')) return;
+  collapsed.value = !collapsed.value;
+}
 </script>

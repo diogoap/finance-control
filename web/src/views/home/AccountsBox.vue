@@ -3,9 +3,18 @@
     class="home-box"
     :toggleable="isMobile"
     v-model:collapsed="collapsed"
+    :pt="{
+      header: {
+        onClick: onHeaderClick,
+        class: ['home-box-header', isMobile ? 'cursor-pointer' : ''],
+      },
+    }"
   >
     <template #header>
-      <span class="text-sm font-semibold">Contas</span>
+      <span class="text-sm font-semibold flex items-center gap-1.5">
+        <span class="home-emoji" aria-hidden="true">💳</span>
+        Contas
+      </span>
     </template>
     <table v-if="enabledAccounts.length" class="w-full text-xs">
       <tbody>
@@ -38,4 +47,11 @@ const collapsed = ref(isMobile.value);
 watch(isMobile, (mobile) => {
   collapsed.value = mobile;
 });
+
+function onHeaderClick(event: MouseEvent) {
+  if (!isMobile.value) return;
+  const target = event.target as HTMLElement | null;
+  if (target?.closest('button')) return;
+  collapsed.value = !collapsed.value;
+}
 </script>
