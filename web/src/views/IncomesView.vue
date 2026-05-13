@@ -20,6 +20,7 @@
             @click="openIncome('new', null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-pencil"
             severity="primary"
             size="small"
@@ -29,15 +30,17 @@
             @click="openIncome('edit', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-trash"
             severity="primary"
             size="small"
             :disabled="!selected"
             aria-label="Excluir"
             v-tooltip.bottom="'Excluir'"
-            @click="confirmDelete"
+            @click="selected && confirmDeleteFor(selected._id)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-clone"
             severity="primary"
             size="small"
@@ -47,13 +50,14 @@
             @click="openIncome('clone', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-dollar"
             severity="primary"
             size="small"
             :disabled="!selected || selected.status !== 'Em aberto'"
             aria-label="Receber"
             v-tooltip.bottom="'Receber'"
-            @click="confirmReceive"
+            @click="selected && confirmReceiveFor(selected._id)"
           />
           <Button
             icon="pi pi-cog"
@@ -127,16 +131,19 @@
 
     <DataTable
       v-model:selection="selected"
+      v-model:context-menu-selection="selected"
       :value="rows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
+      :context-menu="!isMobile"
       removable-sort
       striped-rows
       :paginator="rows.length > 25"
       :rows="25"
       :row-class="rowClass"
       class="p-datatable-sm"
+      @row-contextmenu="onRowContext"
     >
       <Column field="dueDate" header="Vencimento" sortable style="width: 9rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.dueDate) }}</template>
@@ -195,8 +202,28 @@
           <span class="block text-right">{{ formatNumber(amountReceivedTotal) }}</span>
         </template>
       </Column>
+      <Column
+        class="md:hidden text-center"
+        header-class="md:hidden"
+        style="width: 3rem"
+      >
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-ellipsis-v"
+            text
+            rounded
+            size="small"
+            aria-label="Ações"
+            aria-haspopup="menu"
+            @click.stop="openRowMenu($event, data)"
+          />
+        </template>
+      </Column>
       <template #empty>Nenhuma receita encontrada.</template>
     </DataTable>
+
+    <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
+    <ContextMenu v-if="!isMobile" ref="ctxMenu" :model="rowMenuItems" append-to="body" />
 
     <IncomeFormDialog
       :visible="incomeDialog.visible"
@@ -224,6 +251,9 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
+import Menu from 'primevue/menu';
+import ContextMenu from 'primevue/contextmenu';
+import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 import {
@@ -231,6 +261,7 @@ import {
   type Income,
   type IncomeFormPayload,
 } from '../composables/useIncomes';
+import { useIsMobile } from '../composables/useIsMobile';
 import {
   formatCurrency,
   formatNumber,
@@ -247,6 +278,7 @@ import GeneratorFormDialog from './incomes/GeneratorFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchIncomes, create, update, remove, receive } =
   useIncomes();
@@ -261,6 +293,37 @@ const incomeDialog = reactive<{ visible: boolean; mode: 'new' | 'edit' | 'clone'
   visible: false,
   mode: 'new',
   incomeId: null,
+});
+
+const rowMenu = ref();
+const ctxMenu = ref();
+const rowMenuTarget = ref<Income | null>(null);
+const rowMenuItems = computed<MenuItem[]>(() => {
+  const row = rowMenuTarget.value;
+  if (!row) return [];
+  return [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => openIncome('edit', row._id),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => confirmDeleteFor(row._id),
+    },
+    {
+      label: 'Clonar',
+      icon: 'pi pi-clone',
+      command: () => openIncome('clone', row._id),
+    },
+    {
+      label: 'Receber',
+      icon: 'pi pi-dollar',
+      visible: row.status === 'Em aberto',
+      command: () => confirmReceiveFor(row._id),
+    },
+  ];
 });
 
 const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
@@ -320,6 +383,16 @@ function openIncome(mode: 'new' | 'edit' | 'clone', id: string | null) {
   incomeDialog.visible = true;
 }
 
+function openRowMenu(e: MouseEvent, row: Income) {
+  rowMenuTarget.value = row;
+  rowMenu.value?.toggle(e);
+}
+
+function onRowContext(e: { originalEvent: Event; data: Income }) {
+  rowMenuTarget.value = e.data;
+  ctxMenu.value?.show(e.originalEvent);
+}
+
 function closeIncomeDialog() {
   incomeDialog.visible = false;
 }
@@ -361,9 +434,7 @@ function onGeneratorSubmit() {
   fetchAll();
 }
 
-function confirmDelete() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmDeleteFor(id: string) {
   confirm.require({
     message: 'Confirma a exclusão da receita?',
     header: 'Excluir receita',
@@ -385,9 +456,7 @@ function confirmDelete() {
   });
 }
 
-function confirmReceive() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmReceiveFor(id: string) {
   confirm.require({
     message: 'Confirma o recebimento da receita?',
     header: 'Receber receita',

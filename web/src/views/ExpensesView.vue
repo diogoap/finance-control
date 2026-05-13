@@ -20,6 +20,7 @@
             @click="openExpense('new', null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-pencil"
             severity="primary"
             size="small"
@@ -29,15 +30,17 @@
             @click="openExpense('edit', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-trash"
             severity="primary"
             size="small"
             :disabled="!selected"
             aria-label="Excluir"
             v-tooltip.bottom="'Excluir'"
-            @click="confirmDelete"
+            @click="selected && confirmDeleteFor(selected._id)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-clone"
             severity="primary"
             size="small"
@@ -47,13 +50,14 @@
             @click="openExpense('clone', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-dollar"
             severity="primary"
             size="small"
             :disabled="!selected || selected.status !== 'Em aberto'"
             aria-label="Pagar"
             v-tooltip.bottom="'Pagar'"
-            @click="confirmPay"
+            @click="selected && confirmPayFor(selected._id)"
           />
           <Button
             icon="pi pi-cog"
@@ -127,16 +131,19 @@
 
     <DataTable
       v-model:selection="selected"
+      v-model:context-menu-selection="selected"
       :value="rows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
+      :context-menu="!isMobile"
       removable-sort
       striped-rows
       :paginator="rows.length > 25"
       :rows="25"
       :row-class="rowClass"
       class="p-datatable-sm"
+      @row-contextmenu="onRowContext"
     >
       <Column field="dueDate" header="Vencimento" sortable style="width: 9rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.dueDate) }}</template>
@@ -211,8 +218,28 @@
           <i v-if="data.scheduledPayment" class="pi pi-check text-slate-600" />
         </template>
       </Column>
+      <Column
+        class="md:hidden text-center"
+        header-class="md:hidden"
+        style="width: 3rem"
+      >
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-ellipsis-v"
+            text
+            rounded
+            size="small"
+            aria-label="Ações"
+            aria-haspopup="menu"
+            @click.stop="openRowMenu($event, data)"
+          />
+        </template>
+      </Column>
       <template #empty>Nenhuma despesa encontrada.</template>
     </DataTable>
+
+    <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
+    <ContextMenu v-if="!isMobile" ref="ctxMenu" :model="rowMenuItems" append-to="body" />
 
     <ExpenseFormDialog
       :visible="expenseDialog.visible"
@@ -240,6 +267,9 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
+import Menu from 'primevue/menu';
+import ContextMenu from 'primevue/contextmenu';
+import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 import {
@@ -247,6 +277,7 @@ import {
   type Expense,
   type ExpenseFormPayload,
 } from '../composables/useExpenses';
+import { useIsMobile } from '../composables/useIsMobile';
 import {
   formatCurrency,
   formatNumber,
@@ -263,6 +294,7 @@ import GeneratorFormDialog from './expenses/GeneratorFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchExpenses, create, update, remove, pay } =
   useExpenses();
@@ -277,6 +309,37 @@ const expenseDialog = reactive<{ visible: boolean; mode: 'new' | 'edit' | 'clone
   visible: false,
   mode: 'new',
   expenseId: null,
+});
+
+const rowMenu = ref();
+const ctxMenu = ref();
+const rowMenuTarget = ref<Expense | null>(null);
+const rowMenuItems = computed<MenuItem[]>(() => {
+  const row = rowMenuTarget.value;
+  if (!row) return [];
+  return [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => openExpense('edit', row._id),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => confirmDeleteFor(row._id),
+    },
+    {
+      label: 'Clonar',
+      icon: 'pi pi-clone',
+      command: () => openExpense('clone', row._id),
+    },
+    {
+      label: 'Pagar',
+      icon: 'pi pi-dollar',
+      visible: row.status === 'Em aberto',
+      command: () => confirmPayFor(row._id),
+    },
+  ];
 });
 
 const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
@@ -336,6 +399,16 @@ function openExpense(mode: 'new' | 'edit' | 'clone', id: string | null) {
   expenseDialog.visible = true;
 }
 
+function openRowMenu(e: MouseEvent, row: Expense) {
+  rowMenuTarget.value = row;
+  rowMenu.value?.toggle(e);
+}
+
+function onRowContext(e: { originalEvent: Event; data: Expense }) {
+  rowMenuTarget.value = e.data;
+  ctxMenu.value?.show(e.originalEvent);
+}
+
 function closeExpenseDialog() {
   expenseDialog.visible = false;
 }
@@ -377,9 +450,7 @@ function onGeneratorSubmit() {
   fetchAll();
 }
 
-function confirmDelete() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmDeleteFor(id: string) {
   confirm.require({
     message: 'Confirma a exclusão da despesa?',
     header: 'Excluir despesa',
@@ -401,9 +472,7 @@ function confirmDelete() {
   });
 }
 
-function confirmPay() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmPayFor(id: string) {
   confirm.require({
     message: 'Confirma o pagamento da despesa?',
     header: 'Pagar despesa',
