@@ -6,10 +6,10 @@ Personal finance tracker: expenses, incomes, transfers, loans, and balances acro
 
 | Layer       | Technology                                                                 |
 | ----------- | -------------------------------------------------------------------------- |
-| Runtime     | Node.js 18                                                                 |
+| Runtime     | Node.js 18 (server) / 20 (web build)                                       |
 | Backend     | Express 4, Mongoose 7, Passport (Google OAuth2), jsonschema                |
 | Database    | MongoDB 8                                                                  |
-| Frontend    | AngularJS 1.x SPA, ui-bootstrap, ui-grid, Bootstrap                        |
+| Frontend    | Vue 3 + Vite + PrimeVue (Aura) + Tailwind v4 + TypeScript                  |
 | Packaging   | Docker / docker-compose                                                    |
 | Auth        | Google OAuth2 → opaque access token in `Authorization` header              |
 
@@ -18,13 +18,13 @@ Personal finance tracker: expenses, incomes, transfers, loans, and balances acro
 ```mermaid
 flowchart LR
     User([User])
-    Browser[AngularJS SPA<br/>static/index.html]
+    Browser[Vue 3 SPA<br/>web/dist served at /app/*]
     Server[Express server<br/>server.js :8500]
     Mongo[(MongoDB<br/>finance-control)]
     Google[Google OAuth2]
 
     User -->|HTTPS| Browser
-    Browser -->|GET /| Server
+    Browser -->|GET /app/*| Server
     Browser -->|/api/* + Authorization, User-Id| Server
     Server -->|Mongoose| Mongo
     Server -->|/auth/google| Google
@@ -36,7 +36,7 @@ flowchart LR
     end
 ```
 
-The Node process serves both the static SPA and the JSON API from the same origin and port. There is no build step for the frontend — `index.html` and the AngularJS modules under `static/` are shipped as-is.
+The Node process serves both the Vue SPA (built into `web/dist/`) and the JSON API from the same origin and port. The Vue build runs inside `docker/web/Dockerfile`'s multi-stage `web-builder` stage; bare `/`, `/login`, `/logoff` 302-redirect to `/app/...` so legacy bookmarks keep working.
 
 ## Backend module layout
 
@@ -134,12 +134,12 @@ Notes:
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant SPA as AngularJS SPA
+    participant SPA as Vue SPA
     participant API as Express
     participant G as Google OAuth2
     participant DB as MongoDB
 
-    U->>SPA: Click "Sign in with Google"
+    U->>SPA: Click "Entrar com Google"
     SPA->>API: GET /auth/google
     API->>G: Redirect with client_id, scope
     G-->>U: Consent screen
@@ -147,8 +147,8 @@ sequenceDiagram
     G->>API: GET /auth/google/callback?code=...
     API->>G: Exchange code for profile
     API->>DB: usersService.logIn — upsert user, push new token
-    API-->>SPA: Redirect with id, email, token, name, photo
-    SPA->>SPA: indexController stores in localStorage
+    API-->>SPA: Redirect to /app/#id&token&name&email&photo
+    SPA->>SPA: consumeOAuthHash() stores in localStorage; router guard allows
     Note over SPA,API: All later requests carry<br/>Authorization: <token>, User-Id: <id>
     SPA->>API: GET /api/expenses (with headers)
     API->>API: utilsService.ensureAuth — verify user enabled<br/>+ token present in user.accessTokens
@@ -161,20 +161,18 @@ Tokens are opaque random strings stored in an array on the user document, so mul
 
 ## SPA structure
 
-| Concern        | Location                          |
-| -------------- | --------------------------------- |
-| Routing & DI   | `static/js/app.js`                |
-| Page templates | `static/html/*.html` (19 files)   |
-| Controllers    | `static/js/controllers/*.js`      |
-| API clients    | `static/js/services/*.js`         |
-| HTTP plumbing  | `static/js/interceptors/*.js`     |
+| Concern         | Location                                     |
+| --------------- | -------------------------------------------- |
+| Entrypoint      | `web/src/main.ts` (`consumeOAuthHash` pre-mount) |
+| Routing & guard | `web/src/router.ts` (base `/app/`, `meta.public`) |
+| Views           | `web/src/views/*.vue` + `views/<resource>/<Resource>FormDialog.vue` |
+| Composables     | `web/src/composables/*.ts` (CRUD wrappers, theme, isMobile, ...) |
+| API client      | `web/src/lib/api.ts` (axios + auth interceptor) |
+| Session         | `web/src/lib/session.ts` (`getSession`, `isLoggedIn`, `consumeOAuthHash`) |
+| Navbar          | `web/src/components/AppNavbar.vue`           |
+| Theme + locale  | `web/src/primevue.ts`                        |
 
-Routes mirror the backend resources (`/expenses`, `/incomes`, `/accounts`, `/categories`, `/transfers`, `/loans`, `/currencies`) plus `/`, `/login`, `/logoff`. Two `$http` interceptors handle cross-cutting concerns:
-
-- `authorizationHeaderInterceptor` injects `Authorization` and `User-Id` from `localStorage` into every outbound request.
-- `unauthorizedInterceptor` redirects to `/login` on 401.
-
-A `serviceWorker.js` and `manifest.json` are present, suggesting limited PWA support.
+Vue Router routes mirror the backend resources (`/expenses`, `/incomes`, `/accounts`, `/categories`, `/transfers`, `/loans`) plus `/`, `/login`, `/logoff`. The router's global `beforeEach` redirects unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt). The axios response interceptor calls `window.location.assign('/app/login')` on 401 from any API call.
 
 ## Deployment
 
@@ -226,23 +224,30 @@ sequenceDiagram
 
 ```
 finance-control/
-├── server.js                  # Express bootstrap, route registration
-├── package.json               # Node 18, no build/test scripts
-├── docker-compose.yml         # local dev
+├── server.js                  # Express bootstrap, route registration, /app/* SPA fallback, legacy redirects
+├── package.json               # Node 18+, no test scripts; build:web shortcut
+├── docker-compose.yml         # local dev (web + web-frontend Vite + mongodb)
 ├── docker-compose-server.yml  # production
-├── docker/web/                # Dockerfile for the Node image
+├── docker/web/Dockerfile      # multi-stage: web-builder builds web/dist, runtime stage serves
 ├── api/
 │   ├── apis/                  # 11 route modules
 │   ├── services/              # 11 service modules (incl. utilsService)
 │   └── models/                # 8 Mongoose schemas
-├── static/
-│   ├── index.html             # SPA shell
-│   ├── manifest.json
-│   ├── serviceWorker.js
-│   ├── js/                    # app.js, controllers, services, interceptors
-│   ├── html/                  # 19 templates (pages + modals)
-│   ├── css/, images/
-│   └── bower_components/      # vendored frontend deps
+├── web/
+│   ├── package.json           # Vue 3, PrimeVue 4, Tailwind v4, Vite, TypeScript
+│   ├── .npmrc                 # package-lock=false (Tailwind v4 / npm bug #4828)
+│   ├── vite.config.ts         # base '/app/', proxies /api + /auth to Express
+│   ├── index.html
+│   ├── public/                # favicon, etc. (copied to /app/ at build time)
+│   └── src/
+│       ├── main.ts            # consumeOAuthHash() pre-mount; PrimeVue + services
+│       ├── App.vue            # AppNavbar + Toast + ConfirmDialog + RouterView
+│       ├── router.ts          # routes + auth guard
+│       ├── primevue.ts        # theme + pt-BR locale
+│       ├── lib/               # api.ts (axios), session.ts, dateUtils.ts
+│       ├── components/AppNavbar.vue
+│       ├── views/             # one View per resource + LoginView/LogoffView
+│       └── composables/       # CRUD wrappers + theme/isMobile helpers
 └── backups/                   # mounted into the Mongo container
 ```
 
@@ -250,13 +255,11 @@ finance-control/
 
 Worth raising before any rework:
 
-1. **AngularJS 1.x is end-of-life.** The frontend is the largest single liability; a migration target (Vue, Svelte, React) should be picked before adding more pages.
-2. **Frontend deps are vendored via Bower.** Switching to npm + a small bundler is a prerequisite for #1.
-3. **Tokens in `localStorage`.** Vulnerable to XSS exfiltration. `httpOnly` cookies + CSRF token would be a stronger default.
-4. **Callback-based services.** The whole `api/services` layer predates async/await; converting to promises would simplify error handling and remove the deeply nested `callbackSuccess`/`callbackError` argument lists.
-5. **`password-hash` is imported but unused.** Login is Google-only; the dependency can be dropped.
-6. **No tests, no CI, no linter.** `npm start` is the only script. A small Jest/Vitest suite around services and a basic GitHub Actions workflow would be high-leverage.
-7. **No rate limiting or input sanitization beyond schema.** `express-rate-limit` and `helmet` would close obvious gaps.
-8. **Single hard-coded admin** (`USERS_API_ADMIN_EMAIL`). A `role` field on the user document scales better than an env var.
-9. **No API documentation.** Endpoint contracts live only in code; an OpenAPI spec (or at least a README of routes) would help any future client work.
-10. **Mixed locale.** Status enums are in Portuguese (`Em aberto`, `Pago`) while route names are English; worth standardising.
+1. **Tokens in `localStorage`.** Vulnerable to XSS exfiltration. `httpOnly` cookies + CSRF token would be a stronger default.
+2. **Callback-based services.** The whole `api/services` layer predates async/await; converting to promises would simplify error handling and remove the deeply nested `callbackSuccess`/`callbackError` argument lists.
+3. **`password-hash` is imported but unused.** Login is Google-only; the dependency can be dropped.
+4. **No tests, no CI, no linter.** `npm start` is the only script. A small Jest/Vitest suite around services and a basic GitHub Actions workflow would be high-leverage.
+5. **No rate limiting or input sanitization beyond schema.** `express-rate-limit` and `helmet` would close obvious gaps.
+6. **Single hard-coded admin** (`USERS_API_ADMIN_EMAIL`). A `role` field on the user document scales better than an env var.
+7. **No API documentation.** Endpoint contracts live only in code; an OpenAPI spec (or at least a README of routes) would help any future client work.
+8. **Mixed locale.** Status enums are in Portuguese (`Em aberto`, `Pago`) while route names are English; worth standardising.

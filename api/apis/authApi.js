@@ -71,13 +71,13 @@ module.exports = function (app, url, passport, GoogleStrategy) {
     });
 
     app.get('/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login', session: false }),
+        passport.authenticate('google', { failureRedirect: '/app/login', session: false }),
         function (req, res) {
             let user = req.user;
 
             if (!user) {
                 var message = encodeURIComponent('Authentication failed');
-                return res.redirect('/login?error=' + message);
+                return res.redirect('/app/login?error=' + message);
             }
 
             var params = [
@@ -88,7 +88,7 @@ module.exports = function (app, url, passport, GoogleStrategy) {
                 'photo=' + encodeURIComponent(user.photo)
             ].join('&');
 
-            return res.redirect('/#' + params);
+            return res.redirect('/app/#' + params);
         });
 
 }
