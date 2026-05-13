@@ -63,7 +63,7 @@ const headerBgClass = computed(() =>
 );
 
 const iconClass = computed(() =>
-  props.severity === 'success' ? 'pi-arrow-up' : 'pi-arrow-down',
+  props.severity === 'success' ? 'pi-plus-circle' : 'pi-minus-circle',
 );
 
 const { isMobile } = useIsMobile();
