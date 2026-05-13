@@ -183,7 +183,18 @@
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
-      <Column field="status" header="Situação" sortable style="width: 7rem" class="text-center" />
+      <Column field="status" sortable style="width: 4rem" class="text-center">
+        <template #header>
+          <i
+            class="pi pi-wallet text-lg"
+            aria-label="Recebido"
+            v-tooltip.bottom="'Recebido'"
+          />
+        </template>
+        <template #body="{ data }">
+          <i v-if="data.status === 'Recebido'" class="pi pi-check text-green-600" />
+        </template>
+      </Column>
       <Column
         field="amountReceived"
         header="Valor receb."
