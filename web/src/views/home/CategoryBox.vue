@@ -12,7 +12,7 @@
   >
     <template #header>
       <span class="text-sm font-semibold flex items-center gap-1.5">
-        <span class="home-emoji" aria-hidden="true">{{ emoji }}</span>
+        <i :class="['pi', iconClass, 'home-icon']" aria-hidden="true"></i>
         {{ title }}
       </span>
     </template>
@@ -62,7 +62,9 @@ const headerBgClass = computed(() =>
     : 'bg-red-50 dark:bg-red-900/20',
 );
 
-const emoji = computed(() => (props.severity === 'success' ? '📈' : '📉'));
+const iconClass = computed(() =>
+  props.severity === 'success' ? 'pi-arrow-up' : 'pi-arrow-down',
+);
 
 const { isMobile } = useIsMobile();
 const collapsed = ref(isMobile.value);

@@ -6,7 +6,7 @@
   >
     <template #header>
       <span class="text-sm font-semibold flex items-center gap-1.5">
-        <span class="home-emoji" aria-hidden="true">🧮</span>
+        <i class="pi pi-dollar home-icon" aria-hidden="true"></i>
         Totais
       </span>
     </template>
