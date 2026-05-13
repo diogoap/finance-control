@@ -66,21 +66,16 @@
       <template #footer>{{ rows.length }} registros</template>
       <Column field="name" header="Nome" sortable />
       <Column
-        field="_currency.currencyCode"
-        header="Moeda"
-        sortable
-        style="width: 6rem"
-        class="text-center"
-      />
-      <Column
         field="initialBalance"
         header="Saldo inicial"
         sortable
-        style="width: 10rem"
+        style="width: 11rem"
         header-class="header-end"
       >
         <template #body="{ data }">
-          <span class="block text-right">{{ formatNumber(data.initialBalance) }}</span>
+          <span class="block text-right">{{
+            formatCurrency(data.initialBalance, data._currency?.currencyCode)
+          }}</span>
         </template>
       </Column>
       <Column
@@ -124,7 +119,7 @@ import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 import { useAccounts, type Account, type NewAccount } from '../composables/useAccounts';
 import { useReferenceData } from '../composables/useReferenceData';
-import { formatNumber } from '../lib/dateUtils';
+import { formatCurrency } from '../lib/dateUtils';
 import AccountFormDialog from './accounts/AccountFormDialog.vue';
 
 const toast = useToast();

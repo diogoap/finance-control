@@ -42,7 +42,7 @@
       </template>
 
       <template #end>
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="hidden md:flex flex-wrap items-center gap-2">
           <DatePicker
             v-model="dateBegin"
             date-format="dd/mm/yy"

@@ -90,3 +90,33 @@ export function formatNumber(value: number | null | undefined): string {
   if (value == null || isNaN(value)) return '';
   return numberFormatter.format(value);
 }
+
+const currencyFormatters = new Map<string, Intl.NumberFormat>();
+
+function getCurrencyFormatter(code: string): Intl.NumberFormat | null {
+  let f = currencyFormatters.get(code);
+  if (f) return f;
+  try {
+    f = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: code,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    currencyFormatters.set(code, f);
+    return f;
+  } catch {
+    return null;
+  }
+}
+
+export function formatCurrency(
+  value: number | null | undefined,
+  code: string | null | undefined,
+): string {
+  if (value == null || isNaN(value)) return '';
+  if (!code) return formatNumber(value);
+  if (code.includes(' - ')) return `${code} ${formatNumber(value)}`;
+  const f = getCurrencyFormatter(code);
+  return f ? f.format(value) : `${code} ${formatNumber(value)}`;
+}

@@ -145,21 +145,16 @@
         <template #footer>{{ rows.length }} registros</template>
       </Column>
       <Column
-        field="_currencyCodes"
-        header="Moeda"
-        sortable
-        style="width: 6rem"
-        class="text-center"
-      />
-      <Column
         field="amount"
         header="Valor"
         sortable
-        style="width: 8rem"
+        style="width: 10rem"
         header-class="header-end"
       >
         <template #body="{ data }">
-          <span class="block text-right">{{ formatNumber(data.amount) }}</span>
+          <span class="block text-right">{{
+            formatCurrency(data.amount, data._currencyCodes)
+          }}</span>
         </template>
         <template #footer>
           <span class="block text-right">{{ formatNumber(amountTotal) }}</span>
@@ -186,13 +181,15 @@
         field="amountPaid"
         header="Valor pago"
         sortable
-        style="width: 8rem"
+        style="width: 10rem"
         class="hidden md:table-cell"
         header-class="header-end hidden md:table-cell"
         footer-class="hidden md:table-cell"
       >
         <template #body="{ data }">
-          <span class="block text-right">{{ formatNumber(data.amountPaid) }}</span>
+          <span class="block text-right">{{
+            formatCurrency(data.amountPaid, data._currencyCodes)
+          }}</span>
         </template>
         <template #footer>
           <span class="block text-right">{{ formatNumber(amountPaidTotal) }}</span>
@@ -251,6 +248,7 @@ import {
   type ExpenseFormPayload,
 } from '../composables/useExpenses';
 import {
+  formatCurrency,
   formatNumber,
   formatShortDate,
   getActualMonth,

@@ -116,21 +116,16 @@
         <template #footer>{{ rows.length }} registros</template>
       </Column>
       <Column
-        field="_currency.currencyCode"
-        header="Moeda"
-        sortable
-        style="width: 6rem"
-        class="text-center"
-      />
-      <Column
         field="amount"
         header="Valor"
         sortable
-        style="width: 9rem"
+        style="width: 11rem"
         header-class="header-end"
       >
         <template #body="{ data }">
-          <span class="block text-right">{{ formatNumber(data.amount) }}</span>
+          <span class="block text-right">{{
+            formatCurrency(data.amount, data._currency?.currencyCode)
+          }}</span>
         </template>
         <template #footer>
           <span class="block text-right">{{ formatNumber(amountTotal) }}</span>
@@ -172,6 +167,7 @@ import {
   type TransferFormPayload,
 } from '../composables/useTransfers';
 import {
+  formatCurrency,
   formatNumber,
   formatShortDate,
   getActualMonth,
