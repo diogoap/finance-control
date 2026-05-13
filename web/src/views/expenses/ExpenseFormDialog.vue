@@ -174,6 +174,7 @@
                 @click="openDetail('new', null)"
               />
               <Button
+                class="hidden md:inline-flex"
                 icon="pi pi-pencil"
                 size="small"
                 :disabled="!selectedDetail"
@@ -182,14 +183,16 @@
                 @click="openDetail('edit', selectedDetail)"
               />
               <Button
+                class="hidden md:inline-flex"
                 icon="pi pi-trash"
                 size="small"
                 :disabled="!selectedDetail"
                 aria-label="Excluir"
                 v-tooltip.bottom="'Excluir'"
-                @click="confirmDeleteDetail"
+                @click="confirmDeleteDetailFor(selectedDetail?._key ?? null)"
               />
               <Button
+                class="hidden md:inline-flex"
                 icon="pi pi-clone"
                 size="small"
                 :disabled="!selectedDetail"
@@ -198,12 +201,13 @@
                 @click="openDetail('clone', selectedDetail)"
               />
               <Button
+                class="hidden md:inline-flex"
                 icon="pi pi-dollar"
                 size="small"
                 :disabled="!selectedDetail || selectedDetail.status !== 'Em aberto'"
                 aria-label="Pagar"
                 v-tooltip.bottom="'Pagar'"
-                @click="payDetail"
+                @click="payDetailFor(selectedDetail?._key ?? null)"
               />
             </div>
           </template>
@@ -211,21 +215,25 @@
 
         <DataTable
           v-model:selection="selectedDetail"
+          v-model:context-menu-selection="selectedDetail"
           :value="form.detail"
           data-key="_key"
           selection-mode="single"
+          :context-menu="!isMobile"
           striped-rows
           class="p-datatable-sm"
           :rows="5"
+          @row-contextmenu="onRowContext"
         >
           <Column field="description" header="Descrição">
             <template #footer>{{ form.detail.length }} registros</template>
           </Column>
-          <Column header="Moeda" style="width: 5rem" class="text-center">
-            <template #body="{ data }">{{ data._currency?.currencyCode ?? '' }}</template>
-          </Column>
-          <Column header="Valor" style="width: 8rem" class="text-right">
-            <template #body="{ data }">{{ formatNumber(data.amount) }}</template>
+          <Column header="Valor" style="width: 9rem" header-class="header-end">
+            <template #body="{ data }">
+              <span class="block text-right">{{
+                formatCurrency(data.amount, data._currency?.currencyCode)
+              }}</span>
+            </template>
             <template #footer>
               <span class="block text-right">{{ formatNumber(detailTotal) }}</span>
             </template>
@@ -236,7 +244,35 @@
           <Column header="Categoria" style="width: 12rem">
             <template #body="{ data }">{{ data._category?.name ?? '' }}</template>
           </Column>
-          <Column field="status" header="Situação" style="width: 8rem" class="text-center" />
+          <Column field="status" style="width: 4rem" class="text-center">
+            <template #header>
+              <i
+                class="pi pi-money-bill text-lg"
+                aria-label="Pago"
+                v-tooltip.bottom="'Pago'"
+              />
+            </template>
+            <template #body="{ data }">
+              <i v-if="data.status === 'Pago'" class="pi pi-check text-green-600" />
+            </template>
+          </Column>
+          <Column
+            class="md:hidden text-center"
+            header-class="md:hidden"
+            style="width: 3rem"
+          >
+            <template #body="{ data }">
+              <Button
+                icon="pi pi-ellipsis-v"
+                text
+                rounded
+                size="small"
+                aria-label="Ações"
+                aria-haspopup="menu"
+                @click.stop="openRowMenu($event, data)"
+              />
+            </template>
+          </Column>
           <template #empty>
             <div class="text-center text-sm text-slate-500 py-4">Nenhum detalhe adicionado.</div>
           </template>
@@ -249,6 +285,9 @@
       <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
+
+  <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
+  <ContextMenu v-if="!isMobile" ref="ctxMenu" :model="rowMenuItems" append-to="body" />
 
   <ExpenseDetailFormDialog
     :visible="detailDialog.visible"
@@ -274,6 +313,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import DatePicker from 'primevue/datepicker';
 import ProgressSpinner from 'primevue/progressspinner';
+import Menu from 'primevue/menu';
+import ContextMenu from 'primevue/contextmenu';
+import type { MenuItem } from 'primevue/menuitem';
 import { useConfirm } from 'primevue/useconfirm';
 import {
   useExpenses,
@@ -289,7 +331,8 @@ import {
   type CategoryRef,
   type Currency,
 } from '../../composables/useReferenceData';
-import { formatNumber, getDateDst } from '../../lib/dateUtils';
+import { useIsMobile } from '../../composables/useIsMobile';
+import { formatCurrency, formatNumber, getDateDst } from '../../lib/dateUtils';
 import ExpenseDetailFormDialog from './ExpenseDetailFormDialog.vue';
 
 type Mode = 'new' | 'edit' | 'clone';
@@ -310,6 +353,7 @@ const expenseStatusOptions: ExpenseStatus[] = ['Em aberto', 'Pago'];
 
 const { getById } = useExpenses();
 const { loadCurrencies, loadAccounts, loadCategories, getDefaultCurrencyId } = useReferenceData();
+const { isMobile } = useIsMobile();
 const confirm = useConfirm();
 
 const loading = ref(false);
@@ -353,6 +397,37 @@ const detailDialog = reactive<{ visible: boolean; mode: Mode; detail: ExpenseDet
   visible: false,
   mode: 'new',
   detail: null,
+});
+
+const rowMenu = ref();
+const ctxMenu = ref();
+const rowMenuTarget = ref<ExpenseDetail | null>(null);
+const rowMenuItems = computed<MenuItem[]>(() => {
+  const row = rowMenuTarget.value;
+  if (!row) return [];
+  return [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => openDetail('edit', row),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => confirmDeleteDetailFor(row._key ?? null),
+    },
+    {
+      label: 'Clonar',
+      icon: 'pi pi-clone',
+      command: () => openDetail('clone', row),
+    },
+    {
+      label: 'Pagar',
+      icon: 'pi pi-dollar',
+      visible: row.status === 'Em aberto',
+      command: () => payDetailFor(row._key ?? null),
+    },
+  ];
 });
 
 const hasDetail = computed(() => form.detail.length > 0);
@@ -483,6 +558,16 @@ function openDetail(mode: Mode, detail: ExpenseDetail | null) {
   detailDialog.visible = true;
 }
 
+function openRowMenu(e: MouseEvent, row: ExpenseDetail) {
+  rowMenuTarget.value = row;
+  rowMenu.value?.toggle(e);
+}
+
+function onRowContext(e: { originalEvent: Event; data: ExpenseDetail }) {
+  rowMenuTarget.value = e.data;
+  ctxMenu.value?.show(e.originalEvent);
+}
+
 function closeDetailDialog() {
   detailDialog.visible = false;
 }
@@ -508,9 +593,8 @@ function onDetailLoadError(status: number | string) {
   emit('load-error', status);
 }
 
-function confirmDeleteDetail() {
-  if (!selectedDetail.value) return;
-  const key = selectedDetail.value._key;
+function confirmDeleteDetailFor(key: string | null) {
+  if (!key) return;
   confirm.require({
     message: 'Confirma a exclusão do detalhe?',
     header: 'Excluir detalhe',
@@ -525,9 +609,8 @@ function confirmDeleteDetail() {
   });
 }
 
-function payDetail() {
-  if (!selectedDetail.value) return;
-  const key = selectedDetail.value._key;
+function payDetailFor(key: string | null) {
+  if (!key) return;
   const idx = form.detail.findIndex((d) => d._key === key);
   if (idx >= 0) {
     form.detail[idx] = { ...form.detail[idx], status: 'Pago' };
