@@ -17,7 +17,6 @@ var promise = mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedT
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 
-app.use(express.static(__dirname + '/static'))
 app.use('/app', express.static(__dirname + '/web/dist'))
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
@@ -44,8 +43,24 @@ app.get(/^\/app(\/.*)?$/, function(req, res){
     res.sendFile(__dirname + '/web/dist/index.html');
 });
 
-app.use("/", function(req, res, next){
-    res.sendFile(__dirname + '/static/index.html');
+// Legacy entrypoints redirect into the Vue SPA so existing bookmarks and
+// OAuth failure-redirect targets keep working after AngularJS was retired.
+app.get('/', function (req, res) {
+    res.redirect('/app/');
+});
+
+app.get('/login', function (req, res) {
+    var qs = req.url.indexOf('?');
+    res.redirect('/app/login' + (qs >= 0 ? req.url.slice(qs) : ''));
+});
+
+app.get('/logoff', function (req, res) {
+    var qs = req.url.indexOf('?');
+    res.redirect('/app/logoff' + (qs >= 0 ? req.url.slice(qs) : ''));
+});
+
+app.use(function (req, res) {
+    res.redirect('/app/');
 });
 
 // listen (start app with node server.js) ======================================

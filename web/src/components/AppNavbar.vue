@@ -1,5 +1,5 @@
 <template>
-  <Menubar :model="items" class="rounded-none border-x-0 border-t-0 px-4">
+  <Menubar :model="navItems" class="rounded-none border-x-0 border-t-0 px-4">
     <template #start>
       <router-link
         to="/"
@@ -67,14 +67,16 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Menubar from 'primevue/menubar';
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import type { MenuItem } from 'primevue/menuitem';
-import { getSession } from '../lib/session';
+import { getSession, isLoggedIn } from '../lib/session';
 import { useTheme, type ThemeMode } from '../composables/useTheme';
 
 const session = getSession();
+const router = useRouter();
 const { mode: themeMode, setMode } = useTheme();
 
 interface NavItem extends MenuItem {
@@ -90,6 +92,8 @@ const items = ref<NavItem[]>([
   { label: 'Categorias', icon: 'pi pi-list', to: '/categories' },
   { label: 'Contas', icon: 'pi pi-wallet', to: '/accounts' },
 ]);
+
+const navItems = computed<NavItem[]>(() => (isLoggedIn() ? items.value : []));
 
 const themeMeta: Record<ThemeMode, { label: string; icon: string }> = {
   system: { label: 'Sistema', icon: 'pi pi-desktop' },
@@ -120,12 +124,12 @@ const logoffItems = ref<MenuItem[]>([
   {
     label: 'Sair (Desta sessão)',
     icon: 'pi pi-sign-out',
-    url: '/logoff?all=false',
+    command: () => router.push({ name: 'logoff', query: { all: 'false' } }),
   },
   {
     label: 'Sair (Todas sessões)',
     icon: 'pi pi-sign-out',
-    url: '/logoff?all=true',
+    command: () => router.push({ name: 'logoff', query: { all: 'true' } }),
   },
 ]);
 

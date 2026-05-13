@@ -11,15 +11,10 @@ Guidelines for AI agents working in this repo. Read [docs/ARCHITECTURE.md](./doc
 
 ## Project shape
 
-- Two coexisting frontends via the **strangler pattern**:
-  - Vue 3 + Vite + PrimeVue (Aura Light) + Tailwind v4 + TypeScript at `/app/*` (source: `web/src/`).
-  - Legacy AngularJS 1.x at `/` and other routes (source: `static/`). Only **Login/Logoff** remain on AngularJS.
+- Vue 3 + Vite + PrimeVue (Aura) + Tailwind v4 + TypeScript SPA at `/app/*` (source: `web/src/`). All screens — including Login/Logoff — live here.
 - Node/Express backend in `api/` (api → service → model layers) with MongoDB via Mongoose. Auth is Google OAuth2 producing an opaque token in `Authorization`, with `User-Id` alongside.
-- AngularJS owns the OAuth callback (`/#token=...` is parsed into `localStorage`); Vue reads the same `loggedUserToken` / `loggedUserId` keys and 401-redirects to `/login`.
-
-## Vue migration recipe
-
-For each remaining screen (Login/Logoff): add `views/XView.vue` (+ optional `views/x/XFormDialog.vue`) + `composables/useX.ts`, register the route, add a `<router-link>` in `web/src/components/AppNavbar.vue`, and flip the corresponding AngularJS navbar link in `static/index.html` from `ng-click="changeRoute('/x')"` to `href="/app/x"`. Full per-screen recipe is at the bottom of `docs/UI_MIGRATION.md`.
+- OAuth callback redirects to `/app/#id=...&token=...`; `consumeOAuthHash()` in `web/src/lib/session.ts` parses the hash and writes the `loggedUser*` keys to `localStorage` before the Vue app mounts. The router's `beforeEach` guard sends unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt).
+- Bare `/`, `/login`, `/logoff` 302-redirect to `/app/...` server-side so old links keep working.
 
 ## Gotchas
 
@@ -29,6 +24,7 @@ For each remaining screen (Login/Logoff): add `views/XView.vue` (+ optional `vie
 - **Lockfile:** `web/.npmrc` has `package-lock=false` because Tailwind v4's native bindings hit npm bug #4828 with platform-pinned lockfiles. Don't add a `package-lock.json` under `web/`.
 - **Node version:** Vue build needs Node 20+. The Express server is fine on Node 18+.
 - **Shared dropdowns:** module-singleton cache in `web/src/composables/useReferenceData.ts` (currencies, accounts, categories-by-type). Defer Pinia until cross-screen reactive invalidation is actually needed.
+- **Logoff does a full reload:** `LogoffView` calls `window.location.assign('/app/login')` after the API call so `AppNavbar` (mounted in `App.vue`, captures session at setup) re-renders with cleared state. Don't replace this with `router.push` unless you also make the navbar reactive to session changes.
 
 ## Local dev
 
