@@ -20,6 +20,7 @@
             @click="openTransfer('new', null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-pencil"
             severity="primary"
             size="small"
@@ -29,13 +30,14 @@
             @click="openTransfer('edit', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-trash"
             severity="primary"
             size="small"
             :disabled="!selected"
             aria-label="Excluir"
             v-tooltip.bottom="'Excluir'"
-            @click="confirmDelete"
+            @click="selected && confirmDeleteFor(selected._id)"
           />
         </div>
       </template>
@@ -101,15 +103,18 @@
 
     <DataTable
       v-model:selection="selected"
+      v-model:context-menu-selection="selected"
       :value="rows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
+      :context-menu="!isMobile"
       removable-sort
       striped-rows
       :paginator="rows.length > 25"
       :rows="25"
       class="p-datatable-sm"
+      @row-contextmenu="onRowContext"
     >
       <Column field="date" header="Data" sortable style="width: 9rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.date) }}</template>
@@ -139,8 +144,28 @@
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
+      <Column
+        class="md:hidden text-center"
+        header-class="md:hidden"
+        style="width: 3rem"
+      >
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-ellipsis-v"
+            text
+            rounded
+            size="small"
+            aria-label="Ações"
+            aria-haspopup="menu"
+            @click.stop="openRowMenu($event, data)"
+          />
+        </template>
+      </Column>
       <template #empty>Nenhuma transferência encontrada.</template>
     </DataTable>
+
+    <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
+    <ContextMenu v-if="!isMobile" ref="ctxMenu" :model="rowMenuItems" append-to="body" />
 
     <TransferFormDialog
       :visible="dialog.visible"
@@ -160,12 +185,17 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
+import Menu from 'primevue/menu';
+import ContextMenu from 'primevue/contextmenu';
+import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 import {
   useTransfers,
+  type Transfer,
   type TransferFormPayload,
 } from '../composables/useTransfers';
+import { useIsMobile } from '../composables/useIsMobile';
 import {
   formatCurrency,
   formatNumber,
@@ -180,6 +210,7 @@ import TransferFormDialog from './transfers/TransferFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchTransfers, create, update, remove } =
   useTransfers();
@@ -192,6 +223,26 @@ const dialog = reactive<{ visible: boolean; mode: 'new' | 'edit'; transferId: st
   visible: false,
   mode: 'new',
   transferId: null,
+});
+
+const rowMenu = ref();
+const ctxMenu = ref();
+const rowMenuTarget = ref<Transfer | null>(null);
+const rowMenuItems = computed<MenuItem[]>(() => {
+  const row = rowMenuTarget.value;
+  if (!row) return [];
+  return [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => openTransfer('edit', row._id),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => confirmDeleteFor(row._id),
+    },
+  ];
 });
 
 const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
@@ -244,6 +295,16 @@ function openTransfer(mode: 'new' | 'edit', id: string | null) {
   dialog.visible = true;
 }
 
+function openRowMenu(e: MouseEvent, row: Transfer) {
+  rowMenuTarget.value = row;
+  rowMenu.value?.toggle(e);
+}
+
+function onRowContext(e: { originalEvent: Event; data: Transfer }) {
+  rowMenuTarget.value = e.data;
+  ctxMenu.value?.show(e.originalEvent);
+}
+
 function closeDialog() {
   dialog.visible = false;
 }
@@ -272,9 +333,7 @@ async function onDialogSubmit(payload: TransferFormPayload, mode: 'new' | 'edit'
   }
 }
 
-function confirmDelete() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmDeleteFor(id: string) {
   confirm.require({
     message: 'Confirma a exclusão da transferência?',
     header: 'Excluir transferência',

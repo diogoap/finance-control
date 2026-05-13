@@ -14,6 +14,7 @@
             @click="openLoan('new', null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-pencil"
             severity="primary"
             size="small"
@@ -23,15 +24,17 @@
             @click="openLoan('edit', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-trash"
             severity="primary"
             size="small"
             :disabled="!selected"
             aria-label="Excluir"
             v-tooltip.bottom="'Excluir'"
-            @click="confirmDelete"
+            @click="selected && confirmDeleteFor(selected._id)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-clone"
             severity="primary"
             size="small"
@@ -41,13 +44,14 @@
             @click="openLoan('clone', selected?._id ?? null)"
           />
           <Button
+            class="hidden md:inline-flex"
             icon="pi pi-dollar"
             severity="primary"
             size="small"
             :disabled="!selected || selected.status !== 'Em aberto'"
             aria-label="Quitar"
             v-tooltip.bottom="'Quitar'"
-            @click="confirmPay"
+            @click="selected && confirmPayFor(selected._id)"
           />
         </div>
       </template>
@@ -62,15 +66,18 @@
 
     <DataTable
       v-model:selection="selected"
+      v-model:context-menu-selection="selected"
       :value="rows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
+      :context-menu="!isMobile"
       removable-sort
       striped-rows
       :paginator="rows.length > 25"
       :rows="25"
       class="p-datatable-sm"
+      @row-contextmenu="onRowContext"
     >
       <Column field="description" header="Descrição" sortable>
         <template #footer>{{ rows.length }} registros</template>
@@ -126,8 +133,28 @@
         header-class="hidden md:table-cell"
       />
       <Column field="status" header="Situação" sortable style="width: 8rem" class="text-center" />
+      <Column
+        class="md:hidden text-center"
+        header-class="md:hidden"
+        style="width: 3rem"
+      >
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-ellipsis-v"
+            text
+            rounded
+            size="small"
+            aria-label="Ações"
+            aria-haspopup="menu"
+            @click.stop="openRowMenu($event, data)"
+          />
+        </template>
+      </Column>
       <template #empty>Nenhum empréstimo encontrado.</template>
     </DataTable>
+
+    <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
+    <ContextMenu v-if="!isMobile" ref="ctxMenu" :model="rowMenuItems" append-to="body" />
 
     <LoanFormDialog
       :visible="dialog.visible"
@@ -141,20 +168,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import Checkbox from 'primevue/checkbox';
+import Menu from 'primevue/menu';
+import ContextMenu from 'primevue/contextmenu';
+import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
-import { useLoans, type LoanFormPayload } from '../composables/useLoans';
+import { useLoans, type Loan, type LoanFormPayload } from '../composables/useLoans';
+import { useIsMobile } from '../composables/useIsMobile';
 import { formatCurrency, formatNumber, formatShortDate } from '../lib/dateUtils';
 import LoanFormDialog from './loans/LoanFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, listPaid, fetchAll, create, update, remove, pay } = useLoans();
 
@@ -168,6 +200,37 @@ const dialog = reactive<{
   loanId: null,
 });
 
+const rowMenu = ref();
+const ctxMenu = ref();
+const rowMenuTarget = ref<Loan | null>(null);
+const rowMenuItems = computed<MenuItem[]>(() => {
+  const row = rowMenuTarget.value;
+  if (!row) return [];
+  return [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => openLoan('edit', row._id),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => confirmDeleteFor(row._id),
+    },
+    {
+      label: 'Clonar',
+      icon: 'pi pi-clone',
+      command: () => openLoan('clone', row._id),
+    },
+    {
+      label: 'Quitar',
+      icon: 'pi pi-dollar',
+      visible: row.status === 'Em aberto',
+      command: () => confirmPayFor(row._id),
+    },
+  ];
+});
+
 const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
 
 onMounted(() => {
@@ -179,6 +242,16 @@ function openLoan(mode: 'new' | 'edit' | 'clone', id: string | null) {
   dialog.mode = mode;
   dialog.loanId = id;
   dialog.visible = true;
+}
+
+function openRowMenu(e: MouseEvent, row: Loan) {
+  rowMenuTarget.value = row;
+  rowMenu.value?.toggle(e);
+}
+
+function onRowContext(e: { originalEvent: Event; data: Loan }) {
+  rowMenuTarget.value = e.data;
+  ctxMenu.value?.show(e.originalEvent);
 }
 
 function closeDialog() {
@@ -201,9 +274,7 @@ async function onDialogSubmit(payload: LoanFormPayload, mode: 'new' | 'edit' | '
   }
 }
 
-function confirmDelete() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmDeleteFor(id: string) {
   confirm.require({
     message: 'Confirma a exclusão do empréstimo?',
     header: 'Excluir empréstimo',
@@ -225,9 +296,7 @@ function confirmDelete() {
   });
 }
 
-function confirmPay() {
-  if (!selected.value) return;
-  const id = selected.value._id;
+function confirmPayFor(id: string) {
   confirm.require({
     message: 'Confirma a quitação do empréstimo?',
     header: 'Quitar empréstimo',
