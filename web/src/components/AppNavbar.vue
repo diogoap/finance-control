@@ -88,7 +88,7 @@ const items = ref<NavItem[]>([
   { label: 'Transferências', icon: 'pi pi-arrows-h', to: '/transfers' },
   { label: 'Empréstimos', icon: 'pi pi-dollar', to: '/loans' },
   { label: 'Categorias', icon: 'pi pi-list', to: '/categories' },
-  { label: 'Contas', icon: 'pi pi-building', to: '/accounts' },
+  { label: 'Contas', icon: 'pi pi-wallet', to: '/accounts' },
 ]);
 
 const themeMeta: Record<ThemeMode, { label: string; icon: string }> = {

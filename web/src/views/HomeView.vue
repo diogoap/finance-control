@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
-    <Toolbar class="mb-4">
+  <div class="container mx-auto px-4 py-4">
+    <Toolbar class="mb-3">
       <template #start>
         <div class="flex flex-wrap items-center gap-2">
           <Button
@@ -60,9 +60,9 @@
       </template>
     </Toolbar>
 
-    <section class="mb-6">
-      <h2 class="text-base font-semibold mb-3">Previsões - Todos os lançamentos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <section class="mb-4">
+      <h2 class="text-sm font-semibold mb-2">Previsões - Todos os lançamentos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
         <TotalsSummary :bucket="allBucket" />
         <AccountsBox :accounts="allBucket.accounts" />
         <CategoryBox
@@ -81,8 +81,8 @@
     </section>
 
     <section>
-      <h2 class="text-base font-semibold mb-3">Caixa - Lançamentos realizados</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <h2 class="text-sm font-semibold mb-2">Caixa - Lançamentos realizados</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
         <TotalsSummary :bucket="completedBucket" />
         <AccountsBox :accounts="completedBucket.accounts" />
         <CategoryBox

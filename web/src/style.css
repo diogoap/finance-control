@@ -56,3 +56,32 @@ body {
     margin-left: auto;
   }
 }
+
+/* Home: compact Card/Panel padding so both sections fit on one desktop screen */
+.home-box .p-card-body,
+.home-box .p-card-content {
+  padding: 0.5rem 0.75rem;
+}
+.home-box .p-panel-content {
+  padding: 0.5rem 0.75rem;
+}
+.home-box .p-panel-header {
+  padding: 0.4rem 0.75rem;
+}
+
+/* Default light tint for Panel headers; CategoryBox overrides via Tailwind utilities */
+.home-box-header {
+  background-color: rgb(248 250 252); /* slate-50 */
+}
+.dark .home-box-header {
+  background-color: rgb(30 41 59 / 0.4); /* slate-800/40 */
+}
+
+/* Header icons (PrimeIcons): muted slate tone for a black-and-white feel */
+.home-icon {
+  color: rgb(71 85 105); /* slate-600 */
+  font-size: 0.95rem;
+}
+.dark .home-icon {
+  color: rgb(203 213 225); /* slate-300 */
+}
