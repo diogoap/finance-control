@@ -8,7 +8,12 @@ import TransfersView from './views/TransfersView.vue';
 import LoansView from './views/LoansView.vue';
 import LoginView from './views/LoginView.vue';
 import LogoffView from './views/LogoffView.vue';
-import { isLoggedIn } from './lib/session';
+import { consumeOAuthHash, isLoggedIn } from './lib/session';
+
+// Must run before createWebHistory below: Vue Router snapshots window.location
+// at history-creation time and would re-write the hash back via replaceState
+// on first navigation.
+consumeOAuthHash();
 
 const router = createRouter({
   history: createWebHistory('/app/'),

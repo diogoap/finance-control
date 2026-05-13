@@ -7,11 +7,8 @@ import Tooltip from 'primevue/tooltip';
 import App from './App.vue';
 import router from './router';
 import { primevueConfig } from './primevue';
-import { consumeOAuthHash } from './lib/session';
 import './composables/useTheme';
 import './style.css';
-
-consumeOAuthHash();
 
 const app = createApp(App);
 
