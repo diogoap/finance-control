@@ -1,41 +1,47 @@
 <template>
-  <Card>
+  <Card class="home-box">
     <template #content>
-      <table class="w-full text-sm">
+      <table class="w-full text-xs">
         <tbody>
           <tr>
-            <td class="py-1 text-left">(+) Saldo anterior:</td>
-            <td class="py-1 text-right tabular-nums">
+            <td class="py-0.5 text-left">(+) Saldo anterior:</td>
+            <td class="py-0.5 text-right tabular-nums">
               {{ formatNumber(bucket.previousBalance) }}
             </td>
           </tr>
           <tr>
-            <td class="py-1 text-left">(+) Receitas:</td>
-            <td class="py-1 text-right tabular-nums">
+            <td class="py-0.5 text-left">(+) Receitas:</td>
+            <td class="py-0.5 text-right tabular-nums">
               {{ formatNumber(bucket.totalIncomes) }}
             </td>
           </tr>
           <tr>
-            <td class="py-1 text-left">(-) Despesas:</td>
-            <td class="py-1 text-right tabular-nums">
+            <td class="py-0.5 text-left">(-) Despesas:</td>
+            <td class="py-0.5 text-right tabular-nums">
               {{ formatNumber(bucket.totalExpenses * -1) }}
             </td>
           </tr>
           <tr class="border-t border-slate-200 dark:border-slate-700">
-            <td class="py-1 text-left font-semibold">(=) Saldo período:</td>
-            <td class="py-1 text-right font-semibold tabular-nums" :class="valueClass(bucket.partialBalance)">
+            <td class="py-1 text-left text-sm font-semibold">(=) Saldo período:</td>
+            <td
+              class="py-1 text-right text-sm font-semibold tabular-nums"
+              :class="valueClass(bucket.partialBalance)"
+            >
               {{ formatNumber(bucket.partialBalance) }}
             </td>
           </tr>
           <tr>
-            <td class="py-1 text-left">(+) Empréstimos:</td>
-            <td class="py-1 text-right tabular-nums">
+            <td class="py-0.5 text-left">(+) Empréstimos:</td>
+            <td class="py-0.5 text-right tabular-nums">
               {{ formatNumber(bucket.totalLoans) }}
             </td>
           </tr>
           <tr class="border-t border-slate-200 dark:border-slate-700">
-            <td class="py-1 text-left font-semibold">(=) Saldo final:</td>
-            <td class="py-1 text-right font-semibold tabular-nums" :class="valueClass(bucket.actualBalance)">
+            <td class="py-1 text-left text-sm font-semibold">(=) Saldo final:</td>
+            <td
+              class="py-1 text-right text-sm font-semibold tabular-nums"
+              :class="valueClass(bucket.actualBalance)"
+            >
               {{ formatNumber(bucket.actualBalance) }}
             </td>
           </tr>

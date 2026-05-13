@@ -56,3 +56,15 @@ body {
     margin-left: auto;
   }
 }
+
+/* Home: compact Card/Panel padding so both sections fit on one desktop screen */
+.home-box .p-card-body,
+.home-box .p-card-content {
+  padding: 0.5rem 0.75rem;
+}
+.home-box .p-panel-content {
+  padding: 0.5rem 0.75rem;
+}
+.home-box .p-panel-header {
+  padding: 0.4rem 0.75rem;
+}
