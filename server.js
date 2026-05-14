@@ -42,7 +42,8 @@ require('./api/apis/currenciesApi.js')(app, url);
 // AngularJS → Vue migration; this redirect keeps old bookmarks working.
 app.get(/^\/app(\/.*)?$/, function (req, res) {
     var subpath = req.url.replace(/^\/app/, '') || '/';
-    res.redirect(subpath);
+    var safeSubpath = ('/' + subpath).replace(/^\/+/, '/');
+    res.redirect(safeSubpath);
 });
 
 // SPA HTML fallback for client-routed paths (/expenses, /login, ...).
