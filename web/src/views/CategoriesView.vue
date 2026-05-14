@@ -71,8 +71,8 @@
     >
       <template #footer>{{ rows.length }} registros</template>
       <Column field="name" header="Descrição" sortable />
-      <Column field="type" header="Tipo" sortable style="width: 10rem" />
-      <Column header="Ativa?" style="width: 6rem" class="text-center">
+      <Column field="type" header="Tipo" sortable class="w-1/4 md:w-40" />
+      <Column header="Ativa?" class="text-center w-1/4 md:w-24">
         <template #body="{ data }">
           <i
             :class="data.enabled ? 'pi pi-check text-green-600' : 'pi pi-times text-red-600'"
