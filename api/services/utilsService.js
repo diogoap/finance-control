@@ -1,6 +1,5 @@
 'use strict';
 
-var passwordHash = require('password-hash');
 var usersService = require('./usersService');
 var usersApiAdminEmail = process.env.USERS_API_ADMIN_EMAIL;
 

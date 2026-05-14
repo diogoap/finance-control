@@ -163,8 +163,8 @@ Tokens are opaque random strings stored in an array on the user document, so mul
 
 | Concern         | Location                                     |
 | --------------- | -------------------------------------------- |
-| Entrypoint      | `web/src/main.ts` (`consumeOAuthHash` pre-mount) |
-| Routing & guard | `web/src/router.ts` (base `/app/`, `meta.public`) |
+| Entrypoint      | `web/src/main.ts` (createApp + plugins, mounts `#app`) |
+| Routing & guard | `web/src/router.ts` (base `/app/`, `meta.public`; calls `consumeOAuthHash()` at module load, before `createWebHistory`) |
 | Views           | `web/src/views/*.vue` + `views/<resource>/<Resource>FormDialog.vue` |
 | Composables     | `web/src/composables/*.ts` (CRUD wrappers, theme, isMobile, ...) |
 | API client      | `web/src/lib/api.ts` (axios + auth interceptor) |
@@ -240,9 +240,9 @@ finance-control/
 │   ├── index.html
 │   ├── public/                # favicon, etc. (copied to /app/ at build time)
 │   └── src/
-│       ├── main.ts            # consumeOAuthHash() pre-mount; PrimeVue + services
+│       ├── main.ts            # createApp + plugins, mounts #app
 │       ├── App.vue            # AppNavbar + Toast + ConfirmDialog + RouterView
-│       ├── router.ts          # routes + auth guard
+│       ├── router.ts          # routes + auth guard; calls consumeOAuthHash() before createWebHistory
 │       ├── primevue.ts        # theme + pt-BR locale
 │       ├── lib/               # api.ts (axios), session.ts, dateUtils.ts
 │       ├── components/AppNavbar.vue
@@ -257,7 +257,7 @@ Worth raising before any rework:
 
 1. **Tokens in `localStorage`.** Vulnerable to XSS exfiltration. `httpOnly` cookies + CSRF token would be a stronger default.
 2. **Callback-based services.** The whole `api/services` layer predates async/await; converting to promises would simplify error handling and remove the deeply nested `callbackSuccess`/`callbackError` argument lists.
-3. **`password-hash` is imported but unused.** Login is Google-only; the dependency can be dropped.
+3. **Access tokens stored hashed but compared linearly.** `usersService.getUserTokenIndex` walks the `accessTokens` array calling `passwordHash.verify` on every entry, which is O(n) bcrypt-style verifies per request. For a heavy user this is wasteful; an opaque random string indexed directly (or a JWT) would be both cheaper and simpler.
 4. **No tests, no CI, no linter.** `npm start` is the only script. A small Jest/Vitest suite around services and a basic GitHub Actions workflow would be high-leverage.
 5. **No rate limiting or input sanitization beyond schema.** `express-rate-limit` and `helmet` would close obvious gaps.
 6. **Single hard-coded admin** (`USERS_API_ADMIN_EMAIL`). A `role` field on the user document scales better than an env var.

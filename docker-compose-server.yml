@@ -31,7 +31,3 @@ services:
 networks:
   fc-network:
     driver: bridge
-
-volumes:
-  mongo_data:
-  backup_data:
