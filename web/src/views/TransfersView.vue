@@ -116,12 +116,7 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column
-        field="date"
-        header="Data"
-        sortable
-        class="text-center w-1/4 md:w-36"
-      >
+      <Column field="date" header="Data" sortable style="width: 9rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.date) }}</template>
         <template #footer>{{ rows.length }} registros</template>
       </Column>
@@ -129,7 +124,7 @@
         field="amount"
         header="Valor"
         sortable
-        class="w-1/4 md:w-44"
+        style="width: 9rem"
         header-class="header-end"
       >
         <template #body="{ data }">
