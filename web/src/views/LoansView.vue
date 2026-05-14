@@ -86,7 +86,7 @@
         field="transactionDate"
         header="Data"
         sortable
-        style="width: 7rem"
+        style="width: 5rem"
         class="text-center"
       >
         <template #body="{ data }">{{ formatShortDate(data.transactionDate) }}</template>

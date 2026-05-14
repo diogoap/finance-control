@@ -145,7 +145,7 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column field="dueDate" header="Vencimento" sortable style="width: 9rem" class="text-center">
+      <Column field="dueDate" header="Vencimento" sortable style="width: 7rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.dueDate) }}</template>
       </Column>
       <Column field="description" header="Descrição" sortable>
@@ -155,7 +155,7 @@
         field="amount"
         header="Valor"
         sortable
-        style="width: 10rem"
+        style="width: 7rem"
         header-class="header-end"
       >
         <template #body="{ data }">

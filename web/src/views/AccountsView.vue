@@ -75,7 +75,7 @@
         field="initialBalance"
         header="Saldo inicial"
         sortable
-        style="width: 11rem"
+        style="width: 8rem"
         header-class="header-end"
       >
         <template #body="{ data }">
@@ -92,7 +92,7 @@
         class="text-center hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
-      <Column header="Ativa?" style="width: 6rem" class="text-center">
+      <Column header="Ativa?" style="width: 5rem" class="text-center">
         <template #body="{ data }">
           <i
             :class="data.enabled ? 'pi pi-check text-green-600' : 'pi pi-times text-red-600'"
