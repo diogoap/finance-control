@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="incomeDetailDescription" class="text-sm font-medium">Descrição</label>
+        <label for="incomeDetailDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
           id="incomeDetailDescription"
           v-model="form.description"
@@ -34,7 +34,7 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-4 flex flex-col gap-1">
-          <label for="incomeDetailCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="incomeDetailCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="incomeDetailCurrency"
             v-model="form.currency_id"
@@ -42,21 +42,21 @@
             option-label="currencyCode"
             option-value="_id"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Moeda"
+            :placeholder="$t('common.fields.currency')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
           }}</small>
         </div>
         <div class="col-span-8 flex flex-col gap-1">
-          <label for="incomeDetailAmount" class="text-sm font-medium">Valor</label>
+          <label for="incomeDetailAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="incomeDetailAmount"
             v-model="form.amount"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
             :invalid="submitted && !!errors.amount"
-            locale="pt-BR"
+            :locale="numberLocale"
             input-class="text-right"
           />
           <small v-if="submitted && errors.amount" class="text-red-600">{{ errors.amount }}</small>
@@ -64,7 +64,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="incomeDetailAccount" class="text-sm font-medium">Conta</label>
+        <label for="incomeDetailAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
         <Select
           id="incomeDetailAccount"
           v-model="form.account_id"
@@ -72,7 +72,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.account_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.account_id" class="text-red-600">{{
           errors.account_id
@@ -80,7 +80,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="incomeDetailCategory" class="text-sm font-medium">Categoria</label>
+        <label for="incomeDetailCategory" class="text-sm font-medium">{{ $t('common.fields.category') }}</label>
         <Select
           id="incomeDetailCategory"
           v-model="form.category_id"
@@ -88,7 +88,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.category_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.category_id" class="text-red-600">{{
           errors.category_id
@@ -96,21 +96,23 @@
       </div>
 
       <div class="flex flex-col gap-1 max-w-[14rem]">
-        <label for="incomeDetailStatus" class="text-sm font-medium">Situação</label>
+        <label for="incomeDetailStatus" class="text-sm font-medium">{{ $t('common.fields.status') }}</label>
         <Select
           id="incomeDetailStatus"
           v-model="form.status"
           :options="incomeStatusOptions"
+          option-label="label"
+          option-value="value"
           :invalid="submitted && !!errors.status"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.status" class="text-red-600">{{ errors.status }}</small>
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -123,6 +125,7 @@ import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import type { IncomeDetail, IncomeStatus } from '../../composables/useIncomes';
 import {
   useReferenceData,
@@ -130,6 +133,7 @@ import {
   type CategoryRef,
   type Currency,
 } from '../../composables/useReferenceData';
+import { intlLocale } from '../../i18n';
 
 type Mode = 'new' | 'edit' | 'clone';
 
@@ -145,7 +149,14 @@ const emit = defineEmits<{
   (e: 'load-error', status: number | string): void;
 }>();
 
-const incomeStatusOptions: IncomeStatus[] = ['Em aberto', 'Recebido'];
+const { t } = useI18n();
+
+const incomeStatusOptions = computed<{ label: string; value: IncomeStatus }[]>(() => [
+  { label: t('enums.incomeStatus.Em aberto'), value: 'Em aberto' },
+  { label: t('enums.incomeStatus.Recebido'), value: 'Recebido' },
+]);
+
+const numberLocale = computed(() => intlLocale());
 
 const { loadCurrencies, loadAccounts, loadCategories, getDefaultCurrencyId } = useReferenceData();
 
@@ -176,22 +187,22 @@ const form = reactive<{
 const originalKey = ref<string | null>(null);
 
 const title = computed(() => {
-  if (props.mode === 'new') return 'Adicionar detalhe';
-  if (props.mode === 'clone') return 'Clonar detalhe';
-  return 'Editar detalhe';
+  if (props.mode === 'new') return t('incomes.detail.addTitle');
+  if (props.mode === 'clone') return t('incomes.detail.cloneTitle');
+  return t('incomes.detail.editTitle');
 });
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const desc = form.description?.trim() ?? '';
-  if (!desc) out.description = 'O campo Descrição é obrigatório.';
+  if (!desc) out.description = t('common.errors.requiredField', { field: t('common.fields.description') });
   else if (desc.length > 100)
-    out.description = 'O campo Descrição deve possuir no máximo 100 caracteres.';
-  if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
-  if (!form.amount || form.amount <= 0) out.amount = 'O campo Valor é obrigatório.';
-  if (!form.account_id) out.account_id = 'O campo Conta é obrigatório.';
-  if (!form.category_id) out.category_id = 'O campo Categoria é obrigatório.';
-  if (!form.status) out.status = 'O campo Situação é obrigatório.';
+    out.description = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
+  if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
+  if (!form.amount || form.amount <= 0) out.amount = t('common.errors.requiredField', { field: t('common.fields.amount') });
+  if (!form.account_id) out.account_id = t('common.errors.requiredField', { field: t('common.fields.account') });
+  if (!form.category_id) out.category_id = t('common.errors.requiredField', { field: t('common.fields.category') });
+  if (!form.status) out.status = t('common.errors.requiredField', { field: t('common.fields.status') });
   return out;
 });
 
@@ -224,7 +235,9 @@ watch(
         originalKey.value = props.detail._key ?? null;
         form._id = mode === 'clone' ? undefined : props.detail._id;
         form.description =
-          mode === 'clone' ? `${props.detail.description} - Cópia` : props.detail.description;
+          mode === 'clone'
+            ? `${props.detail.description}${t('common.cloneSuffix')}`
+            : props.detail.description;
         form.amount = props.detail.amount;
         form.account_id = props.detail.account_id;
         form.category_id = props.detail.category_id;

@@ -26,7 +26,7 @@
         </tr>
       </tbody>
     </table>
-    <p v-else class="text-xs text-slate-500">Nenhum lançamento no período.</p>
+    <p v-else class="text-xs text-slate-500">{{ $t('home.categoryBox.empty') }}</p>
   </Panel>
 </template>
 

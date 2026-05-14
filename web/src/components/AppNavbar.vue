@@ -5,7 +5,7 @@
         to="/"
         class="flex items-center gap-2 font-semibold text-lg no-underline text-current"
       >
-        Finance Control
+        {{ $t('navbar.brand') }}
       </router-link>
     </template>
 
@@ -47,7 +47,7 @@
           severity="secondary"
           text
           rounded
-          aria-label="Tema"
+          :aria-label="$t('navbar.theme')"
           v-tooltip.bottom="themeTooltip"
           @click="toggleThemeMenu"
         />
@@ -56,7 +56,7 @@
           icon="pi pi-sign-out"
           severity="secondary"
           text
-          aria-label="Sair"
+          :aria-label="$t('navbar.logout')"
           @click="toggleLogoff"
         />
         <Menu ref="logoffMenu" :model="logoffItems" :popup="true" />
@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import Menubar from 'primevue/menubar';
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
@@ -77,39 +78,42 @@ import { useTheme, type ThemeMode } from '../composables/useTheme';
 
 const session = getSession();
 const router = useRouter();
+const { t } = useI18n();
 const { mode: themeMode, setMode } = useTheme();
 
 interface NavItem extends MenuItem {
   to?: string;
 }
 
-const items = ref<NavItem[]>([
-  { label: 'Home', icon: 'pi pi-home', to: '/' },
-  { label: 'Despesas', icon: 'pi pi-minus-circle', to: '/expenses' },
-  { label: 'Receitas', icon: 'pi pi-plus-circle', to: '/incomes' },
-  { label: 'Transferências', icon: 'pi pi-arrows-h', to: '/transfers' },
-  { label: 'Empréstimos', icon: 'pi pi-dollar', to: '/loans' },
-  { label: 'Categorias', icon: 'pi pi-list', to: '/categories' },
-  { label: 'Contas', icon: 'pi pi-wallet', to: '/accounts' },
+const items = computed<NavItem[]>(() => [
+  { label: t('navbar.items.home'), icon: 'pi pi-home', to: '/' },
+  { label: t('navbar.items.expenses'), icon: 'pi pi-minus-circle', to: '/expenses' },
+  { label: t('navbar.items.incomes'), icon: 'pi pi-plus-circle', to: '/incomes' },
+  { label: t('navbar.items.transfers'), icon: 'pi pi-arrows-h', to: '/transfers' },
+  { label: t('navbar.items.loans'), icon: 'pi pi-dollar', to: '/loans' },
+  { label: t('navbar.items.categories'), icon: 'pi pi-list', to: '/categories' },
+  { label: t('navbar.items.accounts'), icon: 'pi pi-wallet', to: '/accounts' },
 ]);
 
 const navItems = computed<NavItem[]>(() => (isLoggedIn() ? items.value : []));
 
-const themeMeta: Record<ThemeMode, { label: string; icon: string }> = {
-  system: { label: 'Sistema', icon: 'pi pi-desktop' },
-  light: { label: 'Claro', icon: 'pi pi-sun' },
-  dark: { label: 'Escuro', icon: 'pi pi-moon' },
-};
+const themeMeta = computed<Record<ThemeMode, { label: string; icon: string }>>(() => ({
+  system: { label: t('navbar.themeModes.system'), icon: 'pi pi-desktop' },
+  light: { label: t('navbar.themeModes.light'), icon: 'pi pi-sun' },
+  dark: { label: t('navbar.themeModes.dark'), icon: 'pi pi-moon' },
+}));
 const THEME_ORDER: ThemeMode[] = ['system', 'light', 'dark'];
 
-const themeIcon = computed(() => themeMeta[themeMode.value].icon);
-const themeTooltip = computed(() => `Tema: ${themeMeta[themeMode.value].label}`);
+const themeIcon = computed(() => themeMeta.value[themeMode.value].icon);
+const themeTooltip = computed(() =>
+  t('navbar.themeTooltip', { mode: themeMeta.value[themeMode.value].label }),
+);
 
 const themeMenu = ref();
 const themeItems = computed<MenuItem[]>(() =>
   THEME_ORDER.map((value) => ({
-    label: themeMeta[value].label,
-    icon: themeMeta[value].icon,
+    label: themeMeta.value[value].label,
+    icon: themeMeta.value[value].icon,
     class: themeMode.value === value ? 'p-menubar-item-active' : undefined,
     command: () => setMode(value),
   })),
@@ -120,14 +124,14 @@ function toggleThemeMenu(event: Event) {
 }
 
 const logoffMenu = ref();
-const logoffItems = ref<MenuItem[]>([
+const logoffItems = computed<MenuItem[]>(() => [
   {
-    label: 'Sair (Desta sessão)',
+    label: t('navbar.logoff.currentSession'),
     icon: 'pi pi-sign-out',
     command: () => router.push({ name: 'logoff', query: { all: 'false' } }),
   },
   {
-    label: 'Sair (Todas sessões)',
+    label: t('navbar.logoff.allSessions'),
     icon: 'pi pi-sign-out',
     command: () => router.push({ name: 'logoff', query: { all: 'true' } }),
   },

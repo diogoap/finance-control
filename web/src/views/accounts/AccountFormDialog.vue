@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="accountLabelInput" class="text-sm font-medium">Nome</label>
+        <label for="accountLabelInput" class="text-sm font-medium">{{ $t('common.fields.name') }}</label>
         <InputText
           id="accountLabelInput"
           v-model="form.name"
@@ -33,7 +33,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex flex-col gap-1 sm:w-32">
-          <label for="accountCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="accountCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="accountCurrency"
             v-model="form.currency_id"
@@ -41,7 +41,7 @@
             option-label="currencyCode"
             option-value="_id"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
@@ -49,13 +49,13 @@
         </div>
 
         <div class="flex flex-col gap-1 flex-1">
-          <label for="accountInitialBalance" class="text-sm font-medium">Saldo inicial</label>
+          <label for="accountInitialBalance" class="text-sm font-medium">{{ $t('accounts.form.fields.initialBalance') }}</label>
           <InputNumber
             id="accountInitialBalance"
             v-model="form.initialBalance"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
-            locale="pt-BR"
+            :locale="numberLocale"
             :invalid="submitted && !!errors.initialBalance"
             input-class="w-full"
           />
@@ -66,7 +66,7 @@
       </div>
 
       <div class="flex flex-col gap-1 sm:w-32">
-        <label for="accountOrder" class="text-sm font-medium">Ordem</label>
+        <label for="accountOrder" class="text-sm font-medium">{{ $t('common.fields.order') }}</label>
         <InputNumber
           id="accountOrder"
           v-model="form.order"
@@ -81,13 +81,13 @@
 
       <div class="flex items-center gap-2">
         <Checkbox v-model="form.enabled" inputId="accountEnabled" binary />
-        <label for="accountEnabled" class="text-sm">Conta ativa?</label>
+        <label for="accountEnabled" class="text-sm">{{ $t('accounts.form.fields.active') }}</label>
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -101,9 +101,11 @@ import Select from 'primevue/select';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import type { Account, NewAccount } from '../../composables/useAccounts';
 import { useAccounts } from '../../composables/useAccounts';
 import { useReferenceData, type Currency } from '../../composables/useReferenceData';
+import { intlLocale } from '../../i18n';
 
 type Mode = 'new' | 'edit';
 
@@ -118,6 +120,9 @@ const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'load-error', status: number | string): void;
 }>();
+
+const { t } = useI18n();
+const numberLocale = computed(() => intlLocale());
 
 const { getById } = useAccounts();
 const { loadCurrencies, getDefaultCurrencyId } = useReferenceData();
@@ -143,19 +148,21 @@ const form = reactive<{
   enabled: true,
 });
 
-const title = computed(() => (props.mode === 'new' ? 'Adicionar conta' : 'Editar conta'));
+const title = computed(() =>
+  props.mode === 'new' ? t('accounts.form.addTitle') : t('accounts.form.editTitle'),
+);
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = 'O campo Nome é obrigatório.';
-  else if (name.length < 3) out.name = 'O campo Nome deve possuir no mínimo 3 caracteres.';
-  else if (name.length > 100) out.name = 'O campo Nome deve possuir no máximo 100 caracteres.';
-  if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
+  if (!name) out.name = t('common.errors.requiredField', { field: t('common.fields.name') });
+  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('common.fields.name'), min: 3 });
+  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('common.fields.name'), max: 100 });
+  if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
   if (form.initialBalance == null || isNaN(form.initialBalance))
-    out.initialBalance = 'O campo Saldo inicial é obrigatório.';
+    out.initialBalance = t('common.errors.requiredField', { field: t('accounts.form.fields.initialBalance') });
   if (form.order == null || isNaN(form.order) || form.order < 1 || form.order > 999)
-    out.order = 'O campo Ordem é obrigatório.';
+    out.order = t('common.errors.requiredField', { field: t('common.fields.order') });
   return out;
 });
 

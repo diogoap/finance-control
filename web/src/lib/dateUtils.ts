@@ -1,3 +1,5 @@
+import { intlLocale } from '../i18n';
+
 function getDstTimezoneOffset(date: Date): number {
   const jan = new Date(date.getFullYear(), 0, 1);
   const jul = new Date(date.getFullYear(), 6, 1);
@@ -68,42 +70,62 @@ export function isLatePayment(isOpen: boolean, dueDate: string | Date): boolean 
   return due < today;
 }
 
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  day: '2-digit',
-  month: '2-digit',
-  year: '2-digit',
-});
+const dateFormatters = new Map<string, Intl.DateTimeFormat>();
+
+function getDateFormatter(): Intl.DateTimeFormat {
+  const locale = intlLocale();
+  let f = dateFormatters.get(locale);
+  if (f) return f;
+  f = new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+  });
+  dateFormatters.set(locale, f);
+  return f;
+}
 
 export function formatShortDate(value: string | Date | null | undefined): string {
   if (!value) return '';
   const d = typeof value === 'string' ? new Date(value) : value;
   if (isNaN(d.getTime())) return '';
-  return dateFormatter.format(d);
+  return getDateFormatter().format(d);
 }
 
-const numberFormatter = new Intl.NumberFormat('pt-BR', {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+const numberFormatters = new Map<string, Intl.NumberFormat>();
+
+function getNumberFormatter(): Intl.NumberFormat {
+  const locale = intlLocale();
+  let f = numberFormatters.get(locale);
+  if (f) return f;
+  f = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  numberFormatters.set(locale, f);
+  return f;
+}
 
 export function formatNumber(value: number | null | undefined): string {
   if (value == null || isNaN(value)) return '';
-  return numberFormatter.format(value);
+  return getNumberFormatter().format(value);
 }
 
 const currencyFormatters = new Map<string, Intl.NumberFormat>();
 
 function getCurrencyFormatter(code: string): Intl.NumberFormat | null {
-  let f = currencyFormatters.get(code);
+  const locale = intlLocale();
+  const key = `${locale}|${code}`;
+  let f = currencyFormatters.get(key);
   if (f) return f;
   try {
-    f = new Intl.NumberFormat('pt-BR', {
+    f = new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: code,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-    currencyFormatters.set(code, f);
+    currencyFormatters.set(key, f);
     return f;
   } catch {
     return null;

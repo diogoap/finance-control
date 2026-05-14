@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto px-4 py-6">
-    <h1 class="text-xl font-semibold mb-4">Cadastro de empréstimos</h1>
+    <h1 class="text-xl font-semibold mb-4">{{ $t('loans.title') }}</h1>
 
     <Toolbar class="mb-4">
       <template #start>
@@ -9,8 +9,8 @@
             icon="pi pi-plus"
             severity="primary"
             size="small"
-            aria-label="Adicionar"
-            v-tooltip.bottom="'Adicionar'"
+            :aria-label="$t('loans.tooltips.add')"
+            v-tooltip.bottom="$t('loans.tooltips.add')"
             @click="openLoan('new', null)"
           />
           <Button
@@ -19,8 +19,8 @@
             severity="primary"
             size="small"
             :disabled="!selected"
-            aria-label="Editar"
-            v-tooltip.bottom="'Editar'"
+            :aria-label="$t('loans.tooltips.edit')"
+            v-tooltip.bottom="$t('loans.tooltips.edit')"
             @click="openLoan('edit', selected?._id ?? null)"
           />
           <Button
@@ -29,8 +29,8 @@
             severity="primary"
             size="small"
             :disabled="!selected"
-            aria-label="Excluir"
-            v-tooltip.bottom="'Excluir'"
+            :aria-label="$t('loans.tooltips.delete')"
+            v-tooltip.bottom="$t('loans.tooltips.delete')"
             @click="selected && confirmDeleteFor(selected._id)"
           />
           <Button
@@ -39,8 +39,8 @@
             severity="primary"
             size="small"
             :disabled="!selected"
-            aria-label="Clonar"
-            v-tooltip.bottom="'Clonar'"
+            :aria-label="$t('loans.tooltips.clone')"
+            v-tooltip.bottom="$t('loans.tooltips.clone')"
             @click="openLoan('clone', selected?._id ?? null)"
           />
           <Button
@@ -49,8 +49,8 @@
             severity="primary"
             size="small"
             :disabled="!selected || selected.status !== 'Em aberto'"
-            aria-label="Quitar"
-            v-tooltip.bottom="'Quitar'"
+            :aria-label="$t('loans.tooltips.settle')"
+            v-tooltip.bottom="$t('loans.tooltips.settle')"
             @click="selected && confirmPayFor(selected._id)"
           />
         </div>
@@ -59,7 +59,7 @@
       <template #end>
         <label class="flex items-center gap-2 text-sm">
           <Checkbox v-model="listPaid" binary @change="fetchAll" />
-          Listar empréstimos quitados?
+          {{ $t('loans.options.listSettled') }}
         </label>
       </template>
     </Toolbar>
@@ -79,12 +79,12 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column field="description" header="Descrição" sortable>
-        <template #footer>{{ rows.length }} registros</template>
+      <Column field="description" :header="$t('loans.headers.description')" sortable>
+        <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
       </Column>
       <Column
         field="transactionDate"
-        header="Data"
+        :header="$t('loans.headers.date')"
         sortable
         style="width: 5rem"
         class="text-center"
@@ -93,7 +93,7 @@
       </Column>
       <Column
         field="dueDate"
-        header="Vencimento"
+        :header="$t('loans.headers.dueDate')"
         sortable
         style="width: 9rem"
         class="text-center hidden md:table-cell"
@@ -103,7 +103,7 @@
       </Column>
       <Column
         field="amount"
-        header="Valor"
+        :header="$t('loans.headers.amount')"
         sortable
         style="width: 7rem"
         header-class="header-end"
@@ -119,25 +119,27 @@
       </Column>
       <Column
         field="_account.name"
-        header="Conta"
+        :header="$t('loans.headers.account')"
         sortable
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
       <Column
         field="type"
-        header="Tipo"
+        :header="$t('loans.headers.type')"
         sortable
         style="width: 8rem"
         class="text-center hidden md:table-cell"
         header-class="hidden md:table-cell"
-      />
+      >
+        <template #body="{ data }">{{ $t('enums.loanType.' + data.type) }}</template>
+      </Column>
       <Column field="status" sortable style="width: 4rem" class="text-center">
         <template #header>
           <i
             class="pi pi-money-bill text-lg"
-            aria-label="Quitado"
-            v-tooltip.bottom="'Quitado'"
+            :aria-label="$t('loans.headers.settled')"
+            v-tooltip.bottom="$t('loans.headers.settled')"
           />
         </template>
         <template #body="{ data }">
@@ -155,13 +157,13 @@
             text
             rounded
             size="small"
-            aria-label="Ações"
+            :aria-label="$t('loans.headers.actions')"
             aria-haspopup="menu"
             @click.stop="openRowMenu($event, data)"
           />
         </template>
       </Column>
-      <template #empty>Nenhum empréstimo encontrado.</template>
+      <template #empty>{{ $t('loans.table.empty') }}</template>
     </DataTable>
 
     <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
@@ -190,6 +192,7 @@ import ContextMenu from 'primevue/contextmenu';
 import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
+import { useI18n } from 'vue-i18n';
 import { useLoans, type Loan, type LoanFormPayload } from '../composables/useLoans';
 import { useIsMobile } from '../composables/useIsMobile';
 import { formatCurrency, formatNumber, formatShortDate } from '../lib/dateUtils';
@@ -197,6 +200,7 @@ import LoanFormDialog from './loans/LoanFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { t } = useI18n();
 const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, listPaid, fetchAll, create, update, remove, pay } = useLoans();
@@ -219,22 +223,22 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   if (!row) return [];
   return [
     {
-      label: 'Editar',
+      label: t('loans.menu.edit'),
       icon: 'pi pi-pencil',
       command: () => openLoan('edit', row._id),
     },
     {
-      label: 'Excluir',
+      label: t('loans.menu.delete'),
       icon: 'pi pi-trash',
       command: () => confirmDeleteFor(row._id),
     },
     {
-      label: 'Clonar',
+      label: t('loans.menu.clone'),
       icon: 'pi pi-clone',
       command: () => openLoan('clone', row._id),
     },
     {
-      label: 'Quitar',
+      label: t('loans.menu.settle'),
       icon: 'pi pi-dollar',
       visible: row.status === 'Em aberto',
       command: () => confirmPayFor(row._id),
@@ -274,10 +278,10 @@ async function onDialogSubmit(payload: LoanFormPayload, mode: 'new' | 'edit' | '
   try {
     if (mode === 'edit') {
       await update(payload);
-      toast.add({ severity: 'success', summary: 'Empréstimo editado com sucesso!', life: 4000 });
+      toast.add({ severity: 'success', summary: t('loans.success.edited'), life: 4000 });
     } else {
       await create(payload);
-      toast.add({ severity: 'success', summary: 'Empréstimo adicionado com sucesso!', life: 4000 });
+      toast.add({ severity: 'success', summary: t('loans.success.added'), life: 4000 });
     }
     await fetchAll();
   } catch (err) {
@@ -287,16 +291,16 @@ async function onDialogSubmit(payload: LoanFormPayload, mode: 'new' | 'edit' | '
 
 function confirmDeleteFor(id: string) {
   confirm.require({
-    message: 'Confirma a exclusão do empréstimo?',
-    header: 'Excluir empréstimo',
-    rejectProps: { label: 'Cancelar', severity: 'secondary', text: true },
-    acceptProps: { label: 'Confirmar' },
+    message: t('loans.confirm.deleteMessage'),
+    header: t('loans.confirm.deleteHeader'),
+    rejectProps: { label: t('common.actions.cancel'), severity: 'secondary', text: true },
+    acceptProps: { label: t('common.actions.confirm') },
     accept: async () => {
       try {
         await remove(id);
         toast.add({
           severity: 'success',
-          summary: 'Empréstimo excluído com sucesso!',
+          summary: t('loans.success.deleted'),
           life: 4000,
         });
         await fetchAll();
@@ -309,16 +313,16 @@ function confirmDeleteFor(id: string) {
 
 function confirmPayFor(id: string) {
   confirm.require({
-    message: 'Confirma a quitação do empréstimo?',
-    header: 'Quitar empréstimo',
-    rejectProps: { label: 'Cancelar', severity: 'secondary', text: true },
-    acceptProps: { label: 'Confirmar' },
+    message: t('loans.confirm.settleMessage'),
+    header: t('loans.confirm.settleHeader'),
+    rejectProps: { label: t('common.actions.cancel'), severity: 'secondary', text: true },
+    acceptProps: { label: t('common.actions.confirm') },
     accept: async () => {
       try {
         await pay(id);
         toast.add({
           severity: 'success',
-          summary: 'Empréstimo quitado com sucesso!',
+          summary: t('loans.success.settled'),
           life: 4000,
         });
         await fetchAll();
@@ -330,11 +334,11 @@ function confirmPayFor(id: string) {
 }
 
 function onLoadError(status: number | string) {
-  toast.add({ severity: 'error', summary: `Erro ao carregar os dados: ${status}`, life: 6000 });
+  toast.add({ severity: 'error', summary: t('common.errors.loadingFailed', { status }), life: 6000 });
 }
 
 function onSaveError(status: number | string) {
-  toast.add({ severity: 'error', summary: `Erro ao salvar os dados: ${status}`, life: 6000 });
+  toast.add({ severity: 'error', summary: t('common.errors.savingFailed', { status }), life: 6000 });
 }
 
 function extractStatus(err: unknown): number | string {

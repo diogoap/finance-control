@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="categoryName" class="text-sm font-medium">Descrição</label>
+        <label for="categoryName" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
           id="categoryName"
           v-model="form.name"
@@ -30,26 +30,28 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="categoryType" class="text-sm font-medium">Tipo</label>
+        <label for="categoryType" class="text-sm font-medium">{{ $t('common.fields.type') }}</label>
         <Select
           id="categoryType"
           v-model="form.type"
           :options="categoryTypes"
+          option-label="label"
+          option-value="value"
           :invalid="submitted && !!errors.type"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.type" class="text-red-600">{{ errors.type }}</small>
       </div>
 
       <div class="flex items-center gap-2">
         <Checkbox v-model="form.enabled" inputId="categoryEnabled" binary />
-        <label for="categoryEnabled" class="text-sm">Categoria ativa?</label>
+        <label for="categoryEnabled" class="text-sm">{{ $t('categories.form.fields.active') }}</label>
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -62,6 +64,7 @@ import Select from 'primevue/select';
 import Checkbox from 'primevue/checkbox';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import type { Category, CategoryType, NewCategory } from '../../composables/useCategories';
 import { useCategories } from '../../composables/useCategories';
 
@@ -79,7 +82,12 @@ const emit = defineEmits<{
   (e: 'load-error', status: number | string): void;
 }>();
 
-const categoryTypes: CategoryType[] = ['Despesa', 'Receita'];
+const { t } = useI18n();
+
+const categoryTypes = computed<{ label: string; value: CategoryType }[]>(() => [
+  { label: t('enums.categoryType.Despesa'), value: 'Despesa' },
+  { label: t('enums.categoryType.Receita'), value: 'Receita' },
+]);
 
 const { getById } = useCategories();
 const loaded = ref<Category | null>(null);
@@ -92,15 +100,17 @@ const form = reactive<{ _id?: string; name: string; type: CategoryType | null; e
   enabled: true,
 });
 
-const title = computed(() => (props.mode === 'new' ? 'Adicionar categoria' : 'Editar categoria'));
+const title = computed(() =>
+  props.mode === 'new' ? t('categories.form.addTitle') : t('categories.form.editTitle'),
+);
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = 'O campo Descrição é obrigatório.';
-  else if (name.length < 3) out.name = 'O campo Descrição deve possuir no mínimo 3 caracteres.';
-  else if (name.length > 100) out.name = 'O campo Descrição deve possuir no máximo 100 caracteres.';
-  if (!form.type) out.type = 'O campo Tipo é obrigatório.';
+  if (!name) out.name = t('common.errors.requiredField', { field: t('common.fields.description') });
+  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('common.fields.description'), min: 3 });
+  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
+  if (!form.type) out.type = t('common.errors.requiredField', { field: t('common.fields.type') });
   return out;
 });
 

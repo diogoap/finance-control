@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="incomeDescription" class="text-sm font-medium">Descrição</label>
+        <label for="incomeDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
           id="incomeDescription"
           v-model="form.description"
@@ -34,7 +34,7 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-4 flex flex-col gap-1">
-          <label for="incomeDueDate" class="text-sm font-medium">Vencimento</label>
+          <label for="incomeDueDate" class="text-sm font-medium">{{ $t('common.fields.dueDate') }}</label>
           <DatePicker
             id="incomeDueDate"
             v-model="form.dueDate"
@@ -47,7 +47,7 @@
           }}</small>
         </div>
         <div class="col-span-4 sm:col-span-3 flex flex-col gap-1">
-          <label for="incomeCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="incomeCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="incomeCurrency"
             v-model="form.currency_id"
@@ -56,14 +56,14 @@
             option-value="_id"
             :disabled="hasDetail"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Moeda"
+            :placeholder="$t('common.fields.currency')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
           }}</small>
         </div>
         <div class="col-span-8 sm:col-span-5 flex flex-col gap-1">
-          <label for="incomeAmount" class="text-sm font-medium">Valor</label>
+          <label for="incomeAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="incomeAmount"
             v-model="form.amount"
@@ -71,7 +71,7 @@
             :max-fraction-digits="2"
             :readonly="hasDetail"
             :invalid="submitted && !!errors.amount"
-            locale="pt-BR"
+            :locale="numberLocale"
             input-class="text-right"
           />
           <small v-if="submitted && errors.amount" class="text-red-600">{{ errors.amount }}</small>
@@ -80,7 +80,7 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="incomeAccount" class="text-sm font-medium">Conta</label>
+          <label for="incomeAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
           <Select
             id="incomeAccount"
             v-model="form.account_id"
@@ -89,14 +89,14 @@
             option-value="_id"
             :disabled="hasDetail"
             :invalid="submitted && !!errors.account_id"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.account_id" class="text-red-600">{{
             errors.account_id
           }}</small>
         </div>
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="incomeCategory" class="text-sm font-medium">Categoria</label>
+          <label for="incomeCategory" class="text-sm font-medium">{{ $t('common.fields.category') }}</label>
           <Select
             id="incomeCategory"
             v-model="form.category_id"
@@ -105,7 +105,7 @@
             option-value="_id"
             :disabled="hasDetail"
             :invalid="submitted && !!errors.category_id"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.category_id" class="text-red-600">{{
             errors.category_id
@@ -115,20 +115,22 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="incomeStatus" class="text-sm font-medium">Situação</label>
+          <label for="incomeStatus" class="text-sm font-medium">{{ $t('common.fields.status') }}</label>
           <Select
             id="incomeStatus"
             v-model="form.status"
             :options="incomeStatusOptions"
+            option-label="label"
+            option-value="value"
             :disabled="hasDetail"
             :invalid="submitted && !!errors.status"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
             @change="onChangeStatus"
           />
           <small v-if="submitted && errors.status" class="text-red-600">{{ errors.status }}</small>
         </div>
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="incomeAmountReceived" class="text-sm font-medium">Valor recebido</label>
+          <label for="incomeAmountReceived" class="text-sm font-medium">{{ $t('common.fields.receivedAmount') }}</label>
           <InputNumber
             id="incomeAmountReceived"
             v-model="form.amountReceived"
@@ -136,7 +138,7 @@
             :max-fraction-digits="2"
             :readonly="hasDetail"
             :invalid="submitted && !!errors.amountReceived"
-            locale="pt-BR"
+            :locale="numberLocale"
             input-class="text-right"
           />
           <small v-if="submitted && errors.amountReceived" class="text-red-600">{{
@@ -146,7 +148,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="incomeNotes" class="text-sm font-medium">Observações</label>
+        <label for="incomeNotes" class="text-sm font-medium">{{ $t('common.fields.notes') }}</label>
         <Textarea id="incomeNotes" v-model="form.notes" rows="2" autocomplete="off" />
       </div>
 
@@ -157,8 +159,8 @@
               <Button
                 icon="pi pi-plus"
                 size="small"
-                aria-label="Adicionar"
-                v-tooltip.bottom="'Adicionar'"
+                :aria-label="$t('common.actions.add')"
+                v-tooltip.bottom="$t('common.actions.add')"
                 @click="openDetail('new', null)"
               />
               <Button
@@ -166,8 +168,8 @@
                 icon="pi pi-pencil"
                 size="small"
                 :disabled="!selectedDetail"
-                aria-label="Editar"
-                v-tooltip.bottom="'Editar'"
+                :aria-label="$t('common.actions.edit')"
+                v-tooltip.bottom="$t('common.actions.edit')"
                 @click="openDetail('edit', selectedDetail)"
               />
               <Button
@@ -175,8 +177,8 @@
                 icon="pi pi-trash"
                 size="small"
                 :disabled="!selectedDetail"
-                aria-label="Excluir"
-                v-tooltip.bottom="'Excluir'"
+                :aria-label="$t('common.actions.delete')"
+                v-tooltip.bottom="$t('common.actions.delete')"
                 @click="confirmDeleteDetailFor(selectedDetail?._key ?? null)"
               />
               <Button
@@ -184,8 +186,8 @@
                 icon="pi pi-clone"
                 size="small"
                 :disabled="!selectedDetail"
-                aria-label="Clonar"
-                v-tooltip.bottom="'Clonar'"
+                :aria-label="$t('common.actions.clone')"
+                v-tooltip.bottom="$t('common.actions.clone')"
                 @click="openDetail('clone', selectedDetail)"
               />
               <Button
@@ -193,8 +195,8 @@
                 icon="pi pi-dollar"
                 size="small"
                 :disabled="!selectedDetail || selectedDetail.status !== 'Em aberto'"
-                aria-label="Receber"
-                v-tooltip.bottom="'Receber'"
+                :aria-label="$t('common.actions.receive')"
+                v-tooltip.bottom="$t('common.actions.receive')"
                 @click="receiveDetailFor(selectedDetail?._key ?? null)"
               />
             </div>
@@ -213,10 +215,10 @@
           :rows="5"
           @row-contextmenu="onRowContext"
         >
-          <Column field="description" header="Descrição">
-            <template #footer>{{ form.detail.length }} registros</template>
+          <Column field="description" :header="$t('common.fields.description')">
+            <template #footer>{{ $t('common.records', { count: form.detail.length }) }}</template>
           </Column>
-          <Column header="Valor" style="width: 9rem" header-class="header-end">
+          <Column :header="$t('common.fields.amount')" style="width: 9rem" header-class="header-end">
             <template #body="{ data }">
               <span class="block text-right">{{
                 formatCurrency(data.amount, data._currency?.currencyCode)
@@ -226,18 +228,18 @@
               <span class="block text-right">{{ formatNumber(detailTotal) }}</span>
             </template>
           </Column>
-          <Column header="Conta" style="width: 12rem">
+          <Column :header="$t('common.fields.account')" style="width: 12rem">
             <template #body="{ data }">{{ data._account?.name ?? '' }}</template>
           </Column>
-          <Column header="Categoria" style="width: 12rem">
+          <Column :header="$t('common.fields.category')" style="width: 12rem">
             <template #body="{ data }">{{ data._category?.name ?? '' }}</template>
           </Column>
           <Column field="status" style="width: 4rem" class="text-center">
             <template #header>
               <i
                 class="pi pi-wallet text-lg"
-                aria-label="Recebido"
-                v-tooltip.bottom="'Recebido'"
+                :aria-label="$t('incomes.headers.received')"
+                v-tooltip.bottom="$t('incomes.headers.received')"
               />
             </template>
             <template #body="{ data }">
@@ -255,22 +257,22 @@
                 text
                 rounded
                 size="small"
-                aria-label="Ações"
+                :aria-label="$t('incomes.headers.actions')"
                 aria-haspopup="menu"
                 @click.stop="openRowMenu($event, data)"
               />
             </template>
           </Column>
           <template #empty>
-            <div class="text-center text-sm text-slate-500 py-4">Nenhum detalhe adicionado.</div>
+            <div class="text-center text-sm text-slate-500 py-4">{{ $t('incomes.form.detailTable.empty') }}</div>
           </template>
         </DataTable>
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 
@@ -304,6 +306,7 @@ import Menu from 'primevue/menu';
 import ContextMenu from 'primevue/contextmenu';
 import type { MenuItem } from 'primevue/menuitem';
 import { useConfirm } from 'primevue/useconfirm';
+import { useI18n } from 'vue-i18n';
 import {
   useIncomes,
   compareDetails,
@@ -320,6 +323,7 @@ import {
 } from '../../composables/useReferenceData';
 import { useIsMobile } from '../../composables/useIsMobile';
 import { formatCurrency, formatNumber, getDateDst } from '../../lib/dateUtils';
+import { intlLocale } from '../../i18n';
 import IncomeDetailFormDialog from './IncomeDetailFormDialog.vue';
 
 type Mode = 'new' | 'edit' | 'clone';
@@ -336,7 +340,14 @@ const emit = defineEmits<{
   (e: 'load-error', status: number | string): void;
 }>();
 
-const incomeStatusOptions: IncomeStatus[] = ['Em aberto', 'Recebido'];
+const { t } = useI18n();
+
+const incomeStatusOptions = computed<{ label: string; value: IncomeStatus }[]>(() => [
+  { label: t('enums.incomeStatus.Em aberto'), value: 'Em aberto' },
+  { label: t('enums.incomeStatus.Recebido'), value: 'Recebido' },
+]);
+
+const numberLocale = computed(() => intlLocale());
 
 const { getById } = useIncomes();
 const { loadCurrencies, loadAccounts, loadCategories, getDefaultCurrencyId } = useReferenceData();
@@ -392,22 +403,22 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   if (!row) return [];
   return [
     {
-      label: 'Editar',
+      label: t('common.actions.edit'),
       icon: 'pi pi-pencil',
       command: () => openDetail('edit', row),
     },
     {
-      label: 'Excluir',
+      label: t('common.actions.delete'),
       icon: 'pi pi-trash',
       command: () => confirmDeleteDetailFor(row._key ?? null),
     },
     {
-      label: 'Clonar',
+      label: t('common.actions.clone'),
       icon: 'pi pi-clone',
       command: () => openDetail('clone', row),
     },
     {
-      label: 'Receber',
+      label: t('common.actions.receive'),
       icon: 'pi pi-dollar',
       visible: row.status === 'Em aberto',
       command: () => receiveDetailFor(row._key ?? null),
@@ -422,28 +433,28 @@ const detailTotal = computed(() =>
 );
 
 const title = computed(() => {
-  if (props.mode === 'new') return 'Adicionar receita';
-  if (props.mode === 'clone') return 'Clonar receita';
-  return 'Editar receita';
+  if (props.mode === 'new') return t('incomes.form.addTitle');
+  if (props.mode === 'clone') return t('incomes.form.cloneTitle');
+  return t('incomes.form.editTitle');
 });
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const desc = form.description?.trim() ?? '';
-  if (!desc) out.description = 'O campo Descrição é obrigatório.';
+  if (!desc) out.description = t('common.errors.requiredField', { field: t('common.fields.description') });
   else if (desc.length < 3)
-    out.description = 'O campo Descrição deve possuir no mínimo 3 caracteres.';
+    out.description = t('common.errors.minLength', { field: t('common.fields.description'), min: 3 });
   else if (desc.length > 100)
-    out.description = 'O campo Descrição deve possuir no máximo 100 caracteres.';
-  if (!form.dueDate) out.dueDate = 'O campo Vencimento é obrigatório.';
-  if (!form.status) out.status = 'O campo Situação é obrigatório.';
+    out.description = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
+  if (!form.dueDate) out.dueDate = t('common.errors.requiredField', { field: t('common.fields.dueDate') });
+  if (!form.status) out.status = t('common.errors.requiredField', { field: t('common.fields.status') });
   if (!hasDetail.value) {
-    if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
-    if (!form.amount || form.amount <= 0) out.amount = 'O campo Valor é obrigatório.';
-    if (!form.account_id) out.account_id = 'O campo Conta é obrigatório.';
-    if (!form.category_id) out.category_id = 'O campo Categoria é obrigatório.';
+    if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
+    if (!form.amount || form.amount <= 0) out.amount = t('common.errors.requiredField', { field: t('common.fields.amount') });
+    if (!form.account_id) out.account_id = t('common.errors.requiredField', { field: t('common.fields.account') });
+    if (!form.category_id) out.category_id = t('common.errors.requiredField', { field: t('common.fields.category') });
     if (form.status === 'Recebido' && (!form.amountReceived || form.amountReceived <= 0)) {
-      out.amountReceived = 'O campo Valor recebido é obrigatório.';
+      out.amountReceived = t('common.errors.requiredField', { field: t('common.fields.receivedAmount') });
     }
   }
   return out;
@@ -579,10 +590,10 @@ function onDetailLoadError(status: number | string) {
 function confirmDeleteDetailFor(key: string | null) {
   if (!key) return;
   confirm.require({
-    message: 'Confirma a exclusão do detalhe?',
-    header: 'Excluir detalhe',
-    rejectProps: { label: 'Cancelar', severity: 'secondary', text: true },
-    acceptProps: { label: 'Confirmar' },
+    message: t('incomes.form.detailConfirm.deleteMessage'),
+    header: t('incomes.form.detailConfirm.deleteHeader'),
+    rejectProps: { label: t('common.actions.cancel'), severity: 'secondary', text: true },
+    acceptProps: { label: t('common.actions.confirm') },
     accept: () => {
       const idx = form.detail.findIndex((d) => d._key === key);
       if (idx >= 0) form.detail.splice(idx, 1);

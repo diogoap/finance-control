@@ -13,7 +13,7 @@
     <template #header>
       <span class="text-sm font-semibold flex items-center gap-1.5">
         <i class="pi pi-wallet home-icon" aria-hidden="true"></i>
-        Contas
+        {{ $t('home.accountsBox.title') }}
       </span>
     </template>
     <table v-if="enabledAccounts.length" class="w-full text-xs">
@@ -26,7 +26,7 @@
         </tr>
       </tbody>
     </table>
-    <p v-else class="text-xs text-slate-500">Nenhuma conta encontrada.</p>
+    <p v-else class="text-xs text-slate-500">{{ $t('home.accountsBox.empty') }}</p>
   </Panel>
 </template>
 

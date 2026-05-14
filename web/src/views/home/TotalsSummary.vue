@@ -7,31 +7,31 @@
     <template #header>
       <span class="text-sm font-semibold flex items-center gap-1.5">
         <i class="pi pi-dollar home-icon" aria-hidden="true"></i>
-        Totais
+        {{ $t('home.totals.title') }}
       </span>
     </template>
     <table class="w-full text-xs">
       <tbody>
         <tr>
-          <td class="py-0.5 text-left">(+) Saldo anterior:</td>
+          <td class="py-0.5 text-left">{{ $t('home.totals.previousBalance') }}</td>
           <td class="py-0.5 text-right tabular-nums">
             {{ formatNumber(bucket.previousBalance) }}
           </td>
         </tr>
         <tr>
-          <td class="py-0.5 text-left">(+) Receitas:</td>
+          <td class="py-0.5 text-left">{{ $t('home.totals.incomes') }}</td>
           <td class="py-0.5 text-right tabular-nums">
             {{ formatNumber(bucket.totalIncomes) }}
           </td>
         </tr>
         <tr>
-          <td class="py-0.5 text-left">(-) Despesas:</td>
+          <td class="py-0.5 text-left">{{ $t('home.totals.expenses') }}</td>
           <td class="py-0.5 text-right tabular-nums">
             {{ formatNumber(bucket.totalExpenses * -1) }}
           </td>
         </tr>
         <tr class="border-t border-slate-200 dark:border-slate-700">
-          <td class="py-1 text-left text-sm font-semibold">(=) Saldo período:</td>
+          <td class="py-1 text-left text-sm font-semibold">{{ $t('home.totals.partialBalance') }}</td>
           <td
             class="py-1 text-right text-sm font-semibold tabular-nums"
             :class="valueClass(bucket.partialBalance)"
@@ -40,13 +40,13 @@
           </td>
         </tr>
         <tr>
-          <td class="py-0.5 text-left">(+) Empréstimos:</td>
+          <td class="py-0.5 text-left">{{ $t('home.totals.loans') }}</td>
           <td class="py-0.5 text-right tabular-nums">
             {{ formatNumber(bucket.totalLoans) }}
           </td>
         </tr>
         <tr class="border-t border-slate-200 dark:border-slate-700">
-          <td class="py-1 text-left text-sm font-semibold">(=) Saldo final:</td>
+          <td class="py-1 text-left text-sm font-semibold">{{ $t('home.totals.finalBalance') }}</td>
           <td
             class="py-1 text-right text-sm font-semibold tabular-nums"
             :class="valueClass(bucket.actualBalance)"
