@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1 sm:w-48">
-        <label for="transferDate" class="text-sm font-medium">Data</label>
+        <label for="transferDate" class="text-sm font-medium">{{ $t('common.fields.date') }}</label>
         <DatePicker
           id="transferDate"
           v-model="form.date"
@@ -31,7 +31,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex flex-col gap-1 sm:w-32">
-          <label for="transferCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="transferCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="transferCurrency"
             v-model="form.currency_id"
@@ -39,7 +39,7 @@
             option-label="currencyCode"
             option-value="_id"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
@@ -47,13 +47,13 @@
         </div>
 
         <div class="flex flex-col gap-1 flex-1">
-          <label for="transferAmount" class="text-sm font-medium">Valor</label>
+          <label for="transferAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="transferAmount"
             v-model="form.amount"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
-            locale="pt-BR"
+            :locale="numberLocale"
             :invalid="submitted && !!errors.amount"
             input-class="w-full"
           />
@@ -62,7 +62,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="transferAccountOrigin" class="text-sm font-medium">Conta Origem</label>
+        <label for="transferAccountOrigin" class="text-sm font-medium">{{ $t('transfers.headers.origin') }}</label>
         <Select
           id="transferAccountOrigin"
           v-model="form.accountOrigin_id"
@@ -70,7 +70,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.accountOrigin_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.accountOrigin_id" class="text-red-600">{{
           errors.accountOrigin_id
@@ -78,7 +78,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="transferAccountTarget" class="text-sm font-medium">Conta Destino</label>
+        <label for="transferAccountTarget" class="text-sm font-medium">{{ $t('transfers.headers.target') }}</label>
         <Select
           id="transferAccountTarget"
           v-model="form.accountTarget_id"
@@ -86,7 +86,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.accountTarget_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.accountTarget_id" class="text-red-600">{{
           errors.accountTarget_id
@@ -95,8 +95,8 @@
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -109,10 +109,12 @@ import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import type { Transfer, TransferFormPayload } from '../../composables/useTransfers';
 import { useTransfers } from '../../composables/useTransfers';
 import { useReferenceData, type Account, type Currency } from '../../composables/useReferenceData';
 import { getDateDst } from '../../lib/dateUtils';
+import { intlLocale } from '../../i18n';
 
 type Mode = 'new' | 'edit';
 
@@ -127,6 +129,10 @@ const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'load-error', status: number | string): void;
 }>();
+
+const { t } = useI18n();
+
+const numberLocale = computed(() => intlLocale());
 
 const { getById } = useTransfers();
 const { loadCurrencies, loadAccounts, getDefaultCurrencyId } = useReferenceData();
@@ -154,24 +160,24 @@ const form = reactive<{
 });
 
 const title = computed(() =>
-  props.mode === 'new' ? 'Adicionar transferência' : 'Editar transferência',
+  props.mode === 'new' ? t('transfers.form.addTitle') : t('transfers.form.editTitle'),
 );
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
-  if (!form.date || isNaN(form.date.getTime())) out.date = 'O campo Data é obrigatório.';
-  if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
+  if (!form.date || isNaN(form.date.getTime())) out.date = t('common.errors.requiredField', { field: t('common.fields.date') });
+  if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
   if (form.amount == null || isNaN(form.amount) || form.amount <= 0)
-    out.amount = 'O campo Valor é obrigatório.';
+    out.amount = t('common.errors.requiredField', { field: t('common.fields.amount') });
   if (!form.accountOrigin_id) {
-    out.accountOrigin_id = 'O campo Conta Origem é obrigatório.';
+    out.accountOrigin_id = t('common.errors.requiredField', { field: t('transfers.headers.origin') });
   } else if (form.accountOrigin_id === form.accountTarget_id) {
-    out.accountOrigin_id = 'A Conta Origem deve ser diferente da Conta Destino.';
+    out.accountOrigin_id = t('transfers.form.validation.sameAccount');
   }
   if (!form.accountTarget_id) {
-    out.accountTarget_id = 'O campo Conta Destino é obrigatório.';
+    out.accountTarget_id = t('common.errors.requiredField', { field: t('transfers.headers.target') });
   } else if (form.accountTarget_id === form.accountOrigin_id) {
-    out.accountTarget_id = 'A Conta Destino deve ser diferente da Conta Origem.';
+    out.accountTarget_id = t('transfers.form.validation.sameAccount');
   }
   return out;
 });

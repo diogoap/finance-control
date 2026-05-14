@@ -6,35 +6,35 @@
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o início do ano'"
+            v-tooltip.bottom="$t('home.navigation.beginYear')"
             label="<<"
             @click="navigate('beginYear')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o mês anterior'"
-            label="-1 Mês"
+            v-tooltip.bottom="$t('home.navigation.prevMonth')"
+            :label="$t('home.navigation.prevMonthLabel')"
             @click="navigate('prev')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o mês atual'"
-            label="Atual"
+            v-tooltip.bottom="$t('home.navigation.currentMonth')"
+            :label="$t('home.navigation.currentMonthLabel')"
             @click="navigate('actual')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o próximo mês'"
-            label="+1 Mês"
+            v-tooltip.bottom="$t('home.navigation.nextMonth')"
+            :label="$t('home.navigation.nextMonthLabel')"
             @click="navigate('next')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o fim do ano'"
+            v-tooltip.bottom="$t('home.navigation.endYear')"
             label=">>"
             @click="navigate('endYear')"
           />
@@ -55,24 +55,24 @@
             show-icon
             input-class="!w-32"
           />
-          <Button label="Filtrar" size="small" severity="secondary" @click="fetchAll" />
+          <Button :label="$t('home.filter')" size="small" severity="secondary" @click="fetchAll" />
         </div>
       </template>
     </Toolbar>
 
     <section class="mb-4">
-      <h2 class="text-sm font-semibold mb-2">Previsões - Todos os lançamentos</h2>
+      <h2 class="text-sm font-semibold mb-2">{{ $t('home.forecasts') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
         <TotalsSummary :bucket="allBucket" />
         <AccountsBox :accounts="allBucket.accounts" />
         <CategoryBox
-          title="Receitas"
+          :title="$t('home.categoryBox.incomes')"
           severity="success"
           :categories="allBucket.categories"
           type="Receita"
         />
         <CategoryBox
-          title="Despesas"
+          :title="$t('home.categoryBox.expenses')"
           severity="danger"
           :categories="allBucket.categories"
           type="Despesa"
@@ -81,18 +81,18 @@
     </section>
 
     <section>
-      <h2 class="text-sm font-semibold mb-2">Caixa - Lançamentos realizados</h2>
+      <h2 class="text-sm font-semibold mb-2">{{ $t('home.cashbox') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
         <TotalsSummary :bucket="completedBucket" />
         <AccountsBox :accounts="completedBucket.accounts" />
         <CategoryBox
-          title="Receitas"
+          :title="$t('home.categoryBox.incomes')"
           severity="success"
           :categories="completedBucket.categories"
           type="Receita"
         />
         <CategoryBox
-          title="Despesas"
+          :title="$t('home.categoryBox.expenses')"
           severity="danger"
           :categories="completedBucket.categories"
           type="Despesa"
@@ -116,6 +116,7 @@ import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
 import ProgressSpinner from 'primevue/progressspinner';
 import { useToast } from 'primevue/usetoast';
+import { useI18n } from 'vue-i18n';
 import { useTotals, emptyBucket } from '../composables/useTotals';
 import {
   getActualMonth,
@@ -129,6 +130,7 @@ import AccountsBox from './home/AccountsBox.vue';
 import CategoryBox from './home/CategoryBox.vue';
 
 const toast = useToast();
+const { t } = useI18n();
 const { totals, loading, fetchAll: fetchTotals } = useTotals();
 
 const { begin: initialBegin, end: initialEnd } = getActualMonth();
@@ -147,7 +149,7 @@ async function fetchAll() {
   } catch (err) {
     toast.add({
       severity: 'error',
-      summary: `Erro ao carregar os dados: ${extractStatus(err)}`,
+      summary: t('common.errors.loadingFailed', { status: extractStatus(err) }),
       life: 6000,
     });
   }

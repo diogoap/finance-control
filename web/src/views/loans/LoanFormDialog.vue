@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="loanDescription" class="text-sm font-medium">Descrição</label>
+        <label for="loanDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
           id="loanDescription"
           v-model="form.description"
@@ -33,7 +33,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex flex-col gap-1 flex-1">
-          <label for="loanTransactionDate" class="text-sm font-medium">Data de lançamento</label>
+          <label for="loanTransactionDate" class="text-sm font-medium">{{ $t('loans.form.fields.transactionDate') }}</label>
           <DatePicker
             id="loanTransactionDate"
             v-model="form.transactionDate"
@@ -47,7 +47,7 @@
         </div>
 
         <div class="flex flex-col gap-1 flex-1">
-          <label for="loanDueDate" class="text-sm font-medium">Data de vencimento</label>
+          <label for="loanDueDate" class="text-sm font-medium">{{ $t('loans.form.fields.dueDate') }}</label>
           <DatePicker
             id="loanDueDate"
             v-model="form.dueDate"
@@ -62,7 +62,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex flex-col gap-1 sm:w-32">
-          <label for="loanCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="loanCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="loanCurrency"
             v-model="form.currency_id"
@@ -70,7 +70,7 @@
             option-label="currencyCode"
             option-value="_id"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
@@ -78,13 +78,13 @@
         </div>
 
         <div class="flex flex-col gap-1 flex-1">
-          <label for="loanAmount" class="text-sm font-medium">Valor</label>
+          <label for="loanAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="loanAmount"
             v-model="form.amount"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
-            locale="pt-BR"
+            :locale="numberLocale"
             :invalid="submitted && !!errors.amount"
             input-class="w-full"
           />
@@ -94,32 +94,36 @@
 
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="flex flex-col gap-1 flex-1">
-          <label for="loanType" class="text-sm font-medium">Tipo de empréstimo</label>
+          <label for="loanType" class="text-sm font-medium">{{ $t('loans.form.fields.loanType') }}</label>
           <Select
             id="loanType"
             v-model="form.type"
             :options="loanTypes"
+            option-label="label"
+            option-value="value"
             :invalid="submitted && !!errors.type"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.type" class="text-red-600">{{ errors.type }}</small>
         </div>
 
         <div class="flex flex-col gap-1 flex-1">
-          <label for="loanStatus" class="text-sm font-medium">Situação</label>
+          <label for="loanStatus" class="text-sm font-medium">{{ $t('common.fields.status') }}</label>
           <Select
             id="loanStatus"
             v-model="form.status"
             :options="loanStatuses"
+            option-label="label"
+            option-value="value"
             :invalid="submitted && !!errors.status"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.status" class="text-red-600">{{ errors.status }}</small>
         </div>
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="loanAccount" class="text-sm font-medium">Conta</label>
+        <label for="loanAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
         <Select
           id="loanAccount"
           v-model="form.account_id"
@@ -127,7 +131,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.account_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.account_id" class="text-red-600">{{
           errors.account_id
@@ -135,14 +139,14 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="loanNotes" class="text-sm font-medium">Observações</label>
+        <label for="loanNotes" class="text-sm font-medium">{{ $t('common.fields.notes') }}</label>
         <Textarea id="loanNotes" v-model="form.notes" rows="3" auto-resize autocomplete="off" />
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -157,6 +161,7 @@ import Select from 'primevue/select';
 import Textarea from 'primevue/textarea';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import type {
   Loan,
   LoanFormPayload,
@@ -166,6 +171,7 @@ import type {
 import { useLoans } from '../../composables/useLoans';
 import { useReferenceData, type Account, type Currency } from '../../composables/useReferenceData';
 import { getDateDst } from '../../lib/dateUtils';
+import { intlLocale } from '../../i18n';
 
 type Mode = 'new' | 'edit' | 'clone';
 
@@ -181,8 +187,19 @@ const emit = defineEmits<{
   (e: 'load-error', status: number | string): void;
 }>();
 
-const loanTypes: LoanType[] = ['Tomado', 'Concedido'];
-const loanStatuses: LoanStatus[] = ['Em aberto', 'Quitado'];
+const { t } = useI18n();
+
+const loanTypes = computed<{ label: string; value: LoanType }[]>(() => [
+  { label: t('enums.loanType.Tomado'), value: 'Tomado' },
+  { label: t('enums.loanType.Concedido'), value: 'Concedido' },
+]);
+
+const loanStatuses = computed<{ label: string; value: LoanStatus }[]>(() => [
+  { label: t('enums.loanStatus.Em aberto'), value: 'Em aberto' },
+  { label: t('enums.loanStatus.Quitado'), value: 'Quitado' },
+]);
+
+const numberLocale = computed(() => intlLocale());
 
 const { getById } = useLoans();
 const { loadCurrencies, loadAccounts, getDefaultCurrencyId } = useReferenceData();
@@ -218,36 +235,36 @@ const form = reactive<{
 });
 
 const title = computed(() => {
-  if (props.mode === 'new') return 'Adicionar empréstimo';
-  if (props.mode === 'clone') return 'Clonar empréstimo';
-  return 'Editar empréstimo';
+  if (props.mode === 'new') return t('loans.form.addTitle');
+  if (props.mode === 'clone') return t('loans.form.cloneTitle');
+  return t('loans.form.editTitle');
 });
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const description = form.description?.trim() ?? '';
-  if (!description) out.description = 'O campo Descrição é obrigatório.';
+  if (!description) out.description = t('common.errors.requiredField', { field: t('common.fields.description') });
   else if (description.length < 3)
-    out.description = 'O campo Descrição deve possuir no mínimo 3 caracteres.';
+    out.description = t('common.errors.minLength', { field: t('common.fields.description'), min: 3 });
   else if (description.length > 100)
-    out.description = 'O campo Descrição deve possuir no máximo 100 caracteres.';
+    out.description = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
 
   if (!form.transactionDate || isNaN(form.transactionDate.getTime()))
-    out.transactionDate = 'O campo Data de lançamento é obrigatório.';
+    out.transactionDate = t('common.errors.requiredField', { field: t('loans.form.fields.transactionDate') });
   if (!form.dueDate || isNaN(form.dueDate.getTime())) {
-    out.dueDate = 'O campo Data de vencimento é obrigatório.';
+    out.dueDate = t('common.errors.requiredField', { field: t('loans.form.fields.dueDate') });
   } else if (form.transactionDate && !isNaN(form.transactionDate.getTime())) {
     const tx = stripTime(form.transactionDate);
     const due = stripTime(form.dueDate);
-    if (due < tx) out.dueDate = 'Não pode ser menor do que a Data de lançamento.';
+    if (due < tx) out.dueDate = t('loans.form.validation.dueDateAfterTransaction');
   }
 
   if (form.amount == null || isNaN(form.amount) || form.amount <= 0)
-    out.amount = 'O campo Valor é obrigatório.';
-  if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
-  if (!form.type) out.type = 'O campo Tipo de empréstimo é obrigatório.';
-  if (!form.status) out.status = 'O campo Situação é obrigatório.';
-  if (!form.account_id) out.account_id = 'O campo Conta é obrigatório.';
+    out.amount = t('common.errors.requiredField', { field: t('common.fields.amount') });
+  if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
+  if (!form.type) out.type = t('common.errors.requiredField', { field: t('loans.form.fields.loanType') });
+  if (!form.status) out.status = t('common.errors.requiredField', { field: t('common.fields.status') });
+  if (!form.account_id) out.account_id = t('common.errors.requiredField', { field: t('common.fields.account') });
   return out;
 });
 
@@ -294,7 +311,10 @@ watch(
         const loan = await getById(id);
         loaded.value = loan;
         form._id = mode === 'clone' ? undefined : loan._id;
-        form.description = mode === 'clone' ? `${loan.description} - Cópia` : loan.description;
+        form.description =
+          mode === 'clone'
+            ? `${loan.description}${t('common.cloneSuffix')}`
+            : loan.description;
         form.transactionDate = new Date(loan.transactionDate);
         form.dueDate = new Date(loan.dueDate);
         form.amount = loan.amount;

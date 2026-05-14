@@ -1,9 +1,9 @@
 <template>
   <div class="container mx-auto px-4 py-6">
     <div class="flex items-center justify-between mb-4 gap-4">
-      <h1 class="text-xl font-semibold">Cadastro de transferências</h1>
+      <h1 class="text-xl font-semibold">{{ $t('transfers.title') }}</h1>
       <div class="flex items-baseline gap-2">
-        <span class="text-sm text-slate-500">Saldo:</span>
+        <span class="text-sm text-slate-500">{{ $t('transfers.balanceLabel') }}</span>
         <span :class="['font-semibold', balanceClass]">{{ formatNumber(balance) }}</span>
       </div>
     </div>
@@ -15,8 +15,8 @@
             icon="pi pi-plus"
             severity="primary"
             size="small"
-            aria-label="Adicionar"
-            v-tooltip.bottom="'Adicionar'"
+            :aria-label="$t('transfers.tooltips.add')"
+            v-tooltip.bottom="$t('transfers.tooltips.add')"
             @click="openTransfer('new', null)"
           />
           <Button
@@ -25,8 +25,8 @@
             severity="primary"
             size="small"
             :disabled="!selected"
-            aria-label="Editar"
-            v-tooltip.bottom="'Editar'"
+            :aria-label="$t('transfers.tooltips.edit')"
+            v-tooltip.bottom="$t('transfers.tooltips.edit')"
             @click="openTransfer('edit', selected?._id ?? null)"
           />
           <Button
@@ -35,8 +35,8 @@
             severity="primary"
             size="small"
             :disabled="!selected"
-            aria-label="Excluir"
-            v-tooltip.bottom="'Excluir'"
+            :aria-label="$t('transfers.tooltips.delete')"
+            v-tooltip.bottom="$t('transfers.tooltips.delete')"
             @click="selected && confirmDeleteFor(selected._id)"
           />
         </div>
@@ -47,35 +47,35 @@
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o início do ano'"
+            v-tooltip.bottom="$t('home.navigation.beginYear')"
             label="<<"
             @click="navigate('beginYear')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o mês anterior'"
-            label="-1 Mês"
+            v-tooltip.bottom="$t('home.navigation.prevMonth')"
+            :label="$t('home.navigation.prevMonthLabel')"
             @click="navigate('prev')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o mês atual'"
-            label="Atual"
+            v-tooltip.bottom="$t('home.navigation.currentMonth')"
+            :label="$t('home.navigation.currentMonthLabel')"
             @click="navigate('actual')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o próximo mês'"
-            label="+1 Mês"
+            v-tooltip.bottom="$t('home.navigation.nextMonth')"
+            :label="$t('home.navigation.nextMonthLabel')"
             @click="navigate('next')"
           />
           <Button
             size="small"
             severity="success"
-            v-tooltip.bottom="'Ir para o fim do ano'"
+            v-tooltip.bottom="$t('home.navigation.endYear')"
             label=">>"
             @click="navigate('endYear')"
           />
@@ -96,7 +96,7 @@
             show-icon
             input-class="!w-32"
           />
-          <Button label="Filtrar" size="small" severity="secondary" @click="fetchAll" />
+          <Button :label="$t('home.filter')" size="small" severity="secondary" @click="fetchAll" />
         </div>
       </template>
     </Toolbar>
@@ -116,13 +116,13 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column field="date" header="Data" sortable style="width: 7rem" class="text-center">
+      <Column field="date" :header="$t('transfers.headers.date')" sortable style="width: 7rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.date) }}</template>
-        <template #footer>{{ rows.length }} registros</template>
+        <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
       </Column>
       <Column
         field="amount"
-        header="Valor"
+        :header="$t('transfers.headers.amount')"
         sortable
         style="width: 7rem"
         header-class="header-end"
@@ -136,10 +136,10 @@
           <span class="block text-right">{{ formatNumber(amountTotal) }}</span>
         </template>
       </Column>
-      <Column field="_accountOrigin.name" header="Conta Origem" sortable />
+      <Column field="_accountOrigin.name" :header="$t('transfers.headers.origin')" sortable />
       <Column
         field="_accountTarget.name"
-        header="Conta Destino"
+        :header="$t('transfers.headers.target')"
         sortable
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
@@ -155,13 +155,13 @@
             text
             rounded
             size="small"
-            aria-label="Ações"
+            :aria-label="$t('transfers.headers.actions')"
             aria-haspopup="menu"
             @click.stop="openRowMenu($event, data)"
           />
         </template>
       </Column>
-      <template #empty>Nenhuma transferência encontrada.</template>
+      <template #empty>{{ $t('transfers.table.empty') }}</template>
     </DataTable>
 
     <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
@@ -190,6 +190,7 @@ import ContextMenu from 'primevue/contextmenu';
 import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
+import { useI18n } from 'vue-i18n';
 import {
   useTransfers,
   type Transfer,
@@ -210,6 +211,7 @@ import TransferFormDialog from './transfers/TransferFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { t } = useI18n();
 const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchTransfers, create, update, remove } =
@@ -233,12 +235,12 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   if (!row) return [];
   return [
     {
-      label: 'Editar',
+      label: t('transfers.menu.edit'),
       icon: 'pi pi-pencil',
       command: () => openTransfer('edit', row._id),
     },
     {
-      label: 'Excluir',
+      label: t('transfers.menu.delete'),
       icon: 'pi pi-trash',
       command: () => confirmDeleteFor(row._id),
     },
@@ -316,14 +318,14 @@ async function onDialogSubmit(payload: TransferFormPayload, mode: 'new' | 'edit'
       await update(payload);
       toast.add({
         severity: 'success',
-        summary: 'Transferência editada com sucesso!',
+        summary: t('transfers.success.edited'),
         life: 4000,
       });
     } else {
       await create(payload);
       toast.add({
         severity: 'success',
-        summary: 'Transferência adicionada com sucesso!',
+        summary: t('transfers.success.added'),
         life: 4000,
       });
     }
@@ -335,16 +337,16 @@ async function onDialogSubmit(payload: TransferFormPayload, mode: 'new' | 'edit'
 
 function confirmDeleteFor(id: string) {
   confirm.require({
-    message: 'Confirma a exclusão da transferência?',
-    header: 'Excluir transferência',
-    rejectProps: { label: 'Cancelar', severity: 'secondary', text: true },
-    acceptProps: { label: 'Confirmar' },
+    message: t('transfers.confirm.deleteMessage'),
+    header: t('transfers.confirm.deleteHeader'),
+    rejectProps: { label: t('common.actions.cancel'), severity: 'secondary', text: true },
+    acceptProps: { label: t('common.actions.confirm') },
     accept: async () => {
       try {
         await remove(id);
         toast.add({
           severity: 'success',
-          summary: 'Transferência excluída com sucesso!',
+          summary: t('transfers.success.deleted'),
           life: 4000,
         });
         await fetchAll();
@@ -358,7 +360,7 @@ function confirmDeleteFor(id: string) {
 function onLoadError(status: number | string) {
   toast.add({
     severity: 'error',
-    summary: `Erro ao carregar os dados: ${status}`,
+    summary: t('common.errors.loadingFailed', { status }),
     life: 6000,
   });
 }
@@ -366,7 +368,7 @@ function onLoadError(status: number | string) {
 function onSaveError(status: number | string) {
   toast.add({
     severity: 'error',
-    summary: `Erro ao salvar os dados: ${status}`,
+    summary: t('common.errors.savingFailed', { status }),
     life: 6000,
   });
 }

@@ -1,65 +1,35 @@
 import Aura from '@primevue/themes/aura';
 
-export const primevueConfig = {
-  theme: {
-    preset: Aura,
-    options: {
-      darkModeSelector: '.dark',
+interface PrimeVueLocale {
+  accept: string;
+  reject: string;
+  choose: string;
+  upload: string;
+  cancel: string;
+  apply: string;
+  clear: string;
+  today: string;
+  weekHeader: string;
+  firstDayOfWeek: number;
+  dayNames: string[];
+  dayNamesShort: string[];
+  dayNamesMin: string[];
+  monthNames: string[];
+  monthNamesShort: string[];
+  emptyMessage: string;
+  emptyFilterMessage: string;
+  noFilter: string;
+  pending: string;
+}
+
+export function buildPrimevueConfig(locale: PrimeVueLocale) {
+  return {
+    theme: {
+      preset: Aura,
+      options: {
+        darkModeSelector: '.dark',
+      },
     },
-  },
-  locale: {
-    accept: 'Sim',
-    reject: 'Não',
-    choose: 'Escolher',
-    upload: 'Enviar',
-    cancel: 'Cancelar',
-    apply: 'Aplicar',
-    clear: 'Limpar',
-    today: 'Hoje',
-    weekHeader: 'Sm',
-    firstDayOfWeek: 0,
-    dayNames: [
-      'Domingo',
-      'Segunda-feira',
-      'Terça-feira',
-      'Quarta-feira',
-      'Quinta-feira',
-      'Sexta-feira',
-      'Sábado',
-    ],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
-    monthNames: [
-      'Janeiro',
-      'Fevereiro',
-      'Março',
-      'Abril',
-      'Maio',
-      'Junho',
-      'Julho',
-      'Agosto',
-      'Setembro',
-      'Outubro',
-      'Novembro',
-      'Dezembro',
-    ],
-    monthNamesShort: [
-      'Jan',
-      'Fev',
-      'Mar',
-      'Abr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Set',
-      'Out',
-      'Nov',
-      'Dez',
-    ],
-    emptyMessage: 'Nenhum resultado encontrado',
-    emptyFilterMessage: 'Nenhum resultado encontrado',
-    noFilter: 'Sem filtro',
-    pending: 'Pendente',
-  },
-};
+    locale,
+  };
+}

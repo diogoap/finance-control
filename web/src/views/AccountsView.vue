@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto px-4 py-6">
-    <h1 class="text-xl font-semibold mb-4">Cadastro de contas</h1>
+    <h1 class="text-xl font-semibold mb-4">{{ $t('accounts.title') }}</h1>
 
     <Toolbar class="mb-4">
       <template #start>
@@ -9,8 +9,8 @@
             icon="pi pi-plus"
             severity="primary"
             size="small"
-            aria-label="Adicionar"
-            v-tooltip.bottom="'Adicionar'"
+            :aria-label="$t('accounts.tooltips.add')"
+            v-tooltip.bottom="$t('accounts.tooltips.add')"
             @click="openNew"
           />
           <Button
@@ -18,9 +18,9 @@
             icon="pi pi-pencil"
             severity="primary"
             size="small"
-            aria-label="Editar"
+            :aria-label="$t('accounts.tooltips.edit')"
             :disabled="!selected"
-            v-tooltip.bottom="'Editar'"
+            v-tooltip.bottom="$t('accounts.tooltips.edit')"
             @click="selected && openEditFor(selected._id)"
           />
           <Button
@@ -29,8 +29,8 @@
             icon="pi pi-times"
             severity="primary"
             size="small"
-            aria-label="Inativar"
-            v-tooltip.bottom="'Inativar'"
+            :aria-label="$t('accounts.tooltips.deactivate')"
+            v-tooltip.bottom="$t('accounts.tooltips.deactivate')"
             @click="confirmToggleFor(selected._id, false)"
           />
           <Button
@@ -39,8 +39,8 @@
             icon="pi pi-check"
             severity="primary"
             size="small"
-            aria-label="Ativar"
-            v-tooltip.bottom="'Ativar'"
+            :aria-label="$t('accounts.tooltips.activate')"
+            v-tooltip.bottom="$t('accounts.tooltips.activate')"
             @click="confirmToggleFor(selected._id, true)"
           />
         </div>
@@ -49,7 +49,7 @@
       <template #end>
         <label class="flex items-center gap-2 text-sm">
           <Checkbox v-model="listDisabled" binary @change="fetchAll" />
-          Listar contas inativas?
+          {{ $t('accounts.options.listInactive') }}
         </label>
       </template>
     </Toolbar>
@@ -69,11 +69,11 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <template #footer>{{ rows.length }} registros</template>
-      <Column field="name" header="Nome" sortable />
+      <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
+      <Column field="name" :header="$t('accounts.headers.name')" sortable />
       <Column
         field="initialBalance"
-        header="Saldo inicial"
+        :header="$t('accounts.headers.initialBalance')"
         sortable
         style="width: 8rem"
         header-class="header-end"
@@ -86,17 +86,17 @@
       </Column>
       <Column
         field="order"
-        header="Ordem"
+        :header="$t('accounts.headers.order')"
         sortable
         style="width: 6rem"
         class="text-center hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
-      <Column header="Ativa?" style="width: 5rem" class="text-center">
+      <Column :header="$t('accounts.headers.active')" style="width: 5rem" class="text-center">
         <template #body="{ data }">
           <i
             :class="data.enabled ? 'pi pi-check text-green-600' : 'pi pi-times text-red-600'"
-            :aria-label="data.enabled ? 'Ativa' : 'Inativa'"
+            :aria-label="data.enabled ? $t('accounts.activeLabel') : $t('accounts.inactiveLabel')"
           />
         </template>
       </Column>
@@ -111,13 +111,13 @@
             text
             rounded
             size="small"
-            aria-label="Ações"
+            :aria-label="$t('accounts.headers.actions')"
             aria-haspopup="menu"
             @click.stop="openRowMenu($event, data)"
           />
         </template>
       </Column>
-      <template #empty>Nenhuma conta encontrada.</template>
+      <template #empty>{{ $t('accounts.table.empty') }}</template>
     </DataTable>
 
     <Menu ref="rowMenu" :model="rowMenuItems" :popup="true" append-to="body" />
@@ -146,6 +146,7 @@ import ContextMenu from 'primevue/contextmenu';
 import type { MenuItem } from 'primevue/menuitem';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
+import { useI18n } from 'vue-i18n';
 import { useAccounts, type Account, type NewAccount } from '../composables/useAccounts';
 import { useReferenceData } from '../composables/useReferenceData';
 import { useIsMobile } from '../composables/useIsMobile';
@@ -154,6 +155,7 @@ import AccountFormDialog from './accounts/AccountFormDialog.vue';
 
 const toast = useToast();
 const confirm = useConfirm();
+const { t } = useI18n();
 const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, listDisabled, fetchAll, create, update, toggleEnabled } =
@@ -174,12 +176,12 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   if (!row) return [];
   return [
     {
-      label: 'Editar',
+      label: t('accounts.menu.edit'),
       icon: 'pi pi-pencil',
       command: () => openEditFor(row._id),
     },
     {
-      label: row.enabled ? 'Inativar' : 'Ativar',
+      label: row.enabled ? t('accounts.menu.deactivate') : t('accounts.menu.activate'),
       icon: row.enabled ? 'pi pi-times' : 'pi pi-check',
       command: () => confirmToggleFor(row._id, !row.enabled),
     },
@@ -221,10 +223,10 @@ async function onDialogSubmit(payload: Account | NewAccount, mode: 'new' | 'edit
   try {
     if (mode === 'new') {
       await create(payload as NewAccount);
-      toast.add({ severity: 'success', summary: 'Conta adicionada com sucesso!', life: 4000 });
+      toast.add({ severity: 'success', summary: t('accounts.success.added'), life: 4000 });
     } else {
       await update(payload as Account);
-      toast.add({ severity: 'success', summary: 'Conta editada com sucesso!', life: 4000 });
+      toast.add({ severity: 'success', summary: t('accounts.success.edited'), life: 4000 });
     }
     invalidate('accounts');
     await fetchAll();
@@ -235,16 +237,16 @@ async function onDialogSubmit(payload: Account | NewAccount, mode: 'new' | 'edit
 
 function confirmToggleFor(id: string, enable: boolean) {
   confirm.require({
-    message: enable ? 'Confirma a ativação da conta?' : 'Confirma a inativação da conta?',
-    header: enable ? 'Ativar conta' : 'Inativar conta',
-    rejectProps: { label: 'Cancelar', severity: 'secondary', text: true },
-    acceptProps: { label: 'Confirmar' },
+    message: enable ? t('accounts.confirm.activateMessage') : t('accounts.confirm.deactivateMessage'),
+    header: enable ? t('accounts.confirm.activateHeader') : t('accounts.confirm.deactivateHeader'),
+    rejectProps: { label: t('common.actions.cancel'), severity: 'secondary', text: true },
+    acceptProps: { label: t('common.actions.confirm') },
     accept: async () => {
       try {
         await toggleEnabled(id, enable);
         toast.add({
           severity: 'success',
-          summary: enable ? 'Conta ativada com sucesso!' : 'Conta inativada com sucesso!',
+          summary: enable ? t('accounts.success.activated') : t('accounts.success.deactivated'),
           life: 4000,
         });
         invalidate('accounts');
@@ -257,11 +259,11 @@ function confirmToggleFor(id: string, enable: boolean) {
 }
 
 function onLoadError(status: number | string) {
-  toast.add({ severity: 'error', summary: `Erro ao carregar os dados: ${status}`, life: 6000 });
+  toast.add({ severity: 'error', summary: t('common.errors.loadingFailed', { status }), life: 6000 });
 }
 
 function onSaveError(status: number | string) {
-  toast.add({ severity: 'error', summary: `Erro ao salvar os dados: ${status}`, life: 6000 });
+  toast.add({ severity: 'error', summary: t('common.errors.savingFailed', { status }), life: 6000 });
 }
 
 function extractStatus(err: unknown): number | string {

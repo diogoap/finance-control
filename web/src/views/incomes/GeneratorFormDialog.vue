@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :visible="visible"
-    :header="'Gerar receitas'"
+    :header="$t('incomes.generator.title')"
     modal
     :style="{ width: 'min(46rem, 95vw)' }"
     :closable="false"
@@ -19,7 +19,7 @@
     >
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="genInitialDate" class="text-sm font-medium">Data inicial</label>
+          <label for="genInitialDate" class="text-sm font-medium">{{ $t('incomes.generator.fields.startDate') }}</label>
           <DatePicker
             id="genInitialDate"
             v-model="form.initialDate"
@@ -32,7 +32,7 @@
           }}</small>
         </div>
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="genInstallments" class="text-sm font-medium">Número de parcelas</label>
+          <label for="genInstallments" class="text-sm font-medium">{{ $t('incomes.generator.fields.installments') }}</label>
           <InputNumber
             id="genInstallments"
             v-model="form.installments"
@@ -49,7 +49,7 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
-          <label for="genDueDateType" class="text-sm font-medium">Vencimento</label>
+          <label for="genDueDateType" class="text-sm font-medium">{{ $t('incomes.generator.fields.dueDateType') }}</label>
           <Select
             id="genDueDateType"
             v-model="form.dueDateType"
@@ -57,7 +57,7 @@
             option-label="label"
             option-value="value"
             :invalid="submitted && !!errors.dueDateType"
-            placeholder="Selecione"
+            :placeholder="$t('common.placeholders.select')"
           />
           <small v-if="submitted && errors.dueDateType" class="text-red-600">{{
             errors.dueDateType
@@ -67,7 +67,7 @@
           v-if="form.dueDateType === 'DiaEspecifico'"
           class="col-span-12 sm:col-span-3 flex flex-col gap-1"
         >
-          <label for="genDueDateTypeDay" class="text-sm font-medium">Dia</label>
+          <label for="genDueDateTypeDay" class="text-sm font-medium">{{ $t('incomes.generator.fields.day') }}</label>
           <InputNumber
             id="genDueDateTypeDay"
             v-model="form.dueDateTypeDay"
@@ -84,7 +84,7 @@
 
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-4 sm:col-span-3 flex flex-col gap-1">
-          <label for="genCurrency" class="text-sm font-medium">Moeda</label>
+          <label for="genCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="genCurrency"
             v-model="form.currency_id"
@@ -92,21 +92,21 @@
             option-label="currencyCode"
             option-value="_id"
             :invalid="submitted && !!errors.currency_id"
-            placeholder="Moeda"
+            :placeholder="$t('common.fields.currency')"
           />
           <small v-if="submitted && errors.currency_id" class="text-red-600">{{
             errors.currency_id
           }}</small>
         </div>
         <div class="col-span-8 sm:col-span-3 flex flex-col gap-1">
-          <label for="genAmount" class="text-sm font-medium">Valor</label>
+          <label for="genAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="genAmount"
             v-model="form.amount"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
             :invalid="submitted && !!errors.amount"
-            locale="pt-BR"
+            :locale="numberLocale"
             input-class="text-right"
           />
           <small v-if="submitted && errors.amount" class="text-red-600">{{
@@ -116,7 +116,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="genDescription" class="text-sm font-medium">Descrição</label>
+        <label for="genDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
           id="genDescription"
           v-model="form.description"
@@ -136,12 +136,12 @@
           binary
         />
         <label for="genDescInstallment" class="text-sm">
-          Inserir o número da parcela na descrição
+          {{ $t('incomes.generator.installmentInDescription') }}
         </label>
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="genAccount" class="text-sm font-medium">Conta</label>
+        <label for="genAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
         <Select
           id="genAccount"
           v-model="form.account_id"
@@ -149,7 +149,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.account_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.account_id" class="text-red-600">{{
           errors.account_id
@@ -157,7 +157,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="genCategory" class="text-sm font-medium">Categoria</label>
+        <label for="genCategory" class="text-sm font-medium">{{ $t('common.fields.category') }}</label>
         <Select
           id="genCategory"
           v-model="form.category_id"
@@ -165,7 +165,7 @@
           option-label="name"
           option-value="_id"
           :invalid="submitted && !!errors.category_id"
-          placeholder="Selecione"
+          :placeholder="$t('common.placeholders.select')"
         />
         <small v-if="submitted && errors.category_id" class="text-red-600">{{
           errors.category_id
@@ -173,14 +173,14 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="genNotes" class="text-sm font-medium">Observações</label>
+        <label for="genNotes" class="text-sm font-medium">{{ $t('common.fields.notes') }}</label>
         <Textarea id="genNotes" v-model="form.notes" rows="1" autocomplete="off" />
       </div>
     </form>
 
     <template #footer>
-      <Button label="Cancelar" severity="secondary" text @click="handleClose" />
-      <Button label="Confirmar" :disabled="submitting || loading" @click="handleSubmit" />
+      <Button :label="$t('common.actions.cancel')" severity="secondary" text @click="handleClose" />
+      <Button :label="$t('common.actions.confirm')" :disabled="submitting || loading" @click="handleSubmit" />
     </template>
   </Dialog>
 </template>
@@ -196,6 +196,7 @@ import Checkbox from 'primevue/checkbox';
 import DatePicker from 'primevue/datepicker';
 import Textarea from 'primevue/textarea';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useI18n } from 'vue-i18n';
 import api from '../../lib/api';
 import {
   useReferenceData,
@@ -204,6 +205,7 @@ import {
   type Currency,
 } from '../../composables/useReferenceData';
 import { getDateDst } from '../../lib/dateUtils';
+import { intlLocale } from '../../i18n';
 
 type DueDateType = 'PrimeiroDia' | 'UltimoDia' | 'DiaEspecifico';
 
@@ -218,11 +220,15 @@ const emit = defineEmits<{
   (e: 'save-error', status: number | string): void;
 }>();
 
-const dueDateTypeOptions: { value: DueDateType; label: string }[] = [
-  { value: 'PrimeiroDia', label: 'Primeiro dia do mês' },
-  { value: 'UltimoDia', label: 'Último dia do mês' },
-  { value: 'DiaEspecifico', label: 'Dia específico' },
-];
+const { t } = useI18n();
+
+const dueDateTypeOptions = computed<{ value: DueDateType; label: string }[]>(() => [
+  { value: 'PrimeiroDia', label: t('incomes.generator.dueDateOptions.firstDay') },
+  { value: 'UltimoDia', label: t('incomes.generator.dueDateOptions.lastDay') },
+  { value: 'DiaEspecifico', label: t('incomes.generator.dueDateOptions.specificDay') },
+]);
+
+const numberLocale = computed(() => intlLocale());
 
 const { loadCurrencies, loadAccounts, loadCategories, getDefaultCurrencyId } = useReferenceData();
 
@@ -261,22 +267,22 @@ const form = reactive<{
 
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
-  if (!form.initialDate) out.initialDate = 'O campo Data inicial é obrigatório.';
+  if (!form.initialDate) out.initialDate = t('common.errors.requiredField', { field: t('incomes.generator.fields.startDate') });
   if (!form.installments || form.installments <= 0)
-    out.installments = 'O campo Número de parcelas é obrigatório.';
-  if (!form.dueDateType) out.dueDateType = 'O campo Vencimento é obrigatório.';
+    out.installments = t('common.errors.requiredField', { field: t('incomes.generator.fields.installments') });
+  if (!form.dueDateType) out.dueDateType = t('common.errors.requiredField', { field: t('incomes.generator.fields.dueDateType') });
   if (form.dueDateType === 'DiaEspecifico' && (!form.dueDateTypeDay || form.dueDateTypeDay <= 0))
-    out.dueDateTypeDay = 'O campo Dia é obrigatório.';
-  if (!form.currency_id) out.currency_id = 'O campo Moeda é obrigatório.';
-  if (!form.amount || form.amount <= 0) out.amount = 'O campo Valor é obrigatório.';
+    out.dueDateTypeDay = t('common.errors.requiredField', { field: t('incomes.generator.fields.day') });
+  if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
+  if (!form.amount || form.amount <= 0) out.amount = t('common.errors.requiredField', { field: t('common.fields.amount') });
   const desc = form.description?.trim() ?? '';
-  if (!desc) out.description = 'O campo Descrição é obrigatório.';
+  if (!desc) out.description = t('common.errors.requiredField', { field: t('common.fields.description') });
   else if (desc.length < 3)
-    out.description = 'O campo Descrição deve possuir no mínimo 3 caracteres.';
+    out.description = t('common.errors.minLength', { field: t('common.fields.description'), min: 3 });
   else if (desc.length > 100)
-    out.description = 'O campo Descrição deve possuir no máximo 100 caracteres.';
-  if (!form.account_id) out.account_id = 'O campo Conta é obrigatório.';
-  if (!form.category_id) out.category_id = 'O campo Categoria é obrigatório.';
+    out.description = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
+  if (!form.account_id) out.account_id = t('common.errors.requiredField', { field: t('common.fields.account') });
+  if (!form.category_id) out.category_id = t('common.errors.requiredField', { field: t('common.fields.category') });
   return out;
 });
 
