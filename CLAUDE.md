@@ -13,7 +13,7 @@ Guidelines for AI agents working in this repo. Read [docs/ARCHITECTURE.md](./doc
 
 - Vue 3 + Vite + PrimeVue (Aura) + Tailwind v4 + TypeScript SPA at `/app/*` (source: `web/src/`). All screens — including Login/Logoff — live here.
 - Node/Express backend in `api/` (api → service → model layers) with MongoDB via Mongoose. Auth is Google OAuth2 producing an opaque token in `Authorization`, with `User-Id` alongside.
-- OAuth callback redirects to `/app/#id=...&token=...`; `consumeOAuthHash()` in `web/src/lib/session.ts` parses the hash and writes the `loggedUser*` keys to `localStorage` before the Vue app mounts. The router's `beforeEach` guard sends unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt).
+- OAuth callback redirects to `/app/#id=...&token=...`; `consumeOAuthHash()` (defined in `web/src/lib/session.ts`) is invoked at the top of `web/src/router.ts`, before `createWebHistory` — Vue Router snapshots `window.location` on history creation, so the hash must be parsed and stripped first. It writes the `loggedUser*` keys to `localStorage`. The router's `beforeEach` guard then sends unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt).
 - Bare `/`, `/login`, `/logoff` 302-redirect to `/app/...` server-side so old links keep working.
 
 ## Gotchas

@@ -105,9 +105,9 @@ finance-control/
     public/
       favicon.png
     src/
-      main.ts                        # consumeOAuthHash() pre-mount; PrimeVue + Toast/Confirm services
+      main.ts                        # createApp + plugins, mounts #app
       App.vue                        # AppNavbar + Toast + ConfirmDialog + RouterView
-      router.ts                      # Vue Router; auth guard via meta.public
+      router.ts                      # Vue Router; auth guard via meta.public; calls consumeOAuthHash() before createWebHistory
       primevue.ts                    # Theme + pt-BR locale
       style.css
       lib/
