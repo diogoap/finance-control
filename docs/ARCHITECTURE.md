@@ -18,13 +18,13 @@ Personal finance tracker: expenses, incomes, transfers, loans, and balances acro
 ```mermaid
 flowchart LR
     User([User])
-    Browser[Vue 3 SPA<br/>web/dist served at /app/*]
+    Browser[Vue 3 SPA<br/>web/dist served at /]
     Server[Express server<br/>server.js :8500]
     Mongo[(MongoDB<br/>finance-control)]
     Google[Google OAuth2]
 
     User -->|HTTPS| Browser
-    Browser -->|GET /app/*| Server
+    Browser -->|GET /| Server
     Browser -->|/api/* + Authorization, User-Id| Server
     Server -->|Mongoose| Mongo
     Server -->|/auth/google| Google
@@ -36,7 +36,7 @@ flowchart LR
     end
 ```
 
-The Node process serves both the Vue SPA (built into `web/dist/`) and the JSON API from the same origin and port. The Vue build runs inside `docker/web/Dockerfile`'s multi-stage `web-builder` stage; bare `/`, `/login`, `/logoff` 302-redirect to `/app/...` so legacy bookmarks keep working.
+The Node process serves both the Vue SPA (built into `web/dist/`) and the JSON API from the same origin and port. The Vue build runs inside `docker/web/Dockerfile`'s multi-stage `web-builder` stage. Legacy `/app/*` URLs (the prefix used during the AngularJS → Vue migration) 302-redirect to the equivalent root path so old bookmarks keep working.
 
 ## Backend module layout
 
@@ -147,7 +147,7 @@ sequenceDiagram
     G->>API: GET /auth/google/callback?code=...
     API->>G: Exchange code for profile
     API->>DB: usersService.logIn — upsert user, push new token
-    API-->>SPA: Redirect to /app/#id&token&name&email&photo
+    API-->>SPA: Redirect to /#id&token&name&email&photo
     SPA->>SPA: consumeOAuthHash() stores in localStorage; router guard allows
     Note over SPA,API: All later requests carry<br/>Authorization: <token>, User-Id: <id>
     SPA->>API: GET /api/expenses (with headers)
@@ -164,7 +164,7 @@ Tokens are opaque random strings stored in an array on the user document, so mul
 | Concern         | Location                                     |
 | --------------- | -------------------------------------------- |
 | Entrypoint      | `web/src/main.ts` (createApp + plugins, mounts `#app`) |
-| Routing & guard | `web/src/router.ts` (base `/app/`, `meta.public`; calls `consumeOAuthHash()` at module load, before `createWebHistory`) |
+| Routing & guard | `web/src/router.ts` (HTML5 history at `/`, `meta.public`; calls `consumeOAuthHash()` at module load, before `createWebHistory`) |
 | Views           | `web/src/views/*.vue` + `views/<resource>/<Resource>FormDialog.vue` |
 | Composables     | `web/src/composables/*.ts` (CRUD wrappers, theme, isMobile, ...) |
 | API client      | `web/src/lib/api.ts` (axios + auth interceptor) |
@@ -172,7 +172,7 @@ Tokens are opaque random strings stored in an array on the user document, so mul
 | Navbar          | `web/src/components/AppNavbar.vue`           |
 | Theme + locale  | `web/src/primevue.ts`                        |
 
-Vue Router routes mirror the backend resources (`/expenses`, `/incomes`, `/accounts`, `/categories`, `/transfers`, `/loans`) plus `/`, `/login`, `/logoff`. The router's global `beforeEach` redirects unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt). The axios response interceptor calls `window.location.assign('/app/login')` on 401 from any API call.
+Vue Router routes mirror the backend resources (`/expenses`, `/incomes`, `/accounts`, `/categories`, `/transfers`, `/loans`) plus `/`, `/login`, `/logoff`. The router's global `beforeEach` redirects unauthenticated requests to `/login` (routes flagged `meta.public: true` are exempt). The axios response interceptor calls `window.location.assign('/login')` on 401 from any API call.
 
 ## Deployment
 
@@ -224,7 +224,7 @@ sequenceDiagram
 
 ```
 finance-control/
-├── server.js                  # Express bootstrap, route registration, /app/* SPA fallback, legacy redirects
+├── server.js                  # Express bootstrap, route registration, root SPA fallback, /app/* legacy redirect
 ├── package.json               # Node 18+, no test scripts; build:web shortcut
 ├── docker-compose.yml         # local dev (web + web-frontend Vite + mongodb)
 ├── docker-compose-server.yml  # production
@@ -236,9 +236,9 @@ finance-control/
 ├── web/
 │   ├── package.json           # Vue 3, PrimeVue 4, Tailwind v4, Vite, TypeScript
 │   ├── .npmrc                 # package-lock=false (Tailwind v4 / npm bug #4828)
-│   ├── vite.config.ts         # base '/app/', proxies /api + /auth to Express
+│   ├── vite.config.ts         # base '/', proxies /api + /auth to Express
 │   ├── index.html
-│   ├── public/                # favicon, etc. (copied to /app/ at build time)
+│   ├── public/                # favicon, etc. (copied to /dist at build time)
 │   └── src/
 │       ├── main.ts            # createApp + plugins, mounts #app
 │       ├── App.vue            # AppNavbar + Toast + ConfirmDialog + RouterView

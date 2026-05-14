@@ -21,6 +21,6 @@ onMounted(async () => {
   }
   clearSession();
   // Full navigation so the navbar (mounted in App.vue) reflects the cleared session.
-  window.location.assign('/app/login');
+  window.location.assign('/login');
 });
 </script>
