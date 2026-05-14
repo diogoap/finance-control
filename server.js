@@ -38,12 +38,21 @@ require('./api/apis/usersApi.js')(app, url);
 require('./api/apis/loansApi.js')(app, url);
 require('./api/apis/currenciesApi.js')(app, url);
 
+function isSafeLocalRedirectPath(pathname) {
+    if (typeof pathname !== 'string') return false;
+    if (!pathname.startsWith('/') || pathname.startsWith('//')) return false;
+    if (pathname.indexOf('\\') !== -1) return false;
+    if (pathname.indexOf('..') !== -1) return false;
+    if (/[\u0000-\u001F\u007F]/.test(pathname)) return false;
+    return /^\/[A-Za-z0-9\-._~!$&'()*+,;=:@/?%]*$/.test(pathname);
+}
+
 // Legacy /app/* → strip prefix. The SPA used to live under /app/ during the
 // AngularJS → Vue migration; this redirect keeps old bookmarks working.
 app.get(/^\/app(\/.*)?$/, function (req, res) {
     var subpath = req.url.replace(/^\/app/, '') || '/';
     var safeSubpath = ('/' + subpath).replace(/^\/+/, '/');
-    res.redirect(safeSubpath);
+    res.redirect(isSafeLocalRedirectPath(safeSubpath) ? safeSubpath : '/');
 });
 
 // SPA HTML fallback for client-routed paths (/expenses, /login, ...).
