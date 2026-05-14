@@ -20,7 +20,7 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      window.location.assign('/app/login');
+      window.location.assign('/login');
     }
     return Promise.reject(error);
   },

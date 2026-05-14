@@ -17,7 +17,7 @@ var promise = mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedT
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 
-app.use('/app', express.static(__dirname + '/web/dist'))
+app.use(express.static(__dirname + '/web/dist'))
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
 app.use(bodyParser.json({ limit: '1mb' }));
@@ -38,29 +38,17 @@ require('./api/apis/usersApi.js')(app, url);
 require('./api/apis/loansApi.js')(app, url);
 require('./api/apis/currenciesApi.js')(app, url);
 
-// Static pages requests =======================================================
-app.get(/^\/app(\/.*)?$/, function(req, res){
+// Legacy /app/* → strip prefix. The SPA used to live under /app/ during the
+// AngularJS → Vue migration; this redirect keeps old bookmarks working.
+app.get(/^\/app(\/.*)?$/, function (req, res) {
+    var subpath = req.url.replace(/^\/app/, '') || '/';
+    res.redirect(subpath);
+});
+
+// SPA HTML fallback for client-routed paths (/expenses, /login, ...).
+// Excludes /api/* and /auth/* so unmatched API routes 404 normally.
+app.get(/^\/(?!api\/|auth\/|app(\/|$)).*$/, function (req, res) {
     res.sendFile(__dirname + '/web/dist/index.html');
-});
-
-// Legacy entrypoints redirect into the Vue SPA so existing bookmarks and
-// OAuth failure-redirect targets keep working after AngularJS was retired.
-app.get('/', function (req, res) {
-    res.redirect('/app/');
-});
-
-app.get('/login', function (req, res) {
-    var qs = req.url.indexOf('?');
-    res.redirect('/app/login' + (qs >= 0 ? req.url.slice(qs) : ''));
-});
-
-app.get('/logoff', function (req, res) {
-    var qs = req.url.indexOf('?');
-    res.redirect('/app/logoff' + (qs >= 0 ? req.url.slice(qs) : ''));
-});
-
-app.use(function (req, res) {
-    res.redirect('/app/');
 });
 
 // listen (start app with node server.js) ======================================

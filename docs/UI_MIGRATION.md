@@ -1,6 +1,6 @@
 # UI migration: AngularJS → Vue 3
 
-The frontend migration from AngularJS 1.x + Bower + Bootstrap 3 + ui-grid to Vue 3 + Vite + PrimeVue + Tailwind is **complete**. The `static/` directory has been deleted; Express serves only the Vue SPA at `/app/*` plus the JSON API.
+The frontend migration from AngularJS 1.x + Bower + Bootstrap 3 + ui-grid to Vue 3 + Vite + PrimeVue + Tailwind is **complete**. The `static/` directory has been deleted; Express serves only the Vue SPA at `/` plus the JSON API. The `/app/` prefix used during the migration has been removed; `/app/*` URLs 302-redirect to the equivalent root path for backward compatibility.
 
 Read [ARCHITECTURE.md](./ARCHITECTURE.md) first for the overall system context.
 
@@ -9,14 +9,14 @@ Read [ARCHITECTURE.md](./ARCHITECTURE.md) first for the overall system context.
 | Concern             | Choice                                                          |
 | ------------------- | --------------------------------------------------------------- |
 | Framework           | Vue 3 (Composition API) + TypeScript                            |
-| Build               | Vite, output to `web/dist/`, base path `/app/`                  |
+| Build               | Vite, output to `web/dist/`, base path `/`                      |
 | Component library   | PrimeVue 4 (Aura preset, light/dark via `.dark` selector)       |
 | Styling             | Tailwind v4 utilities for layout/spacing only                   |
 | Icons               | PrimeIcons                                                      |
-| Routing             | Vue Router (`createWebHistory('/app/')`) with public/private guard |
+| Routing             | Vue Router (HTML5 history at `/`) with public/private guard     |
 | State               | Composables in `web/src/composables/`; Pinia not yet needed     |
 | HTTP                | axios instance with auth-bridge interceptor                     |
-| Auth                | Google OAuth → callback redirects to `/app/#id=...&token=...`; `consumeOAuthHash()` in `web/src/lib/session.ts` parses and stores |
+| Auth                | Google OAuth → callback redirects to `/#id=...&token=...`; `consumeOAuthHash()` in `web/src/lib/session.ts` parses and stores |
 | Lockfile            | **Disabled** in `web/.npmrc` (`package-lock=false`) — see Gotchas |
 
 ## Routing
@@ -24,10 +24,8 @@ Read [ARCHITECTURE.md](./ARCHITECTURE.md) first for the overall system context.
 ```
 /api/*         → Express JSON API
 /auth/*        → Google OAuth + logoff endpoints
-/app/*         → Vue SPA (web/dist)
-/, /login,     → 302 redirect to /app/, /app/login, /app/logoff
-/logoff
-anything else  → 302 redirect to /app/
+/app/*         → 302 redirect to the equivalent path under / (legacy)
+anything else  → Vue SPA (web/dist), with client-side routing
 ```
 
 The Vue router has a `beforeEach` guard that bounces unauthenticated requests to `/login`, except for routes flagged `meta.public: true` (`/login`, `/logoff`).
@@ -51,7 +49,7 @@ The Vue router has a `beforeEach` guard that bounces unauthenticated requests to
 
 | Mode | Command | URL |
 | ---- | ------- | --- |
-| Dev (HMR)               | `docker compose up --build`                                                | `http://localhost:5173/app/` (Vite proxies `/api`+`/auth` to Express on `:8500`) |
+| Dev (HMR)               | `docker compose up --build`                                                | `http://localhost:5173/` (Vite proxies `/api`+`/auth` to Express on `:8500`) |
 | Integrated smoke test   | `npm run build:web && docker compose up --build`                           | `http://localhost:8500/` |
 | Production              | `docker compose -f docker-compose-server.yml up --build` (Portainer)       | port 8500 |
 
@@ -95,10 +93,10 @@ docker compose up --build
 
 ```
 finance-control/
-  server.js                          # Express: /api, /auth, /app/* SPA, redirects for /, /login, /logoff
+  server.js                          # Express: /api, /auth, root SPA fallback, /app/* legacy redirect
   web/                               # Vue 3 app
     package.json
-    vite.config.ts                   # base: '/app/', proxy /api+/auth → Express
+    vite.config.ts                   # base: '/', proxy /api+/auth → Express
     tsconfig.json
     .npmrc                           # package-lock=false
     index.html
@@ -111,7 +109,7 @@ finance-control/
       primevue.ts                    # Theme + pt-BR locale
       style.css
       lib/
-        api.ts                       # axios + auth interceptor + 401 redirect to /app/login
+        api.ts                       # axios + auth interceptor + 401 redirect to /login
         session.ts                   # getSession(), isLoggedIn(), consumeOAuthHash()
       components/
         AppNavbar.vue                # PrimeVue Menubar (hidden when not logged in)

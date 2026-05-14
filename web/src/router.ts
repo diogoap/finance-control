@@ -16,7 +16,7 @@ import { consumeOAuthHash, isLoggedIn } from './lib/session';
 consumeOAuthHash();
 
 const router = createRouter({
-  history: createWebHistory('/app/'),
+  history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: HomeView },
     { path: '/categories', name: 'categories', component: CategoriesView },
