@@ -43,13 +43,13 @@
         />
         <span class="hidden sm:inline text-sm">{{ session.name }}</span>
         <Button
-          icon="pi pi-globe"
+          icon="pi pi-cog"
           severity="secondary"
           text
           rounded
-          :aria-label="$t('navbar.localeSettings')"
-          v-tooltip.bottom="$t('navbar.localeSettings')"
-          @click="localeDialogVisible = true"
+          :aria-label="$t('navbar.settings')"
+          v-tooltip.bottom="$t('navbar.settings')"
+          @click="settingsDialogVisible = true"
         />
         <Button
           :icon="themeIcon"
@@ -73,7 +73,7 @@
     </template>
   </Menubar>
 
-  <LocaleSettingsDialog :visible="localeDialogVisible" @close="localeDialogVisible = false" />
+  <SettingsDialog :visible="settingsDialogVisible" @close="settingsDialogVisible = false" />
 </template>
 
 <script setup lang="ts">
@@ -86,14 +86,14 @@ import Button from 'primevue/button';
 import type { MenuItem } from 'primevue/menuitem';
 import { getSession, isLoggedIn } from '../lib/session';
 import { useTheme, type ThemeMode } from '../composables/useTheme';
-import LocaleSettingsDialog from './LocaleSettingsDialog.vue';
+import SettingsDialog from './SettingsDialog.vue';
 
 const session = getSession();
 const router = useRouter();
 const { t } = useI18n();
 const { mode: themeMode, setMode } = useTheme();
 
-const localeDialogVisible = ref(false);
+const settingsDialogVisible = ref(false);
 
 interface NavItem extends MenuItem {
   to?: string;

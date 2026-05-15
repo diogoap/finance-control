@@ -76,13 +76,13 @@ export function setFormatLocale(loc: string | null) {
 }
 
 export const FORMAT_LOCALE_OPTIONS: { value: string; labelKey: string }[] = [
-  { value: 'en-US', labelKey: 'localeSettings.formats.enUS' },
-  { value: 'en-GB', labelKey: 'localeSettings.formats.enGB' },
-  { value: 'en-NL', labelKey: 'localeSettings.formats.enNL' },
-  { value: 'pt-BR', labelKey: 'localeSettings.formats.ptBR' },
-  { value: 'pt-PT', labelKey: 'localeSettings.formats.ptPT' },
-  { value: 'nl-NL', labelKey: 'localeSettings.formats.nlNL' },
-  { value: 'de-DE', labelKey: 'localeSettings.formats.deDE' },
-  { value: 'fr-FR', labelKey: 'localeSettings.formats.frFR' },
-  { value: 'es-ES', labelKey: 'localeSettings.formats.esES' },
+  { value: 'en-US', labelKey: 'settings.locale.formats.enUS' },
+  { value: 'en-GB', labelKey: 'settings.locale.formats.enGB' },
+  { value: 'en-NL', labelKey: 'settings.locale.formats.enNL' },
+  { value: 'pt-BR', labelKey: 'settings.locale.formats.ptBR' },
+  { value: 'pt-PT', labelKey: 'settings.locale.formats.ptPT' },
+  { value: 'nl-NL', labelKey: 'settings.locale.formats.nlNL' },
+  { value: 'de-DE', labelKey: 'settings.locale.formats.deDE' },
+  { value: 'fr-FR', labelKey: 'settings.locale.formats.frFR' },
+  { value: 'es-ES', labelKey: 'settings.locale.formats.esES' },
 ];

@@ -64,8 +64,8 @@
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > 25"
-      :rows="25"
+      :paginator="rows.length > pageSize"
+      :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
@@ -131,6 +131,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useI18n } from 'vue-i18n';
 import { useCategories, type Category, type NewCategory } from '../composables/useCategories';
 import { useIsMobile } from '../composables/useIsMobile';
+import { pageSize } from '../composables/usePagination';
 import CategoryFormDialog from './categories/CategoryFormDialog.vue';
 
 const toast = useToast();

@@ -74,8 +74,8 @@
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > 25"
-      :rows="25"
+      :paginator="rows.length > pageSize"
+      :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
@@ -195,6 +195,7 @@ import { useConfirm } from 'primevue/useconfirm';
 import { useI18n } from 'vue-i18n';
 import { useLoans, type Loan, type LoanFormPayload } from '../composables/useLoans';
 import { useIsMobile } from '../composables/useIsMobile';
+import { pageSize } from '../composables/usePagination';
 import { formatCurrency, formatNumber, formatShortDate } from '../lib/dateUtils';
 import LoanFormDialog from './loans/LoanFormDialog.vue';
 
