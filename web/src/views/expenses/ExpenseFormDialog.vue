@@ -246,7 +246,7 @@
           <Column :header="$t('common.fields.category')" style="width: 12rem">
             <template #body="{ data }">{{ data._category?.name ?? '' }}</template>
           </Column>
-          <Column field="status" style="width: 4rem" class="text-center">
+          <Column field="status" style="width: 3rem" class="text-center">
             <template #header>
               <i
                 class="pi pi-money-bill text-lg"

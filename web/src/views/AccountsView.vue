@@ -103,7 +103,7 @@
       <Column
         class="md:hidden text-center"
         header-class="md:hidden"
-        style="width: 3rem"
+        style="width: 2rem"
       >
         <template #body="{ data }">
           <Button
