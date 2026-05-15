@@ -53,6 +53,7 @@ export default {
     theme: 'Theme',
     themeTooltip: 'Theme: {mode}',
     logout: 'Sign out',
+    localeSettings: 'Language & format',
     items: {
       home: 'Home',
       expenses: 'Expenses',
@@ -465,6 +466,39 @@ export default {
         active: 'Active category?',
       },
     },
+  },
+
+  localeSettings: {
+    title: 'Language & format',
+    uiLanguage: 'Display language',
+    uiLanguageHint: 'Language used across the interface.',
+    formatLocale: 'Date / number format',
+    formatLocaleHint: 'Affects how dates, numbers, and currencies are displayed.',
+    autoOption: 'Auto (browser default)',
+    customOption: 'Custom…',
+    customLabel: 'Custom locale tag (BCP-47)',
+    customPlaceholder: 'e.g. en-NL',
+    languageOptions: {
+      en: 'English',
+      pt: 'Português',
+    },
+    formats: {
+      enUS: 'English (United States)',
+      enGB: 'English (United Kingdom)',
+      enNL: 'English (Netherlands)',
+      ptBR: 'Português (Brazil)',
+      ptPT: 'Português (Portugal)',
+      nlNL: 'Nederlands (Netherlands)',
+      deDE: 'Deutsch (Germany)',
+      frFR: 'Français (France)',
+      esES: 'Español (Spain)',
+    },
+    preview: 'Preview',
+    previewDate: 'Date',
+    previewNumber: 'Number',
+    previewCurrency: 'Currency',
+    apply: 'Apply',
+    applyHint: 'Applying will reload the app.',
   },
 
   enums: {
