@@ -134,7 +134,7 @@
       >
         <template #body="{ data }">{{ $t('enums.loanType.' + data.type) }}</template>
       </Column>
-      <Column field="status" sortable style="width: 4rem" class="text-center">
+      <Column field="status" sortable style="width: 3rem" class="text-center">
         <template #header>
           <i
             class="pi pi-money-bill text-lg"

@@ -145,7 +145,7 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column field="dueDate" :header="$t('expenses.headers.dueDate')" sortable style="width: 7rem" class="text-center">
+      <Column field="dueDate" :header="$t('expenses.headers.dueDate')" sortable style="width: 6rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.dueDate) }}</template>
       </Column>
       <Column field="description" :header="$t('expenses.headers.description')" sortable>
@@ -183,7 +183,7 @@
         class="hidden md:table-cell"
         header-class="hidden md:table-cell"
       />
-      <Column field="status" sortable style="width: 4rem" class="text-center">
+      <Column field="status" sortable style="width: 3rem" class="text-center">
         <template #header>
           <i
             class="pi pi-money-bill text-lg"
