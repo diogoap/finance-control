@@ -53,6 +53,7 @@ export default {
     theme: 'Tema',
     themeTooltip: 'Tema: {mode}',
     logout: 'Sair',
+    localeSettings: 'Idioma e formato',
     items: {
       home: 'Home',
       expenses: 'Despesas',
@@ -465,6 +466,39 @@ export default {
         active: 'Categoria ativa?',
       },
     },
+  },
+
+  localeSettings: {
+    title: 'Idioma e formato',
+    uiLanguage: 'Idioma da interface',
+    uiLanguageHint: 'Idioma usado em todos os textos.',
+    formatLocale: 'Formato de data / número',
+    formatLocaleHint: 'Afeta como datas, números e moedas são exibidos.',
+    autoOption: 'Automático (navegador)',
+    customOption: 'Personalizado…',
+    customLabel: 'Locale personalizado (BCP-47)',
+    customPlaceholder: 'ex.: pt-BR',
+    languageOptions: {
+      en: 'English',
+      pt: 'Português',
+    },
+    formats: {
+      enUS: 'Inglês (Estados Unidos)',
+      enGB: 'Inglês (Reino Unido)',
+      enNL: 'Inglês (Holanda)',
+      ptBR: 'Português (Brasil)',
+      ptPT: 'Português (Portugal)',
+      nlNL: 'Holandês (Holanda)',
+      deDE: 'Alemão (Alemanha)',
+      frFR: 'Francês (França)',
+      esES: 'Espanhol (Espanha)',
+    },
+    preview: 'Pré-visualização',
+    previewDate: 'Data',
+    previewNumber: 'Número',
+    previewCurrency: 'Moeda',
+    apply: 'Aplicar',
+    applyHint: 'Ao aplicar, o app será recarregado.',
   },
 
   enums: {
