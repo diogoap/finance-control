@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="66 96 892 892" role="img" aria-label="Finance Control icon">
   <style>
+    :root { color-scheme: light dark; }
     .mark { fill: #004A32; stroke: #004A32; }
     .dollar { fill: #FFFFFF; }
     @media (prefers-color-scheme: dark) {
