@@ -9,13 +9,14 @@ import router from './router';
 import i18n from './i18n';
 import en from './i18n/locales/en';
 import pt from './i18n/locales/pt';
+import { uiLocale } from './lib/userLocale';
 import { buildPrimevueConfig } from './primevue';
 import './composables/useTheme';
 import './style.css';
 
 const app = createApp(App);
 
-const primevueLocale = i18n.global.locale.value === 'pt' ? pt.primevue : en.primevue;
+const primevueLocale = uiLocale.value === 'pt' ? pt.primevue : en.primevue;
 
 app.use(router);
 app.use(i18n);
