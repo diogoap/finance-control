@@ -111,8 +111,8 @@
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > 25"
-      :rows="25"
+      :paginator="rows.length > pageSize"
+      :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
@@ -197,6 +197,7 @@ import {
   type TransferFormPayload,
 } from '../composables/useTransfers';
 import { useIsMobile } from '../composables/useIsMobile';
+import { pageSize } from '../composables/usePagination';
 import {
   formatCurrency,
   formatNumber,

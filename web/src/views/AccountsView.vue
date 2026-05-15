@@ -64,8 +64,8 @@
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > 25"
-      :rows="25"
+      :paginator="rows.length > pageSize"
+      :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
@@ -150,6 +150,7 @@ import { useI18n } from 'vue-i18n';
 import { useAccounts, type Account, type NewAccount } from '../composables/useAccounts';
 import { useReferenceData } from '../composables/useReferenceData';
 import { useIsMobile } from '../composables/useIsMobile';
+import { pageSize } from '../composables/usePagination';
 import { formatCurrency } from '../lib/dateUtils';
 import AccountFormDialog from './accounts/AccountFormDialog.vue';
 
