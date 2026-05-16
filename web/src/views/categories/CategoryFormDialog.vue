@@ -18,13 +18,17 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="categoryName" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
+        <label for="categoryDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
-          id="categoryName"
+          id="categoryDescription"
           v-model="form.name"
           :invalid="submitted && !!errors.name"
+          :readonly="nameReadonly"
           autofocus
           autocomplete="off"
+          data-form-type="other"
+          data-lpignore="true"
+          @focus="nameReadonly = false"
         />
         <small v-if="submitted && errors.name" class="text-red-600">{{ errors.name }}</small>
       </div>
@@ -93,6 +97,7 @@ const { getById } = useCategories();
 const loaded = ref<Category | null>(null);
 const loading = ref(false);
 const submitted = ref(false);
+const nameReadonly = ref(true);
 const form = reactive<{ _id?: string; name: string; type: CategoryType | null; enabled: boolean }>({
   _id: undefined,
   name: '',
@@ -119,6 +124,7 @@ watch(
   async ([visible, mode, id]) => {
     if (!visible) return;
     submitted.value = false;
+    nameReadonly.value = true;
     if (mode === 'new') {
       loaded.value = null;
       form._id = undefined;
