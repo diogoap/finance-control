@@ -58,7 +58,7 @@
             errors.dueDate
           }}</small>
         </div>
-        <div class="col-span-4 sm:col-span-3 flex flex-col gap-1">
+        <div v-if="!hasDetail" class="col-span-4 sm:col-span-3 flex flex-col gap-1">
           <label for="expenseCurrency" class="text-sm font-medium">{{ $t('common.fields.currency') }}</label>
           <Select
             id="expenseCurrency"
@@ -66,7 +66,6 @@
             :options="currencies"
             option-label="currencyCode"
             option-value="_id"
-            :disabled="hasDetail"
             :invalid="submitted && !!errors.currency_id"
             :placeholder="$t('common.fields.currency')"
           />
@@ -81,7 +80,7 @@
             v-model="form.amount"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
-            :readonly="hasDetail"
+            :disabled="hasDetail"
             :invalid="submitted && !!errors.amount"
             :locale="numberLocale"
             input-class="text-right"
@@ -90,7 +89,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-12 gap-3">
+      <div v-if="!hasDetail" class="grid grid-cols-12 gap-3">
         <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
           <label for="expenseAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
           <Select
@@ -99,7 +98,6 @@
             :options="accounts"
             option-label="name"
             option-value="_id"
-            :disabled="hasDetail"
             :invalid="submitted && !!errors.account_id"
             :placeholder="$t('common.placeholders.select')"
           />
@@ -115,7 +113,6 @@
             :options="categories"
             option-label="name"
             option-value="_id"
-            :disabled="hasDetail"
             :invalid="submitted && !!errors.category_id"
             :placeholder="$t('common.placeholders.select')"
           />
@@ -126,7 +123,7 @@
       </div>
 
       <div class="grid grid-cols-12 gap-3">
-        <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
+        <div v-if="!hasDetail" class="col-span-12 sm:col-span-6 flex flex-col gap-1">
           <label for="expenseStatus" class="text-sm font-medium">{{ $t('common.fields.status') }}</label>
           <Select
             id="expenseStatus"
@@ -134,7 +131,6 @@
             :options="expenseStatusOptions"
             option-label="label"
             option-value="value"
-            :disabled="hasDetail"
             :invalid="submitted && !!errors.status"
             :placeholder="$t('common.placeholders.select')"
             @change="onChangeStatus"
@@ -148,7 +144,7 @@
             v-model="form.amountPaid"
             :min-fraction-digits="2"
             :max-fraction-digits="2"
-            :readonly="hasDetail"
+            :disabled="hasDetail"
             :invalid="submitted && !!errors.amountPaid"
             :locale="numberLocale"
             input-class="text-right"
