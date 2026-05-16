@@ -116,7 +116,7 @@
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <Column field="date" :header="$t('transfers.headers.date')" sortable style="width: 7rem" class="text-center">
+      <Column field="date" :header="$t('transfers.headers.date')" sortable style="width: 6rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.date) }}</template>
         <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
       </Column>
