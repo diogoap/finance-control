@@ -50,8 +50,6 @@ export default {
 
   navbar: {
     brand: 'Finance Control',
-    theme: 'Tema',
-    themeTooltip: 'Tema: {mode}',
     logout: 'Sair',
     settings: 'Configurações',
     items: {
@@ -62,11 +60,6 @@ export default {
       loans: 'Empréstimos',
       categories: 'Categorias',
       accounts: 'Contas',
-    },
-    themeModes: {
-      system: 'Sistema',
-      light: 'Claro',
-      dark: 'Escuro',
     },
     logoff: {
       currentSession: 'Sair (Desta sessão)',
@@ -473,8 +466,18 @@ export default {
     apply: 'Aplicar',
     applyHintLocale: 'Ao alterar o idioma ou formato, o app será recarregado.',
     sections: {
+      theme: 'Tema',
       locale: 'Idioma e formato',
       pagination: 'Paginação',
+    },
+    theme: {
+      appearance: 'Aparência',
+      hint: 'Sistema acompanha a preferência do sistema operacional.',
+      modes: {
+        system: 'Sistema',
+        light: 'Claro',
+        dark: 'Escuro',
+      },
     },
     locale: {
       uiLanguage: 'Idioma da interface',

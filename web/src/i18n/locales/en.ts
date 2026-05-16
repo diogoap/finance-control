@@ -50,8 +50,6 @@ export default {
 
   navbar: {
     brand: 'Finance Control',
-    theme: 'Theme',
-    themeTooltip: 'Theme: {mode}',
     logout: 'Sign out',
     settings: 'Settings',
     items: {
@@ -62,11 +60,6 @@ export default {
       loans: 'Loans',
       categories: 'Categories',
       accounts: 'Accounts',
-    },
-    themeModes: {
-      system: 'System',
-      light: 'Light',
-      dark: 'Dark',
     },
     logoff: {
       currentSession: 'Sign out (this session)',
@@ -473,8 +466,18 @@ export default {
     apply: 'Apply',
     applyHintLocale: 'Applying language or format changes will reload the app.',
     sections: {
+      theme: 'Theme',
       locale: 'Language & format',
       pagination: 'Pagination',
+    },
+    theme: {
+      appearance: 'Appearance',
+      hint: 'System follows your operating-system preference.',
+      modes: {
+        system: 'System',
+        light: 'Light',
+        dark: 'Dark',
+      },
     },
     locale: {
       uiLanguage: 'Display language',
