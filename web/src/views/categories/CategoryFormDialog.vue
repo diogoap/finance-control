@@ -18,7 +18,7 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="categoryDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
+        <label for="categoryDescription" class="text-sm font-medium">{{ $t('categories.form.fields.name') }}</label>
         <InputText
           id="categoryDescription"
           v-model="form.name"
@@ -109,9 +109,9 @@ const title = computed(() =>
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = t('common.errors.requiredField', { field: t('common.fields.description') });
-  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('common.fields.description'), min: 3 });
-  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('common.fields.description'), max: 100 });
+  if (!name) out.name = t('common.errors.requiredField', { field: t('categories.form.fields.name') });
+  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('categories.form.fields.name'), min: 3 });
+  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('categories.form.fields.name'), max: 100 });
   if (!form.type) out.type = t('common.errors.requiredField', { field: t('common.fields.type') });
   return out;
 });

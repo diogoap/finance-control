@@ -460,6 +460,7 @@ export default {
       addTitle: 'Add category',
       editTitle: 'Edit category',
       fields: {
+        name: 'Category name',
         active: 'Active category?',
       },
     },

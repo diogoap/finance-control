@@ -460,6 +460,7 @@ export default {
       addTitle: 'Adicionar categoria',
       editTitle: 'Editar categoria',
       fields: {
+        name: 'Nome da categoria',
         active: 'Categoria ativa?',
       },
     },
