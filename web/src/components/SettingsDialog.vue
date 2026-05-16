@@ -10,6 +10,30 @@
     <div class="flex flex-col gap-5">
       <section class="flex flex-col gap-4">
         <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">
+          {{ $t('settings.sections.theme') }}
+        </h3>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium">{{ $t('settings.theme.appearance') }}</label>
+          <SelectButton
+            v-model="themeChoice"
+            :options="themeOptions"
+            option-label="label"
+            option-value="value"
+            :allow-empty="false"
+            :aria-label="$t('settings.theme.appearance')"
+          >
+            <template #option="slotProps">
+              <i :class="['mr-2', slotProps.option.icon]" />
+              <span>{{ slotProps.option.label }}</span>
+            </template>
+          </SelectButton>
+          <small class="text-slate-500">{{ $t('settings.theme.hint') }}</small>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-4 pt-4 border-t border-surface-200 dark:border-surface-700">
+        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wide m-0">
           {{ $t('settings.sections.locale') }}
         </h3>
 
@@ -88,6 +112,7 @@
 import { computed, ref, watch } from 'vue';
 import Dialog from 'primevue/dialog';
 import Select from 'primevue/select';
+import SelectButton from 'primevue/selectbutton';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useI18n } from 'vue-i18n';
@@ -107,11 +132,13 @@ import {
   getStoredPageSize,
   setPageSize,
 } from '../composables/usePagination';
+import { useTheme, type ThemeMode } from '../composables/useTheme';
 
 const props = defineProps<{ visible: boolean }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
 
 const { t } = useI18n();
+const { mode: themeMode, setMode: setThemeMode } = useTheme();
 
 const AUTO = '__auto';
 const CUSTOM = '__custom';
@@ -120,10 +147,12 @@ const uiChoice = ref<UiLocale | typeof AUTO>(AUTO);
 const formatChoice = ref<string>(AUTO);
 const customFormat = ref<string>('');
 const pageSizeChoice = ref<number>(DEFAULT_PAGE_SIZE);
+const themeChoice = ref<ThemeMode>(themeMode.value);
 
 const initialUi = ref<UiLocale | typeof AUTO>(AUTO);
 const initialFormat = ref<string>(AUTO);
 const initialCustomFormat = ref<string>('');
+const initialTheme = ref<ThemeMode>(themeMode.value);
 
 const uiOptions = computed(() => [
   { value: AUTO, label: `${t('settings.locale.autoOption')} (${detectUiLocale() === 'pt' ? t('settings.locale.languageOptions.pt') : t('settings.locale.languageOptions.en')})` },
@@ -140,6 +169,16 @@ const formatOptions = computed(() => [
 const pageSizeOptions = computed(() =>
   PAGE_SIZE_OPTIONS.map((n) => ({ value: n, label: String(n) })),
 );
+
+const themeOptions = computed<{ value: ThemeMode; label: string; icon: string }[]>(() => [
+  { value: 'system', label: t('settings.theme.modes.system'), icon: 'pi pi-desktop' },
+  { value: 'light', label: t('settings.theme.modes.light'), icon: 'pi pi-sun' },
+  { value: 'dark', label: t('settings.theme.modes.dark'), icon: 'pi pi-moon' },
+]);
+
+watch(themeChoice, (value) => {
+  if (themeMode.value !== value) setThemeMode(value);
+});
 
 watch(
   () => props.visible,
@@ -164,6 +203,9 @@ watch(
     initialCustomFormat.value = customFormat.value;
 
     pageSizeChoice.value = getStoredPageSize() ?? DEFAULT_PAGE_SIZE;
+
+    themeChoice.value = themeMode.value;
+    initialTheme.value = themeMode.value;
   },
   { immediate: true },
 );
@@ -242,6 +284,9 @@ function apply() {
 }
 
 function handleClose() {
+  if (themeMode.value !== initialTheme.value) {
+    setThemeMode(initialTheme.value);
+  }
   emit('close');
 }
 </script>
