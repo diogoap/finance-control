@@ -410,7 +410,6 @@ export default {
       addTitle: 'Add account',
       editTitle: 'Edit account',
       fields: {
-        name: 'Account name',
         initialBalance: 'Initial balance',
         active: 'Active account?',
       },
@@ -460,7 +459,6 @@ export default {
       addTitle: 'Add category',
       editTitle: 'Edit category',
       fields: {
-        name: 'Category name',
         active: 'Active category?',
       },
     },

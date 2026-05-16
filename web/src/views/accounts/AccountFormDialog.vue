@@ -18,15 +18,17 @@
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="accountLabelInput" class="text-sm font-medium">{{ $t('accounts.form.fields.name') }}</label>
+        <label for="accountLabelInput" class="text-sm font-medium">{{ $t('common.fields.name') }}</label>
         <InputText
           id="accountLabelInput"
           v-model="form.name"
           :invalid="submitted && !!errors.name"
+          :readonly="nameReadonly"
           autofocus
           autocomplete="off"
           data-form-type="other"
           data-lpignore="true"
+          @focus="nameReadonly = false"
         />
         <small v-if="submitted && errors.name" class="text-red-600">{{ errors.name }}</small>
       </div>
@@ -131,6 +133,7 @@ const currencies = ref<Currency[]>([]);
 const loaded = ref<Account | null>(null);
 const loading = ref(false);
 const submitted = ref(false);
+const nameReadonly = ref(true);
 
 const form = reactive<{
   _id?: string;
@@ -155,9 +158,9 @@ const title = computed(() =>
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = t('common.errors.requiredField', { field: t('accounts.form.fields.name') });
-  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('accounts.form.fields.name'), min: 3 });
-  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('accounts.form.fields.name'), max: 100 });
+  if (!name) out.name = t('common.errors.requiredField', { field: t('common.fields.name') });
+  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('common.fields.name'), min: 3 });
+  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('common.fields.name'), max: 100 });
   if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
   if (form.initialBalance == null || isNaN(form.initialBalance))
     out.initialBalance = t('common.errors.requiredField', { field: t('accounts.form.fields.initialBalance') });
@@ -179,6 +182,7 @@ watch(
   async ([visible, mode, id]) => {
     if (!visible) return;
     submitted.value = false;
+    nameReadonly.value = true;
     if (mode === 'new') {
       loaded.value = null;
       form._id = undefined;
