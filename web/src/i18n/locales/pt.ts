@@ -104,6 +104,9 @@ export default {
       incomes: 'Receitas',
       expenses: 'Despesas',
       empty: 'Nenhum lançamento no período.',
+      viewList: 'Visualizar como lista',
+      viewChart: 'Visualizar como gráfico',
+      others: 'Outros',
     },
   },
 

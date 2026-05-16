@@ -70,12 +70,14 @@
           severity="success"
           :categories="allBucket.categories"
           type="Receita"
+          storage-key="home.categoryBox.view.forecasts.incomes"
         />
         <CategoryBox
           :title="$t('home.categoryBox.expenses')"
           severity="danger"
           :categories="allBucket.categories"
           type="Despesa"
+          storage-key="home.categoryBox.view.forecasts.expenses"
         />
       </div>
     </section>
@@ -90,12 +92,14 @@
           severity="success"
           :categories="completedBucket.categories"
           type="Receita"
+          storage-key="home.categoryBox.view.cashbox.incomes"
         />
         <CategoryBox
           :title="$t('home.categoryBox.expenses')"
           severity="danger"
           :categories="completedBucket.categories"
           type="Despesa"
+          storage-key="home.categoryBox.view.cashbox.expenses"
         />
       </div>
     </section>

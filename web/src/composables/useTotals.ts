@@ -7,6 +7,8 @@ export interface AccountTotal {
   enabled: boolean;
   initialBalance: number;
   actualBalance: number;
+  currency_id?: string;
+  _currency?: { _id: string; currencyCode: string } | null;
 }
 
 export interface CategoryTotal {

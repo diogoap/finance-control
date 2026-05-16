@@ -21,7 +21,7 @@
         <tr v-for="account in enabledAccounts" :key="account._id">
           <td class="py-0.5 text-left">{{ account.name }}:</td>
           <td class="py-0.5 text-right tabular-nums">
-            {{ formatNumber(account.actualBalance) }}
+            {{ formatCurrency(account.actualBalance, account._currency?.currencyCode) }}
           </td>
         </tr>
       </tbody>
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import Panel from 'primevue/panel';
-import { formatNumber } from '../../lib/dateUtils';
+import { formatCurrency } from '../../lib/dateUtils';
 import { useIsMobile } from '../../composables/useIsMobile';
 import type { AccountTotal } from '../../composables/useTotals';
 
