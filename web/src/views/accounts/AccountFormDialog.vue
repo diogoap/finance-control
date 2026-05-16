@@ -15,11 +15,10 @@
       v-else
       class="flex flex-col gap-4"
       data-form-type="other"
-      data-np-autofill-form-type="other"
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="accountLabelInput" class="text-sm font-medium">{{ $t('common.fields.name') }}</label>
+        <label for="accountLabelInput" class="text-sm font-medium">{{ $t('accounts.form.fields.name') }}</label>
         <InputText
           id="accountLabelInput"
           v-model="form.name"
@@ -28,9 +27,6 @@
           autocomplete="off"
           data-form-type="other"
           data-lpignore="true"
-          data-1p-ignore="true"
-          data-bwignore="true"
-          data-np-autofill="off"
         />
         <small v-if="submitted && errors.name" class="text-red-600">{{ errors.name }}</small>
       </div>
@@ -159,9 +155,9 @@ const title = computed(() =>
 const errors = computed<Record<string, string>>(() => {
   const out: Record<string, string> = {};
   const name = form.name?.trim() ?? '';
-  if (!name) out.name = t('common.errors.requiredField', { field: t('common.fields.name') });
-  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('common.fields.name'), min: 3 });
-  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('common.fields.name'), max: 100 });
+  if (!name) out.name = t('common.errors.requiredField', { field: t('accounts.form.fields.name') });
+  else if (name.length < 3) out.name = t('common.errors.minLength', { field: t('accounts.form.fields.name'), min: 3 });
+  else if (name.length > 100) out.name = t('common.errors.maxLength', { field: t('accounts.form.fields.name'), max: 100 });
   if (!form.currency_id) out.currency_id = t('common.errors.requiredField', { field: t('common.fields.currency') });
   if (form.initialBalance == null || isNaN(form.initialBalance))
     out.initialBalance = t('common.errors.requiredField', { field: t('accounts.form.fields.initialBalance') });

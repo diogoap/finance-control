@@ -15,22 +15,18 @@
       v-else
       class="flex flex-col gap-4"
       data-form-type="other"
-      data-np-autofill-form-type="other"
       @submit.prevent="handleSubmit"
     >
       <div class="flex flex-col gap-1">
-        <label for="categoryName" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
+        <label for="categoryDescription" class="text-sm font-medium">{{ $t('common.fields.description') }}</label>
         <InputText
-          id="categoryName"
+          id="categoryDescription"
           v-model="form.name"
           :invalid="submitted && !!errors.name"
           autofocus
           autocomplete="off"
           data-form-type="other"
           data-lpignore="true"
-          data-1p-ignore="true"
-          data-bwignore="true"
-          data-np-autofill="off"
         />
         <small v-if="submitted && errors.name" class="text-red-600">{{ errors.name }}</small>
       </div>

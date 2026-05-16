@@ -410,6 +410,7 @@ export default {
       addTitle: 'Adicionar conta',
       editTitle: 'Editar conta',
       fields: {
+        name: 'Nome da conta',
         initialBalance: 'Saldo inicial',
         active: 'Conta ativa?',
       },
