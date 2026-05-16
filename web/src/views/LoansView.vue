@@ -95,7 +95,7 @@
         field="dueDate"
         :header="$t('loans.headers.dueDate')"
         sortable
-        style="width: 9rem"
+        style="width: 6rem"
         class="text-center hidden md:table-cell"
         header-class="hidden md:table-cell"
       >
