@@ -1,5 +1,5 @@
 <template>
-  <Menubar :model="navItems" class="rounded-none border-x-0 border-t-0 px-4">
+  <Menubar :model="navItems" class="sticky top-0 z-40 rounded-none border-x-0 border-t-0 px-4">
     <template #start>
       <router-link
         to="/"
