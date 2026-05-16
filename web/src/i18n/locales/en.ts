@@ -104,6 +104,9 @@ export default {
       incomes: 'Incomes',
       expenses: 'Expenses',
       empty: 'No entries in this period.',
+      viewList: 'View as list',
+      viewChart: 'View as chart',
+      others: 'Others',
     },
   },
 

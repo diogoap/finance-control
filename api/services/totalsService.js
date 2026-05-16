@@ -3,6 +3,7 @@
 var mongoose = require('mongoose');
 var Accounts = require('../models/accountsModel');
 var Categories = require('../models/categoriesModel');
+var Currencies = require('../models/currenciesModel');
 var Incomes = require('../models/incomesModel');
 var Expenses = require('../models/expensesModel');
 var Transfers = require('../models/transfersModel');
@@ -19,14 +20,27 @@ function getCommonEntries(userId, callbackSuccess, callbackError) {
     //Accounts
     var accountsPromisse = Accounts.find(queryFilterUser).sort('order').exec();
     accountsPromisse.then(function (accounts) {
-        entries.accounts = accounts;
+        //Currencies (attach _currency to each account so the totals payload carries the symbol)
+        var currenciesPromisse = Currencies.find().exec();
+        currenciesPromisse.then(function (currencies) {
+            accounts.forEach(function (account) {
+                account._currency = null;
+                for (var j in currencies) {
+                    if (account.currency_id == currencies[j].id) {
+                        account._currency = currencies[j];
+                        break;
+                    }
+                }
+            });
+            entries.accounts = accounts;
 
-        //Categories
-        var categoriesPromisse = Categories.find(queryFilterUser).sort('name').exec();
-        categoriesPromisse.then(function (categories) {
-            entries.categories = categories;
+            //Categories
+            var categoriesPromisse = Categories.find(queryFilterUser).sort('name').exec();
+            categoriesPromisse.then(function (categories) {
+                entries.categories = categories;
 
-            callbackSuccess(entries);
+                callbackSuccess(entries);
+            });
         });
     })
         .then(null, function (error) {
@@ -293,7 +307,13 @@ function getAccountBalance(totals, account, status) {
 function calculateAccountsBalace(accountList, totals, status, previousAccountList) {
     var newAccounts = [];
     accountList.forEach(function (account) {
-        var newAccount = { _id: account._id, name: account.name, enabled: account.enabled };
+        var newAccount = {
+            _id: account._id,
+            name: account.name,
+            enabled: account.enabled,
+            currency_id: account.currency_id,
+            _currency: account._currency,
+        };
         newAccount.initialBalance = getAccountPreviousBalance(account, previousAccountList);
         newAccount.actualBalance = getAccountBalance(totals, newAccount, status);
         newAccounts.push(newAccount);
