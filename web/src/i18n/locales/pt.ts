@@ -14,6 +14,7 @@ export default {
       pay: 'Pagar',
       receive: 'Receber',
       settle: 'Quitar',
+      close: 'Fechar',
     },
     fields: {
       description: 'Descrição',

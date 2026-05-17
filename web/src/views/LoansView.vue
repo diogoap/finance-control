@@ -59,12 +59,9 @@
             v-tooltip.bottom="$t('loans.tooltips.settle')"
             @click="selected && confirmPayFor(selected._id)"
           />
-          <InputText
+          <ToolbarSearch
             v-model="searchTerm"
-            size="small"
-            class="!w-40 md:!w-56"
             :placeholder="$t('loans.searchPlaceholder')"
-            :aria-label="$t('loans.searchPlaceholder')"
           />
         </div>
       </template>
@@ -198,7 +195,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import ToolbarSearch from '../components/ToolbarSearch.vue';
 import Toolbar from 'primevue/toolbar';
 import Checkbox from 'primevue/checkbox';
 import Menu from 'primevue/menu';

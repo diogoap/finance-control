@@ -43,12 +43,9 @@
             v-tooltip.bottom="$t('accounts.tooltips.activate')"
             @click="confirmToggleFor(selected._id, true)"
           />
-          <InputText
+          <ToolbarSearch
             v-model="searchTerm"
-            size="small"
-            class="!w-40 md:!w-56"
             :placeholder="$t('accounts.searchPlaceholder')"
-            :aria-label="$t('accounts.searchPlaceholder')"
           />
         </div>
       </template>
@@ -146,7 +143,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import ToolbarSearch from '../components/ToolbarSearch.vue';
 import Toolbar from 'primevue/toolbar';
 import Checkbox from 'primevue/checkbox';
 import Menu from 'primevue/menu';

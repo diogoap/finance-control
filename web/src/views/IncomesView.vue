@@ -67,12 +67,9 @@
             v-tooltip.bottom="$t('incomes.tooltips.generate')"
             @click="generatorVisible = true"
           />
-          <InputText
+          <ToolbarSearch
             v-model="searchTerm"
-            size="small"
-            class="!w-40 md:!w-56"
             :placeholder="$t('incomes.searchPlaceholder')"
-            :aria-label="$t('incomes.searchPlaceholder')"
           />
         </div>
       </template>
@@ -267,7 +264,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import ToolbarSearch from '../components/ToolbarSearch.vue';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
 import Menu from 'primevue/menu';

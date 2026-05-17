@@ -63,7 +63,9 @@
         </div>
         <div
           :class="[
-            hasDetail ? 'col-span-6 sm:col-span-4' : 'col-span-8 sm:col-span-5',
+            hasDetail
+              ? 'col-span-12 min-[480px]:col-span-6 sm:col-span-4'
+              : 'col-span-8 sm:col-span-5',
             'flex flex-col gap-1',
           ]"
         >
@@ -80,7 +82,7 @@
           />
           <small v-if="submitted && errors.amount" class="text-red-600">{{ errors.amount }}</small>
         </div>
-        <div v-if="hasDetail" class="col-span-6 sm:col-span-4 flex flex-col gap-1">
+        <div v-if="hasDetail" class="col-span-12 min-[480px]:col-span-6 sm:col-span-4 flex flex-col gap-1">
           <label for="incomeAmountReceived" class="text-sm font-medium">{{ $t('common.fields.receivedAmount') }}</label>
           <InputNumber
             id="incomeAmountReceived"
@@ -241,7 +243,12 @@
               <span class="block text-right">{{ formatNumber(detailTotal) }}</span>
             </template>
           </Column>
-          <Column :header="$t('common.fields.account')" style="width: 12rem">
+          <Column
+            :header="$t('common.fields.account')"
+            style="width: 12rem"
+            class="max-[534px]:hidden"
+            header-class="max-[534px]:hidden"
+          >
             <template #body="{ data }">{{ data._account?.name ?? '' }}</template>
           </Column>
           <Column :header="$t('common.fields.category')" style="width: 12rem">
