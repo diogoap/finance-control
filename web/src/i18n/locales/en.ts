@@ -316,6 +316,7 @@ export default {
 
   loans: {
     title: 'Loans',
+    balanceLabel: 'Balance:',
     table: {
       empty: 'No loans found.',
     },

@@ -316,6 +316,7 @@ export default {
 
   loans: {
     title: 'Cadastro de empréstimos',
+    balanceLabel: 'Saldo:',
     table: {
       empty: 'Nenhum empréstimo encontrado.',
     },
