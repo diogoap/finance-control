@@ -4,7 +4,7 @@
 
     <Toolbar class="mb-4">
       <template #start>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
           <Button
             icon="pi pi-plus"
             severity="primary"
@@ -43,6 +43,23 @@
             v-tooltip.bottom="$t('categories.tooltips.activate')"
             @click="confirmToggleFor(selected._id, true)"
           />
+          <Button
+            icon="pi pi-search"
+            :severity="searchVisible ? 'secondary' : 'primary'"
+            size="small"
+            :aria-label="$t('categories.tooltips.search')"
+            v-tooltip.bottom="$t('categories.tooltips.search')"
+            @click="toggleSearch"
+          />
+          <InputText
+            v-if="searchVisible"
+            v-model="searchTerm"
+            size="small"
+            class="!w-40 md:!w-56"
+            autofocus
+            :placeholder="$t('categories.searchPlaceholder')"
+            :aria-label="$t('categories.tooltips.search')"
+          />
         </div>
       </template>
 
@@ -57,19 +74,19 @@
     <DataTable
       v-model:selection="selected"
       v-model:context-menu-selection="selected"
-      :value="rows"
+      :value="filteredRows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > pageSize"
+      :paginator="filteredRows.length > pageSize"
       :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
-      <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
+      <template #footer>{{ $t('common.records', { count: filteredRows.length }) }}</template>
       <Column field="name" :header="$t('categories.headers.description')" sortable />
       <Column field="type" :header="$t('categories.headers.type')" sortable style="width: 7rem">
         <template #body="{ data }">{{ $t('enums.categoryType.' + data.type) }}</template>
@@ -121,6 +138,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import Toolbar from 'primevue/toolbar';
 import Checkbox from 'primevue/checkbox';
 import Menu from 'primevue/menu';
@@ -132,6 +150,7 @@ import { useI18n } from 'vue-i18n';
 import { useCategories, type Category, type NewCategory } from '../composables/useCategories';
 import { useIsMobile } from '../composables/useIsMobile';
 import { pageSize } from '../composables/usePagination';
+import { useSearchFilter } from '../composables/useSearchFilter';
 import CategoryFormDialog from './categories/CategoryFormDialog.vue';
 
 const toast = useToast();
@@ -141,6 +160,13 @@ const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, listDisabled, fetchAll, create, update, toggleEnabled } =
   useCategories();
+
+const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
+
+function toggleSearch() {
+  searchVisible.value = !searchVisible.value;
+  if (!searchVisible.value) searchTerm.value = '';
+}
 
 const dialog = reactive<{ visible: boolean; mode: 'new' | 'edit'; categoryId: string | null }>({
   visible: false,

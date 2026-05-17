@@ -39,6 +39,23 @@
             v-tooltip.bottom="$t('transfers.tooltips.delete')"
             @click="selected && confirmDeleteFor(selected._id)"
           />
+          <Button
+            icon="pi pi-search"
+            :severity="searchVisible ? 'secondary' : 'primary'"
+            size="small"
+            :aria-label="$t('transfers.tooltips.search')"
+            v-tooltip.bottom="$t('transfers.tooltips.search')"
+            @click="toggleSearch"
+          />
+          <InputText
+            v-if="searchVisible"
+            v-model="searchTerm"
+            size="small"
+            class="!w-40 md:!w-56"
+            autofocus
+            :placeholder="$t('transfers.searchPlaceholder')"
+            :aria-label="$t('transfers.tooltips.search')"
+          />
         </div>
       </template>
 
@@ -104,21 +121,21 @@
     <DataTable
       v-model:selection="selected"
       v-model:context-menu-selection="selected"
-      :value="rows"
+      :value="filteredRows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > pageSize"
+      :paginator="filteredRows.length > pageSize"
       :rows="pageSize"
       class="p-datatable-sm"
       @row-contextmenu="onRowContext"
     >
       <Column field="date" :header="$t('transfers.headers.date')" sortable style="width: 6rem" class="text-center">
         <template #body="{ data }">{{ formatShortDate(data.date) }}</template>
-        <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
+        <template #footer>{{ $t('common.records', { count: filteredRows.length }) }}</template>
       </Column>
       <Column
         field="amount"
@@ -183,6 +200,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
 import Menu from 'primevue/menu';
@@ -198,6 +216,7 @@ import {
 } from '../composables/useTransfers';
 import { useIsMobile } from '../composables/useIsMobile';
 import { pageSize } from '../composables/usePagination';
+import { useSearchFilter } from '../composables/useSearchFilter';
 import {
   formatCurrency,
   formatNumber,
@@ -217,6 +236,13 @@ const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchTransfers, create, update, remove } =
   useTransfers();
+
+const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
+
+function toggleSearch() {
+  searchVisible.value = !searchVisible.value;
+  if (!searchVisible.value) searchTerm.value = '';
+}
 
 const { begin: initialBegin, end: initialEnd } = getActualMonth();
 const dateBegin = ref<Date | null>(initialBegin);
@@ -248,7 +274,7 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   ];
 });
 
-const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
+const amountTotal = computed(() => filteredRows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
 const balanceClass = computed(() => {
   if (balance.value < 0) return 'text-red-600';
   if (balance.value === 0) return 'text-slate-500';

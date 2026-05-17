@@ -134,7 +134,9 @@ export default {
       clone: 'Clonar',
       pay: 'Pagar',
       generate: 'Gerar',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       delete: 'Excluir',
@@ -213,7 +215,9 @@ export default {
       clone: 'Clonar',
       receive: 'Receber',
       generate: 'Gerar',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       delete: 'Excluir',
@@ -285,7 +289,9 @@ export default {
       add: 'Adicionar',
       edit: 'Editar',
       delete: 'Excluir',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       delete: 'Excluir',
@@ -332,7 +338,9 @@ export default {
       delete: 'Excluir',
       clone: 'Clonar',
       settle: 'Quitar',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       delete: 'Excluir',
@@ -388,7 +396,9 @@ export default {
       edit: 'Editar',
       activate: 'Ativar',
       deactivate: 'Inativar',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       activate: 'Ativar',
@@ -437,7 +447,9 @@ export default {
       edit: 'Editar',
       activate: 'Ativar',
       deactivate: 'Inativar',
+      search: 'Pesquisar',
     },
+    searchPlaceholder: 'Pesquisar...',
     menu: {
       edit: 'Editar',
       activate: 'Ativar',
