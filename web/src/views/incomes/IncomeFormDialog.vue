@@ -243,7 +243,12 @@
               <span class="block text-right">{{ formatNumber(detailTotal) }}</span>
             </template>
           </Column>
-          <Column :header="$t('common.fields.account')" style="width: 12rem">
+          <Column
+            :header="$t('common.fields.account')"
+            style="width: 12rem"
+            class="max-[534px]:hidden"
+            header-class="max-[534px]:hidden"
+          >
             <template #body="{ data }">{{ data._account?.name ?? '' }}</template>
           </Column>
           <Column :header="$t('common.fields.category')" style="width: 12rem">
