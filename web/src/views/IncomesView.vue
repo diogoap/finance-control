@@ -67,6 +67,23 @@
             v-tooltip.bottom="$t('incomes.tooltips.generate')"
             @click="generatorVisible = true"
           />
+          <Button
+            icon="pi pi-search"
+            :severity="searchVisible ? 'secondary' : 'primary'"
+            size="small"
+            :aria-label="$t('incomes.tooltips.search')"
+            v-tooltip.bottom="$t('incomes.tooltips.search')"
+            @click="toggleSearch"
+          />
+          <InputText
+            v-if="searchVisible"
+            v-model="searchTerm"
+            size="small"
+            class="!w-40 md:!w-56"
+            autofocus
+            :placeholder="$t('incomes.searchPlaceholder')"
+            :aria-label="$t('incomes.tooltips.search')"
+          />
         </div>
       </template>
 
@@ -132,14 +149,14 @@
     <DataTable
       v-model:selection="selected"
       v-model:context-menu-selection="selected"
-      :value="rows"
+      :value="filteredRows"
       :loading="loading"
       data-key="_id"
       selection-mode="single"
       :context-menu="!isMobile"
       removable-sort
       striped-rows
-      :paginator="rows.length > pageSize"
+      :paginator="filteredRows.length > pageSize"
       :rows="pageSize"
       :row-class="rowClass"
       class="p-datatable-sm"
@@ -149,7 +166,7 @@
         <template #body="{ data }">{{ formatShortDate(data.dueDate) }}</template>
       </Column>
       <Column field="description" :header="$t('incomes.headers.description')" sortable>
-        <template #footer>{{ $t('common.records', { count: rows.length }) }}</template>
+        <template #footer>{{ $t('common.records', { count: filteredRows.length }) }}</template>
       </Column>
       <Column
         field="amount"
@@ -260,6 +277,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
 import Toolbar from 'primevue/toolbar';
 import DatePicker from 'primevue/datepicker';
 import Menu from 'primevue/menu';
@@ -275,6 +293,7 @@ import {
 } from '../composables/useIncomes';
 import { useIsMobile } from '../composables/useIsMobile';
 import { pageSize } from '../composables/usePagination';
+import { useSearchFilter } from '../composables/useSearchFilter';
 import {
   formatCurrency,
   formatNumber,
@@ -296,6 +315,13 @@ const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, balance, fetchAll: fetchIncomes, create, update, remove, receive } =
   useIncomes();
+
+const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
+
+function toggleSearch() {
+  searchVisible.value = !searchVisible.value;
+  if (!searchVisible.value) searchTerm.value = '';
+}
 
 const { begin: initialBegin, end: initialEnd } = getActualMonth();
 const dueDateBegin = ref<Date | null>(initialBegin);
@@ -340,9 +366,9 @@ const rowMenuItems = computed<MenuItem[]>(() => {
   ];
 });
 
-const amountTotal = computed(() => rows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
+const amountTotal = computed(() => filteredRows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
 const amountReceivedTotal = computed(() =>
-  rows.value.reduce((acc, r) => acc + (r.amountReceived ?? 0), 0),
+  filteredRows.value.reduce((acc, r) => acc + (r.amountReceived ?? 0), 0),
 );
 const balanceClass = computed(() => {
   if (balance.value < 0) return 'text-red-600';
