@@ -14,11 +14,9 @@ function rowMatches(row: unknown, term: string): boolean {
 
 export function useSearchFilter<T>(rows: Ref<T[]>): {
   searchTerm: Ref<string>;
-  searchVisible: Ref<boolean>;
   filteredRows: ComputedRef<T[]>;
 } {
   const searchTerm = ref('');
-  const searchVisible = ref(false);
 
   const filteredRows = computed(() => {
     const term = searchTerm.value.trim().toLowerCase();
@@ -26,5 +24,5 @@ export function useSearchFilter<T>(rows: Ref<T[]>): {
     return rows.value.filter((row) => rowMatches(row, term));
   });
 
-  return { searchTerm, searchVisible, filteredRows };
+  return { searchTerm, filteredRows };
 }

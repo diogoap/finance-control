@@ -134,7 +134,6 @@ export default {
       clone: 'Clone',
       pay: 'Pay',
       generate: 'Generate',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {
@@ -215,7 +214,6 @@ export default {
       clone: 'Clone',
       receive: 'Receive',
       generate: 'Generate',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {
@@ -289,7 +287,6 @@ export default {
       add: 'Add',
       edit: 'Edit',
       delete: 'Delete',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {
@@ -339,7 +336,6 @@ export default {
       delete: 'Delete',
       clone: 'Clone',
       settle: 'Settle',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {
@@ -397,7 +393,6 @@ export default {
       edit: 'Edit',
       activate: 'Activate',
       deactivate: 'Deactivate',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {
@@ -448,7 +443,6 @@ export default {
       edit: 'Edit',
       activate: 'Activate',
       deactivate: 'Deactivate',
-      search: 'Search',
     },
     searchPlaceholder: 'Search...',
     menu: {

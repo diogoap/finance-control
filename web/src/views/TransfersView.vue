@@ -39,22 +39,12 @@
             v-tooltip.bottom="$t('transfers.tooltips.delete')"
             @click="selected && confirmDeleteFor(selected._id)"
           />
-          <Button
-            icon="pi pi-search"
-            :severity="searchVisible ? 'secondary' : 'primary'"
-            size="small"
-            :aria-label="$t('transfers.tooltips.search')"
-            v-tooltip.bottom="$t('transfers.tooltips.search')"
-            @click="toggleSearch"
-          />
           <InputText
-            v-if="searchVisible"
             v-model="searchTerm"
             size="small"
             class="!w-40 md:!w-56"
-            autofocus
             :placeholder="$t('transfers.searchPlaceholder')"
-            :aria-label="$t('transfers.tooltips.search')"
+            :aria-label="$t('transfers.searchPlaceholder')"
           />
         </div>
       </template>
@@ -237,12 +227,7 @@ const { isMobile } = useIsMobile();
 const { rows, loading, selected, balance, fetchAll: fetchTransfers, create, update, remove } =
   useTransfers();
 
-const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
-
-function toggleSearch() {
-  searchVisible.value = !searchVisible.value;
-  if (!searchVisible.value) searchTerm.value = '';
-}
+const { searchTerm, filteredRows } = useSearchFilter(rows);
 
 const { begin: initialBegin, end: initialEnd } = getActualMonth();
 const dateBegin = ref<Date | null>(initialBegin);

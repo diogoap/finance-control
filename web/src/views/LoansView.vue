@@ -59,22 +59,12 @@
             v-tooltip.bottom="$t('loans.tooltips.settle')"
             @click="selected && confirmPayFor(selected._id)"
           />
-          <Button
-            icon="pi pi-search"
-            :severity="searchVisible ? 'secondary' : 'primary'"
-            size="small"
-            :aria-label="$t('loans.tooltips.search')"
-            v-tooltip.bottom="$t('loans.tooltips.search')"
-            @click="toggleSearch"
-          />
           <InputText
-            v-if="searchVisible"
             v-model="searchTerm"
             size="small"
             class="!w-40 md:!w-56"
-            autofocus
             :placeholder="$t('loans.searchPlaceholder')"
-            :aria-label="$t('loans.tooltips.search')"
+            :aria-label="$t('loans.searchPlaceholder')"
           />
         </div>
       </template>
@@ -231,12 +221,7 @@ const { isMobile } = useIsMobile();
 
 const { rows, loading, selected, listPaid, balance, fetchAll, create, update, remove, pay } = useLoans();
 
-const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
-
-function toggleSearch() {
-  searchVisible.value = !searchVisible.value;
-  if (!searchVisible.value) searchTerm.value = '';
-}
+const { searchTerm, filteredRows } = useSearchFilter(rows);
 
 const dialog = reactive<{
   visible: boolean;

@@ -43,22 +43,12 @@
             v-tooltip.bottom="$t('categories.tooltips.activate')"
             @click="confirmToggleFor(selected._id, true)"
           />
-          <Button
-            icon="pi pi-search"
-            :severity="searchVisible ? 'secondary' : 'primary'"
-            size="small"
-            :aria-label="$t('categories.tooltips.search')"
-            v-tooltip.bottom="$t('categories.tooltips.search')"
-            @click="toggleSearch"
-          />
           <InputText
-            v-if="searchVisible"
             v-model="searchTerm"
             size="small"
             class="!w-40 md:!w-56"
-            autofocus
             :placeholder="$t('categories.searchPlaceholder')"
-            :aria-label="$t('categories.tooltips.search')"
+            :aria-label="$t('categories.searchPlaceholder')"
           />
         </div>
       </template>
@@ -161,12 +151,7 @@ const { isMobile } = useIsMobile();
 const { rows, loading, selected, listDisabled, fetchAll, create, update, toggleEnabled } =
   useCategories();
 
-const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
-
-function toggleSearch() {
-  searchVisible.value = !searchVisible.value;
-  if (!searchVisible.value) searchTerm.value = '';
-}
+const { searchTerm, filteredRows } = useSearchFilter(rows);
 
 const dialog = reactive<{ visible: boolean; mode: 'new' | 'edit'; categoryId: string | null }>({
   visible: false,
