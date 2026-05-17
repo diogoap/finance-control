@@ -67,22 +67,12 @@
             v-tooltip.bottom="$t('incomes.tooltips.generate')"
             @click="generatorVisible = true"
           />
-          <Button
-            icon="pi pi-search"
-            :severity="searchVisible ? 'secondary' : 'primary'"
-            size="small"
-            :aria-label="$t('incomes.tooltips.search')"
-            v-tooltip.bottom="$t('incomes.tooltips.search')"
-            @click="toggleSearch"
-          />
           <InputText
-            v-if="searchVisible"
             v-model="searchTerm"
             size="small"
             class="!w-40 md:!w-56"
-            autofocus
             :placeholder="$t('incomes.searchPlaceholder')"
-            :aria-label="$t('incomes.tooltips.search')"
+            :aria-label="$t('incomes.searchPlaceholder')"
           />
         </div>
       </template>
@@ -316,12 +306,7 @@ const { isMobile } = useIsMobile();
 const { rows, loading, selected, balance, fetchAll: fetchIncomes, create, update, remove, receive } =
   useIncomes();
 
-const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
-
-function toggleSearch() {
-  searchVisible.value = !searchVisible.value;
-  if (!searchVisible.value) searchTerm.value = '';
-}
+const { searchTerm, filteredRows } = useSearchFilter(rows);
 
 const { begin: initialBegin, end: initialEnd } = getActualMonth();
 const dueDateBegin = ref<Date | null>(initialBegin);

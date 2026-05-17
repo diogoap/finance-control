@@ -134,7 +134,6 @@ export default {
       clone: 'Clonar',
       pay: 'Pagar',
       generate: 'Gerar',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {
@@ -215,7 +214,6 @@ export default {
       clone: 'Clonar',
       receive: 'Receber',
       generate: 'Gerar',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {
@@ -289,7 +287,6 @@ export default {
       add: 'Adicionar',
       edit: 'Editar',
       delete: 'Excluir',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {
@@ -338,7 +335,6 @@ export default {
       delete: 'Excluir',
       clone: 'Clonar',
       settle: 'Quitar',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {
@@ -396,7 +392,6 @@ export default {
       edit: 'Editar',
       activate: 'Ativar',
       deactivate: 'Inativar',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {
@@ -447,7 +442,6 @@ export default {
       edit: 'Editar',
       activate: 'Ativar',
       deactivate: 'Inativar',
-      search: 'Pesquisar',
     },
     searchPlaceholder: 'Pesquisar...',
     menu: {

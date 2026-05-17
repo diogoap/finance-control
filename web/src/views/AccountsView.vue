@@ -43,22 +43,12 @@
             v-tooltip.bottom="$t('accounts.tooltips.activate')"
             @click="confirmToggleFor(selected._id, true)"
           />
-          <Button
-            icon="pi pi-search"
-            :severity="searchVisible ? 'secondary' : 'primary'"
-            size="small"
-            :aria-label="$t('accounts.tooltips.search')"
-            v-tooltip.bottom="$t('accounts.tooltips.search')"
-            @click="toggleSearch"
-          />
           <InputText
-            v-if="searchVisible"
             v-model="searchTerm"
             size="small"
             class="!w-40 md:!w-56"
-            autofocus
             :placeholder="$t('accounts.searchPlaceholder')"
-            :aria-label="$t('accounts.tooltips.search')"
+            :aria-label="$t('accounts.searchPlaceholder')"
           />
         </div>
       </template>
@@ -182,12 +172,7 @@ const { rows, loading, selected, listDisabled, fetchAll, create, update, toggleE
   useAccounts();
 const { invalidate } = useReferenceData();
 
-const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
-
-function toggleSearch() {
-  searchVisible.value = !searchVisible.value;
-  if (!searchVisible.value) searchTerm.value = '';
-}
+const { searchTerm, filteredRows } = useSearchFilter(rows);
 
 const dialog = reactive<{ visible: boolean; mode: 'new' | 'edit'; accountId: string | null }>({
   visible: false,
