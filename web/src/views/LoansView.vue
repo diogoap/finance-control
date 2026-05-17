@@ -1,6 +1,12 @@
 <template>
   <div class="container mx-auto px-4 py-6">
-    <h1 class="text-xl font-semibold mb-4">{{ $t('loans.title') }}</h1>
+    <div class="flex items-center justify-between mb-4 gap-4">
+      <h1 class="text-xl font-semibold">{{ $t('loans.title') }}</h1>
+      <div class="flex items-baseline gap-2">
+        <span class="text-sm text-slate-500">{{ $t('loans.balanceLabel') }}</span>
+        <span :class="['font-semibold', balanceClass]">{{ formatNumber(balance) }}</span>
+      </div>
+    </div>
 
     <Toolbar class="mb-4">
       <template #start>
@@ -223,7 +229,7 @@ const confirm = useConfirm();
 const { t } = useI18n();
 const { isMobile } = useIsMobile();
 
-const { rows, loading, selected, listPaid, fetchAll, create, update, remove, pay } = useLoans();
+const { rows, loading, selected, listPaid, balance, fetchAll, create, update, remove, pay } = useLoans();
 
 const { searchTerm, searchVisible, filteredRows } = useSearchFilter(rows);
 
@@ -274,6 +280,11 @@ const rowMenuItems = computed<MenuItem[]>(() => {
 });
 
 const amountTotal = computed(() => filteredRows.value.reduce((acc, r) => acc + (r.amount ?? 0), 0));
+const balanceClass = computed(() => {
+  if (balance.value < 0) return 'text-red-600';
+  if (balance.value === 0) return 'text-slate-500';
+  return 'text-green-600';
+});
 
 onMounted(() => {
   fetchAll().catch((err) => onLoadError(extractStatus(err)));
