@@ -14,6 +14,7 @@ export default {
       pay: 'Pay',
       receive: 'Receive',
       settle: 'Settle',
+      close: 'Close',
     },
     fields: {
       description: 'Description',
