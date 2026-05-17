@@ -61,7 +61,12 @@
             errors.currency_id
           }}</small>
         </div>
-        <div class="col-span-8 sm:col-span-5 flex flex-col gap-1">
+        <div
+          :class="[
+            hasDetail ? 'col-span-6 sm:col-span-4' : 'col-span-8 sm:col-span-5',
+            'flex flex-col gap-1',
+          ]"
+        >
           <label for="incomeAmount" class="text-sm font-medium">{{ $t('common.fields.amount') }}</label>
           <InputNumber
             id="incomeAmount"
@@ -74,6 +79,18 @@
             input-class="text-right"
           />
           <small v-if="submitted && errors.amount" class="text-red-600">{{ errors.amount }}</small>
+        </div>
+        <div v-if="hasDetail" class="col-span-6 sm:col-span-4 flex flex-col gap-1">
+          <label for="incomeAmountReceived" class="text-sm font-medium">{{ $t('common.fields.receivedAmount') }}</label>
+          <InputNumber
+            id="incomeAmountReceived"
+            v-model="form.amountReceived"
+            :min-fraction-digits="2"
+            :max-fraction-digits="2"
+            disabled
+            :locale="numberLocale"
+            input-class="text-right"
+          />
         </div>
       </div>
 
@@ -110,8 +127,8 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-12 gap-3">
-        <div v-if="!hasDetail" class="col-span-12 sm:col-span-6 flex flex-col gap-1">
+      <div v-if="!hasDetail" class="grid grid-cols-12 gap-3">
+        <div class="col-span-12 sm:col-span-6 flex flex-col gap-1">
           <label for="incomeStatus" class="text-sm font-medium">{{ $t('common.fields.status') }}</label>
           <Select
             id="incomeStatus"

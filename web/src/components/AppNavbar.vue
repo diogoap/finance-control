@@ -13,14 +13,14 @@
       <template #item="{ item, props, hasSubmenu }">
         <router-link
           v-if="item.to"
-          v-slot="{ href, navigate, isActive }"
+          v-slot="{ href, navigate, isExactActive }"
           :to="item.to"
           custom
         >
           <a
             v-bind="props.action"
             :href="href"
-            :class="{ 'p-menubar-item-active': isActive }"
+            :class="{ 'nav-active': isExactActive }"
             @click="navigate"
           >
             <span v-if="item.icon" :class="['p-menubar-item-icon', item.icon]" />
