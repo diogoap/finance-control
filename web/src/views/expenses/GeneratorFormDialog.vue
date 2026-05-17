@@ -140,6 +140,17 @@
         </label>
       </div>
 
+      <div class="flex items-center gap-2">
+        <Checkbox
+          v-model="form.scheduledPayment"
+          inputId="genScheduledPayment"
+          binary
+        />
+        <label for="genScheduledPayment" class="text-sm">
+          {{ $t('expenses.form.scheduledPayment') }}
+        </label>
+      </div>
+
       <div class="flex flex-col gap-1">
         <label for="genAccount" class="text-sm font-medium">{{ $t('common.fields.account') }}</label>
         <Select
@@ -248,6 +259,7 @@ const form = reactive<{
   amount: number | null;
   description: string;
   descriptionInstallmentNumber: boolean;
+  scheduledPayment: boolean;
   account_id: string;
   category_id: string;
   notes: string;
@@ -260,6 +272,7 @@ const form = reactive<{
   amount: null,
   description: '',
   descriptionInstallmentNumber: false,
+  scheduledPayment: false,
   account_id: '',
   category_id: '',
   notes: '',
@@ -310,6 +323,7 @@ watch(
       form.amount = null;
       form.description = '';
       form.descriptionInstallmentNumber = false;
+      form.scheduledPayment = false;
       form.account_id = '';
       form.category_id = '';
       form.notes = '';
@@ -339,6 +353,7 @@ async function handleSubmit() {
       amount: form.amount,
       description: form.description.trim(),
       descriptionInstallmentNumber: form.descriptionInstallmentNumber,
+      scheduledPayment: form.scheduledPayment,
       account_id: form.account_id,
       category_id: form.category_id,
       notes: form.notes ?? '',
