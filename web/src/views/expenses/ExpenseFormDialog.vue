@@ -315,6 +315,7 @@
     :visible="detailDialog.visible"
     :mode="detailDialog.mode"
     :detail="detailDialog.detail"
+    :defaults="detailDialog.defaults"
     @submit="onDetailSubmit"
     @close="closeDetailDialog"
     @load-error="onDetailLoadError"
@@ -424,10 +425,18 @@ const form = reactive<{
 
 const selectedDetail = ref<ExpenseDetail | null>(null);
 
-const detailDialog = reactive<{ visible: boolean; mode: Mode; detail: ExpenseDetail | null }>({
+type DetailDefaults = { account_id?: string; category_id?: string; currency_id?: string };
+
+const detailDialog = reactive<{
+  visible: boolean;
+  mode: Mode;
+  detail: ExpenseDetail | null;
+  defaults: DetailDefaults | null;
+}>({
   visible: false,
   mode: 'new',
   detail: null,
+  defaults: null,
 });
 
 const rowMenu = ref();
@@ -586,7 +595,24 @@ function recomputeTotals() {
 function openDetail(mode: Mode, detail: ExpenseDetail | null) {
   detailDialog.mode = mode;
   detailDialog.detail = detail;
+  detailDialog.defaults = mode === 'new' ? computeDetailDefaults() : null;
   detailDialog.visible = true;
+}
+
+function computeDetailDefaults(): DetailDefaults {
+  const first = form.detail[0];
+  if (first) {
+    return {
+      account_id: first.account_id,
+      category_id: first.category_id,
+      currency_id: first.currency_id,
+    };
+  }
+  return {
+    account_id: form.account_id || undefined,
+    category_id: form.category_id || undefined,
+    currency_id: form.currency_id || undefined,
+  };
 }
 
 function openRowMenu(e: MouseEvent, row: ExpenseDetail) {
