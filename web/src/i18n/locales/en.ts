@@ -46,7 +46,6 @@ export default {
     placeholders: {
       select: 'Select',
     },
-    cloneSuffix: ' - Copy',
   },
 
   navbar: {

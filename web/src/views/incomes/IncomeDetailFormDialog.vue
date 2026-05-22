@@ -141,6 +141,7 @@ const props = defineProps<{
   visible: boolean;
   mode: Mode;
   detail: IncomeDetail | null;
+  defaults?: { account_id?: string; category_id?: string; currency_id?: string } | null;
 }>();
 
 const emit = defineEmits<{
@@ -227,17 +228,14 @@ watch(
         form._id = undefined;
         form.description = '';
         form.amount = null;
-        form.account_id = '';
-        form.category_id = '';
-        form.currency_id = getDefaultCurrencyId(cur);
+        form.account_id = props.defaults?.account_id ?? '';
+        form.category_id = props.defaults?.category_id ?? '';
+        form.currency_id = props.defaults?.currency_id || getDefaultCurrencyId(cur);
         form.status = 'Em aberto';
       } else if (props.detail) {
         originalKey.value = props.detail._key ?? null;
         form._id = mode === 'clone' ? undefined : props.detail._id;
-        form.description =
-          mode === 'clone'
-            ? `${props.detail.description}${t('common.cloneSuffix')}`
-            : props.detail.description;
+        form.description = props.detail.description;
         form.amount = props.detail.amount;
         form.account_id = props.detail.account_id;
         form.category_id = props.detail.category_id;
