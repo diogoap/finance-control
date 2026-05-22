@@ -311,10 +311,7 @@ watch(
         const loan = await getById(id);
         loaded.value = loan;
         form._id = mode === 'clone' ? undefined : loan._id;
-        form.description =
-          mode === 'clone'
-            ? `${loan.description}${t('common.cloneSuffix')}`
-            : loan.description;
+        form.description = loan.description;
         form.transactionDate = new Date(loan.transactionDate);
         form.dueDate = new Date(loan.dueDate);
         form.amount = loan.amount;
