@@ -52,7 +52,7 @@
             size="small"
             severity="success"
             v-tooltip.bottom="$t('home.navigation.beginYear')"
-            label="<<"
+            :label="$t('home.navigation.beginYearLabel')"
             @click="navigate('beginYear')"
           />
           <Button
@@ -80,7 +80,7 @@
             size="small"
             severity="success"
             v-tooltip.bottom="$t('home.navigation.endYear')"
-            label=">>"
+            :label="$t('home.navigation.endYearLabel')"
             @click="navigate('endYear')"
           />
         </div>

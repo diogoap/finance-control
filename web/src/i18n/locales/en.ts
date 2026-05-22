@@ -84,9 +84,11 @@ export default {
       currentMonth: 'Go to current month',
       nextMonth: 'Go to next month',
       endYear: 'Go to end of year',
+      beginYearLabel: '<<',
       prevMonthLabel: '-1 Month',
       currentMonthLabel: 'Current',
       nextMonthLabel: '+1 Month',
+      endYearLabel: '>>',
     },
     totals: {
       title: 'Totals',
