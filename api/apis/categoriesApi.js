@@ -54,7 +54,7 @@ module.exports = function (app, url) {
     })
 
     app.patch('/api/categories/:id', utils.ensureAuth, ensureCategoryUser, function (req, res) {
-        categoriesService.edit(req.params.id, req.body,
+        categoriesService.edit(utils.getUserId(req), req.params.id, req.body,
             function (categories) {
                 res.json('OK');
             },

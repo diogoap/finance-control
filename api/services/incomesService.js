@@ -300,7 +300,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, income, callbackSuccess, callbackError) {
+    edit: function (userId, id, income, callbackSuccess, callbackError) {
+        income.user_id = userId;
         var val = new Validator().validate(income, incomeSchema);
 
         if (val.errors.length == 0) {

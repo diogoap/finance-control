@@ -64,7 +64,7 @@ module.exports = function (app, url) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        transfersService.edit(req.params.id, req.body,
+        transfersService.edit(utils.getUserId(req), req.params.id, req.body,
             function () {
                 res.json('OK');
             },

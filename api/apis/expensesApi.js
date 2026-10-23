@@ -74,7 +74,7 @@ module.exports = function (app, url) {
                 }
             );
         } else {
-            expensesService.edit(req.params.id, req.body,
+            expensesService.edit(utils.getUserId(req), req.params.id, req.body,
                 function () {
                     res.json('OK');
                 },

@@ -54,7 +54,7 @@ module.exports = function (app, url) {
     })
 
     app.patch('/api/currencies/:id', utils.ensureAuth, ensureCurrencyUser, function (req, res) {
-        currenciesService.edit(req.params.id, req.body,
+        currenciesService.edit(utils.getUserId(req), req.params.id, req.body,
             function (currencies) {
                 res.json('OK');
             },

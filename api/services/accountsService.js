@@ -116,7 +116,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, account, callbackSuccess, callbackError) {
+    edit: function (userId, id, account, callbackSuccess, callbackError) {
+        account.user_id = userId;
         var val = new Validator().validate(account, accountSchema);
 
         if (val.errors.length == 0) {

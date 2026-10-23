@@ -87,7 +87,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, category, callbackSuccess, callbackError) {
+    edit: function (userId, id, category, callbackSuccess, callbackError) {
+        category.user_id = userId;
         var val = new Validator().validate(category, categorySchema);
 
         if (val.errors.length == 0) {

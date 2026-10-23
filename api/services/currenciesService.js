@@ -234,7 +234,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, currency, callbackSuccess, callbackError) {
+    edit: function (userId, id, currency, callbackSuccess, callbackError) {
+        currency.user_id = userId;
         var val = new Validator().validate(currency, currencySchema);
 
         if (val.errors.length == 0) {

@@ -152,7 +152,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, transfer, callbackSuccess, callbackError) {
+    edit: function (userId, id, transfer, callbackSuccess, callbackError) {
+        transfer.user_id = userId;
         var val = new Validator().validate(transfer, transferSchema);
         validateTransfer(transfer, val.errors);
 

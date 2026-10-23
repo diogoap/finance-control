@@ -301,7 +301,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, expense, callbackSuccess, callbackError) {
+    edit: function (userId, id, expense, callbackSuccess, callbackError) {
+        expense.user_id = userId;
         var val = new Validator().validate(expense, expenseSchema);
 
         if (val.errors.length == 0) {

@@ -74,7 +74,7 @@ module.exports = function (app, url) {
                 }
             );
         } else {
-            incomesService.edit(req.params.id, req.body,
+            incomesService.edit(utils.getUserId(req), req.params.id, req.body,
                 function () {
                     res.json('OK');
                 },
