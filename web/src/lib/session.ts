@@ -14,6 +14,20 @@ export function getSession(): Session {
   };
 }
 
+const SESSION_KEYS = [
+  'loggedUserId',
+  'loggedUserEmail',
+  'loggedUserToken',
+  'loggedUserName',
+  'loggedUserPhoto',
+] as const;
+
+export function clearSession() {
+  for (const key of SESSION_KEYS) {
+    window.localStorage.removeItem(key);
+  }
+}
+
 export function isLoggedIn(): boolean {
   const token = window.localStorage.getItem('loggedUserToken');
   return !!token && token.length > 0;

@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { clearSession } from './session';
 
 const api = axios.create({
   baseURL: '/api',
@@ -20,6 +21,9 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
+      // Token was revoked or expired server-side; drop the stale local copy so
+      // the router guard and navbar stop treating this device as logged in.
+      clearSession();
       window.location.assign('/login');
     }
     return Promise.reject(error);
