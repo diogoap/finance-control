@@ -9,7 +9,8 @@ const SESSION_KEYS = [
 ] as const;
 
 export function logoff(allSessions: boolean) {
-  return api.get(`/auth/logoff?all=${allSessions}`);
+  // /auth/* lives outside the /api prefix on the server.
+  return api.get('/auth/logoff', { baseURL: '/', params: { all: allSessions } });
 }
 
 export function clearSession() {
