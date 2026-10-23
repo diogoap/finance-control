@@ -29,9 +29,18 @@ function getUser(queryFilter, callbackSuccess, callbackError) {
         });
 }
 
+var SESSION_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000;
+
+function isTokenExpired(accessToken) {
+    return !accessToken.creationDate || (Date.now() - accessToken.creationDate.getTime()) > SESSION_MAX_AGE_MS;
+}
+
 function getUserTokenIndex(userObj, userToken) {
     if ((userObj.accessTokens != undefined) && (userObj.accessTokens.length > 0)) {
         for (var i in userObj.accessTokens) {
+            if (isTokenExpired(userObj.accessTokens[i])) {
+                continue;
+            }
             if (passwordHash.verify(userToken, userObj.accessTokens[i].token) == true) {
                 return i;
             }
@@ -147,6 +156,10 @@ module.exports = {
                 newAccessToken.token = passwordHash.generate(userData.accessToken);
                 newAccessToken.creationDate = new Date();
 
+                // Drop expired sessions so the token list doesn't grow forever.
+                userDb.accessTokens = userDb.accessTokens.filter(function (accessToken) {
+                    return !isTokenExpired(accessToken);
+                });
                 userDb.accessTokens.push(newAccessToken);
 
                 userDb.save()
