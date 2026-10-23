@@ -53,7 +53,7 @@ module.exports = function (app, url, passport, GoogleStrategy) {
         function (req, res) { }
     );
 
-    app.get('/auth/logoff', function (req, res) {
+    app.get('/auth/logoff', utils.ensureAuth, function (req, res) {
         var url_parts = url.parse(req.url, true);
         var allSessions = url_parts.query.all;
 

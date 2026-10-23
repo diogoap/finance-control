@@ -54,7 +54,7 @@ module.exports = function (app, url) {
     })
 
     app.patch('/api/accounts/:id', utils.ensureAuth, ensureAccountUser, function (req, res) {
-        accountsService.edit(req.params.id, req.body,
+        accountsService.edit(utils.getUserId(req), req.params.id, req.body,
             function (accounts) {
                 res.json('OK');
             },

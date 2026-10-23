@@ -149,7 +149,8 @@ module.exports = {
         });
     },
 
-    edit: function (id, loan, callbackSuccess, callbackError) {
+    edit: function (userId, id, loan, callbackSuccess, callbackError) {
+        loan.user_id = userId;
         var val = new Validator().validate(loan, loanSchema);
         validateLoan(loan, val.errors);
 

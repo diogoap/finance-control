@@ -74,7 +74,7 @@ module.exports = function (app, url) {
                 }
             );
         } else {
-            loansService.edit(req.params.id, req.body,
+            loansService.edit(utils.getUserId(req), req.params.id, req.body,
                 function () {
                     res.json('OK');
                 },
